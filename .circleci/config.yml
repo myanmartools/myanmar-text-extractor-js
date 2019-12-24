@@ -1,0 +1,30 @@
+version: 2.1
+
+var_1: &docker_image circleci/node:lts-browsers
+var_2: &cache_key v2.1-repo-{{ .Branch }}-{{ checksum "package-lock.json" }}-node-lts
+
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: *docker_image
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - save_cache:
+          key: *cache_key
+          paths:
+            - ./node_modules
+      - run:
+          name: Run test
+          command: npm test -- -c=ci
+      - run:
+          name: Run build
+          command: npm run build
+      - run:
+          name: Run lint
+          command: npm run lint
