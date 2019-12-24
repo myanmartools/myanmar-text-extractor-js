@@ -1,4 +1,5 @@
 import { MyanmarTextFragmenterOptions } from './myanmar-text-fragmenter-options';
+import { NonGrammarTextFragmentOptions } from './non-grammar-text-fragment-options';
 import { TextFragment } from './text-fragment';
 
 export class MyanmarTextFragmenter {
@@ -6,10 +7,10 @@ export class MyanmarTextFragmenter {
     private readonly _aThetRegExp = new RegExp('^[\u0020\u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF]*[\u1000-\u1021\u1023\u1025\u1027\u103F\u1040\u1048]\u103A[\u103B\u103C]?[\u102B\u102C]?[\u1037\u1038]?');
 
     constructor(options?: MyanmarTextFragmenterOptions) {
-        this._options = { ...options };
+        this._options = { ...this._options, ...options };
     }
 
-    getNextFragment(input: string, options?: MyanmarTextFragmenterOptions): TextFragment | null {
+    getNextFragment(input: string): TextFragment | null {
         const firstC = input[0];
         // ဤ / ဪ / ၌ / ၊ / ။ / ၍ / ၏
         if (firstC === '\u1024' || firstC === '\u102A' ||
@@ -31,11 +32,11 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    getNextNonGrammarFragment(input: string, options?: MyanmarTextFragmenterOptions): TextFragment | null {
+    getNextNonGrammarFragment(input: string, options?: NonGrammarTextFragmentOptions): TextFragment | null {
         let curStr = input;
         let tmpSpace = '';
         let trimedMatchedStr = '';
-        const curOptions = options || this._options;
+        const curOptions = options || {};
 
         const textFragment: TextFragment = {
             matchedString: ''
