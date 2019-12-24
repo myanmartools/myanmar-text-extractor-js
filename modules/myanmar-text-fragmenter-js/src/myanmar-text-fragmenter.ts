@@ -1,16 +1,16 @@
-import { MyanmarTextFragmenterOptions } from './myanmar-text-fragmenter-options';
-import { PossibleTextFragmentOptions } from './possible-text-fragment-options';
 import { TextFragment } from './text-fragment';
+import { TextFragmenterOptions } from './text-fragmenter-options';
 
 export class MyanmarTextFragmenter {
-    private readonly _options: MyanmarTextFragmenterOptions = {};
+    private readonly _options: TextFragmenterOptions;
+
     private readonly _aThetRegExp = new RegExp('^[\u0020\u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF]*[\u1000-\u1021\u1023\u1025\u1027\u103F\u1040\u1048]\u103A[\u103B\u103C]?[\u102B\u102C]?[\u1037\u1038]?');
 
-    constructor(options?: MyanmarTextFragmenterOptions) {
-        this._options = { ...this._options, ...options };
+    constructor(options?: TextFragmenterOptions) {
+        this._options = options || {};
     }
 
-    getNextFragment(input: string): TextFragment | null {
+    getNextFragment(input: string, options?: TextFragmenterOptions): TextFragment | null {
         const firstC = input[0];
         // ဤ / ဪ / ၌ / ၊ / ။ / ၍ / ၏
         if (firstC === '\u1024' || firstC === '\u102A' ||
@@ -23,8 +23,17 @@ export class MyanmarTextFragmenter {
         }
 
         const fCp = firstC.codePointAt(0);
+        if (!fCp) {
+            return null;
+        }
 
-        if (!fCp || !((fCp >= 0x1000 && fCp <= 0x1021) || fCp === 0x1023 ||
+        const curOptions = options || this._options;
+
+        if ((fCp >= 0x102B && fCp <= 0x103E) && !curOptions.noInvalidStart) {
+            return this.getNextInvalidFragment(input, curOptions);
+        }
+
+        if (!((fCp >= 0x1000 && fCp <= 0x1021) || fCp === 0x1023 ||
             (fCp >= 0x1025 && fCp <= 0x1027) || fCp === 0x1029 || fCp === 0x103F || fCp === 0x104E)) {
             return null;
         }
@@ -32,11 +41,10 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    getNextPossibleFragment(input: string, options?: PossibleTextFragmentOptions): TextFragment | null {
+    private getNextInvalidFragment(input: string, curOptions: TextFragmenterOptions): TextFragment | null {
         let curStr = input;
         let tmpSpace = '';
         let trimedMatchedStr = '';
-        const curOptions = options || {};
 
         const textFragment: TextFragment = {
             matchedString: ''
@@ -63,7 +71,7 @@ export class MyanmarTextFragmenter {
 
             if ((cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || cp === 0x180E || (cp >= 0x2000 && cp <= 0x200B) ||
                 cp === 0x202F || cp === 0x205F || cp === 0x3000 || cp === 0xFEFF)) {
-                if (curOptions.allowSpacesBetween && !tmpSpace) {
+                if (!curOptions.noSpaceBetween && !tmpSpace) {
                     tmpSpace = c;
                     curStr = curStr.substring(1);
                     continue;
