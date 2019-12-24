@@ -9,6 +9,17 @@ export class MyanmarTextFragmenter {
     }
 
     getNextFragment(input: string, options?: MyanmarTextFragmenterOptions): TextFragment | null {
+        const firstC = input[0];
+        // ဤ / ဪ / ၌ / ၊ / ။ / ၍ / ၏
+        if (firstC === '\u1024' || firstC === '\u102A' ||
+            firstC === '\u104A' || firstC === '\u104B' ||
+            firstC === '\u104C' || firstC === '\u104D' || firstC === '\u104F') {
+            return {
+                matchedString: firstC,
+                independentLetter: true
+            };
+        }
+
         return null;
     }
 }
