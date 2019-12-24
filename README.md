@@ -2,7 +2,9 @@
 
 [![Gitter](https://badges.gitter.im/myanmartools/community.svg)](https://gitter.im/myanmartools/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+Myanmar Text (Burmese language) segmentation, fragmentation and splitting JavaScript library modules for Web, Node.js and Angular applications written in Typescript.
 
+[WIP]
 
 ## Feedback and Contributing
 
