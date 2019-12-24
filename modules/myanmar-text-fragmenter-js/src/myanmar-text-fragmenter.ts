@@ -1,5 +1,5 @@
 import { MyanmarTextFragmenterOptions } from './myanmar-text-fragmenter-options';
-import { NonGrammarTextFragmentOptions } from './non-grammar-text-fragment-options';
+import { PossibleTextFragmentOptions } from './possible-text-fragment-options';
 import { TextFragment } from './text-fragment';
 
 export class MyanmarTextFragmenter {
@@ -32,7 +32,7 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    getNextNonGrammarFragment(input: string, options?: NonGrammarTextFragmentOptions): TextFragment | null {
+    getNextPossibleFragment(input: string, options?: PossibleTextFragmentOptions): TextFragment | null {
         let curStr = input;
         let tmpSpace = '';
         let trimedMatchedStr = '';
