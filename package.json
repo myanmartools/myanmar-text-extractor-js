@@ -2,6 +2,7 @@
   "name": "myanmar-text-fragmenter-js",
   "version": "0.0.0",
   "author": "DagonMetric",
+  "description": "Myanmar Text (Burmese language) segmentation, fragmentation and splitting JavaScript library modules for Web, Node.js and Angular applications written in Typescript.",
   "license": "MIT",
   "repository": {
     "type": "git",
