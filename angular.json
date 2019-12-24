@@ -3,17 +3,17 @@
   "version": 1,
   "newProjectRoot": "modules",
   "projects": {
-    "default-library-name": {
-      "root": "modules/default-library-name",
-      "sourceRoot": "modules/default-library-name",
+    "myanmar-text-fragmenter-js": {
+      "root": "modules/myanmar-text-fragmenter-js",
+      "sourceRoot": "modules/myanmar-text-fragmenter-js",
       "projectType": "library",
       "architect": {
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "modules/default-library-name/test.ts",
-            "tsConfig": "modules/default-library-name/tsconfig-test.json",
-            "karmaConfig": "modules/default-library-name/karma.conf.js",
+            "main": "modules/myanmar-text-fragmenter-js/test.ts",
+            "tsConfig": "modules/myanmar-text-fragmenter-js/tsconfig-test.json",
+            "karmaConfig": "modules/myanmar-text-fragmenter-js/karma.conf.js",
             "codeCoverageExclude": [
               "**/test.ts",
               "**/index.ts",
@@ -44,5 +44,5 @@
       }
     }
   },
-  "defaultProject": "default-library-name"
+  "defaultProject": "myanmar-text-fragmenter-js"
 }

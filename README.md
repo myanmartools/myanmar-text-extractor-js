@@ -1,22 +1,13 @@
-# repo-title
+# Myanmar Text Fragmenter
 
-[![Gitter](https://badges.gitter.im/gitter-channel-name.svg)](https://gitter.im/gitter-channel-name?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/myanmartools/community.svg)](https://gitter.im/myanmartools/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Template variables:
 
-```code
-organization-name
-repo-title
-repo-name
-gitter-channel-name
-default-library-name
-copyright-name
-```
 
 ## Feedback and Contributing
 
-Check out the [Contributing](https://github.com/organization-name/repo-name//blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
+Check out the [Contributing](https://github.com/myanmartools/myanmar-text-fragmenter-js/blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
 
 ## License
 
-This repository is licensed with the [MIT](https://github.com/organization-name/repo-name/blob/master/LICENSE) license.
+This repository is licensed with the [MIT](https://github.com/myanmartools/myanmar-text-fragmenter-js/blob/master/LICENSE) license.

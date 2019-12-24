@@ -1,16 +1,16 @@
 {
-  "name": "repo-name",
+  "name": "myanmar-text-fragmenter-js",
   "version": "0.0.0",
   "author": "DagonMetric",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/organization-name/repo-name.git"
+    "url": "git+https://github.com/myanmartools/myanmar-text-fragmenter-js.git"
   },
   "bugs": {
-    "url": "https://github.com/organization-name/repo-name/issues"
+    "url": "https://github.com/myanmartools/myanmar-text-fragmenter-js/issues"
   },
-  "homepage": "https://github.com/organization-name/repo-name",
+  "homepage": "https://github.com/myanmartools/myanmar-text-fragmenter-js",
   "scripts": {
     "ng": "ng",
     "lint": "ng lint",
