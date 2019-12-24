@@ -1,3 +1,1 @@
-export interface MyanmarTextFragmenterOptions {
-    allowSpacesBetween?: boolean;
-}
+export interface MyanmarTextFragmenterOptions {}
