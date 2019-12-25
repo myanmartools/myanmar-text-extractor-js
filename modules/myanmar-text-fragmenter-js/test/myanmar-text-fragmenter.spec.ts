@@ -12,7 +12,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ဤ -> ဤ
-    it(String.raw`should return fragement '\u1024' when input '\u1024'`, () => {
+    it(String.raw`'\u1024' -> '\u1024'`, () => {
         const fragment = fragmenter.getNextFragment('\u1024') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u1024',
@@ -22,7 +22,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ဪ -> ဪ
-    it(String.raw`should return fragement '\u102A' when input '\u102A'`, () => {
+    it(String.raw`'\u102A' -> '\u102A'`, () => {
         const fragment = fragmenter.getNextFragment('\u102A') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u102A',
@@ -32,7 +32,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ၊ -> ၊
-    it(String.raw`should return fragement '\u104A' when input '\u104A'`, () => {
+    it(String.raw`'\u104A' -> '\u104A'`, () => {
         const fragment = fragmenter.getNextFragment('\u104A') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u104A',
@@ -42,7 +42,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ။ -> ။
-    it(String.raw`should return fragement '\u104B' when input '\u104B'`, () => {
+    it(String.raw`'\u104B' -> '\u104B'`, () => {
         const fragment = fragmenter.getNextFragment('\u104B') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u104B',
@@ -52,7 +52,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ၌ -> ၌
-    it(String.raw`should return fragement '\u104C' when input '\u104C'`, () => {
+    it(String.raw`'\u104C' -> '\u104C'`, () => {
         const fragment = fragmenter.getNextFragment('\u104C') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u104C',
@@ -62,7 +62,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ၍ -> ၍
-    it(String.raw`should return fragement '\u104D' when input '\u104D'`, () => {
+    it(String.raw`'\u104D' -> '\u104D'`, () => {
         const fragment = fragmenter.getNextFragment('\u104D') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u104D',
@@ -72,7 +72,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ၏ -> ၏
-    it(String.raw`should return fragement '\u104F' when input '\u104F'`, () => {
+    it(String.raw`'\u104F' -> '\u104F'`, () => {
         const fragment = fragmenter.getNextFragment('\u104F') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u104F',
@@ -82,7 +82,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
     });
 
     // ဤက -> ဤ
-    it(String.raw`should return fragement '\u1024' when input '\u1024\u1000'`, () => {
+    it(String.raw`'\u1024\u1000' -> '\u1024'`, () => {
         const fragment = fragmenter.getNextFragment('\u1024\u1000') as TextFragment;
 
         expect(fragment.matchedString).toBe('\u1024',
