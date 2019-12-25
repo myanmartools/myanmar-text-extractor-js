@@ -30,7 +30,10 @@ export class MyanmarTextFragmenter {
         const curOptions = options || this._options;
 
         if ((fCp >= 0x102B && fCp <= 0x103E) && !curOptions.noInvalidStart) {
-            return this.getNextInvalidFragment(input, curOptions);
+            return this.getNextInvalidFragment(input.substring(1), curOptions, {
+                matchedString: firstC,
+                errors: ['invalidStart']
+            });
         }
 
         if (!((fCp >= 0x1000 && fCp <= 0x1021) || fCp === 0x1023 ||
@@ -41,18 +44,14 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getNextInvalidFragment(input: string, curOptions: TextFragmenterOptions): TextFragment | null {
-        let curStr = input;
+    private getNextInvalidFragment(curStr: string, curOptions: TextFragmenterOptions, textFragment: TextFragment): TextFragment | null {
         let tmpSpace = '';
         let trimedMatchedStr = '';
-
-        const textFragment: TextFragment = {
-            matchedString: ''
-        };
 
         while (curStr.length > 0) {
             const c = curStr[0];
             const cp = c.codePointAt(0);
+
             if (!cp) {
                 break;
             }
