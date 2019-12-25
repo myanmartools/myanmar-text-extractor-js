@@ -1,8 +1,10 @@
-import { TextFragmentErrorType } from './text-fragment-error-type';
-
 export interface TextFragment {
     matchedString: string;
-    standaloneLetter?: boolean;
-    errors?: TextFragmentErrorType[];
-    spaceIncluded?: boolean;
+    normalizedString: string;
+    uncombinableLetter?: boolean;
+    error?: {
+        invalidUnicodeOrder?: boolean;
+        invalidStart?: boolean;
+        spaceIncluded?: boolean;
+    };
 }

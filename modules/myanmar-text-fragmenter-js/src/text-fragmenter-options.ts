@@ -4,10 +4,6 @@ export interface TextFragmenterOptions {
      */
     noSpaceBetween?: boolean;
     /**
-     * Max numbers of space characters to be allowed.
-     */
-    maxSpaceBetween?: number;
-    /**
      * Do not collect if the input starts with diacritics letters [\u102B-\u103E].
      */
     noInvalidStart?: boolean;

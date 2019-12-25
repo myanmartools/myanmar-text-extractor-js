@@ -18,7 +18,8 @@ export class MyanmarTextFragmenter {
             firstC === '\u104C' || firstC === '\u104D' || firstC === '\u104F') {
             return {
                 matchedString: firstC,
-                standaloneLetter: true
+                normalizedString: firstC,
+                uncombinableLetter: true
             };
         }
 
@@ -30,9 +31,10 @@ export class MyanmarTextFragmenter {
         const curOptions = options || this._options;
 
         if ((fCp >= 0x102B && fCp <= 0x103E) && !curOptions.noInvalidStart) {
-            return this.getNextInvalidFragment(input.substring(1), curOptions, {
+            return this.getNextFragmentForInvalid(input.substring(1), curOptions, {
                 matchedString: firstC,
-                errors: ['invalidStart']
+                normalizedString: firstC,
+                error: { invalidUnicodeOrder: true, invalidStart: true }
             });
         }
 
@@ -44,9 +46,8 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getNextInvalidFragment(curStr: string, curOptions: TextFragmenterOptions, textFragment: TextFragment): TextFragment | null {
+    private getNextFragmentForInvalid(curStr: string, curOptions: TextFragmenterOptions, textFragment: TextFragment): TextFragment | null {
         let tmpSpace = '';
-        let trimedMatchedStr = '';
 
         while (curStr.length > 0) {
             const c = curStr[0];
@@ -58,9 +59,10 @@ export class MyanmarTextFragmenter {
 
             if (cp >= 0x102B && cp <= 0x103E) {
                 textFragment.matchedString += tmpSpace + c;
-                trimedMatchedStr += c;
+                textFragment.normalizedString += c;
                 if (tmpSpace) {
-                    textFragment.spaceIncluded = true;
+                    textFragment.error = textFragment.error || {};
+                    textFragment.error.spaceIncluded = true;
                 }
 
                 tmpSpace = '';
@@ -70,8 +72,8 @@ export class MyanmarTextFragmenter {
 
             if ((cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || cp === 0x180E || (cp >= 0x2000 && cp <= 0x200B) ||
                 cp === 0x202F || cp === 0x205F || cp === 0x3000 || cp === 0xFEFF)) {
-                if (!curOptions.noSpaceBetween && !tmpSpace) {
-                    tmpSpace = c;
+                if (!curOptions.noSpaceBetween) {
+                    tmpSpace += c;
                     curStr = curStr.substring(1);
                     continue;
                 }
@@ -79,15 +81,17 @@ export class MyanmarTextFragmenter {
                 break;
             }
 
-            const prevC = trimedMatchedStr.length > 0 ? trimedMatchedStr[trimedMatchedStr.length - 1] : '';
+            const prevC = textFragment.normalizedString[textFragment.normalizedString.length - 1];
 
             // Check char after Kinsi \u103A\u1039
-            if (prevC === '\u1039' && trimedMatchedStr.length > 1 && trimedMatchedStr[trimedMatchedStr.length - 2] === '\u103A' &&
+            if (prevC === '\u1039' && textFragment.normalizedString.length > 1 &&
+                textFragment.normalizedString[textFragment.normalizedString.length - 2] === '\u103A' &&
                 ((cp >= 0x1000 && cp <= 0x102A) || cp === 0x103F || (cp >= 0x1040 && cp <= 0x1049) || cp === 0x104E)) {
                 textFragment.matchedString += tmpSpace + c;
-                trimedMatchedStr += c;
+                textFragment.normalizedString += c;
                 if (tmpSpace) {
-                    textFragment.spaceIncluded = true;
+                    textFragment.error = textFragment.error || {};
+                    textFragment.error.spaceIncluded = true;
                 }
 
                 tmpSpace = '';
@@ -98,9 +102,10 @@ export class MyanmarTextFragmenter {
             // Check char after Pahsin \u1039
             if (prevC === '\u1039' && ((cp >= 0x1000 && cp <= 0x1022) || cp === 0x1027 || cp === 0x103F)) {
                 textFragment.matchedString += tmpSpace + c;
-                trimedMatchedStr += c;
+                textFragment.normalizedString += c;
                 if (tmpSpace) {
-                    textFragment.spaceIncluded = true;
+                    textFragment.error = textFragment.error || {};
+                    textFragment.error.spaceIncluded = true;
                 }
 
                 tmpSpace = '';
@@ -112,9 +117,10 @@ export class MyanmarTextFragmenter {
             if (aThatMatch != null) {
                 const matchedStr = aThatMatch[0];
                 textFragment.matchedString += tmpSpace + matchedStr;
-                trimedMatchedStr += matchedStr;
+                textFragment.normalizedString += c;
                 if (tmpSpace) {
-                    textFragment.spaceIncluded = true;
+                    textFragment.error = textFragment.error || {};
+                    textFragment.error.spaceIncluded = true;
                 }
 
                 tmpSpace = '';
