@@ -17,7 +17,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u1024',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -27,7 +26,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u102A',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -37,7 +35,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104A',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -47,7 +44,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104B',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -57,7 +53,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104C',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -67,7 +62,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104D',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -77,7 +71,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104F',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 
@@ -87,7 +80,6 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u1024',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.uncombinableLetter).toBeTruthy();
         expect(fragment.error).toBeFalsy();
     });
 });
