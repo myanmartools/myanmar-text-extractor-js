@@ -18,8 +18,7 @@ export class MyanmarTextFragmenter {
             firstC === '\u104C' || firstC === '\u104D' || firstC === '\u104F') {
             return {
                 matchedString: firstC,
-                normalizedString: firstC,
-                uncombinableLetter: true
+                normalizedString: firstC
             };
         }
 
