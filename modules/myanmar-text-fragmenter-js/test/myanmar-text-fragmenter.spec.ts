@@ -16,8 +16,8 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u1024',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 
     it(String.raw`should return fragement '\u102A' when input '\u102A' (standalone letter)`, () => {
@@ -25,8 +25,8 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u102A',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 
     it(String.raw`should return fragement '\u104A' when input '\u104A' (standalone letter)`, () => {
@@ -34,8 +34,8 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104A',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 
     it(String.raw`should return fragement '\u104B' when input '\u104B' (standalone letter)`, () => {
@@ -43,8 +43,8 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104B',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 
     it(String.raw`should return fragement '\u104C' when input '\u104C' (standalone letter)`, () => {
@@ -52,8 +52,8 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104C',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 
     it(String.raw`should return fragement '\u104D' when input '\u104D' (standalone letter)`, () => {
@@ -61,8 +61,8 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104D',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 
     it(String.raw`should return fragement '\u104F' when input '\u104F' (standalone letter)`, () => {
@@ -70,7 +70,7 @@ describe('MyanmarTextFragmenter#getNextFragment', () => {
 
         expect(fragment.matchedString).toBe('\u104F',
             `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-        expect(fragment.standaloneLetter).toBeTruthy();
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.uncombinableLetter).toBeTruthy();
+        expect(fragment.error).toBeFalsy();
     });
 });
