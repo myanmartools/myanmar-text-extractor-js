@@ -30,10 +30,13 @@ export class MyanmarTextFragmenter {
         const curOptions = options || this._options;
 
         if ((fCp >= 0x102B && fCp <= 0x103E) && !curOptions.noInvalidStart) {
-            return this.getNextFragmentForInvalid(input.substring(1), curOptions, {
+            return this.getNextRawFragment(input.substring(1), curOptions, {
                 matchedString: firstC,
                 normalizedString: firstC,
-                error: { invalidUnicodeOrder: true, invalidStart: true }
+                error: {
+                    invalidUnicodeOrder: true,
+                    invalidStart: true
+                }
             });
         }
 
@@ -45,7 +48,7 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getNextFragmentForInvalid(curStr: string, curOptions: TextFragmenterOptions, textFragment: TextFragment): TextFragment | null {
+    private getNextRawFragment(curStr: string, curOptions: TextFragmenterOptions, textFragment: TextFragment): TextFragment | null {
         let tmpSpace = '';
 
         while (curStr.length > 0) {
@@ -59,12 +62,12 @@ export class MyanmarTextFragmenter {
             if (cp >= 0x102B && cp <= 0x103E) {
                 textFragment.matchedString += tmpSpace + c;
                 textFragment.normalizedString += c;
-                if (tmpSpace) {
+                if (tmpSpace.length > 0) {
                     textFragment.error = textFragment.error || {};
                     textFragment.error.spaceIncluded = true;
+                    tmpSpace = '';
                 }
 
-                tmpSpace = '';
                 curStr = curStr.substring(1);
                 continue;
             }
@@ -88,12 +91,12 @@ export class MyanmarTextFragmenter {
                 ((cp >= 0x1000 && cp <= 0x102A) || cp === 0x103F || (cp >= 0x1040 && cp <= 0x1049) || cp === 0x104E)) {
                 textFragment.matchedString += tmpSpace + c;
                 textFragment.normalizedString += c;
-                if (tmpSpace) {
+                if (tmpSpace.length > 0) {
                     textFragment.error = textFragment.error || {};
                     textFragment.error.spaceIncluded = true;
+                    tmpSpace = '';
                 }
 
-                tmpSpace = '';
                 curStr = curStr.substring(1);
                 continue;
             }
@@ -102,12 +105,12 @@ export class MyanmarTextFragmenter {
             if (prevC === '\u1039' && ((cp >= 0x1000 && cp <= 0x1022) || cp === 0x1027 || cp === 0x103F)) {
                 textFragment.matchedString += tmpSpace + c;
                 textFragment.normalizedString += c;
-                if (tmpSpace) {
+                if (tmpSpace.length > 0) {
                     textFragment.error = textFragment.error || {};
                     textFragment.error.spaceIncluded = true;
+                    tmpSpace = '';
                 }
 
-                tmpSpace = '';
                 curStr = curStr.substring(1);
                 continue;
             }
@@ -117,12 +120,12 @@ export class MyanmarTextFragmenter {
                 const matchedStr = aThatMatch[0];
                 textFragment.matchedString += tmpSpace + matchedStr;
                 textFragment.normalizedString += c;
-                if (tmpSpace) {
+                if (tmpSpace.length > 0) {
                     textFragment.error = textFragment.error || {};
                     textFragment.error.spaceIncluded = true;
+                    tmpSpace = '';
                 }
 
-                tmpSpace = '';
                 curStr = curStr.substring(matchedStr.length);
                 continue;
             }
