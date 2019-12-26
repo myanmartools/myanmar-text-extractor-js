@@ -34,7 +34,7 @@ export class MyanmarTextFragmenter {
                 matchedString: firstC,
                 normalizedString: firstC,
                 error: {
-                    invalidUnicodeOrder: true,
+                    invalidUnicodeForm: true,
                     invalidStart: true
                 }
             });
@@ -101,7 +101,7 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            // Check char after Pahsin \u1039
+            // Check char after \u1039
             if (prevC === '\u1039' && ((cp >= 0x1000 && cp <= 0x1022) || cp === 0x1027 || cp === 0x103F)) {
                 textFragment.matchedString += tmpSpace + c;
                 textFragment.normalizedString += c;
