@@ -25,13 +25,31 @@ export class MyanmarTextFragmenter {
 
     getNextFragment(input: string, options?: TextFragmenterOptions): TextFragment | null {
         const firstC = input[0];
-        // ဤ / ဪ / ၊ / ။ / ၌ / ၍ / ၏
-        if (firstC === '\u1024' || firstC === '\u102A' ||
-            firstC === '\u104A' || firstC === '\u104B' ||
-            firstC === '\u104C' || firstC === '\u104D' || firstC === '\u104F') {
+        // ဤ / ဪ
+        if (firstC === '\u1024' || firstC === '\u102A') {
             return {
-                matchedString: firstC,
-                normalizedString: firstC
+                matchedStr: firstC,
+                uncombinableLetter: true,
+                syllableIncluded: true
+            };
+        }
+
+        // ၌ / ၍ / ၏
+        if (firstC === '\u104C' || firstC === '\u104D' || firstC === '\u104F') {
+            return {
+                matchedStr: firstC,
+                uncombinableLetter: true,
+                punctuationLetter: true,
+                syllableIncluded: true
+            };
+        }
+
+        // ၊ / ။
+        if (firstC === '\u104A' || firstC === '\u104B') {
+            return {
+                matchedStr: firstC,
+                uncombinableLetter: true,
+                punctuationLetter: true
             };
         }
 
@@ -42,122 +60,18 @@ export class MyanmarTextFragmenter {
 
         const curOptions = options || this._options;
 
-        // if ((fCp >= 0x102B && fCp <= 0x103E) && !curOptions.noInvalidStart) {
-        //     return this.getNextFragmentCore(input.substring(1), curOptions, {
-        //         matchedString: firstC,
-        //         normalizedString: firstC,
-        //         error: {
-        //             invalidUnicodeForm: true,
-        //             invalidStart: true
-        //         }
-        //     });
-        // }
-
-        return this.getConsonantCombination(input, firstCp, curOptions);
+        return this.getFragmentForCombination(input, firstCp, curOptions);
     }
 
-    // private getNextFragmentCore(curStr: string, curOptions: TextFragmenterOptions, textFragment: TextFragment): TextFragment | null {
-    //     let tmpSpace = '';
-
-    //     while (curStr.length > 0) {
-    //         const c = curStr[0];
-    //         const cp = c.codePointAt(0);
-
-    //         if (!cp) {
-    //             break;
-    //         }
-
-    //         if (cp >= 0x102B && cp <= 0x103E) {
-    //             textFragment.matchedString += tmpSpace + c;
-    //             textFragment.normalizedString += c;
-    //             if (tmpSpace.length > 0) {
-    //                 textFragment.error = textFragment.error || {};
-    //                 textFragment.error.spaceIncluded = true;
-    //                 tmpSpace = '';
-    //             }
-
-    //             curStr = curStr.substring(1);
-    //             continue;
-    //         }
-
-    //         if ((cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || cp === 0x180E || (cp >= 0x2000 && cp <= 0x200B) ||
-    //             cp === 0x202F || cp === 0x205F || cp === 0x3000 || cp === 0xFEFF)) {
-    //             if (!curOptions.noSpaceBetween) {
-    //                 tmpSpace += c;
-    //                 curStr = curStr.substring(1);
-    //                 continue;
-    //             }
-
-    //             break;
-    //         }
-
-    //         const prevC = textFragment.normalizedString[textFragment.normalizedString.length - 1];
-
-    //         // Check char after Kinsi \u103A\u1039
-    //         if (prevC === '\u1039' && textFragment.normalizedString.length > 1 &&
-    //             textFragment.normalizedString[textFragment.normalizedString.length - 2] === '\u103A' &&
-    //             ((cp >= 0x1000 && cp <= 0x102A) || cp === 0x103F || (cp >= 0x1040 && cp <= 0x1049) || cp === 0x104E)) {
-    //             textFragment.matchedString += tmpSpace + c;
-    //             textFragment.normalizedString += c;
-    //             if (tmpSpace.length > 0) {
-    //                 textFragment.error = textFragment.error || {};
-    //                 textFragment.error.spaceIncluded = true;
-    //                 tmpSpace = '';
-    //             }
-
-    //             curStr = curStr.substring(1);
-    //             continue;
-    //         }
-
-    //         // Check char after \u1039
-    //         if (prevC === '\u1039' && ((cp >= 0x1000 && cp <= 0x1022) || cp === 0x1027 || cp === 0x103F)) {
-    //             textFragment.matchedString += tmpSpace + c;
-    //             textFragment.normalizedString += c;
-    //             if (tmpSpace.length > 0) {
-    //                 textFragment.error = textFragment.error || {};
-    //                 textFragment.error.spaceIncluded = true;
-    //                 tmpSpace = '';
-    //             }
-
-    //             curStr = curStr.substring(1);
-    //             continue;
-    //         }
-
-    //         const aThatMatch = curStr.trim().length > 1 ? curStr.match(this._aThetRegExp) : null;
-    //         if (aThatMatch != null) {
-    //             const matchedStr = aThatMatch[0];
-    //             textFragment.matchedString += tmpSpace + matchedStr;
-    //             textFragment.normalizedString += c;
-    //             if (tmpSpace.length > 0) {
-    //                 textFragment.error = textFragment.error || {};
-    //                 textFragment.error.spaceIncluded = true;
-    //                 tmpSpace = '';
-    //             }
-
-    //             curStr = curStr.substring(matchedStr.length);
-    //             continue;
-    //         }
-
-    //         break;
-    //     }
-
-    //     return textFragment.matchedString ? textFragment : null;
-    // }
-
-    private getConsonantCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
+    private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
         if (!((firstCp >= 0x1000 && firstCp <= 0x1021) ||
             firstCp === 0x1023 || (firstCp >= 0x1025 && firstCp <= 0x1027) ||
-            firstCp === 0x1029 || firstCp === 0x104E)) {
+            firstCp === 0x1029 || firstCp === 0x103F ||
+            (firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x104E)) {
             return null;
         }
 
-        const firstC = input[0];
-        const textFragment: TextFragment = {
-            matchedString: firstC,
-            normalizedString: firstC
-        };
-
-        const inputLen = input.length;
+        const normalizedTextFragment = this.getNormalizedFragmentForConsonantCombination(input, curOptions);
 
         if (inputLen < 2) {
             return textFragment;
@@ -196,10 +110,58 @@ export class MyanmarTextFragmenter {
             if (matchedStr != null) {
                 textFragment.matchedString += matchedStr;
                 textFragment.normalizedString += matchedStr;
+
+                return textFragment;
             }
         }
 
         return textFragment;
+    }
+
+    private getNormalizedFragmentForConsonantCombination(input: string, curOptions: TextFragmenterOptions): TextFragment | null {
+        let tmpSpace = '';
+        const textFragment: TextFragment = {
+            matchedString: input[0],
+            normalizedString: input[0]
+        };
+
+        let curStr = input.substring(1);
+
+        while (curStr.length > 0) {
+            const c = curStr[0];
+            const cp = c.codePointAt(0);
+
+            if (!cp) {
+                break;
+            }
+
+            if (cp >= 0x102B && cp <= 0x103E) {
+                textFragment.matchedString += tmpSpace + c;
+                textFragment.normalizedString += c;
+                if (tmpSpace) {
+                    textFragment.spaceIncluded = true;
+                    tmpSpace = '';
+                }
+
+                curStr = curStr.substring(1);
+                continue;
+            }
+
+            if ((cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || cp === 0x180E || (cp >= 0x2000 && cp <= 0x200B) ||
+                cp === 0x202F || cp === 0x205F || cp === 0x3000 || cp === 0xFEFF)) {
+                if (!curOptions.noSpaceBetween) {
+                    tmpSpace += c;
+                    curStr = curStr.substring(1);
+                    continue;
+                }
+
+                break;
+            }
+
+            break;
+        }
+
+        return textFragment.matchedString ? textFragment : null;
     }
 
     private matchU103BOrU103CStart(curStr: string): string | null {

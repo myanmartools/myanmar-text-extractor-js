@@ -1,9 +1,20 @@
 export interface TextFragment {
-    matchedString: string;
-    normalizedString: string;
+    matchedStr: string;
+    suggestedStr?: string;
+
+    numberFragment?: boolean;
+    numberOrderList?: boolean;
+    orderListDigitStr?: string;
+
+    uncombinableLetter?: boolean;
+    punctuationLetter?: boolean;
+    syllableIncluded?: boolean;
+
     error?: {
         invalidUnicodeForm?: boolean;
-        invalidStart?: boolean;
+        invalidDiacriticsStart?: boolean;
         spaceIncluded?: boolean;
+        invalidU101DInsteadOfU1040?: boolean;
+        invalidU104EInsteadOfU1044?: boolean;
     };
 }
