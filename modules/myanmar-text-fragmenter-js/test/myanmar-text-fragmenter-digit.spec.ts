@@ -35,6 +35,8 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
         expect(fragment.matchedStr).toBe('(\u1041)',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
         expect(fragment.numberFragment).toBeTruthy();
+        expect(fragment.numberOrderList).toBeTruthy();
+        expect(fragment.orderListDigitStr).toEqual('\u1041');
         expect(fragment.error).toBeFalsy();
     });
 });
