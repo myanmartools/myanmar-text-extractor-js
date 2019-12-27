@@ -3,6 +3,12 @@ import { TextFragment } from './text-fragment';
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
+    private readonly _orderListNonBoxRegExp = new RegExp('^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]\u104A\u104B]');
+    private readonly _orderListBoxRegExp = new RegExp('^[\[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]]');
+
+    private readonly _thousandSeparatorSuffixRegex = new RegExp('([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?');
+    private readonly _underscoreSeparatorSuffixRegex = new RegExp('(\u005F[\u101D\u1040-\u1049\u104E]+)+');
+
     // // [\u103B\u103C]
     // //
     // // ကျှော် / ကျှော့ / ကျှော (Length: 4)
@@ -18,22 +24,49 @@ export class MyanmarTextFragmenter {
     // // ကျေး / ကျေ့ / ကျေ (Length: 2)
     // private readonly _d3bOr3c31O37Or38RegExp = new RegExp('^[\u103B\u103C]\u1031[\u1037\u1038]?');
 
-    private readonly _orderListNonBoxRegExp = new RegExp('^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]\u104A\u104B]');
-    private readonly _orderListBoxRegExp = new RegExp('^[\[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]]');
-
-    private readonly _thousandSeparatorSuffixRegex = new RegExp('([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?');
-    private readonly _underscoreSeparatorSuffixRegex = new RegExp('(\u005F[\u101D\u1040-\u1049\u104E]+)+');
-
     // constructor(options?: TextFragmenterOptions) {
     //     this._options = options || {};
     // }
 
-    getNextDigitFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
-        const firstCp = input.codePointAt(0);
+    getNextFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+        const firstC = input[0];
+        const firstCp = firstC.codePointAt(0);
         if (!firstCp) {
             return null;
         }
 
+        // ဤ / ဪ
+        if (firstCp === 0x1024 || firstCp === 0x102A) {
+            return {
+                matchedStr: firstC,
+                uncombinableLetter: true,
+                syllableIncluded: true
+            };
+        }
+
+        // ၌ / ၍ / ၏
+        if (firstCp === 0x104C || firstCp === 0x104D || firstCp === 0x104F) {
+            return {
+                matchedStr: firstC,
+                uncombinableLetter: true,
+                punctuationLetter: true,
+                syllableIncluded: true
+            };
+        }
+
+        // ၊ / ။
+        if (firstCp === 0x104A || firstCp === 0x104B) {
+            return {
+                matchedStr: firstC,
+                uncombinableLetter: true,
+                punctuationLetter: true
+            };
+        }
+
+        return this.getNextDigitFragment(input, firstCp, prevFragments);
+    }
+
+    private getNextDigitFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         if ((firstCp === 0x0028 || firstCp === 0x005B) && input.length > 2) {
             return this.getOrderListDigitFragment(input, firstCp, prevFragments);
         }
@@ -296,46 +329,6 @@ export class MyanmarTextFragmenter {
 
         return textFragment;
     }
-
-    // getNextFragment(input: string, options?: TextFragmenterOptions): TextFragment | null {
-    //     const firstC = input[0];
-    //     // ဤ / ဪ
-    //     if (firstC === '\u1024' || firstC === '\u102A') {
-    //         return {
-    //             matchedStr: firstC,
-    //             uncombinableLetter: true,
-    //             syllableIncluded: true
-    //         };
-    //     }
-
-    //     // ၌ / ၍ / ၏
-    //     if (firstC === '\u104C' || firstC === '\u104D' || firstC === '\u104F') {
-    //         return {
-    //             matchedStr: firstC,
-    //             uncombinableLetter: true,
-    //             punctuationLetter: true,
-    //             syllableIncluded: true
-    //         };
-    //     }
-
-    //     // ၊ / ။
-    //     if (firstC === '\u104A' || firstC === '\u104B') {
-    //         return {
-    //             matchedStr: firstC,
-    //             uncombinableLetter: true,
-    //             punctuationLetter: true
-    //         };
-    //     }
-
-    //     const firstCp = firstC.codePointAt(0);
-    //     if (!firstCp) {
-    //         return null;
-    //     }
-
-    //     const curOptions = options || this._options;
-
-    //     return this.getFragmentForCombination(input, firstCp, curOptions);
-    // }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
     //     if (!((firstCp >= 0x1000 && firstCp <= 0x1021) ||
