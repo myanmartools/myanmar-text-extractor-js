@@ -4,7 +4,7 @@ import { TextFragment } from '../src/text-fragment';
 
 import { formatCodePoints } from './shared/format-code-points.spec';
 
-describe('MyanmarTextFragmenter#getNextDigitFragment', () => {
+describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
     let fragmenter: MyanmarTextFragmenter;
 
     beforeEach(() => {
@@ -12,7 +12,7 @@ describe('MyanmarTextFragmenter#getNextDigitFragment', () => {
     });
 
     it(String.raw`'\u1040' -> '\u1040'`, () => {
-        const fragment = fragmenter.getNextDigitFragment('\u1040') as TextFragment;
+        const fragment = fragmenter.getNextFragment('\u1040') as TextFragment;
 
         expect(fragment.matchedStr).toBe('\u1040',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
