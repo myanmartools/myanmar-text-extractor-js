@@ -3,11 +3,11 @@ import { TextFragment } from './text-fragment';
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
-    private readonly _orderListNonBoxRegExp = new RegExp('^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]\u104A\u104B]');
-    private readonly _orderListBoxRegExp = new RegExp('^[\[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]]');
+    private readonly _orderListBoxRegExp = /^[\[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]]/;
+    private readonly _orderListNonBoxRegExp = /^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]\u104A\u104B]/;
 
-    private readonly _thousandSeparatorSuffixRegex = new RegExp('([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?');
-    private readonly _underscoreSeparatorSuffixRegex = new RegExp('(\u005F[\u101D\u1040-\u1049\u104E]+)+');
+    private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
+    private readonly _underscoreSeparatorSuffixRegex = /(\u005F[\u101D\u1040-\u1049\u104E]+)+/;
 
     // // [\u103B\u103C]
     // //
@@ -97,7 +97,7 @@ export class MyanmarTextFragmenter {
     private getOrderListDigitFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
 
-        if ((firstCp === 0x0028 || firstCp === 0x005B)) {
+        if (firstCp === 0x0028 || firstCp === 0x005B) {
             m = input.match(this._orderListBoxRegExp);
         } else {
             m = input.match(this._orderListNonBoxRegExp);
