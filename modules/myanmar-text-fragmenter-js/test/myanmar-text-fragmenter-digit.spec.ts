@@ -1,14 +1,14 @@
 
-import { MyanmarTextDigitFragmenter } from '../src/myanmar-text-digit-fragmenter';
+import { MyanmarTextFragmenter } from '../src/myanmar-text-fragmenter';
 import { TextFragment } from '../src/text-fragment';
 
 import { formatCodePoints } from './shared/format-code-points.spec';
 
-describe('MyanmarTextDigitFragmenter#getNextDigitFragment', () => {
-    let fragmenter: MyanmarTextDigitFragmenter;
+describe('MyanmarTextFragmenter#getNextDigitFragment', () => {
+    let fragmenter: MyanmarTextFragmenter;
 
     beforeEach(() => {
-        fragmenter = new MyanmarTextDigitFragmenter();
+        fragmenter = new MyanmarTextFragmenter();
     });
 
     it(String.raw`'\u1040' -> '\u1040'`, () => {
