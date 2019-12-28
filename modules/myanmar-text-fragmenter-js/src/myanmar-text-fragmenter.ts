@@ -274,36 +274,9 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        let normalizedStr = '';
-        let digitStr = '';
-        let u101dIncluded = false;
-        let u104eIncluded = false;
-        let spaceIncluded = false;
+        const numberMatchInfo = this.getNumberMatchInfo(matchedStr);
 
-        for (const c of matchedStr) {
-            const cp = c.codePointAt(0) as number;
-            if (cp === 0x0020 || cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
-                spaceIncluded = true;
-                continue;
-            }
-
-            if (cp >= 0x1040 && cp <= 0x1049) {
-                digitStr += c;
-                normalizedStr += c;
-            } else if (cp === 0x101D) {
-                u101dIncluded = true;
-                digitStr += '\u1040';
-                normalizedStr += '\u1040';
-            } else if (cp === 0x104E) {
-                u104eIncluded = true;
-                digitStr += '\u1044';
-                normalizedStr += '\u1044';
-            } else {
-                normalizedStr += c;
-            }
-        }
-
-        if (digitStr === '\u1044' && u104eIncluded) {
+        if (numberMatchInfo.digitStr === '\u1044' && numberMatchInfo.u104eIncluded) {
             if (!prevFragments) {
                 return null;
             }
@@ -329,24 +302,24 @@ export class MyanmarTextFragmenter {
 
         const textFragment: TextFragment = {
             matchedStr,
-            normalizedStr,
+            normalizedStr: numberMatchInfo.normalizedStr,
             numberFragment: true,
             numberOrderList: true,
-            digitStr
+            digitStr: numberMatchInfo.digitStr
         };
 
-        if (spaceIncluded) {
+        if (numberMatchInfo.spaceIncluded) {
             textFragment.spaceIncluded = true;
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidSpaceIncluded = true;
         }
 
-        if (u101dIncluded) {
+        if (numberMatchInfo.u101dIncluded) {
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidU101DInsteadOfU1040 = true;
         }
 
-        if (u104eIncluded) {
+        if (numberMatchInfo.u104eIncluded) {
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidU104EInsteadOfU1044 = true;
         }
