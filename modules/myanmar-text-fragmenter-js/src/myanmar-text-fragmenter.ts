@@ -127,7 +127,7 @@ export class MyanmarTextFragmenter {
     /**
      * Get ancient 'အင်္ဂါ' number fragment - e.g. \u1004\u103A\u1039\u1041\u102B င်္၁ါ - (၁)အင်္ဂါ
      */
-    private getNumberIngaFragment(input: string, leftDigitStr?: string): TextFragment | null {
+    private getNumberIngaFragment(input: string, prevNumberFragment?: TextFragment): TextFragment | null {
         if (input.length < 5) {
             return null;
         }
@@ -143,26 +143,30 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        if (c4Cp === 0x1040 && !leftDigitStr) {
+        if (c4Cp === 0x1040 && (!prevNumberFragment || !prevNumberFragment.digitStr)) {
             return null;
         }
 
-        leftDigitStr = leftDigitStr || '';
-        const curMatchedStr = input.substring(5);
-        const matchedStr = leftDigitStr + curMatchedStr;
+        const curMatchedStr = input.substring(0, 5);
+        const matchedStr = (prevNumberFragment?.matchedStr || '') + curMatchedStr;
+        const normalizedStr = (prevNumberFragment?.normalizedStr || '') + curMatchedStr;
+        const digitStr = (prevNumberFragment?.digitStr || '') + c4;
 
         return {
             matchedStr,
-            normalizedStr: matchedStr,
+            normalizedStr,
             numberFragment: true,
-            ancient: true
+            digitStr,
+            ancient: true,
+            // အင်္ဂါ
+            measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
     }
 
     /**
      * Get ancient `တင်း` / `တောင်း` number fragment - e.g. \u1004\u103A\u1039\u1041 င်္၁ - (၁)တင်း / (၁)တောင်း
      */
-    private getNumberTinOrTaungFragment(input: string, leftDigitStr?: string): TextFragment | null {
+    private getNumberTinOrTaungFragment(input: string, prevNumberFragment?: TextFragment): TextFragment | null {
         if (input.length < 4) {
             return null;
         }
@@ -177,19 +181,36 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        if (c4Cp === 0x1040 && !leftDigitStr) {
+        if (c4Cp === 0x1040 && (!prevNumberFragment || !prevNumberFragment.digitStr)) {
             return null;
         }
 
-        leftDigitStr = leftDigitStr || '';
-        const curMatchedStr = input.substring(4);
-        const matchedStr = leftDigitStr + curMatchedStr;
+        const curMatchedStr = input.substring(0, 4);
+        const matchedStr = (prevNumberFragment?.matchedStr || '') + curMatchedStr;
+        const normalizedStr = (prevNumberFragment?.normalizedStr || '') + curMatchedStr;
+        const digitStr = (prevNumberFragment?.digitStr || '') + c4;
+
+        const rightStr = input.substring(curMatchedStr.length).trimLeft();
+        let measureWords: string[];
+        if (rightStr.startsWith('\u1010\u1031\u102C\u1004\u103A\u1038')) {
+            measureWords = ['\u1010\u1031\u102C\u1004\u103A\u1038'];
+        } else if (rightStr.startsWith('\u1010\u1004\u103A\u1038')) {
+            measureWords = ['\u1010\u1004\u103A\u1038'];
+        } else {
+            measureWords = [
+                '\u1010\u1031\u102C\u1004\u103A\u1038',
+                '\u1010\u1004\u103A\u1038'
+            ];
+        }
 
         return {
             matchedStr,
-            normalizedStr: matchedStr,
+            normalizedStr,
             numberFragment: true,
-            ancient: true
+            digitStr,
+            ancient: true,
+            // တောင်း / တင်း
+            measureWords
         };
     }
 
@@ -220,7 +241,10 @@ export class MyanmarTextFragmenter {
             matchedStr,
             normalizedStr: numberMatchInfo.normalizedStr,
             numberFragment: true,
-            ancient: true
+            digitStr: numberMatchInfo.digitStr,
+            ancient: true,
+            // ဆယ်သား
+            measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
 
         if (numberMatchInfo.spaceIncluded) {
@@ -291,7 +315,7 @@ export class MyanmarTextFragmenter {
                     continue;
                 }
 
-                if (prevFragment.orderListDigitStr === '\u1043') {
+                if (prevFragment.digitStr === '\u1043') {
                     foundMatch = true;
                 }
 
@@ -308,7 +332,7 @@ export class MyanmarTextFragmenter {
             normalizedStr,
             numberFragment: true,
             numberOrderList: true,
-            orderListDigitStr: digitStr
+            digitStr
         };
 
         if (spaceIncluded) {
