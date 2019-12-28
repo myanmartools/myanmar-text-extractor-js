@@ -45,4 +45,17 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
         expect(fragment.orderListDigitStr).toEqual('\u1041');
         expect(fragment.error).toBeFalsy();
     });
+
+    it(String.raw`should return digit fragment with order list when input '(\u1041\u1042\u1040)'`, () => {
+        const fragment = fragmenter.getNextFragment('(\u1041\u1042\u1040)') as TextFragment;
+
+        expect(fragment.matchedStr).toBe('(\u1041\u1042\u1040)',
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.suggestedStr).toBeFalsy();
+        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.numberFragment).toBeTruthy();
+        expect(fragment.numberOrderList).toBeTruthy();
+        expect(fragment.orderListDigitStr).toEqual('\u1041\u1042\u1040');
+        expect(fragment.error).toBeFalsy();
+    });
 });
