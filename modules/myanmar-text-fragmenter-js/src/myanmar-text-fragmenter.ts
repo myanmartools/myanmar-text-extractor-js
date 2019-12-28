@@ -96,7 +96,6 @@ export class MyanmarTextFragmenter {
 
     private getOrderListDigitFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
-
         if (firstCp === 0x0028 || firstCp === 0x005B) {
             m = input.match(this._orderListBoxRegExp);
         } else {
@@ -108,36 +107,32 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        let spaceNormalizedStr = '';
         let suggestedStr = '';
         let digitStr = '';
-
         let u101dIncluded = false;
         let u104eIncluded = false;
+        let spaceIncluded = false;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
             if (cp === 0x0020 || cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+                spaceIncluded = true;
                 continue;
             }
 
             if (cp >= 0x1040 && cp <= 0x1049) {
                 digitStr += c;
                 suggestedStr += c;
-                spaceNormalizedStr += c;
             } else if (cp === 0x101D) {
                 u101dIncluded = true;
                 digitStr += '\u1040';
                 suggestedStr += '\u1040';
-                spaceNormalizedStr += c;
             } else if (cp === 0x104E) {
                 u104eIncluded = true;
                 digitStr += '\u1044';
                 suggestedStr += '\u1044';
-                spaceNormalizedStr += c;
             } else {
                 suggestedStr += c;
-                spaceNormalizedStr += c;
             }
         }
 
@@ -167,11 +162,20 @@ export class MyanmarTextFragmenter {
 
         const textFragment: TextFragment = {
             matchedStr,
-            suggestedStr,
             numberFragment: true,
             numberOrderList: true,
             orderListDigitStr: digitStr
         };
+
+        if (suggestedStr !== matchedStr) {
+            textFragment.suggestedStr = suggestedStr;
+        }
+
+        if (spaceIncluded) {
+            textFragment.spaceIncluded = true;
+            textFragment.error = textFragment.error || {};
+            textFragment.error.invalidSpaceIncluded = true;
+        }
 
         if (u101dIncluded) {
             textFragment.error = textFragment.error || {};
@@ -183,11 +187,6 @@ export class MyanmarTextFragmenter {
             textFragment.error.invalidU104EInsteadOfU1044 = true;
         }
 
-        if (matchedStr.length !== spaceNormalizedStr.length) {
-            textFragment.error = textFragment.error || {};
-            textFragment.error.spaceIncluded = true;
-        }
-
         return textFragment;
     }
 
@@ -196,14 +195,14 @@ export class MyanmarTextFragmenter {
         let curStr = input;
 
         let matchedStr = '';
-        let spaceNormalizedStr = '';
         let suggestedStr = '';
         let digitStr = '';
 
         let u101DCount = 0;
         let u104ECount = 0;
-
         let tmpSpace = '';
+        let spaceIncluded = false;
+        let invalidSpaceIncluded = false;
 
         while (curStr.length > 0) {
             const c = curStr[0];
@@ -215,7 +214,14 @@ export class MyanmarTextFragmenter {
 
             if (cp === 0x101D || cp === 0x104E || (cp >= 0x1040 && cp <= 0x1049)) {
                 matchedStr += tmpSpace + c;
-                spaceNormalizedStr += c;
+                if (tmpSpace) {
+                    spaceIncluded = true;
+                    if (tmpSpace !== ' ') {
+                        invalidSpaceIncluded = true;
+                    }
+
+                    tmpSpace = '';
+                }
 
                 if (cp === 0x101D) {
                     u101DCount++;
@@ -230,7 +236,6 @@ export class MyanmarTextFragmenter {
                     suggestedStr += c;
                 }
 
-                tmpSpace = '';
                 curStr = curStr.substring(1);
                 continue;
             }
@@ -274,9 +279,8 @@ export class MyanmarTextFragmenter {
 
                 const mStr = m[0];
                 matchedStr += mStr;
-                spaceNormalizedStr += mStr;
 
-                for (const cc of spaceNormalizedStr) {
+                for (const cc of mStr) {
                     if (cc === '\u066C') {
                         suggestedStr += '\u002C';
                     } else if (cc === '\u101D') {
@@ -299,7 +303,7 @@ export class MyanmarTextFragmenter {
             break;
         }
 
-        if (u101DCount + u104ECount >= digitStr.length) {
+        if (!digitStr || u101DCount + u104ECount >= digitStr.length) {
             return null;
         }
 
@@ -312,6 +316,10 @@ export class MyanmarTextFragmenter {
             textFragment.suggestedStr = suggestedStr;
         }
 
+        if (spaceIncluded) {
+            textFragment.spaceIncluded = true;
+        }
+
         if (u101DCount > 0) {
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidU101DInsteadOfU1040 = true;
@@ -322,9 +330,9 @@ export class MyanmarTextFragmenter {
             textFragment.error.invalidU104EInsteadOfU1044 = true;
         }
 
-        if (matchedStr.length !== spaceNormalizedStr.length) {
+        if (invalidSpaceIncluded) {
             textFragment.error = textFragment.error || {};
-            textFragment.error.spaceIncluded = true;
+            textFragment.error.invalidSpaceIncluded = true;
         }
 
         return textFragment;

@@ -1,6 +1,7 @@
 export interface TextFragment {
     matchedStr: string;
     suggestedStr?: string;
+    spaceIncluded?: boolean;
 
     numberFragment?: boolean;
     numberOrderList?: boolean;
@@ -13,7 +14,7 @@ export interface TextFragment {
     error?: {
         invalidUnicodeForm?: boolean;
         invalidDiacriticsStart?: boolean;
-        spaceIncluded?: boolean;
+        invalidSpaceIncluded?: boolean;
         invalidU101DInsteadOfU1040?: boolean;
         invalidU104EInsteadOfU1044?: boolean;
     };
