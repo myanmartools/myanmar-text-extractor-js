@@ -5,8 +5,9 @@ export interface TextFragment {
     ancient?: boolean;
 
     numberFragment?: boolean;
+    digitStr?: string;
+    measureWords?: string[];
     numberOrderList?: boolean;
-    orderListDigitStr?: string;
 
     uncombinableLetter?: boolean;
     punctuationLetter?: boolean;
