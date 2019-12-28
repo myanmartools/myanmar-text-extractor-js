@@ -11,7 +11,7 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
-    it(String.raw`should return numberFragment when input '\u1040'`, () => {
+    it(String.raw`should return digit fragment when input '\u1040'`, () => {
         const fragment = fragmenter.getNextFragment('\u1040') as TextFragment;
 
         expect(fragment.matchedStr).toBe('\u1040',
@@ -20,7 +20,7 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
         expect(fragment.error).toBeFalsy();
     });
 
-    it(String.raw`should return numberFragment when input '\u1049'`, () => {
+    it(String.raw`should return digit fragment when input '\u1049'`, () => {
         const fragment = fragmenter.getNextFragment('\u1049') as TextFragment;
 
         expect(fragment.matchedStr).toBe('\u1049',
@@ -29,7 +29,7 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
         expect(fragment.error).toBeFalsy();
     });
 
-    it(String.raw`should return numberFragment when box order list input '(\u1041)'`, () => {
+    it(String.raw`should return digit fragment with order list when input '(\u1041)'`, () => {
         const fragment = fragmenter.getNextFragment('(\u1041)') as TextFragment;
 
         expect(fragment.matchedStr).toBe('(\u1041)',
