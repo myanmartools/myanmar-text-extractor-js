@@ -16,7 +16,6 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
 
         expect(fragment.matchedStr).toBe('\u1040',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.suggestedStr).toBeFalsy();
         expect(fragment.spaceIncluded).toBeFalsy();
         expect(fragment.numberFragment).toBeTruthy();
         expect(fragment.error).toBeFalsy();
@@ -27,7 +26,6 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
 
         expect(fragment.matchedStr).toBe('\u1049',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.suggestedStr).toBeFalsy();
         expect(fragment.spaceIncluded).toBeFalsy();
         expect(fragment.numberFragment).toBeTruthy();
         expect(fragment.error).toBeFalsy();
@@ -38,7 +36,6 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
 
         expect(fragment.matchedStr).toBe('(\u1041)',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.suggestedStr).toBeFalsy();
         expect(fragment.spaceIncluded).toBeFalsy();
         expect(fragment.numberFragment).toBeTruthy();
         expect(fragment.numberOrderList).toBeTruthy();
@@ -51,7 +48,6 @@ describe('MyanmarTextFragmenter#getNextFragment#digit', () => {
 
         expect(fragment.matchedStr).toBe('(\u1041\u1042\u1040)',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.suggestedStr).toBeFalsy();
         expect(fragment.spaceIncluded).toBeFalsy();
         expect(fragment.numberFragment).toBeTruthy();
         expect(fragment.numberOrderList).toBeTruthy();
