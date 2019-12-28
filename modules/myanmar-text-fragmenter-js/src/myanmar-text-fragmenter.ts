@@ -1,7 +1,17 @@
 import { TextFragment } from './text-fragment';
 
+interface NumberMatchInfo {
+    normalizedStr: string;
+    digitStr: string;
+    u101dIncluded?: boolean;
+    u104eIncluded?: boolean;
+    spaceIncluded?: boolean;
+}
+
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
+
+    private readonly _hsethaRegExp = /^[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1041-\u1049\u104E][ \u180E\u200A\u200B\u202F\uFEFF]?[\)][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1040\u101D]\u102D/;
 
     private readonly _orderListBoxRegExp = /^[\[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]]/;
     private readonly _orderListNonBoxRegExp = /^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]\u104A\u104B]/;
@@ -63,10 +73,17 @@ export class MyanmarTextFragmenter {
             };
         }
 
-        return this.getNextDigitFragment(input, firstCp, prevFragments);
+        return this.getNextNumberFragment(input, firstCp, prevFragments);
     }
 
-    private getNextDigitFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNextNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+        if (firstCp === 0x0028 && input.length > 4) {
+            const hsethaFragment = this.getHsethaNumberFragment(input);
+            if (hsethaFragment != null) {
+                return hsethaFragment;
+            }
+        }
+
         if ((firstCp === 0x0028 || firstCp === 0x005B) && input.length > 2) {
             return this.getOrderListDigitFragment(input, firstCp, prevFragments);
         }
@@ -92,6 +109,44 @@ export class MyanmarTextFragmenter {
         }
 
         return this.getNumberCombinationDigitFragment(input);
+    }
+
+    /**
+     * Get `ဆယ်သား` number fragment - e.g. \u0028\u1041\u0029\u1040\u102D (၁)၀ိ - (တစ်)ဆယ်သား.
+     */
+    private getHsethaNumberFragment(input: string): TextFragment | null {
+        const m = input.match(this._hsethaRegExp);
+        if (m == null) {
+            return null;
+        }
+
+        const matchedStr = m[0];
+        const numberMatchInfo = this.getNumberMatchInfo(matchedStr);
+
+        const textFragment: TextFragment = {
+            matchedStr,
+            normalizedStr: numberMatchInfo.normalizedStr,
+            numberFragment: true,
+            ancient: true
+        };
+
+        if (numberMatchInfo.spaceIncluded) {
+            textFragment.spaceIncluded = true;
+            textFragment.error = textFragment.error || {};
+            textFragment.error.invalidSpaceIncluded = true;
+        }
+
+        if (numberMatchInfo.u101dIncluded) {
+            textFragment.error = textFragment.error || {};
+            textFragment.error.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (numberMatchInfo.u104eIncluded) {
+            textFragment.error = textFragment.error || {};
+            textFragment.error.invalidU104EInsteadOfU1044 = true;
+        }
+
+        return textFragment;
     }
 
     private getOrderListDigitFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
@@ -203,6 +258,7 @@ export class MyanmarTextFragmenter {
         let tmpSpace = '';
         let spaceIncluded = false;
         let invalidSpaceIncluded = false;
+        let dotIncluded = false;
 
         while (curStr.length > 0) {
             const c = curStr[0];
@@ -283,6 +339,9 @@ export class MyanmarTextFragmenter {
                 for (const cc of mStr) {
                     if (cc === '\u066C') {
                         suggestedStr += '\u002C';
+                    } else if (cc === '.') {
+                        suggestedStr += cc;
+                        dotIncluded = true;
                     } else if (cc === '\u101D') {
                         u101DCount++;
                         suggestedStr += '\u1040';
@@ -305,6 +364,11 @@ export class MyanmarTextFragmenter {
 
         if (!digitStr || u101DCount + u104ECount >= digitStr.length) {
             return null;
+        }
+
+        const rightStr = input.substring(matchedStr.length);
+        if (rightStr.length > 0 && !dotIncluded) {
+
         }
 
         const textFragment: TextFragment = {
@@ -336,6 +400,70 @@ export class MyanmarTextFragmenter {
         }
 
         return textFragment;
+    }
+
+    private getNumberMatchInfo(matchedStr: string): NumberMatchInfo {
+        let normalizedStr = '';
+        let digitStr = '';
+        let u101dIncluded = false;
+        let u104eIncluded = false;
+        let spaceIncluded = false;
+
+        for (const c of matchedStr) {
+            const cp = c.codePointAt(0) as number;
+            if (cp === 0x0020 || cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+                spaceIncluded = true;
+                continue;
+            }
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
+                digitStr += c;
+                normalizedStr += c;
+            } else if (cp === 0x101D) {
+                u101dIncluded = true;
+                digitStr += '\u1040';
+                normalizedStr += '\u1040';
+            } else if (cp === 0x104E) {
+                u104eIncluded = true;
+                digitStr += '\u1044';
+                normalizedStr += '\u1044';
+            } else {
+                normalizedStr += c;
+            }
+        }
+
+        return {
+            normalizedStr,
+            digitStr,
+            u101dIncluded,
+            u104eIncluded,
+            spaceIncluded
+        };
+    }
+
+    private matchAncientNumeralShortcutSuffix(rawDigitStr: string, normalizedDigitStr: string, rightStr: string): string | null {
+        if (!rightStr) {
+            return null;
+        }
+
+        // \u103D\u1031 - (တစ်)ရွေး
+        // \u102D - တစ်ကျပ် / တစ်စိတ် / (တစ်)မိုက်
+        // \u103D\u102C - (တစ်)ထွာ
+        // \u1032 - (တစ်)ပဲ / (တစ်)စလယ် / (တစ်)ပယ်
+        // \u1030 - (တစ်)မူး
+        // u1036 - တစ်လက်သစ် / (တစ်)မတ်
+        // \u103B\u1000\u103A - (တစ်)လမျက်
+        // \u101A\u103A - (တစ်)လမယ်
+        // \u103D\u1000\u103A - (တစ်)ခွက်
+        // \u103A - (တစ်)ပြည်
+        // \u103D\u1032 - (တစ်)ခွဲ
+        // \u1004\u103A\u1039\u1041 င်္၁ - (တစ်)တင်း / (တစ်)တောင်း
+        // \u0028\u1041\u0029\u1040\u102D (၁)၀ိ - (တစ်)ဆယ်သား
+        // \u102B - (တစ်)ပိဿာ
+        // \u102B\u1038 - (တစ်)ပြား / (တစ်)ပါး
+        // \u1004\u103A\u1039\u1041\u102B င်္၁ါ - (တစ်)အင်္ဂါ
+
+        return null;
     }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {

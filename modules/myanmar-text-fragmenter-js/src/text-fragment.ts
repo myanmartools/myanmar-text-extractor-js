@@ -1,7 +1,8 @@
 export interface TextFragment {
     matchedStr: string;
-    suggestedStr?: string;
+    normalizedStr: string;
     spaceIncluded?: boolean;
+    ancient?: boolean;
 
     numberFragment?: boolean;
     numberOrderList?: boolean;
