@@ -1,7 +1,10 @@
 export interface TextFragment {
     matchedStr: string;
     normalizedStr: string;
+
     spaceIncluded?: boolean;
+    invisibleSpaceIncluded?: boolean;
+
     ancient?: boolean;
 
     numberFragment?: boolean;

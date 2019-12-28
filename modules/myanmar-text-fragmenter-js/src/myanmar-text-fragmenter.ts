@@ -543,28 +543,129 @@ export class MyanmarTextFragmenter {
         return false;
     }
 
-    private matchOtherAncientNumeralShortcutSuffix(rightStr: string): string | null {
-        const firstCp = rightStr.codePointAt(0);
+    private matchOtherAncientNumeralShortcutSuffix(input: string): string | null {
+        const firstCp = input.codePointAt(0);
         if (!firstCp || !(firstCp >= 0x102B && firstCp <= 0x103E)) {
             return null;
         }
 
-        // \u103D\u1031 - (တစ်)ရွေး
-        // \u102D - တစ်ကျပ် / တစ်စိတ် / (တစ်)မိုက်
-        // \u103D\u102C - (တစ်)ထွာ
-        // \u1032 - (တစ်)ပဲ / (တစ်)စလယ် / (တစ်)ပယ်
-        // \u1030 - (တစ်)မူး
-        // u1036 - တစ်လက်သစ် / (တစ်)မတ်
-        // \u103B\u1000\u103A - (တစ်)လမျက်
-        // \u101A\u103A - (တစ်)လမယ်
-        // \u103D\u1000\u103A - (တစ်)ခွက်
-        // \u103A - (တစ်)ပြည်
-        // \u103D\u1032 - (တစ်)ခွဲ
+        const rawFragment = this.getNextRawFragment(input);
 
-        // \u102B - (တစ်)ပိဿာ
-        // \u102B\u1038 - (တစ်)ပြား / (တစ်)ပါး
+        let measureWords: string[];
+
+        if (rawFragment.normalizedStr === '\u103D\u1031') {
+            // ရွေး
+            measureWords = ['\u101B\u103D\u1031\u1038'];
+        } else if (rawFragment.normalizedStr === '\u102D') {
+            // ကျပ် / စိတ် / မိုက်
+            measureWords = [
+                '\u1000\u103B\u1015\u103A',
+                '\u1005\u102D\u1010\u103A',
+                '\u1019\u102D\u102F\u1000\u103A'
+            ];
+        } else if (rawFragment.normalizedStr === '\u103D\u102C') {
+            // ထွာ
+            measureWords = ['\u1011\u103D\u102C'];
+        } else if (rawFragment.normalizedStr === '\u1032') {
+            // ပဲ / စလယ် / ပယ်
+            measureWords = [
+                '\u1015\u1032',
+                '\u1005\u101C\u101A\u103A',
+                '\u1015\u101A\u103A'
+            ];
+        } else if (rawFragment.normalizedStr === '\u1030') {
+            // မူး
+            measureWords = ['\u1019\u1030\u1038'];
+        } else if (rawFragment.normalizedStr === '\u1036') {
+            // လက်သစ် / မတ်
+            measureWords = [
+                '\u101C\u1000\u103A\u101E\u1005\u103A',
+                '\u1019\u1010\u103A'
+            ];
+        } else if (rawFragment.normalizedStr === '\u103B\u1000\u103A') {
+            // လမျက်
+            measureWords = ['\u101C\u1019\u103B\u1000\u103A'];
+        } else if (rawFragment.normalizedStr === '\u101A\u103A') {
+            // လမယ်
+            measureWords = ['\u101C\u1019\u101A\u103A'];
+        } else if (rawFragment.normalizedStr === '\u103D\u1000\u103A') {
+            // ခွက်
+            measureWords = ['\u1001\u103D\u1000\u103A'];
+        } else if (rawFragment.normalizedStr === '\u103A') {
+            // ပြည်
+            measureWords = ['\u1015\u103C\u100A\u103A'];
+        } else if (rawFragment.normalizedStr === '\u103D\u1032') {
+            // ခွဲ
+            measureWords = ['\u1001\u103D\u1032'];
+        } else if (rawFragment.normalizedStr === '\u102B') {
+            // ပိဿာ
+            measureWords = ['\u1015\u102D\u103F\u102C'];
+        } else if (rawFragment.normalizedStr === '\u102B\u1038') {
+            // ပြား / ပါး
+            measureWords = [
+                '\u1015\u103C\u102C\u1038',
+                '\u1015\u102B\u1038'
+            ];
+        }
 
         return null;
+    }
+
+    private getNextRawFragment(input: string): TextFragment {
+        let matchedStr = input[0];
+        let normalizedStr = input[0];
+        let tmpSpace = '';
+        let tmpInvisibleIncluded = false;
+        let spaceIncluded = false;
+        let invisibleSpaceIncluded = false;
+
+        let curStr = input.substring(1);
+
+        while (curStr.length > 0) {
+            const c = curStr[0];
+            const cp = c.codePointAt(0);
+
+            if (!cp) {
+                break;
+            }
+
+            if (cp >= 0x102B && cp <= 0x103E) {
+                matchedStr += tmpSpace + c;
+                normalizedStr += c;
+                if (tmpSpace) {
+                    spaceIncluded = true;
+                    if (tmpInvisibleIncluded) {
+                        invisibleSpaceIncluded = true;
+                    }
+                    tmpSpace = '';
+                }
+
+                curStr = curStr.substring(1);
+                continue;
+            }
+
+            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+                tmpInvisibleIncluded = true;
+                tmpSpace += c;
+                curStr = curStr.substring(1);
+                continue;
+            }
+
+            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000) {
+                tmpSpace += c;
+                curStr = curStr.substring(1);
+                continue;
+            }
+
+            break;
+        }
+
+        return {
+            matchedStr,
+            normalizedStr,
+            spaceIncluded,
+            invisibleSpaceIncluded
+        };
     }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
@@ -622,51 +723,6 @@ export class MyanmarTextFragmenter {
     //     return textFragment;
     // }
 
-    // private getNormalizedFragmentForConsonantCombination(input: string, curOptions: TextFragmenterOptions): TextFragment | null {
-    //     let tmpSpace = '';
-    //     const textFragment: TextFragment = {
-    //         matchedString: input[0],
-    //         normalizedString: input[0]
-    //     };
-
-    //     let curStr = input.substring(1);
-
-    //     while (curStr.length > 0) {
-    //         const c = curStr[0];
-    //         const cp = c.codePointAt(0);
-
-    //         if (!cp) {
-    //             break;
-    //         }
-
-    //         if (cp >= 0x102B && cp <= 0x103E) {
-    //             textFragment.matchedString += tmpSpace + c;
-    //             textFragment.normalizedString += c;
-    //             if (tmpSpace) {
-    //                 textFragment.spaceIncluded = true;
-    //                 tmpSpace = '';
-    //             }
-
-    //             curStr = curStr.substring(1);
-    //             continue;
-    //         }
-
-    //         if ((cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || cp === 0x180E || (cp >= 0x2000 && cp <= 0x200B) ||
-    //             cp === 0x202F || cp === 0x205F || cp === 0x3000 || cp === 0xFEFF)) {
-    //             if (!curOptions.noSpaceBetween) {
-    //                 tmpSpace += c;
-    //                 curStr = curStr.substring(1);
-    //                 continue;
-    //             }
-
-    //             break;
-    //         }
-
-    //         break;
-    //     }
-
-    //     return textFragment.matchedString ? textFragment : null;
-    // }
 
     // private matchU103BOrU103CStart(curStr: string): string | null {
     //     const curStrLen = curStr.length;
