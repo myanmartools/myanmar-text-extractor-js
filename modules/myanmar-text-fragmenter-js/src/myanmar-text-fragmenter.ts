@@ -549,7 +549,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const rawFragment = this.getNextRawFragment(input);
+        const rawFragment = this.getDiacriticsFragment(input);
 
         let measureWords: string[];
 
@@ -611,14 +611,13 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getNextRawFragment(input: string): TextFragment {
+    private getDiacriticsFragment(input: string): TextFragment {
         let matchedStr = input[0];
         let normalizedStr = input[0];
         let tmpSpace = '';
         let tmpInvisibleIncluded = false;
         let spaceIncluded = false;
         let invisibleSpaceIncluded = false;
-
         let curStr = input.substring(1);
 
         while (curStr.length > 0) {
@@ -645,6 +644,10 @@ export class MyanmarTextFragmenter {
             }
 
             if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+                if (tmpSpace) {
+                    break;
+                }
+
                 tmpInvisibleIncluded = true;
                 tmpSpace += c;
                 curStr = curStr.substring(1);
@@ -652,6 +655,10 @@ export class MyanmarTextFragmenter {
             }
 
             if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000) {
+                if (tmpSpace) {
+                    break;
+                }
+
                 tmpSpace += c;
                 curStr = curStr.substring(1);
                 continue;
