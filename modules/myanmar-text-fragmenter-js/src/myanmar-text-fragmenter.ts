@@ -448,16 +448,28 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const rightStr = input.substring(matchedStr.length);
-        if (rightStr.length > 0 && !dotIncluded) {
-            const ancientSuffixStr = this.matchOtherAncientNumeralShortcutSuffix(rightStr);
-        }
 
         const textFragment: TextFragment = {
             matchedStr,
             normalizedStr,
             numberFragment: true
         };
+
+        const rightStr = input.substring(matchedStr.length);
+        if (rightStr.length > 0 && !dotIncluded) {
+            const ancientNumeralShortcutFragment = this.getOtherAncientNumeralShortcutFragment(rightStr);
+            if (ancientNumeralShortcutFragment) {
+                textFragment.matchedStr += ancientNumeralShortcutFragment.matchedStr;
+                textFragment.normalizedStr += ancientNumeralShortcutFragment.normalizedStr;
+                textFragment.measureWords = ancientNumeralShortcutFragment.measureWords;
+                if (ancientNumeralShortcutFragment.spaceIncluded) {
+                    spaceIncluded = true;
+                }
+                if (ancientNumeralShortcutFragment.invisibleSpaceIncluded) {
+                    invalidSpaceIncluded = true;
+                }
+            }
+        }
 
         if (spaceIncluded) {
             textFragment.spaceIncluded = true;
@@ -543,7 +555,7 @@ export class MyanmarTextFragmenter {
         return false;
     }
 
-    private matchOtherAncientNumeralShortcutSuffix(input: string): TextFragment | null {
+    private getOtherAncientNumeralShortcutFragment(input: string): TextFragment | null {
         const firstCp = input.codePointAt(0);
         if (!firstCp || !(firstCp >= 0x102B && firstCp <= 0x103E)) {
             return null;
@@ -551,13 +563,11 @@ export class MyanmarTextFragmenter {
 
         const diacriticsFragment = this.getDiacriticsFragment(input);
 
-        let matchedStr = '';
         let measureWords: string[] | undefined;
 
         if (diacriticsFragment.normalizedStr === '\u103D\u1031') {
             // ရွေး
             measureWords = ['\u101B\u103D\u1031\u1038'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u102D') {
             // ကျပ် / စိတ် / မိုက်
             measureWords = [
@@ -565,11 +575,9 @@ export class MyanmarTextFragmenter {
                 '\u1005\u102D\u1010\u103A',
                 '\u1019\u102D\u102F\u1000\u103A'
             ];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u103D\u102C') {
             // ထွာ
             measureWords = ['\u1011\u103D\u102C'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u1032') {
             // ပဲ / စလယ် / ပယ်
             measureWords = [
@@ -577,55 +585,47 @@ export class MyanmarTextFragmenter {
                 '\u1005\u101C\u101A\u103A',
                 '\u1015\u101A\u103A'
             ];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u1030') {
             // မူး
             measureWords = ['\u1019\u1030\u1038'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u1036') {
             // လက်သစ် / မတ်
             measureWords = [
                 '\u101C\u1000\u103A\u101E\u1005\u103A',
                 '\u1019\u1010\u103A'
             ];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u103B\u1000\u103A') {
             // လမျက်
             measureWords = ['\u101C\u1019\u103B\u1000\u103A'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u101A\u103A') {
             // လမယ်
             measureWords = ['\u101C\u1019\u101A\u103A'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u103D\u1000\u103A') {
             // ခွက်
             measureWords = ['\u1001\u103D\u1000\u103A'];
-            matchedStr = '\u103D\u1000\u103A';
         } else if (diacriticsFragment.normalizedStr === '\u103A') {
             // ပြည်
             measureWords = ['\u1015\u103C\u100A\u103A'];
-            matchedStr = '\u103D\u1031';
         } else if (diacriticsFragment.normalizedStr === '\u103D\u1032') {
             // ခွဲ
             measureWords = ['\u1001\u103D\u1032'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u102B') {
             // ပိဿာ
             measureWords = ['\u1015\u102D\u103F\u102C'];
-            matchedStr = diacriticsFragment.normalizedStr;
         } else if (diacriticsFragment.normalizedStr === '\u102B\u1038') {
             // ပြား / ပါး
             measureWords = [
                 '\u1015\u103C\u102C\u1038',
                 '\u1015\u102B\u1038'
             ];
-            matchedStr = diacriticsFragment.normalizedStr;
         }
 
-        if (matchedStr) {
+        if (measureWords && measureWords.length > 0) {
             return {
-                matchedStr,
-                normalizedStr: matchedStr,
+                matchedStr: diacriticsFragment.matchedStr,
+                normalizedStr: diacriticsFragment.normalizedStr,
+                spaceIncluded: diacriticsFragment.spaceIncluded,
+                invisibleSpaceIncluded: diacriticsFragment.spaceIncluded,
                 measureWords
             };
         }
