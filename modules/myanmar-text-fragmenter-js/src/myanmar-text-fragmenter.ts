@@ -148,9 +148,9 @@ export class MyanmarTextFragmenter {
         }
 
         const curMatchedStr = input.substring(0, 5);
-        const matchedStr = (prevNumberFragment?.matchedStr || '') + curMatchedStr;
-        const normalizedStr = (prevNumberFragment?.normalizedStr || '') + curMatchedStr;
-        const digitStr = (prevNumberFragment?.digitStr || '') + c4;
+        const matchedStr = prevNumberFragment ? prevNumberFragment.matchedStr + curMatchedStr : curMatchedStr;
+        const normalizedStr = prevNumberFragment ? prevNumberFragment.normalizedStr + curMatchedStr : curMatchedStr;
+        const digitStr = prevNumberFragment ? prevNumberFragment.digitStr + c4 : c4;
 
         return {
             matchedStr,
@@ -186,9 +186,9 @@ export class MyanmarTextFragmenter {
         }
 
         const curMatchedStr = input.substring(0, 4);
-        const matchedStr = (prevNumberFragment?.matchedStr || '') + curMatchedStr;
-        const normalizedStr = (prevNumberFragment?.normalizedStr || '') + curMatchedStr;
-        const digitStr = (prevNumberFragment?.digitStr || '') + c4;
+        const matchedStr = prevNumberFragment ? prevNumberFragment.matchedStr + curMatchedStr : curMatchedStr;
+        const normalizedStr = prevNumberFragment ? prevNumberFragment.normalizedStr + curMatchedStr : curMatchedStr;
+        const digitStr = prevNumberFragment ? prevNumberFragment.digitStr + c4 : c4;
 
         const rightStr = input.substring(curMatchedStr.length).trimLeft();
         let measureWords: string[];
@@ -547,9 +547,9 @@ export class MyanmarTextFragmenter {
             return true;
         }
 
-        if ((cp >= 0x1000 && cp <= 0x102A) || cp === 0x103F || (cp >= 0x104C && cp <= 0x104F)) {
-            // TODO: To check with dictionary
-        }
+        // if ((cp >= 0x1000 && cp <= 0x102A) || cp === 0x103F || (cp >= 0x104C && cp <= 0x104F)) {
+        //    To check with dictionary
+        // }
 
         return false;
     }
