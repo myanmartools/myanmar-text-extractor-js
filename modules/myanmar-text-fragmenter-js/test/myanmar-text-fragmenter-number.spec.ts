@@ -11,47 +11,33 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
-    it(String.raw`should return number fragment when input '\u1040'`, () => {
-        const fragment = fragmenter.getNextFragment('\u1040') as TextFragment;
+    it(String.raw`should return number fragment when input '၁'`, () => {
+        const fragment = fragmenter.getNextFragment('၁') as TextFragment;
 
-        expect(fragment.matchedStr).toBe('\u1040',
+        expect(fragment.matchedStr).toBe('၁',
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.spaceIncluded).toBeFalsy();
+        expect(fragment.normalizedStr).toBe('၁');
         expect(fragment.numberFragment).toBeTruthy();
-        expect(fragment.error).toBeFalsy();
     });
 
-    // it(String.raw`should return number fragment when input '\u1049'`, () => {
-    //     const fragment = fragmenter.getNextFragment('\u1049') as TextFragment;
+    it(String.raw`should return number fragment when input '၉'`, () => {
+        const fragment = fragmenter.getNextFragment('၉') as TextFragment;
 
-    //     expect(fragment.matchedStr).toBe('\u1049',
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment.spaceIncluded).toBeFalsy();
-    //     expect(fragment.numberFragment).toBeTruthy();
-    //     expect(fragment.error).toBeFalsy();
-    // });
+        expect(fragment.matchedStr).toBe('၉',
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('၉');
+        expect(fragment.numberFragment).toBeTruthy();
+    });
 
-    // it(String.raw`should return number fragment with order list when input '(\u1041)'`, () => {
-    //     const fragment = fragmenter.getNextFragment('(\u1041)') as TextFragment;
+    it(String.raw`should return 'inga' number fragment when input 'င်္၁ါ'`, () => {
+        const fragment = fragmenter.getNextFragment('င်္၁ါ') as TextFragment;
 
-    //     expect(fragment.matchedStr).toBe('(\u1041)',
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment.spaceIncluded).toBeFalsy();
-    //     expect(fragment.numberFragment).toBeTruthy();
-    //     expect(fragment.numberOrderList).toBeTruthy();
-    //     expect(fragment.digitStr).toEqual('\u1041');
-    //     expect(fragment.error).toBeFalsy();
-    // });
-
-    // it(String.raw`should return number fragment with order list when input '(\u1041\u1042\u1040)'`, () => {
-    //     const fragment = fragmenter.getNextFragment('(\u1041\u1042\u1040)') as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe('(\u1041\u1042\u1040)',
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment.spaceIncluded).toBeFalsy();
-    //     expect(fragment.numberFragment).toBeTruthy();
-    //     expect(fragment.numberOrderList).toBeTruthy();
-    //     expect(fragment.digitStr).toEqual('\u1041\u1042\u1040');
-    //     expect(fragment.error).toBeFalsy();
-    // });
+        expect(fragment.matchedStr).toBe('င်္၁ါ',
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('င်္၁ါ');
+        expect(fragment.numberFragment).toBeTruthy();
+        expect(fragment.digitStr).toBe('၁');
+        expect(fragment.ancient).toBeTruthy();
+        expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
+    });
 });
