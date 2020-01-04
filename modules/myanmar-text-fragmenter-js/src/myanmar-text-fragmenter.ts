@@ -448,7 +448,6 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-
         const textFragment: TextFragment = {
             matchedStr,
             normalizedStr,
@@ -751,7 +750,6 @@ export class MyanmarTextFragmenter {
 
     //     return textFragment;
     // }
-
 
     // private matchU103BOrU103CStart(curStr: string): string | null {
     //     const curStrLen = curStr.length;
