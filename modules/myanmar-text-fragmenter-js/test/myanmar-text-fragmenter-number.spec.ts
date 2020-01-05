@@ -148,4 +148,16 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.digitStr).toBe('၁');
         expect(fragment.numberOrderList).toBeTruthy();
     });
+
+    it(String.raw`should return order list number fragment when input '(၉၀)'`, () => {
+        const input = '(၉၀)';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၉၀');
+        expect(fragment.numberOrderList).toBeTruthy();
+    });
 });
