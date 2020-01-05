@@ -384,6 +384,12 @@ export class MyanmarTextFragmenter {
             textFragment.error.invalidSpaceIncluded = true;
         }
 
+        if (numberExtractInfo.invisibleSpaceIncluded) {
+            textFragment.invisibleSpaceIncluded = true;
+            textFragment.error = textFragment.error || {};
+            textFragment.error.invalidSpaceIncluded = true;
+        }
+
         if (numberExtractInfo.u101dIncluded) {
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidU101DInsteadOfU1040 = true;
