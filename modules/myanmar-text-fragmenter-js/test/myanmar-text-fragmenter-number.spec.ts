@@ -258,4 +258,15 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၉၀');
     });
+
+    it(String.raw`should return number fragment when input '၀၉။'`, () => {
+        const input = '၀၉။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၀၉');
+    });
 });
