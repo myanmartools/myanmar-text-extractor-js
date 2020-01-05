@@ -304,6 +304,11 @@ export class MyanmarTextFragmenter {
         const numberExtractInfo = this.extractNumberInfo(normalizedStr);
         normalizedStr = numberExtractInfo.normalizedStr;
 
+        if (numberExtractInfo.u101dIncluded &&
+            (normalizedStr.length !== matchedStr.length || (rFirstCp && rFirstCp >= 0x1000 && rFirstCp <= 0x104E))) {
+            return null;
+        }
+
         const numberFragment: TextFragment = {
             matchedStr,
             normalizedStr,
@@ -313,6 +318,11 @@ export class MyanmarTextFragmenter {
             // ဆယ်သား
             measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
+
+        if (numberExtractInfo.u101dIncluded) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU101DInsteadOfU1040 = true;
+        }
 
         if (numberExtractInfo.u104eIncluded) {
             numberFragment.error = numberFragment.error || {};
