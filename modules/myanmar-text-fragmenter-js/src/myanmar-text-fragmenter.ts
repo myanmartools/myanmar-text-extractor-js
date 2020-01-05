@@ -36,9 +36,11 @@ const sp = ' \u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
-    private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?\u1040\u102D`);
-    private readonly _numberParenthesesRegExp = new RegExp(`^[(][${sp}]?[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)]`);
-    private readonly _orderListRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)\u104A\u104B]`);
+    private readonly _allU101D = new RegExp('^\u101D+$');
+
+    private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?[\u101D\u1040]\u102D`);
+    private readonly _numberParenthesesRegExp = new RegExp(`^[(][${sp}]?[\u101D\u1040-\u1049\u104E]+[${sp}]?[)]`);
+    private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${sp}]?[)\u104A\u104B]`);
 
     private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
     private readonly _underscoreSeparatorSuffixRegex = /(\u005F[\u101D\u1040-\u1049\u104E]+)+/;
@@ -114,11 +116,11 @@ export class MyanmarTextFragmenter {
             return this.getNumberParenthesisOrOrderListFragment(input, firstCp, prevFragments);
         }
 
-        if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x104E)) {
+        if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x101D || firstCp === 0x104E)) {
             return null;
         }
 
-        if (firstCp === 0x104E && input.length === 1) {
+        if ((firstCp === 0x101D || firstCp === 0x104E) && input.length === 1) {
             return null;
         }
 
@@ -346,6 +348,11 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const numberExtractInfo = this.extractNumberInfo(matchedStr);
+
+        if (numberExtractInfo.u101dIncluded &&
+            (numberExtractInfo.digitStr === '\u1040' || this._allU101D.test(numberExtractInfo.digitStr))) {
+            return null;
+        }
 
         if (numberExtractInfo.digitStr === '\u1044' && numberExtractInfo.u104eIncluded) {
             if (!prevFragments) {
