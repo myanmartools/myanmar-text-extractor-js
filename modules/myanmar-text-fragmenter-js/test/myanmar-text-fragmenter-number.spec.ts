@@ -29,16 +29,29 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
     });
 
-    it(String.raw`should return 'inga' number fragment when input 'င်္၁ါ'`, () => {
+    it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
         const input = 'င်္၁ါ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('င်္၁ါ');
+        expect(fragment.normalizedStr).toBe(input);
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၁');
         expect(fragment.ancient).toBeTruthy();
         expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
+    });
+
+    it(String.raw`should return 'တင်း' / 'တောင်း' number fragment when input 'င်္၁'`, () => {
+        const input = 'င်္၁';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၁');
+        expect(fragment.ancient).toBeTruthy();
+        expect(fragment.measureWords).toEqual(['တောင်း', 'တင်း']);
     });
 });
