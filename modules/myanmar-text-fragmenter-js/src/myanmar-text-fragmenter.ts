@@ -81,19 +81,9 @@ export class MyanmarTextFragmenter {
     }
 
     private getNextNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
-        const ingaFragment = this.getNumberIngaFragment(input);
-        if (ingaFragment != null) {
-            return ingaFragment;
-        }
-
-        const tinOrTaungFragment = this.getNumberTinOrTaungFragment(input);
-        if (tinOrTaungFragment != null) {
-            return tinOrTaungFragment;
-        }
-
-        const hsethaFragment = this.getNumberHsethaFragment(input);
-        if (hsethaFragment != null) {
-            return hsethaFragment;
+        const preAncientNumberFragment = this.getPreAncientNumberFragment(input);
+        if (preAncientNumberFragment != null) {
+            return preAncientNumberFragment;
         }
 
         if ((firstCp === 0x0028 || firstCp === 0x005B) && input.length > 2) {
@@ -456,7 +446,7 @@ export class MyanmarTextFragmenter {
 
         const rightStr = input.substring(matchedStr.length);
         if (rightStr.length > 0 && !dotIncluded) {
-            const ancientNumeralShortcutFragment = this.getOtherAncientNumeralShortcutFragment(rightStr);
+            const ancientNumeralShortcutFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
             if (ancientNumeralShortcutFragment) {
                 textFragment.matchedStr += ancientNumeralShortcutFragment.matchedStr;
                 textFragment.normalizedStr += ancientNumeralShortcutFragment.normalizedStr;
@@ -554,7 +544,26 @@ export class MyanmarTextFragmenter {
         return false;
     }
 
-    private getOtherAncientNumeralShortcutFragment(input: string): TextFragment | null {
+    private getPreAncientNumberFragment(input: string): TextFragment | null {
+        const ingaFragment = this.getNumberIngaFragment(input);
+        if (ingaFragment != null) {
+            return ingaFragment;
+        }
+
+        const tinOrTaungFragment = this.getNumberTinOrTaungFragment(input);
+        if (tinOrTaungFragment != null) {
+            return tinOrTaungFragment;
+        }
+
+        const hsethaFragment = this.getNumberHsethaFragment(input);
+        if (hsethaFragment != null) {
+            return hsethaFragment;
+        }
+
+        return null;
+    }
+
+    private getAncientNumeralShortcutSuffixFragment(input: string): TextFragment | null {
         const firstCp = input.codePointAt(0);
         if (!firstCp || !(firstCp >= 0x102B && firstCp <= 0x103E)) {
             return null;
