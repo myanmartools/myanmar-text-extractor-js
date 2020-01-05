@@ -1,6 +1,6 @@
 export interface TextFragmenterOptions {
     /**
-     * Do not collect if the input starts with diacritics letters [\u102B-\u103E].
+     * Don't accept space between a combination.
      */
-    noInvalidStart?: boolean;
+    noSpaceBetween?: boolean;
 }
