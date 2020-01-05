@@ -269,4 +269,50 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၀၉');
     });
+
+    it(String.raw`should return number fragment when input with space '၀၉ ။'`, () => {
+        const input = '၀၉ ။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('၀၉။');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၀၉');
+        expect(fragment.spaceIncluded).toBeTruthy();
+        expect(fragment.error).toEqual({
+            invalidSpaceIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with space \u200B '၀၉​။'`, () => {
+        const input = '၀၉​။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('၀၉။');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၀၉');
+        expect(fragment.invisibleSpaceIncluded).toBeTruthy();
+        expect(fragment.error).toEqual({
+            invalidSpaceIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with \u101D and \u104E '၉ဝ၎။'`, () => {
+        const input = '၉ဝ၎။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('၉၀၄။');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၉၀၄');
+        expect(fragment.error).toEqual({
+            invalidU101DInsteadOfU1040: true,
+            invalidU104EInsteadOfU1044: true
+        });
+    });
+
 });
