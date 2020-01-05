@@ -146,7 +146,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.normalizedStr).toBe(input);
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၁');
-        expect(fragment.numberOrderList).toBeTruthy();
     });
 
     it(String.raw`should return order list number fragment when input '(၉၀)'`, () => {
@@ -158,6 +157,5 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.normalizedStr).toBe(input);
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၉၀');
-        expect(fragment.numberOrderList).toBeTruthy();
     });
 });
