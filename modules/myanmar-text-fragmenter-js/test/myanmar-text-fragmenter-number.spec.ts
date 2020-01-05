@@ -35,10 +35,10 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        // expect(fragment.normalizedStr).toBe('င်္၁ါ');
-        // expect(fragment.numberFragment).toBeTruthy();
-        // expect(fragment.digitStr).toBe('၁');
-        // expect(fragment.ancient).toBeTruthy();
-        // expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
+        expect(fragment.normalizedStr).toBe('င်္၁ါ');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၁');
+        expect(fragment.ancient).toBeTruthy();
+        expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
     });
 });
