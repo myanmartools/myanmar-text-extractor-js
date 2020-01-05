@@ -137,7 +137,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return order list number fragment when input '(၁)'`, () => {
+    it(String.raw`should return number fragment when input '(၁)'`, () => {
         const input = '(၁)';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
@@ -148,7 +148,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.digitStr).toBe('၁');
     });
 
-    it(String.raw`should return order list number fragment when input '(၉၀)'`, () => {
+    it(String.raw`should return number fragment when input '(၉၀)'`, () => {
         const input = '(၉၀)';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
@@ -157,5 +157,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.normalizedStr).toBe(input);
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၉၀');
+    });
+
+    it(String.raw`should return number fragment when input with \u101D and \u104E '(၉ဝ၎)'`, () => {
+        const input = '(၉ဝ၎)';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('(၉၀၄)');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၉၀၄');
+        expect(fragment.error).toEqual({
+            invalidU101DInsteadOfU1040: true,
+            invalidU104EInsteadOfU1044: true
+        });
     });
 });
