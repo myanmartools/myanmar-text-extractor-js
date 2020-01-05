@@ -214,4 +214,37 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             invalidU104EInsteadOfU1044: true
         });
     });
+
+    it(String.raw`should return number fragment when input '၁။'`, () => {
+        const input = '၁။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၁');
+    });
+
+    it(String.raw`should return number fragment when input '၉၊'`, () => {
+        const input = '၉၊';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၉');
+    });
+
+    it(String.raw`should return number fragment when input '၉၀။'`, () => {
+        const input = '၉၀။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၉၀');
+    });
 });
