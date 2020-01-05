@@ -37,7 +37,6 @@ export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
     private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?\u1040\u102D`);
-
     private readonly _orderListBoxRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)]`);
     private readonly _orderListNonBoxRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)\u104A\u104B]`);
 
@@ -112,7 +111,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (firstCp === 0x0028 && input.length > 2) {
-            return this.getNumberOrderListFragment(input, firstCp, prevFragments);
+            return this.getNumberParenthesisOrOrderListFragment(input, firstCp, prevFragments);
         }
 
         if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x104E)) {
@@ -131,7 +130,7 @@ export class MyanmarTextFragmenter {
             };
         }
 
-        const orderListFragment = this.getNumberOrderListFragment(input, firstCp, prevFragments);
+        const orderListFragment = this.getNumberParenthesisOrOrderListFragment(input, firstCp, prevFragments);
         if (orderListFragment != null) {
             return orderListFragment;
         }
@@ -333,7 +332,7 @@ export class MyanmarTextFragmenter {
         return numberFragment;
     }
 
-    private getNumberOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberParenthesisOrOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
         if (firstCp === 0x0028) {
             m = input.match(this._orderListBoxRegExp);
@@ -356,7 +355,7 @@ export class MyanmarTextFragmenter {
             let foundMatch = false;
             for (let i = prevFragments.length - 1; i === 0; i--) {
                 const prevFragment = prevFragments[i];
-                if (!prevFragment.numberOrderList) {
+                if (prevFragment.fragmentType !== FragmentType.Number) {
                     continue;
                 }
 
@@ -376,7 +375,6 @@ export class MyanmarTextFragmenter {
             matchedStr,
             normalizedStr: numberExtractInfo.normalizedStr,
             fragmentType: FragmentType.Number,
-            numberOrderList: true,
             digitStr: numberExtractInfo.digitStr
         };
 
