@@ -141,13 +141,13 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const c2 = input[1];
-        const c3 = input[2];
+        if (input[1] !== '\u103A' || input[2] !== '\u1039' || input[4] !== '\u102B') {
+            return null;
+        }
+
         const c4 = input[3];
         const c4Cp = c4.codePointAt(0);
-        const c5 = input[4];
-
-        if (!(c2 === '\u103A' && c3 === '\u1039' && c4Cp && (c4Cp >= 0x1040 && c4Cp <= 0x1049) && c5 === '\u102B')) {
+        if (!c4Cp || !(c4Cp >= 0x1040 && c4Cp <= 0x1049)) {
             return null;
         }
 
