@@ -1,4 +1,4 @@
-
+import { FragmentType } from '../src/fragment-type';
 import { MyanmarTextFragmenter } from '../src/myanmar-text-fragmenter';
 import { TextFragment } from '../src/text-fragment';
 
@@ -17,7 +17,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
         expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.numberFragment).toBeTruthy();
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
     });
 
     it(String.raw`should return number fragment when input '၉'`, () => {
@@ -26,7 +26,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
         expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.numberFragment).toBeTruthy();
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
     });
 
     it(String.raw`should return 'inga' number fragment when input 'င်္၁ါ'`, () => {
