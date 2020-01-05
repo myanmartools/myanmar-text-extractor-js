@@ -1,19 +1,20 @@
+import { FragmentType } from './fragment-type';
+
 export interface TextFragment {
     matchedStr: string;
     normalizedStr: string;
+    fragmentType: FragmentType;
 
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
 
     ancient?: boolean;
 
-    numberFragment?: boolean;
     digitStr?: string;
     measureWords?: string[];
     numberOrderList?: boolean;
 
     uncombinableLetter?: boolean;
-    punctuationLetter?: boolean;
     syllableIncluded?: boolean;
 
     error?: {
