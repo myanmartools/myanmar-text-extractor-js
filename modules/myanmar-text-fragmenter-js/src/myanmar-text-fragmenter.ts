@@ -1,6 +1,5 @@
 import { FragmentType } from './fragment-type';
 import { TextFragment } from './text-fragment';
-import { TextFragmenterOptions } from './text-fragmenter-options';
 
 interface NormalizedTextInfo {
     matchedStr: string;
@@ -32,12 +31,15 @@ interface TextFragmentPartial {
     numberOrderList?: boolean;
 }
 
-export class MyanmarTextFragmenter {
-    private readonly _options: TextFragmenterOptions;
-    private readonly _hsethaRegExp = /^[\(][\u1041-\u1049\u104E][\)]\u1040\u102D/;
+const sp = ' \u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
 
-    private readonly _orderListBoxRegExp = /^[\[\(][ \u180E\u200A\u200B\u202F\uFEFF]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]]/;
-    private readonly _orderListNonBoxRegExp = /^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[ \u180E\u200A\u200B\u202F\uFEFF]?[\)\]\u104A\u104B]/;
+export class MyanmarTextFragmenter {
+    // private readonly _options: TextFragmenterOptions;
+
+    private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][)][${sp}]?\u1040[${sp}]?\u102D`);
+
+    private readonly _orderListBoxRegExp = new RegExp(`^[\[\(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[\)\]]`);
+    private readonly _orderListNonBoxRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[\)\][${sp}]?\u104A\u104B]`);
 
     private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
     private readonly _underscoreSeparatorSuffixRegex = /(\u005F[\u101D\u1040-\u1049\u104E]+)+/;
@@ -57,11 +59,11 @@ export class MyanmarTextFragmenter {
     // // ကျေး / ကျေ့ / ကျေ (Length: 2)
     // private readonly _d3bOr3c31O37Or38RegExp = new RegExp('^[\u103B\u103C]\u1031[\u1037\u1038]?');
 
-    constructor(options?: TextFragmenterOptions) {
-        this._options = options || {};
-    }
+    // constructor(options?: TextFragmenterOptions) {
+    //     this._options = options || {};
+    // }
 
-    getNextFragment(input: string, options?: TextFragmenterOptions, prevFragments?: TextFragment[]): TextFragment | null {
+    getNextFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
         const firstC = input[0];
         const firstCp = firstC.codePointAt(0);
         if (!firstCp) {
@@ -100,17 +102,11 @@ export class MyanmarTextFragmenter {
             };
         }
 
-        const curOptions = options || this._options;
-
-        return this.getNumberFragment(input, firstCp, curOptions, prevFragments);
+        return this.getNumberFragment(input, firstCp, prevFragments);
     }
 
-    private getNumberFragment(
-        input: string,
-        firstCp: number,
-        curOptions: TextFragmenterOptions,
-        prevFragments?: TextFragment[]): TextFragment | null {
-        const preAncientNumberFragment = this.getPreAncientNumberFragment(input, firstCp, curOptions);
+    private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+        const preAncientNumberFragment = this.getPreAncientNumberFragment(input, firstCp);
         if (preAncientNumberFragment != null) {
             return preAncientNumberFragment;
         }
@@ -143,37 +139,30 @@ export class MyanmarTextFragmenter {
         return this.getNumberCombinationFragment(input);
     }
 
-    private getPreAncientNumberFragment(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
-        const ingaFragment = this.getNumberIngaFragment(input, firstCp, curOptions);
+    private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
+        const ingaFragment = this.getNumberIngaFragment(input, firstCp);
         if (ingaFragment != null) {
             return ingaFragment;
         }
 
-        const tinOrTaungFragment = this.getNumberTinOrTaungFragment(input, firstCp, curOptions);
+        const tinOrTaungFragment = this.getNumberTinOrTaungFragment(input, firstCp);
         if (tinOrTaungFragment != null) {
             return tinOrTaungFragment;
         }
 
-        return this.getNumberHsethaFragment(input, firstCp, curOptions);
+        return this.getNumberHsethaFragment(input, firstCp);
     }
 
     /**
      * Get ancient 'အင်္ဂါ' number fragment - e.g. \u1004\u103A\u1039\u1041\u102B င်္၁ါ - (၁)အင်္ဂါ
      */
-    private getNumberIngaFragment(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
+    private getNumberIngaFragment(input: string, firstCp: number): TextFragment | null {
         if (firstCp !== 0x1004 || input.length < 5) {
             return null;
         }
 
-        let testStr: string;
-        let normalizedTextInfo: NormalizedTextInfo | undefined;
-
-        if (curOptions.noSpaceBetween) {
-            testStr = input.substring(0, 5);
-        } else {
-            normalizedTextInfo = this.getNormalizedTextInfo(input, 5);
-            testStr = normalizedTextInfo.normalizedStr;
-        }
+        const normalizedTextInfo = this.getNormalizedTextInfo(input, 5);
+        const testStr = normalizedTextInfo.normalizedStr;
 
         if (testStr[1] !== '\u103A' || testStr[2] !== '\u1039' || testStr[4] !== '\u102B') {
             return null;
@@ -221,20 +210,13 @@ export class MyanmarTextFragmenter {
     /**
      * Get ancient `တင်း` / `တောင်း` number fragment - e.g. \u1004\u103A\u1039\u1041 င်္၁ - (၁)တင်း / (၁)တောင်း
      */
-    private getNumberTinOrTaungFragment(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
+    private getNumberTinOrTaungFragment(input: string, firstCp: number): TextFragment | null {
         if (firstCp !== 0x1004 || input.length < 4) {
             return null;
         }
 
-        let testStr: string;
-        let normalizedTextInfo: NormalizedTextInfo | undefined;
-
-        if (curOptions.noSpaceBetween) {
-            testStr = input.substring(0, 4);
-        } else {
-            normalizedTextInfo = this.getNormalizedTextInfo(input, 4);
-            testStr = normalizedTextInfo.normalizedStr;
-        }
+        const normalizedTextInfo = this.getNormalizedTextInfo(input, 4);
+        const testStr = normalizedTextInfo.normalizedStr;
 
         if (testStr[1] !== '\u103A' || testStr[2] !== '\u1039') {
             return null;
@@ -294,26 +276,17 @@ export class MyanmarTextFragmenter {
     /**
      * Get ancient `ဆယ်သား` number fragment - e.g. \u0028\u1041\u0029\u1040\u102D (၁)၀ိ - (၁)ဆယ်သား.
      */
-    private getNumberHsethaFragment(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
+    private getNumberHsethaFragment(input: string, firstCp: number): TextFragment | null {
         if (firstCp !== 0x0028 || input.length < 5) {
             return null;
         }
 
-        let testStr: string;
-        let normalizedTextInfo: NormalizedTextInfo | undefined;
-
-        if (curOptions.noSpaceBetween) {
-            testStr = input.substring(0, 5);
-        } else {
-            normalizedTextInfo = this.getNormalizedTextInfo(input, 5, [0x0028, 0x0029]);
-            testStr = normalizedTextInfo.normalizedStr;
-        }
-
-        if (!this._hsethaRegExp.test(testStr)) {
+        const m = input.match(this._hsethaRegExp);
+        if (m == null) {
             return null;
         }
 
-        const matchedStr = normalizedTextInfo ? normalizedTextInfo.matchedStr : testStr;
+        const matchedStr = m[0];
 
         const rightStr = input.substring(matchedStr.length);
         const rFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
@@ -321,7 +294,8 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        let normalizedStr = normalizedTextInfo ? normalizedTextInfo.normalizedStr : matchedStr;
+        const normalizedTextInfo = this.getNormalizedTextInfo(matchedStr, undefined, true);
+        let normalizedStr = normalizedTextInfo.normalizedStr;
 
         const numberExtractInfo = this.extractNumberInfo(normalizedStr);
         normalizedStr = numberExtractInfo.normalizedStr;
@@ -774,7 +748,7 @@ export class MyanmarTextFragmenter {
         };
     }
 
-    private getNormalizedTextInfo(str: string, upTo: number, extraCps?: number[]): NormalizedTextInfo {
+    private getNormalizedTextInfo(str: string, upTo?: number, allChars?: boolean): NormalizedTextInfo {
         let matchedStr = '';
         let normalizedStr = '';
         let tmpSpace = '';
@@ -789,29 +763,6 @@ export class MyanmarTextFragmenter {
 
             if (!cp) {
                 break;
-            }
-
-            if ((cp >= 0x1000 && cp <= 0x1021) ||
-                (cp >= 0x1023 && cp <= 0x1027) ||
-                (cp >= 0x1029 && cp <= 0x1049) ||
-                cp === 0x104E ||
-                (extraCps && extraCps.indexOf(cp) > -1)) {
-                matchedStr += tmpSpace + c;
-                normalizedStr += c;
-                if (tmpSpace) {
-                    spaceIncluded = true;
-                    if (tmpInvisibleIncluded) {
-                        invisibleSpaceIncluded = true;
-                    }
-                    tmpSpace = '';
-                }
-
-                if (normalizedStr.length >= upTo) {
-                    break;
-                }
-
-                curStr = curStr.substring(1);
-                continue;
             }
 
             if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
@@ -831,6 +782,29 @@ export class MyanmarTextFragmenter {
                 }
 
                 tmpSpace += c;
+                curStr = curStr.substring(1);
+                continue;
+            }
+
+            if (allChars ||
+                (cp >= 0x1000 && cp <= 0x1021) ||
+                (cp >= 0x1023 && cp <= 0x1027) ||
+                (cp >= 0x1029 && cp <= 0x1049) ||
+                cp === 0x104E) {
+                matchedStr += tmpSpace + c;
+                normalizedStr += c;
+                if (tmpSpace) {
+                    spaceIncluded = true;
+                    if (tmpInvisibleIncluded) {
+                        invisibleSpaceIncluded = true;
+                    }
+                    tmpSpace = '';
+                }
+
+                if (upTo != null && normalizedStr.length >= upTo) {
+                    break;
+                }
+
                 curStr = curStr.substring(1);
                 continue;
             }
