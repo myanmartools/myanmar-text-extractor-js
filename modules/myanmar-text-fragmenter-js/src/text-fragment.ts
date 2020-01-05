@@ -12,8 +12,6 @@ export interface TextFragment {
 
     digitStr?: string;
     measureWords?: string[];
-    numberOrderList?: boolean;
-
     uncombinableLetter?: boolean;
     syllableIncluded?: boolean;
 
