@@ -37,8 +37,8 @@ export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
     private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?\u1040\u102D`);
-    private readonly _orderListBoxRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)]`);
-    private readonly _orderListNonBoxRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)\u104A\u104B]`);
+    private readonly _numberParenthesesRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)]`);
+    private readonly _orderListRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)\u104A\u104B]`);
 
     private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
     private readonly _underscoreSeparatorSuffixRegex = /(\u005F[\u101D\u1040-\u1049\u104E]+)+/;
@@ -335,9 +335,9 @@ export class MyanmarTextFragmenter {
     private getNumberParenthesisOrOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
         if (firstCp === 0x0028) {
-            m = input.match(this._orderListBoxRegExp);
+            m = input.match(this._numberParenthesesRegExp);
         } else {
-            m = input.match(this._orderListNonBoxRegExp);
+            m = input.match(this._orderListRegExp);
         }
 
         if (m == null) {
