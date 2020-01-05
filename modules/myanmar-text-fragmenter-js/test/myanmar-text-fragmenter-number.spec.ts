@@ -159,6 +159,31 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.digitStr).toBe('၉၀');
     });
 
+    it(String.raw`should return number fragment when input '(၀၉)'`, () => {
+        const input = '(၀၉)';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၀၉');
+    });
+
+    it(String.raw`should return number fragment when input with space '( ၉ )'`, () => {
+        const input = '( ၉ )';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('(၉)');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၉');
+        expect(fragment.error).toEqual({
+            invalidSpaceIncluded: true
+        });
+    });
+
     it(String.raw`should return number fragment when input with \u101D and \u104E '(၉ဝ၎)'`, () => {
         const input = '(၉ဝ၎)';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
