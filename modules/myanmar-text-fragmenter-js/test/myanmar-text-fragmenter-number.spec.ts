@@ -121,6 +121,22 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should return 'ဆယ်သား' number fragment when input with \u101D '(၁)ဝိ'`, () => {
+        const input = '(၁)ဝိ';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('(၁)၀ိ');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၁၀');
+        expect(fragment.ancient).toBeTruthy();
+        expect(fragment.measureWords).toEqual(['ဆယ်သား']);
+        expect(fragment.error).toEqual({
+            invalidU101DInsteadOfU1040: true
+        });
+    });
+
     it(String.raw`should return 'ဆယ်သား' number fragment when input with \u104E '(၎)၀ိ'`, () => {
         const input = '(၎)၀ိ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
