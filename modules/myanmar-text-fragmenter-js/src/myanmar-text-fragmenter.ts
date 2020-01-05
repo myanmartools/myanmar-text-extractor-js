@@ -137,7 +137,7 @@ export class MyanmarTextFragmenter {
      * Get ancient 'အင်္ဂါ' number fragment - e.g. \u1004\u103A\u1039\u1041\u102B င်္၁ါ - (၁)အင်္ဂါ
      */
     private getNumberIngaFragment(input: string, firstCp: number, prevNumberFragment?: TextFragment): TextFragment | null {
-        if (firstCp !== 0x10004 || input.length < 5) {
+        if (firstCp !== 0x1004 || input.length < 5) {
             return null;
         }
 
