@@ -54,4 +54,18 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.ancient).toBeTruthy();
         expect(fragment.measureWords).toEqual(['တောင်း', 'တင်း']);
     });
+
+    it(String.raw`should return 'ဆယ်သား' number fragment when input '(၁)၀ိ'`, () => {
+        const input = '(၁)၀ိ';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၁၀');
+        expect(fragment.ancient).toBeTruthy();
+        expect(fragment.measureWords).toEqual(['ဆယ်သား']);
+    });
+
 });
