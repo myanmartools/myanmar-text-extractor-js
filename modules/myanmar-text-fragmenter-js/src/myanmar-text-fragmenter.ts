@@ -38,7 +38,7 @@ export class MyanmarTextFragmenter {
 
     private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?\u1040\u102D`);
 
-    private readonly _orderListBoxRegExp = new RegExp(`^[[(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[\)\]]`);
+    private readonly _orderListBoxRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)]`);
     private readonly _orderListNonBoxRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)\u104A\u104B]`);
 
     private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
@@ -111,15 +111,15 @@ export class MyanmarTextFragmenter {
             return preAncientNumberFragment;
         }
 
-        if ((firstCp === 0x0028 || firstCp === 0x005B) && input.length > 2) {
+        if (firstCp === 0x0028 && input.length > 2) {
             return this.getNumberOrderListFragment(input, firstCp, prevFragments);
         }
 
-        if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x101D || firstCp === 0x104E)) {
+        if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x104E)) {
             return null;
         }
 
-        if ((firstCp === 0x101D || firstCp === 0x104E) && input.length === 1) {
+        if (firstCp === 0x104E && input.length === 1) {
             return null;
         }
 
@@ -335,7 +335,7 @@ export class MyanmarTextFragmenter {
 
     private getNumberOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
-        if (firstCp === 0x0028 || firstCp === 0x005B) {
+        if (firstCp === 0x0028) {
             m = input.match(this._orderListBoxRegExp);
         } else {
             m = input.match(this._orderListNonBoxRegExp);
