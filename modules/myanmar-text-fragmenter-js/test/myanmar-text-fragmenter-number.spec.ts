@@ -200,6 +200,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should return number fragment when input with \u101D '(ဝ၁)'`, () => {
+        const input = '(ဝ၁)';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('(၀၁)');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၀၁');
+        expect(fragment.error).toEqual({
+            invalidU101DInsteadOfU1040: true
+        });
+    });
+
     it(String.raw`should return number fragment when input with \u101D and \u104E '(၉ဝ၎)'`, () => {
         const input = '(၉ဝ၎)';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -297,6 +311,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.invisibleSpaceIncluded).toBeTruthy();
         expect(fragment.error).toEqual({
             invalidSpaceIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with \u101D 'ဝ၁။'`, () => {
+        const input = 'ဝ၁။';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe('၀၁။');
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+        expect(fragment.digitStr).toBe('၀၁');
+        expect(fragment.error).toEqual({
+            invalidU101DInsteadOfU1040: true
         });
     });
 
