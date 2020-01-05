@@ -36,10 +36,10 @@ const sp = ' \u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
-    private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][)][${sp}]?\u1040[${sp}]?\u102D`);
+    private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?\u1040\u102D`);
 
-    private readonly _orderListBoxRegExp = new RegExp(`^[\[\(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[\)\]]`);
-    private readonly _orderListNonBoxRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[\)\][${sp}]?\u104A\u104B]`);
+    private readonly _orderListBoxRegExp = new RegExp(`^[[(][${sp}]?[\u1041-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[\)\]]`);
+    private readonly _orderListNonBoxRegExp = new RegExp(`^[\u1040-\u1049\u104E][\u101D\u1040-\u1049\u104E]*[${sp}]?[)\u104A\u104B]`);
 
     private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
     private readonly _underscoreSeparatorSuffixRegex = /(\u005F[\u101D\u1040-\u1049\u104E]+)+/;
@@ -161,20 +161,38 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const normalizedTextInfo = this.getNormalizedTextInfo(input, 5);
-        const testStr = normalizedTextInfo.normalizedStr;
-
-        if (testStr[1] !== '\u103A' || testStr[2] !== '\u1039' || testStr[4] !== '\u102B') {
+        if (input[1] !== '\u103A' || input[2] !== '\u1039') {
             return null;
         }
 
-        const c4 = testStr[3];
+        const c4 = input[3];
         const c4Cp = c4.codePointAt(0);
         if (!c4Cp || !(c4Cp >= 0x1040 && c4Cp <= 0x1049)) {
             return null;
         }
 
-        const matchedStr = normalizedTextInfo ? normalizedTextInfo.matchedStr : testStr;
+        let matchedStr = input.substring(0, 4);
+        let normalizedStr = matchedStr;
+        let spaceIncluded: boolean | undefined;
+        let invisibleSpaceIncluded: boolean | undefined;
+
+        if (input[4] !== '\u102B') {
+            if (input.length < 6 || input[5] !== '\u102B') {
+                return null;
+            }
+            const subStr = input.substring(matchedStr.length);
+            const normalizedTextInfo = this.getNormalizedTextInfo(subStr, 2);
+            if (normalizedTextInfo.normalizedStr !== '\u102B') {
+                return null;
+            }
+            matchedStr += normalizedTextInfo.matchedStr;
+            normalizedStr += normalizedTextInfo.normalizedStr;
+            spaceIncluded = normalizedTextInfo.spaceIncluded;
+            invisibleSpaceIncluded = normalizedTextInfo.invisibleSpaceIncluded;
+        } else {
+            matchedStr += input[4];
+            normalizedStr += input[4];
+        }
 
         const rightStr = input.substring(matchedStr.length);
         const rFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
@@ -184,7 +202,7 @@ export class MyanmarTextFragmenter {
 
         const numberFragment: TextFragment = {
             matchedStr,
-            normalizedStr: normalizedTextInfo ? normalizedTextInfo.normalizedStr : matchedStr,
+            normalizedStr,
             fragmentType: FragmentType.Number,
             ancient: true,
             digitStr: c4,
@@ -192,16 +210,18 @@ export class MyanmarTextFragmenter {
             measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
 
-        if (normalizedTextInfo && normalizedTextInfo.spaceIncluded) {
+        if (spaceIncluded) {
             numberFragment.spaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
+            numberFragment.error.invalidUnicodeForm = true;
         }
 
-        if (normalizedTextInfo && normalizedTextInfo.invisibleSpaceIncluded) {
+        if (invisibleSpaceIncluded) {
             numberFragment.invisibleSpaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
+            numberFragment.error.invalidUnicodeForm = true;
         }
 
         return numberFragment;
@@ -215,20 +235,17 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const normalizedTextInfo = this.getNormalizedTextInfo(input, 4);
-        const testStr = normalizedTextInfo.normalizedStr;
-
-        if (testStr[1] !== '\u103A' || testStr[2] !== '\u1039') {
+        if (input[1] !== '\u103A' || input[2] !== '\u1039') {
             return null;
         }
 
-        const c4 = testStr[3];
+        const c4 = input[3];
         const c4Cp = c4.codePointAt(0);
         if (!c4Cp || !(c4Cp >= 0x1040 && c4Cp <= 0x1049)) {
             return null;
         }
 
-        const matchedStr = normalizedTextInfo ? normalizedTextInfo.matchedStr : testStr;
+        const matchedStr = input.substring(0, 4);
 
         const rightStr = input.substring(matchedStr.length);
         const rFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
@@ -248,29 +265,15 @@ export class MyanmarTextFragmenter {
             ];
         }
 
-        const numberFragment: TextFragment = {
+        return {
             matchedStr,
-            normalizedStr: normalizedTextInfo ? normalizedTextInfo.normalizedStr : matchedStr,
+            normalizedStr: matchedStr,
             fragmentType: FragmentType.Number,
             ancient: true,
             digitStr: c4,
             // အင်္ဂါ
             measureWords
         };
-
-        if (normalizedTextInfo && normalizedTextInfo.spaceIncluded) {
-            numberFragment.spaceIncluded = true;
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidSpaceIncluded = true;
-        }
-
-        if (normalizedTextInfo && normalizedTextInfo.invisibleSpaceIncluded) {
-            numberFragment.invisibleSpaceIncluded = true;
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidSpaceIncluded = true;
-        }
-
-        return numberFragment;
     }
 
     /**
