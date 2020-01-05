@@ -305,7 +305,7 @@ export class MyanmarTextFragmenter {
         if (curOptions.noSpaceBetween) {
             testStr = input.substring(0, 5);
         } else {
-            normalizedTextInfo = this.getNormalizedTextInfo(input, 5);
+            normalizedTextInfo = this.getNormalizedTextInfo(input, 5, [0x0028, 0x0029]);
             testStr = normalizedTextInfo.normalizedStr;
         }
 
@@ -774,7 +774,7 @@ export class MyanmarTextFragmenter {
         };
     }
 
-    private getNormalizedTextInfo(str: string, upTo: number): NormalizedTextInfo {
+    private getNormalizedTextInfo(str: string, upTo: number, extraCps?: number[]): NormalizedTextInfo {
         let matchedStr = '';
         let normalizedStr = '';
         let tmpSpace = '';
@@ -791,7 +791,11 @@ export class MyanmarTextFragmenter {
                 break;
             }
 
-            if ((cp >= 0x1000 && cp <= 0x1021) || (cp >= 0x1023 && cp <= 0x1027) || (cp >= 0x1029 && cp <= 0x1049) || cp === 0x104E) {
+            if ((cp >= 0x1000 && cp <= 0x1021) ||
+                (cp >= 0x1023 && cp <= 0x1027) ||
+                (cp >= 0x1029 && cp <= 0x1049) ||
+                cp === 0x104E ||
+                (extraCps && extraCps.indexOf(cp) > -1)) {
                 matchedStr += tmpSpace + c;
                 normalizedStr += c;
                 if (tmpSpace) {
