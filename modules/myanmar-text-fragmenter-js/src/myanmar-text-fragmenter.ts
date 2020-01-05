@@ -77,11 +77,11 @@ export class MyanmarTextFragmenter {
             };
         }
 
-        return this.getNextNumberFragment(input, firstCp, prevFragments);
+        return this.getNumberFragment(input, firstCp, prevFragments);
     }
 
-    private getNextNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
-        const preAncientNumberFragment = this.getPreAncientNumberFragment(input);
+    private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+        const preAncientNumberFragment = this.getPreAncientNumberFragment(input, firstCp);
         if (preAncientNumberFragment != null) {
             return preAncientNumberFragment;
         }
@@ -114,22 +114,40 @@ export class MyanmarTextFragmenter {
         return this.getNumberCombinationFragment(input);
     }
 
+    private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
+        const ingaFragment = this.getNumberIngaFragment(input, firstCp);
+        if (ingaFragment != null) {
+            return ingaFragment;
+        }
+
+        const tinOrTaungFragment = this.getNumberTinOrTaungFragment(input, firstCp);
+        if (tinOrTaungFragment != null) {
+            return tinOrTaungFragment;
+        }
+
+        const hsethaFragment = this.getNumberHsethaFragment(input, firstCp);
+        if (hsethaFragment != null) {
+            return hsethaFragment;
+        }
+
+        return null;
+    }
+
     /**
      * Get ancient 'အင်္ဂါ' number fragment - e.g. \u1004\u103A\u1039\u1041\u102B င်္၁ါ - (၁)အင်္ဂါ
      */
-    private getNumberIngaFragment(input: string, prevNumberFragment?: TextFragment): TextFragment | null {
-        if (input.length < 5) {
+    private getNumberIngaFragment(input: string, firstCp: number, prevNumberFragment?: TextFragment): TextFragment | null {
+        if (firstCp !== 0x10004 || input.length < 5) {
             return null;
         }
 
-        const c1 = input[0];
         const c2 = input[1];
         const c3 = input[2];
         const c4 = input[3];
         const c4Cp = c4.codePointAt(0);
         const c5 = input[4];
 
-        if (!(c1 === '\u1004' && c2 === '\u103A' && c3 === '\u1039' && c4Cp && (c4Cp >= 0x1040 && c4Cp <= 0x1049) && c5 === '\u102B')) {
+        if (!(c2 === '\u103A' && c3 === '\u1039' && c4Cp && (c4Cp >= 0x1040 && c4Cp <= 0x1049) && c5 === '\u102B')) {
             return null;
         }
 
@@ -156,18 +174,17 @@ export class MyanmarTextFragmenter {
     /**
      * Get ancient `တင်း` / `တောင်း` number fragment - e.g. \u1004\u103A\u1039\u1041 င်္၁ - (၁)တင်း / (၁)တောင်း
      */
-    private getNumberTinOrTaungFragment(input: string, prevNumberFragment?: TextFragment): TextFragment | null {
-        if (input.length < 4) {
+    private getNumberTinOrTaungFragment(input: string, firstCp: number, prevNumberFragment?: TextFragment): TextFragment | null {
+        if (firstCp !== 0x1004 || input.length < 4) {
             return null;
         }
 
-        const c1 = input[0];
         const c2 = input[1];
         const c3 = input[2];
         const c4 = input[3];
         const c4Cp = c4.codePointAt(0);
 
-        if (!(c1 === '\u1004' && c2 === '\u103A' && c3 === '\u1039' && c4Cp && (c4Cp >= 0x1040 && c4Cp <= 0x1049))) {
+        if (!(c2 === '\u103A' && c3 === '\u1039' && c4Cp && (c4Cp >= 0x1040 && c4Cp <= 0x1049))) {
             return null;
         }
 
@@ -207,8 +224,8 @@ export class MyanmarTextFragmenter {
     /**
      * Get ancient `ဆယ်သား` number fragment - e.g. \u0028\u1041\u0029\u1040\u102D (၁)၀ိ - (၁)ဆယ်သား.
      */
-    private getNumberHsethaFragment(input: string): TextFragment | null {
-        if (input.length < 5 || input[0] !== '\u0028') {
+    private getNumberHsethaFragment(input: string, firstCp: number): TextFragment | null {
+        if (firstCp !== 0x0028 || input.length < 5) {
             return null;
         }
 
@@ -542,25 +559,6 @@ export class MyanmarTextFragmenter {
         // }
 
         return false;
-    }
-
-    private getPreAncientNumberFragment(input: string): TextFragment | null {
-        const ingaFragment = this.getNumberIngaFragment(input);
-        if (ingaFragment != null) {
-            return ingaFragment;
-        }
-
-        const tinOrTaungFragment = this.getNumberTinOrTaungFragment(input);
-        if (tinOrTaungFragment != null) {
-            return tinOrTaungFragment;
-        }
-
-        const hsethaFragment = this.getNumberHsethaFragment(input);
-        if (hsethaFragment != null) {
-            return hsethaFragment;
-        }
-
-        return null;
     }
 
     private getAncientNumeralShortcutSuffixFragment(input: string): TextFragment | null {
