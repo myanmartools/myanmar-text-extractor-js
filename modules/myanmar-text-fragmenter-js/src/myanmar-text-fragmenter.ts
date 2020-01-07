@@ -42,6 +42,7 @@ export class MyanmarTextFragmenter {
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${sp}]?[\u101D\u1040-\u1049\u104E]+[${sp}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${sp}]?[)\u104A\u104B]`);
     private readonly _numberWithSeparatorRegex = /^[\u1040-\u1049\u101D\u104E]{1,3}([\u002C\u066C][\u1040-\u1049\u101D\u104E]{3})*(\.[\u1040-\u1049\u101D\u104E]+)?/;
+    private readonly _hasSeparatorRegex = /[\u002C\u066C]/;
 
     // // [\u103B\u103C]
     // //
@@ -457,7 +458,9 @@ export class MyanmarTextFragmenter {
             }
         }
 
-        // tslint:disable-next-line: no-unnecessary-local-variable
+        const dotDecimalIncluded = matchedStr.indexOf('.') > -1;
+        const hasSeparator = this._hasSeparatorRegex.test(matchedStr);
+
         const numberFragment: TextFragment = {
             matchedStr,
             normalizedStr,
@@ -465,6 +468,39 @@ export class MyanmarTextFragmenter {
             ancient: true,
             digitStr: numberExtractInfo.digitStr
         };
+
+        if (numberExtractInfo.u101dIncluded) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (numberExtractInfo.u104eIncluded) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU104EInsteadOfU1044 = true;
+        }
+
+        if (!dotDecimalIncluded && !hasSeparator) {
+            const rightStr = input.substring(matchedStr.length);
+            const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
+            if (suffixFragment != null) {
+                numberFragment.matchedStr += suffixFragment.matchedStr;
+                numberFragment.normalizedStr += suffixFragment.normalizedStr;
+
+                if (suffixFragment.spaceIncluded) {
+                    numberFragment.spaceIncluded = true;
+                    numberFragment.error = numberFragment.error || {};
+                    numberFragment.error.invalidSpaceIncluded = true;
+                    numberFragment.error.invalidUnicodeForm = true;
+
+                }
+                if (suffixFragment.invisibleSpaceIncluded) {
+                    numberFragment.invisibleSpaceIncluded = true;
+                    numberFragment.error = numberFragment.error || {};
+                    numberFragment.error.invalidSpaceIncluded = true;
+                    numberFragment.error.invalidUnicodeForm = true;
+                }
+            }
+        }
 
         return numberFragment;
     }
