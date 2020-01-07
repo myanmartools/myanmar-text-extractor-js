@@ -39,11 +39,9 @@ export class MyanmarTextFragmenter {
     private readonly _allU101D = new RegExp('^\u101D+$');
 
     private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?[\u101D\u1040]\u102D`);
-    private readonly _numberParenthesesRegExp = new RegExp(`^[(][${sp}]?[\u101D\u1040-\u1049\u104E]+[${sp}]?[)]`);
+    private readonly _numberParenthesisRegExp = new RegExp(`^[(][${sp}]?[\u101D\u1040-\u1049\u104E]+[${sp}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${sp}]?[)\u104A\u104B]`);
-
-    private readonly _thousandSeparatorSuffixRegex = /([\u002C\u066C][\u101D\u1040-\u1049\u104E]{3})+(\.[\u101D\u1040-\u1049\u104E]+)?/;
-    private readonly _underscoreSeparatorSuffixRegex = /(\u005F[\u101D\u1040-\u1049\u104E]+)+/;
+    private readonly _numberWithSeparatorRegex = /^[\u1040-\u1049\u101D\u104E]{1,3}([\u002C\u066C][\u1040-\u1049\u101D\u104E]{3})*(\.[\u1040-\u1049\u101D\u104E]+)?/;
 
     // // [\u103B\u103C]
     // //
@@ -137,7 +135,7 @@ export class MyanmarTextFragmenter {
             return orderListFragment;
         }
 
-        return this.getNumberCombinationFragment(input);
+        return this.getNumberCombinationFragment(input, prevFragments);
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -347,7 +345,7 @@ export class MyanmarTextFragmenter {
     private getNumberParenthesisOrOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
         if (firstCp === 0x0028) {
-            m = input.match(this._numberParenthesesRegExp);
+            m = input.match(this._numberParenthesisRegExp);
         } else {
             m = input.match(this._orderListRegExp);
         }
@@ -420,169 +418,55 @@ export class MyanmarTextFragmenter {
         return textFragment;
     }
 
-    // tslint:disable-next-line: max-func-body-length
-    private getNumberCombinationFragment(input: string): TextFragment | null {
-        let curStr = input;
-
-        let matchedStr = '';
-        let normalizedStr = '';
-        let digitStr = '';
-
-        let u101DCount = 0;
-        let u104ECount = 0;
-        let tmpSpace = '';
-        let spaceIncluded = false;
-        let invalidSpaceIncluded = false;
-        let dotIncluded = false;
-
-        while (curStr.length > 0) {
-            const c = curStr[0];
-            const cp = c.codePointAt(0);
-
-            if (!cp) {
-                break;
-            }
-
-            if (cp === 0x101D || cp === 0x104E || (cp >= 0x1040 && cp <= 0x1049)) {
-                matchedStr += tmpSpace + c;
-                if (tmpSpace) {
-                    spaceIncluded = true;
-                    if (tmpSpace !== ' ') {
-                        invalidSpaceIncluded = true;
-                    }
-
-                    tmpSpace = '';
-                }
-
-                if (cp === 0x101D) {
-                    u101DCount++;
-                    digitStr += '\u1040';
-                    normalizedStr += '\u1040';
-                } else if (cp === 0x104E) {
-                    u104ECount++;
-                    digitStr += '\u1044';
-                    normalizedStr += '\u1044';
-                } else {
-                    digitStr += c;
-                    normalizedStr += c;
-                }
-
-                curStr = curStr.substring(1);
-                continue;
-            }
-
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000 ||
-                cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
-                if (tmpSpace || curStr.length < 2) {
-                    break;
-                }
-
-                tmpSpace = c;
-                curStr = curStr.substring(1);
-                continue;
-            }
-
-            // Digit seperators
-            if (cp === 0x002C || cp === 0x066C || cp === 0x005F) {
-                if (tmpSpace) {
-                    break;
-                }
-
-                let m: RegExpMatchArray | null = null;
-
-                if (cp === 0x002C || cp === 0x066C) {
-                    if (curStr.length < 4) {
-                        break;
-                    }
-
-                    m = curStr.match(this._thousandSeparatorSuffixRegex);
-                } else if (cp === 0x005F) {
-                    if (curStr.length < 2) {
-                        break;
-                    }
-
-                    m = curStr.match(this._underscoreSeparatorSuffixRegex);
-                }
-
-                if (m == null) {
-                    break;
-                }
-
-                const mStr = m[0];
-                matchedStr += mStr;
-
-                for (const cc of mStr) {
-                    if (cc === '\u066C') {
-                        normalizedStr += '\u002C';
-                    } else if (cc === '.') {
-                        normalizedStr += cc;
-                        dotIncluded = true;
-                    } else if (cc === '\u101D') {
-                        u101DCount++;
-                        normalizedStr += '\u1040';
-                        digitStr += '\u1040';
-                    } else if (cc === '\u104E') {
-                        u104ECount++;
-                        normalizedStr += '\u1044';
-                        digitStr += '\u1044';
-                    } else {
-                        normalizedStr += cc;
-                        digitStr += cc;
-                    }
-                }
-
-                break;
-            }
-
-            break;
-        }
-
-        if (!digitStr || u101DCount + u104ECount >= digitStr.length) {
+    private getNumberCombinationFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+        const m = input.match(this._numberWithSeparatorRegex);
+        if (m == null) {
             return null;
         }
 
-        const textFragment: TextFragment = {
-            matchedStr,
-            normalizedStr,
-            fragmentType: FragmentType.Number
-        };
+        const matchedStr = m[0];
+        const numberExtractInfo = this.extractNumberInfo(matchedStr);
+        const normalizedStr = numberExtractInfo.normalizedStr;
 
-        const rightStr = input.substring(matchedStr.length);
-        if (rightStr.length > 0 && !dotIncluded) {
-            const ancientNumeralShortcutFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
-            if (ancientNumeralShortcutFragment) {
-                textFragment.matchedStr += ancientNumeralShortcutFragment.matchedStr;
-                textFragment.normalizedStr += ancientNumeralShortcutFragment.normalizedStr;
-                textFragment.measureWords = ancientNumeralShortcutFragment.measureWords;
-                if (ancientNumeralShortcutFragment.spaceIncluded) {
-                    spaceIncluded = true;
+        if (numberExtractInfo.u101dIncluded &&
+            (numberExtractInfo.digitStr === '\u1040' || this._allU101D.test(numberExtractInfo.digitStr))) {
+            return null;
+        }
+
+        if (numberExtractInfo.digitStr === '\u1044' && numberExtractInfo.u104eIncluded) {
+            if (!prevFragments) {
+                return null;
+            }
+
+            let foundMatch = false;
+            for (let i = prevFragments.length - 1; i === 0; i--) {
+                const prevFragment = prevFragments[i];
+                if (prevFragment.fragmentType !== FragmentType.Number) {
+                    continue;
                 }
-                if (ancientNumeralShortcutFragment.invisibleSpaceIncluded) {
-                    invalidSpaceIncluded = true;
+
+                if (prevFragment.digitStr === '\u1043') {
+                    foundMatch = true;
                 }
+
+                break;
+            }
+
+            if (!foundMatch) {
+                return null;
             }
         }
 
-        if (spaceIncluded) {
-            textFragment.spaceIncluded = true;
-        }
+        // tslint:disable-next-line: no-unnecessary-local-variable
+        const numberFragment: TextFragment = {
+            matchedStr,
+            normalizedStr,
+            fragmentType: FragmentType.Number,
+            ancient: true,
+            digitStr: numberExtractInfo.digitStr
+        };
 
-        if (u101DCount > 0) {
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (u104ECount > 0) {
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidU104EInsteadOfU1044 = true;
-        }
-
-        if (invalidSpaceIncluded) {
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidSpaceIncluded = true;
-        }
-
-        return textFragment;
+        return numberFragment;
     }
 
     private extractNumberInfo(matchedStr: string): NumberExtractInfo {
