@@ -38,6 +38,15 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
     });
 
+    it(String.raw`should return number fragment when input with separator '၁,၉၉၉'`, () => {
+        const input = '၁,၉၉၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment.normalizedStr).toBe(input);
+        expect(fragment.fragmentType).toEqual(FragmentType.Number);
+    });
+
     it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
         const input = 'င်္၁ါ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
