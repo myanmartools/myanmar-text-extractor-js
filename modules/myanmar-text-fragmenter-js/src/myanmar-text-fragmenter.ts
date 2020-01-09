@@ -219,6 +219,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (invisibleSpaceIncluded) {
+            numberFragment.spaceIncluded = true;
             numberFragment.invisibleSpaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
@@ -336,6 +337,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (normalizedTextInfo && normalizedTextInfo.invisibleSpaceIncluded) {
+            numberFragment.spaceIncluded = true;
             numberFragment.invisibleSpaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
@@ -402,6 +404,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (numberExtractInfo.invisibleSpaceIncluded) {
+            textFragment.spaceIncluded = true;
             textFragment.invisibleSpaceIncluded = true;
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidSpaceIncluded = true;
@@ -494,7 +497,9 @@ export class MyanmarTextFragmenter {
                     numberFragment.error.invalidUnicodeForm = true;
 
                 }
+
                 if (suffixFragment.invisibleSpaceIncluded) {
+                    numberFragment.spaceIncluded = true;
                     numberFragment.invisibleSpaceIncluded = true;
                     numberFragment.error = numberFragment.error || {};
                     numberFragment.error.invalidSpaceIncluded = true;
@@ -516,16 +521,16 @@ export class MyanmarTextFragmenter {
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
-            if (cp === 0x0020) {
+            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000) {
                 spaceIncluded = true;
                 continue;
             } else if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
-                invisibleSpaceIncluded = true;
                 spaceIncluded = true;
+                invisibleSpaceIncluded = true;
                 continue;
             }
 
-            if (cp >= 0x1040 && cp <= 0x1049) {
+            if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x002E) {
                 digitStr += c;
                 normalizedStr += c;
             } else if (cp === 0x101D) {
