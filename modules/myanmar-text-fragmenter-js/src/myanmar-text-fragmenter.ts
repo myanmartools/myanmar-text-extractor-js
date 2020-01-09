@@ -41,7 +41,7 @@ export class MyanmarTextFragmenter {
     private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?[\u101D\u1040]\u102D`);
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${sp}]?[\u101D\u1040-\u1049\u104E]+[${sp}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${sp}]?[)\u104A\u104B]`);
-    private readonly _numberWithSeparatorRegex = /^[\u1040-\u1049\u101D\u104E]{1,3}([\u002C\u066C][\u1040-\u1049\u101D\u104E]{3})*(\.[\u1040-\u1049\u101D\u104E]+)?/;
+    private readonly _numberSeparatorRegex = /^[\u1040-\u1049\u101D\u104E]{1,3}([\u002C\u066C][\u1040-\u1049\u101D\u104E]{3})*(\.[\u1040-\u1049\u101D\u104E]+)?/;
     private readonly _hasSeparatorRegex = /[\u002C\u066C]/;
 
     // // [\u103B\u103C]
@@ -127,7 +127,8 @@ export class MyanmarTextFragmenter {
             return {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number
+                fragmentType: FragmentType.Number,
+                digitStr: input
             };
         }
 
@@ -420,7 +421,7 @@ export class MyanmarTextFragmenter {
     }
 
     private getNumberCombinationFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
-        const m = input.match(this._numberWithSeparatorRegex);
+        const m = input.match(this._numberSeparatorRegex);
         if (m == null) {
             return null;
         }
