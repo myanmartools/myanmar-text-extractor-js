@@ -454,28 +454,7 @@ export class MyanmarTextFragmenter {
         const digitSeparatorIncluded = this._hasDigitSeparatorRegex.test(matchedStr);
         if (digitSeparatorIncluded) {
             numberFragment.digitSeparatorIncluded = true;
-        }
-
-        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
-            numberFragment.spaceIncluded = true;
-            if (numberExtractInfo.invisibleSpaceIncluded) {
-                numberFragment.invisibleSpaceIncluded = true;
-                numberFragment.error = numberFragment.error || {};
-                numberFragment.error.invalidSpaceIncluded = true;
-            }
-        }
-
-        if (numberExtractInfo.u101dCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (numberExtractInfo.u104eCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU104EInsteadOfU1044 = true;
-        }
-
-        if (!digitSeparatorIncluded) {
+        } else {
             const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
             if (suffixFragment != null) {
                 numberFragment.matchedStr += suffixFragment.matchedStr;
@@ -496,6 +475,25 @@ export class MyanmarTextFragmenter {
                     numberFragment.error.invalidUnicodeForm = true;
                 }
             }
+        }
+
+        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
+            numberFragment.spaceIncluded = true;
+            if (numberExtractInfo.invisibleSpaceIncluded) {
+                numberFragment.invisibleSpaceIncluded = true;
+                numberFragment.error = numberFragment.error || {};
+                numberFragment.error.invalidSpaceIncluded = true;
+            }
+        }
+
+        if (numberExtractInfo.u101dCount) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (numberExtractInfo.u104eCount) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU104EInsteadOfU1044 = true;
         }
 
         return numberFragment;
