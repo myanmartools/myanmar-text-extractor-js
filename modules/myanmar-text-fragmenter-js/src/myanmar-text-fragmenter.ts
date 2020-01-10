@@ -45,6 +45,7 @@ export class MyanmarTextFragmenter {
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
     private readonly _numberGroupRegex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rNumberSeparator}][\u1040-\u1049\u101D\u104E]{2,3})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
     private readonly _hasNumberSeparatorRegex = new RegExp(`[${rNumberSeparator}]`);
+    private readonly _decimalPointWithSpaceSuffixRegex = new RegExp(`^([${rVisibleSpace}][\u1040-\u1049\u101D\u104E]{5})+`);
 
     // // [\u103B\u103C]
     // //
@@ -431,7 +432,15 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
+        const rightStr = input.substring(matchedStr.length);
+        if (rightStr.length > 5) {
+            const m2 = rightStr.match(this._decimalPointWithSpaceSuffixRegex);
+            if (m2 != null) {
+                matchedStr += m2[0];
+            }
+        }
+
         const numberExtractInfo = this.extractNumberInfo(matchedStr);
         const normalizedStr = numberExtractInfo.normalizedStr;
 
@@ -486,7 +495,6 @@ export class MyanmarTextFragmenter {
         }
 
         if (!dotDecimalIncluded && !hasSeparator) {
-            const rightStr = input.substring(matchedStr.length);
             const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
             if (suffixFragment != null) {
                 numberFragment.matchedStr += suffixFragment.matchedStr;
