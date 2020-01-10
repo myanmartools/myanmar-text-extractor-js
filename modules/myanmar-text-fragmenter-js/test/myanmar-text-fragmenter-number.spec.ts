@@ -46,9 +46,13 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toEqual(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toEqual('၁၉၉၉');
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၉၉၉',
+            digitSeparatorIncluded: true
+        });
     });
 
     it(String.raw`should return number fragment when input with separator and decimal dot '၁,၉၉၉.၀၂'`, () => {
@@ -59,6 +63,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.normalizedStr).toEqual(input);
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toEqual('၁၉၉၉.၀၂');
+        expect(fragment.digitSeparatorIncluded).toBeTruthy();
     });
 
     it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
