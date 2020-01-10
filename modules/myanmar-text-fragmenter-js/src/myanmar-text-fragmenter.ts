@@ -139,7 +139,7 @@ export class MyanmarTextFragmenter {
             return orderListFragment;
         }
 
-        return this.getNumberWithDecimalSeparatorFragment(input, prevFragments);
+        return this.getNumberDecimalSeparatorFragment(input, prevFragments);
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -425,7 +425,7 @@ export class MyanmarTextFragmenter {
         return textFragment;
     }
 
-    private getNumberWithDecimalSeparatorFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberDecimalSeparatorFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
         const m = input.match(this._thousandSeparatorRegex);
         if (m == null) {
             return null;
