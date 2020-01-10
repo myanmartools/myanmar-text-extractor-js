@@ -439,7 +439,7 @@ export class MyanmarTextFragmenter {
             }
         }
 
-        const numberExtractInfo = this.extractNumberInfo(matchedStr);
+        const numberExtractInfo = this.extractNumberInfo(matchedStr, true);
         if (!numberExtractInfo.digitCount) {
             return null;
         }
@@ -499,7 +499,7 @@ export class MyanmarTextFragmenter {
         return numberFragment;
     }
 
-    private extractNumberInfo(matchedStr: string): NumberExtractInfo {
+    private extractNumberInfo(matchedStr: string, allowSpaceInNormalizedStr?: boolean): NumberExtractInfo {
         let normalizedStr = '';
         let digitStr = '';
         let digitCount = 0;
@@ -512,6 +512,9 @@ export class MyanmarTextFragmenter {
             const cp = c.codePointAt(0) as number;
             if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
                 cp === 0x202F || cp === 0x205F || cp === 0x3000) {
+                if (allowSpaceInNormalizedStr) {
+                    normalizedStr += '\u0020';
+                }
                 spaceIncluded = true;
                 continue;
             } else if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
@@ -519,10 +522,13 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x002E) {
+            if (cp >= 0x1040 && cp <= 0x1049) {
                 digitCount++;
                 digitStr += c;
                 normalizedStr += c;
+            } else if (cp === 0x002E || cp === 0x00B7) {
+                digitStr += c;
+                normalizedStr += '\u002E';
             } else if (cp === 0x101D) {
                 u101dCount++;
                 digitStr += '\u1040';
