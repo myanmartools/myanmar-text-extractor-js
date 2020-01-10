@@ -510,21 +510,19 @@ export class MyanmarTextFragmenter {
                 spaceIncluded = true;
                 continue;
             } else if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
-                spaceIncluded = true;
                 invisibleSpaceIncluded = true;
                 continue;
             }
 
             if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x002E) {
+                digitCount++;
                 digitStr += c;
                 normalizedStr += c;
             } else if (cp === 0x101D) {
-                digitCount++;
                 u101dCount++;
                 digitStr += '\u1040';
                 normalizedStr += '\u1040';
             } else if (cp === 0x104E) {
-                digitCount++;
                 u104eCount++;
                 digitStr += '\u1044';
                 normalizedStr += '\u1044';
