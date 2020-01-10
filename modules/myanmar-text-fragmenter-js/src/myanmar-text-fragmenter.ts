@@ -42,7 +42,7 @@ export class MyanmarTextFragmenter {
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
     private readonly _numberGroupRegex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rNumberSeparator}][\u1040-\u1049\u101D\u104E]{2,3})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
-    private readonly _hasNumberSeparatorRegex = new RegExp(`[${rNumberSeparator}]`);
+    private readonly _hasDigitSeparatorRegex = new RegExp(`[${rNumberSeparator}]`);
     private readonly _decimalPointWithSpaceSuffixRegex = new RegExp(`^([${rVisibleSpace}][\u1040-\u1049\u101D\u104E]{5})+`);
 
     // // [\u103B\u103C]
@@ -138,7 +138,7 @@ export class MyanmarTextFragmenter {
             return orderListFragment;
         }
 
-        return this.getNumberDigitGroupFragment(input, prevFragments);
+        return this.getNumberDigitGroupFragment(input);
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -361,11 +361,8 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const numberExtractInfo = this.extractNumberInfo(matchedStr);
-        if (!numberExtractInfo.digitCount) {
-            return null;
-        }
 
-        if (numberExtractInfo.u101dCount && numberExtractInfo.digitStr === '\u1040') {
+        if (numberExtractInfo.u101dCount && !numberExtractInfo.digitCount) {
             return null;
         }
 
@@ -426,7 +423,7 @@ export class MyanmarTextFragmenter {
         return textFragment;
     }
 
-    private getNumberDigitGroupFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberDigitGroupFragment(input: string): TextFragment | null {
         const m = input.match(this._numberGroupRegex);
         if (m == null) {
             return null;
@@ -443,59 +440,35 @@ export class MyanmarTextFragmenter {
         }
 
         const numberExtractInfo = this.extractNumberInfo(matchedStr);
-        const normalizedStr = numberExtractInfo.normalizedStr;
-
-        if (numberExtractInfo.u101dIncluded &&
-            (numberExtractInfo.digitStr === '\u1040' || this._allU101D.test(numberExtractInfo.digitStr))) {
+        if (!numberExtractInfo.digitCount) {
             return null;
         }
 
-        if (numberExtractInfo.digitStr === '\u1044' && numberExtractInfo.u104eIncluded) {
-            if (!prevFragments) {
-                return null;
-            }
-
-            let foundMatch = false;
-            for (let i = prevFragments.length - 1; i === 0; i--) {
-                const prevFragment = prevFragments[i];
-                if (prevFragment.fragmentType !== FragmentType.Number) {
-                    continue;
-                }
-
-                if (prevFragment.digitStr === '\u1043') {
-                    foundMatch = true;
-                }
-
-                break;
-            }
-
-            if (!foundMatch) {
-                return null;
-            }
-        }
-
-        const dotDecimalIncluded = matchedStr.indexOf('.') > -1;
-        const hasSeparator = this._hasNumberSeparatorRegex.test(matchedStr);
+        const normalizedStr = numberExtractInfo.normalizedStr;
+        const digitSeparatorIncluded = this._hasDigitSeparatorRegex.test(matchedStr);
 
         const numberFragment: TextFragment = {
             matchedStr,
             normalizedStr,
             fragmentType: FragmentType.Number,
             ancient: true,
-            digitStr: numberExtractInfo.digitStr
+            digitStr: numberExtractInfo.digitStr,
+            spaceIncluded: numberExtractInfo.spaceIncluded,
+            invisibleSpaceIncluded: numberExtractInfo.invisibleSpaceIncluded,
+            digitSeparatorIncluded
         };
 
-        if (numberExtractInfo.u101dIncluded) {
+        if (numberExtractInfo.u101dCount) {
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidU101DInsteadOfU1040 = true;
         }
 
-        if (numberExtractInfo.u104eIncluded) {
+        if (numberExtractInfo.u104eCount) {
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidU104EInsteadOfU1044 = true;
         }
 
-        if (!dotDecimalIncluded && !hasSeparator) {
+        if (!digitSeparatorIncluded) {
             const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
             if (suffixFragment != null) {
                 numberFragment.matchedStr += suffixFragment.matchedStr;
@@ -506,7 +479,6 @@ export class MyanmarTextFragmenter {
                     numberFragment.error = numberFragment.error || {};
                     numberFragment.error.invalidSpaceIncluded = true;
                     numberFragment.error.invalidUnicodeForm = true;
-
                 }
 
                 if (suffixFragment.invisibleSpaceIncluded) {
