@@ -92,6 +92,21 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁ ၂၃၄ ၅၆၇.၈၉'`, () => {
+        const input = '၁ ၂၃၄ ၅၆၇.၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true,
+            spaceIncluded: true
+        });
+    });
+
     it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
         const input = 'င်္၁ါ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
