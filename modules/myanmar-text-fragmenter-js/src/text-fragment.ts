@@ -12,8 +12,7 @@ export interface TextFragment {
 
     digitStr?: string;
     measureWords?: string[];
-    thousandSeparatorIncluded?: boolean;
-    decimalPointIncluded?: boolean;
+    digitSeparatorIncluded?: boolean;
 
     uncombinableLetter?: boolean;
     syllableIncluded?: boolean;
