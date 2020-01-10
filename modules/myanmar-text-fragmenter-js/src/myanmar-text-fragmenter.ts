@@ -306,7 +306,7 @@ export class MyanmarTextFragmenter {
         const numberExtractInfo = this.extractNumberInfo(normalizedStr);
         normalizedStr = numberExtractInfo.normalizedStr;
 
-        if (numberExtractInfo.u101dIncluded &&
+        if (numberExtractInfo.u101dCount &&
             (normalizedStr.length !== matchedStr.length || (rFirstCp && rFirstCp >= 0x1000 && rFirstCp <= 0x104E))) {
             return null;
         }
@@ -321,12 +321,12 @@ export class MyanmarTextFragmenter {
             measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
 
-        if (numberExtractInfo.u101dIncluded) {
+        if (numberExtractInfo.u101dCount) {
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidU101DInsteadOfU1040 = true;
         }
 
-        if (numberExtractInfo.u104eIncluded) {
+        if (numberExtractInfo.u104eCount) {
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidU104EInsteadOfU1044 = true;
         }
@@ -361,13 +361,15 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const numberExtractInfo = this.extractNumberInfo(matchedStr);
-
-        if (numberExtractInfo.u101dIncluded &&
-            (numberExtractInfo.digitStr === '\u1040' || this._allU101D.test(numberExtractInfo.digitStr))) {
+        if (!numberExtractInfo.digitCount) {
             return null;
         }
 
-        if (numberExtractInfo.digitStr === '\u1044' && numberExtractInfo.u104eIncluded) {
+        if (numberExtractInfo.u101dCount && numberExtractInfo.digitStr === '\u1040') {
+            return null;
+        }
+
+        if (numberExtractInfo.u104eCount && numberExtractInfo.digitStr === '\u1044') {
             if (!prevFragments) {
                 return null;
             }
@@ -411,12 +413,12 @@ export class MyanmarTextFragmenter {
             textFragment.error.invalidSpaceIncluded = true;
         }
 
-        if (numberExtractInfo.u101dIncluded) {
+        if (numberExtractInfo.u101dCount) {
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidU101DInsteadOfU1040 = true;
         }
 
-        if (numberExtractInfo.u104eIncluded) {
+        if (numberExtractInfo.u104eCount) {
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidU104EInsteadOfU1044 = true;
         }
