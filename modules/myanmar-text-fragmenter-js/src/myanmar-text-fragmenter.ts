@@ -31,18 +31,20 @@ interface TextFragmentPartial {
     numberOrderList?: boolean;
 }
 
-const sp = ' \u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
+const rSpace = '\u0020\u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
+const rVisibleSpace = '\u0020\u00A0\u1680\u2000-\u2009\u205F\u3000';
+const rThousanSeparator = `\u002C\u066C${rVisibleSpace}`;
 
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
 
     private readonly _allU101D = new RegExp('^\u101D+$');
 
-    private readonly _hsethaRegExp = new RegExp(`^[(][${sp}]?[\u1041-\u1049\u104E][${sp}]?[)][${sp}]?[\u101D\u1040]\u102D`);
-    private readonly _numberParenthesisRegExp = new RegExp(`^[(][${sp}]?[\u101D\u1040-\u1049\u104E]+[${sp}]?[)]`);
-    private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${sp}]?[)\u104A\u104B]`);
-    private readonly _numberSeparatorRegex = /^[\u1040-\u1049\u101D\u104E]{1,3}([\u002C\u066C][\u1040-\u1049\u101D\u104E]{3})*(\.[\u1040-\u1049\u101D\u104E]+)?/;
-    private readonly _hasSeparatorRegex = /[\u002C\u066C]/;
+    private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?[\u101D\u1040]\u102D`);
+    private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
+    private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
+    private readonly _thousandSeparatorRegex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rThousanSeparator}][\u1040-\u1049\u101D\u104E]{3})*(\.[\u1040-\u1049\u101D\u104E]+)?`);
+    private readonly _hasThousandSeparatorRegex = new RegExp(`[${rThousanSeparator}]`);
 
     // // [\u103B\u103C]
     // //
@@ -137,7 +139,7 @@ export class MyanmarTextFragmenter {
             return orderListFragment;
         }
 
-        return this.getNumberCombinationFragment(input, prevFragments);
+        return this.getNumberWithDecimalSeparatorFragment(input, prevFragments);
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -423,8 +425,8 @@ export class MyanmarTextFragmenter {
         return textFragment;
     }
 
-    private getNumberCombinationFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
-        const m = input.match(this._numberSeparatorRegex);
+    private getNumberWithDecimalSeparatorFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+        const m = input.match(this._thousandSeparatorRegex);
         if (m == null) {
             return null;
         }
@@ -463,7 +465,7 @@ export class MyanmarTextFragmenter {
         }
 
         const dotDecimalIncluded = matchedStr.indexOf('.') > -1;
-        const hasSeparator = this._hasSeparatorRegex.test(matchedStr);
+        const hasSeparator = this._hasThousandSeparatorRegex.test(matchedStr);
 
         const numberFragment: TextFragment = {
             matchedStr,
