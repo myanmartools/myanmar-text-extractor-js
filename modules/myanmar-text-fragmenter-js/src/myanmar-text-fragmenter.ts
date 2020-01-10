@@ -11,8 +11,9 @@ interface NormalizedTextInfo {
 interface NumberExtractInfo {
     normalizedStr: string;
     digitStr: string;
-    u101dIncluded?: boolean;
-    u104eIncluded?: boolean;
+    digitCount: number;
+    u101dCount?: number;
+    u104eCount?: number;
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
 }
@@ -37,9 +38,6 @@ const rNumberSeparator = `\u002C\u002E\u066B\u066C\u2396\u00B7\u005F\u0027\u02D9
 
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
-
-    private readonly _allU101D = new RegExp('^\u101D+$');
-
     private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?[\u101D\u1040]\u102D`);
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
@@ -434,7 +432,8 @@ export class MyanmarTextFragmenter {
 
         let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        if (rightStr.length > 5) {
+        const rCp = rightStr.length > 5 ? rightStr.codePointAt(1) : undefined;
+        if (rCp && ((rCp >= 0x1040 && rCp <= 0x1049) || rCp === 0x101D || rCp === 0x104E)) {
             const m2 = rightStr.match(this._decimalPointWithSpaceSuffixRegex);
             if (m2 != null) {
                 matchedStr += m2[0];
@@ -524,8 +523,9 @@ export class MyanmarTextFragmenter {
     private extractNumberInfo(matchedStr: string): NumberExtractInfo {
         let normalizedStr = '';
         let digitStr = '';
-        let u101dIncluded = false;
-        let u104eIncluded = false;
+        let digitCount = 0;
+        let u101dCount = 0;
+        let u104eCount = 0;
         let spaceIncluded = false;
         let invisibleSpaceIncluded = false;
 
@@ -544,11 +544,13 @@ export class MyanmarTextFragmenter {
                 digitStr += c;
                 normalizedStr += c;
             } else if (cp === 0x101D) {
-                u101dIncluded = true;
+                digitCount++;
+                u101dCount++;
                 digitStr += '\u1040';
                 normalizedStr += '\u1040';
             } else if (cp === 0x104E) {
-                u104eIncluded = true;
+                digitCount++;
+                u104eCount++;
                 digitStr += '\u1044';
                 normalizedStr += '\u1044';
             } else {
@@ -559,8 +561,9 @@ export class MyanmarTextFragmenter {
         return {
             normalizedStr,
             digitStr,
-            u101dIncluded,
-            u104eIncluded,
+            digitCount,
+            u101dCount,
+            u104eCount,
             spaceIncluded,
             invisibleSpaceIncluded
         };
