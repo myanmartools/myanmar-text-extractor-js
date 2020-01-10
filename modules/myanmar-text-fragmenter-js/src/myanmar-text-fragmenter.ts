@@ -444,19 +444,26 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const normalizedStr = numberExtractInfo.normalizedStr;
-        const digitSeparatorIncluded = this._hasDigitSeparatorRegex.test(matchedStr);
-
         const numberFragment: TextFragment = {
             matchedStr,
-            normalizedStr,
+            normalizedStr: numberExtractInfo.normalizedStr,
             fragmentType: FragmentType.Number,
-            ancient: true,
-            digitStr: numberExtractInfo.digitStr,
-            spaceIncluded: numberExtractInfo.spaceIncluded,
-            invisibleSpaceIncluded: numberExtractInfo.invisibleSpaceIncluded,
-            digitSeparatorIncluded
+            digitStr: numberExtractInfo.digitStr
         };
+
+        const digitSeparatorIncluded = this._hasDigitSeparatorRegex.test(matchedStr);
+        if (digitSeparatorIncluded) {
+            numberFragment.digitSeparatorIncluded = true;
+        }
+
+        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
+            numberFragment.spaceIncluded = true;
+            if (numberExtractInfo.invisibleSpaceIncluded) {
+                numberFragment.invisibleSpaceIncluded = true;
+                numberFragment.error = numberFragment.error || {};
+                numberFragment.error.invalidSpaceIncluded = true;
+            }
+        }
 
         if (numberExtractInfo.u101dCount) {
             numberFragment.error = numberFragment.error || {};
