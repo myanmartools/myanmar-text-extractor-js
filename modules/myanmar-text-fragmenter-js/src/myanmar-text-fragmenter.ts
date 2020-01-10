@@ -41,7 +41,7 @@ export class MyanmarTextFragmenter {
     private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?[\u101D\u1040]\u102D`);
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
-    private readonly _numberGroupRegex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rNumberSeparator}][\u1040-\u1049\u101D\u104E]{2,3})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
+    private readonly _numberGroupRegex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rNumberSeparator}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
     private readonly _hasDigitSeparatorRegex = new RegExp(`[${rNumberSeparator}]`);
     private readonly _decimalPointWithSpaceSuffixRegex = new RegExp(`^([${rVisibleSpace}][\u1040-\u1049\u101D\u104E]{5})+`);
 
@@ -527,7 +527,7 @@ export class MyanmarTextFragmenter {
                 digitStr += c;
                 normalizedStr += c;
             } else if (cp === 0x002E || cp === 0x00B7) {
-                digitStr += c;
+                digitStr += '\u002E';
                 normalizedStr += '\u002E';
             } else if (cp === 0x101D) {
                 u101dCount++;
