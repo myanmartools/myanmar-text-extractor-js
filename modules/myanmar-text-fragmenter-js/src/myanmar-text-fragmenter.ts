@@ -531,10 +531,11 @@ export class MyanmarTextFragmenter {
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000) {
+            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
+                cp === 0x202F || cp === 0x205F || cp === 0x3000) {
                 spaceIncluded = true;
                 continue;
-            } else if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+            } else if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
                 spaceIncluded = true;
                 invisibleSpaceIncluded = true;
                 continue;
@@ -679,7 +680,7 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
                 if (tmpSpace) {
                     break;
                 }
@@ -690,7 +691,8 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000) {
+            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
+                cp === 0x202F || cp === 0x205F || cp === 0x3000) {
                 if (tmpSpace) {
                     break;
                 }
@@ -728,7 +730,7 @@ export class MyanmarTextFragmenter {
                 break;
             }
 
-            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0x202F || cp === 0xFEFF) {
+            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
                 if (tmpSpace) {
                     break;
                 }
@@ -739,7 +741,8 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) || cp === 0x205F || cp === 0x3000) {
+            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
+                cp === 0x202F || cp === 0x205F || cp === 0x3000) {
                 if (tmpSpace) {
                     break;
                 }
