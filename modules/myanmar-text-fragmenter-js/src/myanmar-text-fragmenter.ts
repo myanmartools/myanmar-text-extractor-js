@@ -12,10 +12,11 @@ interface NumberExtractInfo {
     normalizedStr: string;
     digitStr: string;
     digitCount: number;
-    u101dCount?: number;
-    u104eCount?: number;
+    u101dCount: number;
+    u104eCount: number;
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
+    digitSeparatorIncluded?: boolean;
 }
 
 interface TextFragmentPartial {
@@ -34,16 +35,15 @@ interface TextFragmentPartial {
 
 const rSpace = '\u0020\u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
 const rVisibleSpace = '\u0020\u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
-const rNumberSeparator = `\u002C\u002E\u066B\u066C\u2396\u00B7\u005F\u0027\u02D9${rVisibleSpace}`;
+// \u002E\u00B7\u02D9
+const rDigitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${rVisibleSpace}`;
 
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
     private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?[\u101D\u1040]\u102D`);
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
-    private readonly _numberGroupRegex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rNumberSeparator}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
-    private readonly _hasDigitSeparatorRegex = new RegExp(`[${rNumberSeparator}]`);
-    private readonly _decimalPointWithSpaceSuffixRegex = new RegExp(`^([${rVisibleSpace}][\u1040-\u1049\u101D\u104E]{5})+`);
+    private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rDigitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
     // // [\u103B\u103C]
     // //
@@ -424,21 +424,12 @@ export class MyanmarTextFragmenter {
     }
 
     private getNumberDigitGroupFragment(input: string): TextFragment | null {
-        const m = input.match(this._numberGroupRegex);
-        if (m == null) {
+        const m1 = input.match(this._numberGroup1Regex);
+        if (m1 == null) {
             return null;
         }
 
-        let matchedStr = m[0];
-        const rightStr = input.substring(matchedStr.length);
-        const rCp = rightStr.length > 5 ? rightStr.codePointAt(1) : undefined;
-        if (rCp && ((rCp >= 0x1040 && rCp <= 0x1049) || rCp === 0x101D || rCp === 0x104E)) {
-            const m2 = rightStr.match(this._decimalPointWithSpaceSuffixRegex);
-            if (m2 != null) {
-                matchedStr += m2[0];
-            }
-        }
-
+        const matchedStr = m1[0];
         const numberExtractInfo = this.extractNumberInfo(matchedStr, true);
         if (!numberExtractInfo.digitCount) {
             return null;
@@ -446,15 +437,15 @@ export class MyanmarTextFragmenter {
 
         const numberFragment: TextFragment = {
             matchedStr,
-            normalizedStr: numberExtractInfo.normalizedStr,
             fragmentType: FragmentType.Number,
+            normalizedStr: numberExtractInfo.normalizedStr,
             digitStr: numberExtractInfo.digitStr
         };
 
-        const digitSeparatorIncluded = this._hasDigitSeparatorRegex.test(matchedStr);
-        if (digitSeparatorIncluded) {
+        if (numberExtractInfo.digitSeparatorIncluded) {
             numberFragment.digitSeparatorIncluded = true;
         } else {
+            const rightStr = input.substring(matchedStr.length);
             const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
             if (suffixFragment != null) {
                 numberFragment.matchedStr += suffixFragment.matchedStr;
@@ -500,57 +491,63 @@ export class MyanmarTextFragmenter {
     }
 
     private extractNumberInfo(matchedStr: string, allowSpaceInNormalizedStr?: boolean): NumberExtractInfo {
-        let normalizedStr = '';
-        let digitStr = '';
-        let digitCount = 0;
-        let u101dCount = 0;
-        let u104eCount = 0;
-        let spaceIncluded = false;
-        let invisibleSpaceIncluded = false;
+        const extractNumberInfo: NumberExtractInfo = {
+            normalizedStr: '',
+            digitStr: '',
+            digitCount: 0,
+            u101dCount: 0,
+            u104eCount: 0
+        };
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
             if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
                 cp === 0x202F || cp === 0x205F || cp === 0x3000) {
+                extractNumberInfo.spaceIncluded = true;
                 if (allowSpaceInNormalizedStr) {
-                    normalizedStr += '\u0020';
+                    extractNumberInfo.normalizedStr += '\u0020';
                 }
-                spaceIncluded = true;
+
                 continue;
-            } else if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
-                invisibleSpaceIncluded = true;
+            }
+
+            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
+                extractNumberInfo.spaceIncluded = true;
+                extractNumberInfo.invisibleSpaceIncluded = true;
                 continue;
             }
 
             if (cp >= 0x1040 && cp <= 0x1049) {
-                digitCount++;
-                digitStr += c;
-                normalizedStr += c;
+                ++extractNumberInfo.digitCount;
+                extractNumberInfo.digitStr += c;
+                extractNumberInfo.normalizedStr += c;
+            } else if (cp === 0x002C || cp === 0x066B || cp === 0x066C || cp === 0x2396) {
+                // , ٫ ٬ ⎖
+                extractNumberInfo.digitSeparatorIncluded = true;
+                extractNumberInfo.normalizedStr += '\u002C';
+            } else if (cp === 0x005F || cp === 0x0027) {
+                // _ '
+                extractNumberInfo.digitSeparatorIncluded = true;
+                extractNumberInfo.normalizedStr += c;
             } else if (cp === 0x002E || cp === 0x00B7) {
-                digitStr += '\u002E';
-                normalizedStr += '\u002E';
+                // . ·
+                extractNumberInfo.digitSeparatorIncluded = true;
+                extractNumberInfo.digitStr += '\u002E';
+                extractNumberInfo.normalizedStr += '\u002E';
             } else if (cp === 0x101D) {
-                u101dCount++;
-                digitStr += '\u1040';
-                normalizedStr += '\u1040';
+                ++extractNumberInfo.u101dCount;
+                extractNumberInfo.digitStr += '\u1040';
+                extractNumberInfo.normalizedStr += '\u1040';
             } else if (cp === 0x104E) {
-                u104eCount++;
-                digitStr += '\u1044';
-                normalizedStr += '\u1044';
+                ++extractNumberInfo.u104eCount;
+                extractNumberInfo.digitStr += '\u1044';
+                extractNumberInfo.normalizedStr += '\u1044';
             } else {
-                normalizedStr += c;
+                extractNumberInfo.normalizedStr += c;
             }
         }
 
-        return {
-            normalizedStr,
-            digitStr,
-            digitCount,
-            u101dCount,
-            u104eCount,
-            spaceIncluded,
-            invisibleSpaceIncluded
-        };
+        return extractNumberInfo;
     }
 
     private getAncientNumeralShortcutSuffixFragment(input: string): TextFragmentPartial | null {
