@@ -78,8 +78,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇.၈၉၀'`, () => {
-        const input = '၁,၂၃၄,၅၆၇.၈၉၀';
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇.၈၉'`, () => {
+        const input = '၁,၂၃၄,၅၆၇.၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -87,7 +87,63 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉၀',
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁٫၂၃၄٫၅၆၇.၈၉'`, () => {
+        const input = '၁٫၂၃၄٫၅၆၇.၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁٬၂၃၄٬၅၆၇.၈၉'`, () => {
+        const input = '၁٬၂၃၄٬၅၆၇.၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁⎖၂၃၄⎖၅၆၇.၈၉'`, () => {
+        const input = '၁⎖၂၃၄⎖၅၆၇.၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot "၁'၂၃၄'၅၆၇.၈၉"`, () => {
+        const input = "၁'၂၃၄'၅၆၇.၈၉";
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
             digitSeparatorIncluded: true
         });
     });
@@ -137,20 +193,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     it(String.raw`should return number fragment when input with separator and decimal dot '၁၂,၃၄,၅၆၇.၈၉'`, () => {
         const input = '၁၂,၃၄,၅၆၇.၈၉';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: input,
-            fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
-        });
-    });
-
-    it(String.raw`should return number fragment when input with separator and decimal dot "၁'၂၃၄'၅၆၇.၈၉"`, () => {
-        const input = "၁'၂၃၄'၅၆၇.၈၉";
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
