@@ -229,7 +229,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
-           digitSeparatorIncluded: true
+            digitSeparatorIncluded: true
         });
     });
 
@@ -253,11 +253,14 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁',
+            ancient: true,
+            measureWords: ['အင်္ဂါ']
+        });
     });
 
     it(String.raw`should return 'အင်္ဂါ' number fragment when input with space 'င်္၁ ါ'`, () => {
@@ -266,15 +269,18 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('င်္၁ါ');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
-        expect(fragment.spaceIncluded).toBeTruthy();
-        expect(fragment.error).toEqual({
-            invalidSpaceIncluded: true,
-            invalidUnicodeForm: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: 'င်္၁ါ',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁',
+            ancient: true,
+            measureWords: ['အင်္ဂါ'],
+            spaceIncluded: true,
+            error: {
+                invalidSpaceIncluded: true,
+                invalidUnicodeForm: true
+            }
         });
     });
 
