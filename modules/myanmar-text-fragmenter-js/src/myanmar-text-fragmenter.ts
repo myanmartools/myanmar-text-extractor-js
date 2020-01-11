@@ -516,12 +516,12 @@ export class MyanmarTextFragmenter {
                 ++extractNumberInfo.digitCount;
                 extractNumberInfo.digitStr += c;
                 extractNumberInfo.normalizedStr += c;
-            } else if (cp === 0x002C || cp === 0x066B || cp === 0x066C || cp === 0x2396) {
-                // , ٫ ٬ ⎖
+            } else if (cp === 0x002C || cp === 0x066B || cp === 0x066C || cp === 0x2396 || cp === 0x0027) {
+                // , ٫ ٬ ⎖ '
                 extractNumberInfo.digitSeparatorIncluded = true;
                 extractNumberInfo.normalizedStr += '\u002C';
-            } else if (cp === 0x005F || cp === 0x0027) {
-                // _ '
+            } else if (cp === 0x005F) {
+                // _
                 extractNumberInfo.digitSeparatorIncluded = true;
                 extractNumberInfo.normalizedStr += c;
             } else if (cp === 0x002E || cp === 0x00B7) {
