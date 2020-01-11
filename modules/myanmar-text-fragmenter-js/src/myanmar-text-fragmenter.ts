@@ -212,14 +212,7 @@ export class MyanmarTextFragmenter {
             measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
 
-        if (spaceIncluded) {
-            numberFragment.spaceIncluded = true;
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidSpaceIncluded = true;
-            numberFragment.error.invalidUnicodeForm = true;
-        }
-
-        if (invisibleSpaceIncluded) {
+        if (spaceIncluded || invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
