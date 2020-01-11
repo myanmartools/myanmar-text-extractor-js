@@ -78,8 +78,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇.၈၉'`, () => {
-        const input = '၁,၂၃၄,၅၆၇.၈၉';
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇.၈၉၀'`, () => {
+        const input = '၁,၂၃၄,၅၆၇.၈၉၀';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -87,8 +87,22 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitStr: '၁၂၃၄၅၆၇.၈၉၀',
             digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁ ၂၃၄ ၅၆၇'`, () => {
+        const input = '၁ ၂၃၄ ၅၆၇';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇',
+            spaceIncluded: true
         });
     });
 
@@ -173,7 +187,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
-            digitSeparatorIncluded: true
+           digitSeparatorIncluded: true
         });
     });
 
@@ -219,7 +233,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.digitStr).toBe('၁');
         expect(fragment.ancient).toBeTruthy();
         expect(fragment.measureWords).toEqual(['အင်္ဂါ']);
-        expect(fragment.invisibleSpaceIncluded).toBeTruthy();
         expect(fragment.error).toEqual({
             invalidSpaceIncluded: true,
             invalidUnicodeForm: true
@@ -358,7 +371,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.normalizedStr).toBe('(၉)');
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၉');
-        expect(fragment.invisibleSpaceIncluded).toBeTruthy();
         expect(fragment.error).toEqual({
             invalidSpaceIncluded: true
         });
@@ -472,7 +484,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.normalizedStr).toBe('၀၉။');
         expect(fragment.fragmentType).toEqual(FragmentType.Number);
         expect(fragment.digitStr).toBe('၀၉');
-        expect(fragment.invisibleSpaceIncluded).toBeTruthy();
         expect(fragment.error).toEqual({
             invalidSpaceIncluded: true
         });
