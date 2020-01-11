@@ -221,7 +221,6 @@ export class MyanmarTextFragmenter {
 
         if (invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
-            numberFragment.invisibleSpaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
             numberFragment.error.invalidUnicodeForm = true;
@@ -339,7 +338,6 @@ export class MyanmarTextFragmenter {
 
         if (normalizedTextInfo && normalizedTextInfo.invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
-            numberFragment.invisibleSpaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
         }
@@ -405,7 +403,6 @@ export class MyanmarTextFragmenter {
 
         if (numberExtractInfo.invisibleSpaceIncluded) {
             textFragment.spaceIncluded = true;
-            textFragment.invisibleSpaceIncluded = true;
             textFragment.error = textFragment.error || {};
             textFragment.error.invalidSpaceIncluded = true;
         }
@@ -460,7 +457,6 @@ export class MyanmarTextFragmenter {
 
                 if (suffixFragment.invisibleSpaceIncluded) {
                     numberFragment.spaceIncluded = true;
-                    numberFragment.invisibleSpaceIncluded = true;
                     numberFragment.error = numberFragment.error || {};
                     numberFragment.error.invalidSpaceIncluded = true;
                     numberFragment.error.invalidUnicodeForm = true;
@@ -471,7 +467,6 @@ export class MyanmarTextFragmenter {
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
             if (numberExtractInfo.invisibleSpaceIncluded) {
-                numberFragment.invisibleSpaceIncluded = true;
                 numberFragment.error = numberFragment.error || {};
                 numberFragment.error.invalidSpaceIncluded = true;
             }
