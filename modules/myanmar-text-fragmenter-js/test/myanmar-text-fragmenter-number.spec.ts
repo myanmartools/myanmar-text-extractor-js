@@ -120,20 +120,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input with separator and decimal dot '၁_၂၃၄_၅၆၇.၈၉'`, () => {
-        const input = '၁_၂၃၄_၅၆၇.၈၉';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: '၁_၂၃၄_၅၆၇.၈၉',
-            fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
-        });
-    });
-
     it(String.raw`should return number fragment when input with separator and decimal dot '၁⎖၂၃၄⎖၅၆၇.၈၉'`, () => {
         const input = '၁⎖၂၃၄⎖၅၆၇.၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -156,6 +142,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment).toEqual({
             matchedStr: input,
             normalizedStr: "၁'၂၃၄'၅၆၇.၈၉",
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁_၂၃၄_၅၆၇.၈၉'`, () => {
+        const input = '၁_၂၃၄_၅၆၇.၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁_၂၃၄_၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
             digitSeparatorIncluded: true
@@ -188,20 +188,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             digitStr: '၁၂၃၄၅၆၇.၈၉',
             digitSeparatorIncluded: true,
             spaceIncluded: true
-        });
-    });
-
-    it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇·၈၉'`, () => {
-        const input = '၁,၂၃၄,၅၆၇·၈၉';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
-            fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
         });
     });
 
@@ -244,6 +230,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             fragmentType: FragmentType.Number,
             digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
            digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇·၈၉'`, () => {
+        const input = '၁,၂၃၄,၅၆၇·၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            digitSeparatorIncluded: true
         });
     });
 
