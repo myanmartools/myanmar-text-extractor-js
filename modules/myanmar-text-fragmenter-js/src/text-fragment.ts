@@ -6,7 +6,6 @@ export interface TextFragment {
     fragmentType: FragmentType;
 
     spaceIncluded?: boolean;
-    invisibleSpaceIncluded?: boolean;
 
     ancient?: boolean;
 
