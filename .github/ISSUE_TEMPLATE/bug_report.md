@@ -24,8 +24,8 @@ Please fill in the *entire* template below.
 
 ## Environment
 
-<!-- - Library package version: -->
+<!-- Library package version: -->
 
-## Additional context
+## Additional Context
 
 <!-- Anything else relevant? -->

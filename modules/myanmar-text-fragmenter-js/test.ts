@@ -1,24 +1,9 @@
 // tslint:disable: no-implicit-dependencies no-import-side-effect
 
-import 'zone.js/dist/zone';
-import 'zone.js/dist/zone-testing';
-
-import { getTestBed } from '@angular/core/testing';
-
-import {
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
 
 // tslint:disable: no-any
 // tslint:disable-next-line: no-reserved-keywords
 declare const require: any;
-
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-);
 
 // Then we find all the tests.
 // tslint:disable-next-line: no-unsafe-any

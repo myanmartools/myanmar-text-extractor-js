@@ -4,8 +4,7 @@
     "tslint-microsoft-contrib/recommended"
   ],
   "rulesDirectory": [
-    "node_modules/tslint-microsoft-contrib",
-    "node_modules/codelyzer"
+    "node_modules/tslint-microsoft-contrib"
   ],
   "rules": {
     // Core rules with custom configurations
@@ -162,35 +161,5 @@
     "export-name": false,
     "function-name": false,
     "no-relative-imports": false,
-    "prefer-type-cast": false,
-
-    // codelyzer overides
-    "component-class-suffix": true,
-    "component-selector": [
-      true,
-      "element",
-      "app",
-      "kebab-case"
-    ],
-    "contextual-lifecycle": true,
-    "directive-class-suffix": true,
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "no-conflicting-lifecycle": true,
-    "no-host-metadata-property": true,
-    "no-input-rename": true,
-    "no-inputs-metadata-property": true,
-    "no-output-native": true,
-    "no-output-on-prefix": true,
-    "no-output-rename": true,
-    "no-outputs-metadata-property": true,
-    "template-banana-in-box": true,
-    "template-no-negated-async": true,
-    "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
-  }
+    "prefer-type-cast": false
 }
