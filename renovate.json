@@ -13,18 +13,6 @@
   "packageRules": [
     {
       "packagePatterns": [
-        "^@angular-devkit\/.*"
-      ],
-      "groupName": "angular-devkit"
-    },
-    {
-      "packagePatterns": [
-        "^@angular\/.*"
-      ],
-      "groupName": "angular"
-    },
-    {
-      "packagePatterns": [
         "^@dagonmetric\/.*"
       ],
       "groupName": "dagonmetric"
@@ -52,14 +40,6 @@
     {
       "packagePatterns": ["^protractor.*"],
       "groupName": "protractor"
-    },
-    {
-      "packageNames": ["typescript"],
-      "automerge": false
-    },
-    {
-      "packageNames": ["tsickle"],
-      "automerge": false
     }
   ]
 }
