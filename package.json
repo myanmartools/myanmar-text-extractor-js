@@ -1,5 +1,5 @@
 {
-  "name": "myanmar-text-fragmenter-js",
+  "name": "@myanmartools/myanmar-text-fragmenter-js",
   "version": "0.0.0",
   "author": "DagonMetric",
   "description": "Myanmar Text (Burmese language) word segmentation, fragmentation and splitting JavaScript library module for Web and Node.js applications written in Typescript.",
