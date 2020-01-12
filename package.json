@@ -12,6 +12,9 @@
     "url": "https://github.com/myanmartools/myanmar-text-fragmenter-js/issues"
   },
   "homepage": "https://github.com/myanmartools/myanmar-text-fragmenter-js",
+  "scripts": {
+    "karma": "karma"
+  },
   "dependencies": {
     "tslib": "^1.10.0"
   },

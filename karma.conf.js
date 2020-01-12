@@ -8,6 +8,9 @@ module.exports = function (config) {
     config.set({
         basePath: '',
         frameworks: ['jasmine'],
+        files: [
+            'test/**/*.spec.ts'
+        ],
         plugins: [
             require('karma-jasmine'),
             require('karma-chrome-launcher'),
@@ -19,7 +22,7 @@ module.exports = function (config) {
             clearContext: false // leave Jasmine Spec Runner output visible in browser
         },
         coverageIstanbulReporter: {
-            dir: require('path').join(__dirname, '../../dist/coverage/myanmar-text-fragmenter-js'),
+            dir: require('path').join(__dirname, './dist/coverage/myanmar-text-fragmenter-js'),
             reports: ['html', 'lcovonly', 'text-summary', 'cobertura'],
             fixWebpackSourcePaths: true,
             thresholds: {
@@ -31,7 +34,7 @@ module.exports = function (config) {
         },
         reporters: ['progress', 'kjhtml'],
         junitReporter: {
-            outputDir: '../../dist/junit/myanmar-text-fragmenter-js'
+            outputDir: './dist/junit/myanmar-text-fragmenter-js'
         },
         port: 9876,
         colors: true,
