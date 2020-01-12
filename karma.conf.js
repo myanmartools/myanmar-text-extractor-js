@@ -9,9 +9,14 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'test/**/*.spec.ts'
+            'test.ts'
         ],
+        preprocessors: {
+            'test.ts': ['webpack', 'sourcemap']
+        },
         plugins: [
+            require('karma-webpack'),
+            require('karma-sourcemap-loader'),
             require('karma-jasmine'),
             require('karma-chrome-launcher'),
             require('karma-jasmine-html-reporter'),
@@ -19,7 +24,7 @@ module.exports = function (config) {
             require('karma-junit-reporter')
         ],
         client: {
-            clearContext: false // leave Jasmine Spec Runner output visible in browser
+            clearContext: false
         },
         coverageIstanbulReporter: {
             dir: require('path').join(__dirname, './dist/coverage/myanmar-text-fragmenter-js'),
@@ -36,6 +41,7 @@ module.exports = function (config) {
         junitReporter: {
             outputDir: './dist/junit/myanmar-text-fragmenter-js'
         },
+        webpack: require('./webpack.config.test.js')(),
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
