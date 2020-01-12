@@ -9,10 +9,10 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'test.ts'
+            'test/index.ts'
         ],
         preprocessors: {
-            'test.ts': ['webpack', 'sourcemap']
+            'test/index.ts': ['webpack', 'sourcemap']
         },
         plugins: [
             require('karma-webpack'),
@@ -42,6 +42,12 @@ module.exports = function (config) {
             outputDir: './dist/junit/myanmar-text-fragmenter-js'
         },
         webpack: require('./webpack.config.test.js')(),
+        webpackMiddleware: {
+            noInfo: true
+        },
+        mime: {
+            'text/x-typescript': ['ts', 'tsx']
+        },
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

@@ -8,8 +8,14 @@
   ],
   "rules": {
     // Core rules with custom configurations
-    "array-type": [true, "array"],
-    "arrow-parens": [true, "ban-single-arg-parens"],
+    "array-type": [
+      true,
+      "array"
+    ],
+    "arrow-parens": [
+      true,
+      "ban-single-arg-parens"
+    ],
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
@@ -111,7 +117,10 @@
       "avoid-template"
     ],
     "radix": true,
-    "semicolon": [true, "always"],
+    "semicolon": [
+      true,
+      "always"
+    ],
     "strict-boolean-expressions": false,
     "trailing-comma": false,
     "triple-equals": [
@@ -156,10 +165,10 @@
       "check-separator",
       "check-type"
     ],
-
     // tslint-microsoft-contrib overides
     "export-name": false,
     "function-name": false,
     "no-relative-imports": false,
     "prefer-type-cast": false
+  }
 }

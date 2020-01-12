@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = function () {
     return {
-        devtool: 'inline-source-map',
         mode: 'development',
         resolve: {
             extensions: ['.ts', '.js']
         },
+        devtool: 'inline-source-map',
         module: {
             rules: [
                 {
@@ -29,20 +29,12 @@ module.exports = function () {
                         esModules: true
                     },
                     include: path.resolve(__dirname, 'src'),
-                    exclude: /\.(e2e|spec)\.ts$|node_modules/
+                    exclude: /\.spec\.ts$|node_modules/
                 }
             ]
         },
         performance: {
             hints: false
-        },
-        node: {
-            global: true,
-            process: false,
-            crypto: 'empty',
-            module: false,
-            clearImmediate: false,
-            setImmediate: false
         }
     };
 };
