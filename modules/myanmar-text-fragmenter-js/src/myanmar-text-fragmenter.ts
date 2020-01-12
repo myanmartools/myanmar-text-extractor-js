@@ -26,8 +26,6 @@ interface TextFragmentPartial {
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
 
-    ancient?: boolean;
-
     digitStr?: string;
     measureWords?: string[];
     numberOrderList?: boolean;
@@ -152,7 +150,41 @@ export class MyanmarTextFragmenter {
             return tinOrTaungFragment;
         }
 
-        return this.getNumberHsethaFragment(input, firstCp);
+        const hsethaFragment = this.getNumberHsethaFragment(input, firstCp);
+        if (hsethaFragment != null) {
+            return hsethaFragment;
+        }
+
+        if (firstCp >= 0x1040 && firstCp <= 0x1049 && input.length > 1) {
+            const rightStr = input.substring(1);
+            const r1stCp = rightStr.codePointAt(0);
+            if (!r1stCp) {
+                return null;
+            }
+
+            const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr, r1stCp);
+            if (suffixFragment != null) {
+                const numberFragment: TextFragment = {
+                    matchedStr: input[0] + suffixFragment.matchedStr,
+                    normalizedStr: input[0] + suffixFragment.normalizedStr,
+                    fragmentType: FragmentType.Number,
+                    ancient: true,
+                    measureWords: suffixFragment.measureWords
+                };
+
+                if (suffixFragment.spaceIncluded || suffixFragment.invisibleSpaceIncluded) {
+                    numberFragment.spaceIncluded = true;
+                    numberFragment.error = numberFragment.error || {};
+                    numberFragment.error.invalidSpaceIncluded = true;
+                    numberFragment.error.invalidUnicodeForm = true;
+                }
+
+                return numberFragment;
+
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -436,23 +468,22 @@ export class MyanmarTextFragmenter {
             numberFragment.digitSeparatorIncluded = true;
         } else {
             const rightStr = input.substring(matchedStr.length);
-            const suffixFragment = this.getAncientNumeralShortcutSuffixFragment(rightStr);
+            const r1stCp = rightStr.codePointAt(0) as number;
+            const suffixFragment = this.getPreAncientNumberFragment(rightStr, r1stCp);
             if (suffixFragment != null) {
                 numberFragment.matchedStr += suffixFragment.matchedStr;
                 numberFragment.normalizedStr += suffixFragment.normalizedStr;
+                numberFragment.digitStr = numberFragment.digitStr || '';
+                numberFragment.digitStr += suffixFragment.digitStr || '';
+                numberFragment.ancient = true;
+                numberFragment.measureWords = suffixFragment.measureWords;
 
                 if (suffixFragment.spaceIncluded) {
                     numberFragment.spaceIncluded = true;
-                    numberFragment.error = numberFragment.error || {};
-                    numberFragment.error.invalidSpaceIncluded = true;
-                    numberFragment.error.invalidUnicodeForm = true;
                 }
 
-                if (suffixFragment.invisibleSpaceIncluded) {
-                    numberFragment.spaceIncluded = true;
-                    numberFragment.error = numberFragment.error || {};
-                    numberFragment.error.invalidSpaceIncluded = true;
-                    numberFragment.error.invalidUnicodeForm = true;
+                if (suffixFragment.error) {
+                    numberFragment.error = suffixFragment.error;
                 }
             }
         }
@@ -542,9 +573,8 @@ export class MyanmarTextFragmenter {
         return extractNumberInfo;
     }
 
-    private getAncientNumeralShortcutSuffixFragment(input: string): TextFragmentPartial | null {
-        const firstCp = input.codePointAt(0);
-        if (!firstCp || !(firstCp >= 0x102B && firstCp <= 0x103E)) {
+    private getAncientNumeralShortcutSuffixFragment(input: string, firstCp: number): TextFragmentPartial | null {
+        if (!(firstCp >= 0x102B && firstCp <= 0x103E)) {
             return null;
         }
 
@@ -607,17 +637,17 @@ export class MyanmarTextFragmenter {
             ];
         }
 
-        if (measureWords && measureWords.length > 0) {
-            return {
-                matchedStr: diacriticsFragment.matchedStr,
-                normalizedStr: diacriticsFragment.normalizedStr,
-                spaceIncluded: diacriticsFragment.spaceIncluded,
-                invisibleSpaceIncluded: diacriticsFragment.spaceIncluded,
-                measureWords
-            };
+        if (!measureWords || !measureWords.length) {
+            return null;
         }
 
-        return null;
+        return {
+            matchedStr: diacriticsFragment.matchedStr,
+            normalizedStr: diacriticsFragment.normalizedStr,
+            spaceIncluded: diacriticsFragment.spaceIncluded,
+            invisibleSpaceIncluded: diacriticsFragment.invisibleSpaceIncluded,
+            measureWords
+        };
     }
 
     private getDiacriticsFragment(input: string): TextFragmentPartial {
