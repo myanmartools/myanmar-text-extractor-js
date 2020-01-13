@@ -29,12 +29,12 @@ module.exports = function (config) {
             dir: path.join(__dirname, 'dist/coverage'),
             reports: ['html', 'lcovonly', 'text-summary', 'cobertura'],
             fixWebpackSourcePaths: true,
-            thresholds: {
-                statements: 80,
-                lines: 80,
-                branches: 80,
-                functions: 80
-            }
+            // thresholds: {
+            //     statements: 80,
+            //     lines: 80,
+            //     branches: 80,
+            //     functions: 80
+            // }
         },
         reporters: ['progress', 'kjhtml'],
         junitReporter: {
