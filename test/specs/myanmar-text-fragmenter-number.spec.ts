@@ -235,6 +235,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    // \u066B
     it(String.raw`should return number fragment when input with separator and decimal dot '၁٫၂၃၄٫၅၆၇.၈၉'`, () => {
         const input = '၁٫၂၃၄٫၅၆၇.၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -249,6 +250,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    // \u066C
     it(String.raw`should return number fragment when input with separator and decimal dot '၁٬၂၃၄٬၅၆၇.၈၉'`, () => {
         const input = '၁٬၂၃၄٬၅၆၇.၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -263,6 +265,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    // \u2396
     it(String.raw`should return number fragment when input with separator and decimal dot '၁⎖၂၃၄⎖၅၆၇.၈၉'`, () => {
         const input = '၁⎖၂၃၄⎖၅၆၇.၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -277,6 +280,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    // \u0027
     it(String.raw`should return number fragment when input with separator and decimal dot "၁'၂၃၄'၅၆၇.၈၉"`, () => {
         const input = "၁'၂၃၄'၅၆၇.၈၉";
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -291,6 +295,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    // \u005F
     it(String.raw`should return number fragment when input with separator and decimal dot '၁_၂၃၄_၅၆၇.၈၉'`, () => {
         const input = '၁_၂၃၄_၅၆၇.၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
