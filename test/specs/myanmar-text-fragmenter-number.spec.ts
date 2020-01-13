@@ -381,6 +381,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    // \u00B7
     it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇·၈၉'`, () => {
         const input = '၁,၂၃၄,၅၆၇·၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -427,8 +428,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    // invalid
-    it(String.raw`should return 'အင်္ဂါ' number fragment when input with space 'င်္၁ ါ'`, () => {
+    // invalid space
+    it(String.raw`should return 'အင်္ဂါ' number fragment with ERROR when input 'င်္၁ ါ'`, () => {
         const input = 'င်္၁ ါ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
