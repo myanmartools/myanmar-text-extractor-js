@@ -101,7 +101,16 @@ export class MyanmarTextFragmenter {
             };
         }
 
-        return this.getNumberFragment(input, firstCp, prevFragments);
+        const numberFragment = this.getNumberFragment(input, firstCp, prevFragments);
+        if (numberFragment != null) {
+            return numberFragment;
+        }
+
+        return {
+            matchedStr: '',
+            normalizedStr: '',
+            fragmentType: FragmentType.Unknown
+        };
     }
 
     private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
