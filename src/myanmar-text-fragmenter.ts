@@ -38,7 +38,7 @@ const rDigitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${rVisibleSpace}`;
 
 export class MyanmarTextFragmenter {
     // private readonly _options: TextFragmenterOptions;
-    private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?[\u101D\u1040]\u102D`);
+    private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?\u1040\u102D`);
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)\u104A\u104B]`);
     private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rDigitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
@@ -339,11 +339,6 @@ export class MyanmarTextFragmenter {
         const numberExtractInfo = this.extractNumberInfo(normalizedStr);
         normalizedStr = numberExtractInfo.normalizedStr;
 
-        if (numberExtractInfo.u101dCount &&
-            (normalizedStr.length !== matchedStr.length || (rFirstCp && rFirstCp >= 0x1000 && rFirstCp <= 0x104E))) {
-            return null;
-        }
-
         const numberFragment: TextFragment = {
             matchedStr,
             normalizedStr,
@@ -353,11 +348,6 @@ export class MyanmarTextFragmenter {
             // ဆယ်သား
             measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
-
-        if (numberExtractInfo.u101dCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU101DInsteadOfU1040 = true;
-        }
 
         if (numberExtractInfo.u104eCount) {
             numberFragment.error = numberFragment.error || {};
