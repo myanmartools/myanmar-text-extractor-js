@@ -57,6 +57,38 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should return number fragment with ERROR when input '၉၉\u101D'`, () => {
+        const input = '၉၉\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၉၀',
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၉၀',
+            error: {
+                invalidU101DInsteadOfU1040: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '\u101D၉၉'`, () => {
+        const input = '\u101D၉၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၀၉၉',
+            fragmentType: FragmentType.Number,
+            digitStr: '၀၉၉',
+            error: {
+                invalidU101DInsteadOfU1040: true
+            }
+        });
+    });
+
     it(String.raw`should return number fragment when input with separator '၁,၉၉၉'`, () => {
         const input = '၁,၉၉၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -70,6 +102,24 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             digitSeparatorIncluded: true
         });
     });
+
+    it(String.raw`should return number fragment with ERROR when input '၁,၉၉\u101D'`, () => {
+        const input = '၁,၉၉\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၉၉၀',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၉၉၀',
+            digitSeparatorIncluded: true,
+            error: {
+                invalidU101DInsteadOfU1040: true
+            }
+        });
+    });
+
 
     it(String.raw`should return number fragment when input with separator and decimal dot '၁,၉၉၉.၀၂'`, () => {
         const input = '၁,၉၉၉.၀၂';
