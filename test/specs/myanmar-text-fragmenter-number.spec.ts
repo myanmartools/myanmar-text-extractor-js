@@ -428,6 +428,23 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should return 'အင်္ဂါ' number fragment when input '၁,၉၂င်္၀ါ'`, () => {
+        const input = '၁,၉၂င်္၀ါ';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၉၂၀',
+            ancient: true,
+            measureWords: ['အင်္ဂါ'],
+            digitSeparatorIncluded: true
+        });
+    });
+
     // invalid space
     it(String.raw`should return 'အင်္ဂါ' number fragment with ERROR when input 'င်္၁ ါ'`, () => {
         const input = 'င်္၁ ါ';
@@ -456,11 +473,14 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['တောင်း', 'တင်း']);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁',
+            ancient: true,
+            measureWords: ['တောင်း', 'တင်း']
+        });
     });
 
     it(String.raw`should return 'ဆယ်သား' number fragment when input '(၁)၀ိ'`, () => {
@@ -469,11 +489,14 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁၀');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['ဆယ်သား']);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၀',
+            ancient: true,
+            measureWords: ['ဆယ်သား']
+        });
     });
 
     it(String.raw`should return 'ဆယ်သား' number fragment when input with space '( ၁ ) ၀ိ'`, () => {
@@ -482,14 +505,17 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('(၁)၀ိ');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁၀');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['ဆယ်သား']);
-        expect(fragment.spaceIncluded).toBeTruthy();
-        expect(fragment.error).toEqual({
-            invalidSpaceIncluded: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '(၁)၀ိ',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၀',
+            ancient: true,
+            measureWords: ['ဆယ်သား'],
+            spaceIncluded: true,
+            error: {
+                invalidSpaceIncluded: true
+            }
         });
     });
 
