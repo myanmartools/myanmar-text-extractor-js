@@ -475,26 +475,6 @@ export class MyanmarTextFragmenter {
 
         if (numberExtractInfo.digitSeparatorIncluded) {
             numberFragment.digitSeparatorIncluded = true;
-        } else {
-            const rightStr = input.substring(matchedStr.length);
-            const r1stCp = rightStr.codePointAt(0) as number;
-            const suffixFragment = this.getPreAncientNumberFragment(rightStr, r1stCp);
-            if (suffixFragment != null) {
-                numberFragment.matchedStr += suffixFragment.matchedStr;
-                numberFragment.normalizedStr += suffixFragment.normalizedStr;
-                numberFragment.digitStr = numberFragment.digitStr || '';
-                numberFragment.digitStr += suffixFragment.digitStr || '';
-                numberFragment.ancient = true;
-                numberFragment.measureWords = suffixFragment.measureWords;
-
-                if (suffixFragment.spaceIncluded) {
-                    numberFragment.spaceIncluded = true;
-                }
-
-                if (suffixFragment.error) {
-                    numberFragment.error = suffixFragment.error;
-                }
-            }
         }
 
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
@@ -513,6 +493,28 @@ export class MyanmarTextFragmenter {
         if (numberExtractInfo.u104eCount) {
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidU104EInsteadOfU1044 = true;
+        }
+
+        const rightStr = input.substring(matchedStr.length);
+        const r1stCp = rightStr.length > 0 ? rightStr.codePointAt(0) : undefined;
+        if (r1stCp) {
+            const ancientFragment = this.getPreAncientNumberFragment(rightStr, r1stCp);
+            if (ancientFragment != null) {
+                numberFragment.matchedStr += ancientFragment.matchedStr;
+                numberFragment.normalizedStr += ancientFragment.normalizedStr;
+                numberFragment.digitStr = numberFragment.digitStr || '';
+                numberFragment.digitStr += ancientFragment.digitStr || '';
+                numberFragment.ancient = true;
+                numberFragment.measureWords = ancientFragment.measureWords;
+
+                if (ancientFragment.spaceIncluded) {
+                    numberFragment.spaceIncluded = true;
+                }
+
+                if (ancientFragment.error) {
+                    numberFragment.error = ancientFragment.error;
+                }
+            }
         }
 
         return numberFragment;
