@@ -21,7 +21,7 @@ jobs:
             - ./node_modules
       - run:
           name: Run test
-          command: npm run test:ci
+          command: npm run test:ci --if-present
       - run:
           name: Run build
           command: npm run build  --if-present
