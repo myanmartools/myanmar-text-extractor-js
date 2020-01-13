@@ -364,13 +364,7 @@ export class MyanmarTextFragmenter {
             numberFragment.error.invalidU104EInsteadOfU1044 = true;
         }
 
-        if (normalizedTextInfo && normalizedTextInfo.spaceIncluded) {
-            numberFragment.spaceIncluded = true;
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidSpaceIncluded = true;
-        }
-
-        if (normalizedTextInfo && normalizedTextInfo.invisibleSpaceIncluded) {
+        if (normalizedTextInfo && (normalizedTextInfo.spaceIncluded || normalizedTextInfo.invisibleSpaceIncluded)) {
             numberFragment.spaceIncluded = true;
             numberFragment.error = numberFragment.error || {};
             numberFragment.error.invalidSpaceIncluded = true;
