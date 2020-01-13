@@ -544,9 +544,12 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁');
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၁'
+        });
     });
 
     it(String.raw`should return number fragment when input '(၉၀)'`, () => {
