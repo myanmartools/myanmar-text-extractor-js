@@ -1,5 +1,6 @@
 export enum FragmentType {
-    Text = 0,
+    Unknown = 0,
     Number = 1,
-    Punctuation = 2
+    Text = 2,
+    Punctuation = 3
 }
