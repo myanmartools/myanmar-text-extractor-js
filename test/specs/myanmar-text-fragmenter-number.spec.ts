@@ -37,6 +37,13 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
+        const input = '\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
     it(String.raw`should return number fragment when input '၉၉၉'`, () => {
         const input = '၉၉၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
