@@ -499,7 +499,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return 'ဆယ်သား' number fragment when input with space '( ၁ ) ၀ိ'`, () => {
+    it(String.raw`should return 'ဆယ်သား' number fragment with ERROR when input '( ၁ ) ၀ိ'`, () => {
         const input = '( ၁ ) ၀ိ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
@@ -519,35 +519,22 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return 'ဆယ်သား' number fragment when input with \u101D '(၁)ဝိ'`, () => {
-        const input = '(၁)ဝိ';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input,
-            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('(၁)၀ိ');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၁၀');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['ဆယ်သား']);
-        expect(fragment.error).toEqual({
-            invalidU101DInsteadOfU1040: true
-        });
-    });
-
-    it(String.raw`should return 'ဆယ်သား' number fragment when input with \u104E '(၎)၀ိ'`, () => {
+    it(String.raw`should return 'ဆယ်သား' number fragment with ERROR when input \u104E '(၎)၀ိ'`, () => {
         const input = '(၎)၀ိ';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('(၄)၀ိ');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၄၀');
-        expect(fragment.ancient).toBeTruthy();
-        expect(fragment.measureWords).toEqual(['ဆယ်သား']);
-        expect(fragment.error).toEqual({
-            invalidU104EInsteadOfU1044: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '(၄)၀ိ',
+            fragmentType: FragmentType.Number,
+            digitStr: '၄၀',
+            ancient: true,
+            measureWords: ['ဆယ်သား'],
+            error: {
+                invalidU104EInsteadOfU1044: true
+            }
         });
     });
 
