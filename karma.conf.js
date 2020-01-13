@@ -1,5 +1,4 @@
-// Karma configuration file, see link for more information
-// https://karma-runner.github.io/1.0/config/configuration-file.html
+const path = require('path');
 
 module.exports = function (config) {
     const puppeteer = require('puppeteer');
@@ -27,7 +26,7 @@ module.exports = function (config) {
             clearContext: false
         },
         coverageIstanbulReporter: {
-            dir: require('path').join(__dirname, './dist/coverage/myanmar-text-fragmenter-js'),
+            dir: path.join(__dirname, 'dist/coverage'),
             reports: ['html', 'lcovonly', 'text-summary', 'cobertura'],
             fixWebpackSourcePaths: true,
             thresholds: {
@@ -39,11 +38,12 @@ module.exports = function (config) {
         },
         reporters: ['progress', 'kjhtml'],
         junitReporter: {
-            outputDir: './dist/junit/myanmar-text-fragmenter-js'
+            outputDir: './dist/junit'
         },
-        webpack: require('./webpack.config.test.js')(),
+        webpack: require('./webpack.config.test.js'),
         webpackMiddleware: {
-            noInfo: true
+            noInfo: true,
+            stats: 'errors-only'
         },
         mime: {
             'text/x-typescript': ['ts', 'tsx']
@@ -53,12 +53,6 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
         autoWatch: true,
         browsers: ['Chrome'],
-        // customLaunchers: {
-        //     ChromeHeadlessCI: {
-        //         base: 'ChromeHeadless',
-        //         flags: ['--no-sandbox']
-        //     }
-        // },
         singleRun: false,
         restartOnFileChange: true
     });
