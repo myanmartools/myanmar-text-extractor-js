@@ -37,13 +37,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
-        const input = '\u101D';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    });
-
     it(String.raw`should return number fragment when input '၉၉၉'`, () => {
         const input = '၉၉၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -55,6 +48,41 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             fragmentType: FragmentType.Number,
             digitStr: '၉၉၉'
         });
+    });
+
+    it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
+        const input = '\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
+    it(String.raw`should NOT return number fragment when input '\u104E'`, () => {
+        const input = '\u104E';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
+    it(String.raw`should NOT return number fragment when input '\u101D\u101D'`, () => {
+        const input = '\u101D\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
+    it(String.raw`should NOT return number fragment when input '\u104E\u104E'`, () => {
+        const input = '\u104E\u104E';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
+    it(String.raw`should NOT return number fragment when input '\u104E\u101D'`, () => {
+        const input = '\u104E\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     });
 
     it(String.raw`should return number fragment with ERROR when input '၉၉\u101D'`, () => {
@@ -69,6 +97,39 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             digitStr: '၉၉၀',
             error: {
                 invalidU101DInsteadOfU1040: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၉၉\u104E'`, () => {
+        const input = '၉၉\u104E';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၉၄',
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၉၄',
+            error: {
+                invalidU104EInsteadOfU1044: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၉\u104E\u101D'`, () => {
+        const input = '၉\u104E\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၄၀',
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၄၀',
+            error: {
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
             }
         });
     });
@@ -103,23 +164,30 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment with ERROR when input '၁,၉၉\u101D'`, () => {
-        const input = '၁,၉၉\u101D';
+    it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
+        const input = '\u104E,\u104E\u104E\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D'`, () => {
+        const input = '၁,၉\u104E\u101D';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
         expect(fragment).toEqual({
             matchedStr: input,
-            normalizedStr: '၁,၉၉၀',
+            normalizedStr: '၁,၉၄၀',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၉၉၀',
+            digitStr: '၁၉၄၀',
             digitSeparatorIncluded: true,
             error: {
-                invalidU101DInsteadOfU1040: true
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
             }
         });
     });
-
 
     it(String.raw`should return number fragment when input with separator and decimal dot '၁,၉၉၉.၀၂'`, () => {
         const input = '၁,၉၉၉.၀၂';
@@ -132,6 +200,24 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             fragmentType: FragmentType.Number,
             digitStr: '၁၉၉၉.၀၂',
             digitSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
+        const input = '၁,၉\u104E\u101D.\u101D\u104E';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၁,၉၄၀.၀၄',
+            fragmentType: FragmentType.Number,
+            digitStr: '၁၉၄၀.၀၄',
+            digitSeparatorIncluded: true,
+            error: {
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
+            }
         });
     });
 
