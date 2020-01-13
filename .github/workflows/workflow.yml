@@ -22,10 +22,10 @@ jobs:
         npm ci
     - name: Run test
       run: |
-        npm test:ci --if-present
+        npm run test:ci --if-present
     - name: Run build
       run: |
-        npm build --if-present
+        npm run build --if-present
     - name: Run lint
       run: |
         npm run lint --if-present
