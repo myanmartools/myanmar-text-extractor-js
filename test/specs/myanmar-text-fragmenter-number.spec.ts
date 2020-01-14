@@ -679,26 +679,18 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input '၄)'`, () => {
-        const input = '၄)';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input,
-            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၄');
-    });
-
     it(String.raw`should return number fragment when input '၉၀။'`, () => {
         const input = '၉၀။';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၉၀');
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၀'
+        });
     });
 
     it(String.raw`should return number fragment when input '၀၉။'`, () => {
@@ -707,9 +699,12 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe(input);
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၀၉');
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၀၉'
+        });
     });
 
     it(String.raw`should return number fragment when input with space '၀၉ ။'`, () => {
@@ -718,55 +713,68 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('၀၉။');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၀၉');
-        expect(fragment.spaceIncluded).toBeTruthy();
-        expect(fragment.error).toEqual({
-            invalidSpaceIncluded: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၀၉။',
+            fragmentType: FragmentType.Number,
+            digitStr: '၀၉',
+            spaceIncluded: true,
+            error: {
+                invalidSpaceIncluded: true
+            }
         });
     });
 
-    it(String.raw`should return number fragment when input with space \u200B '၀၉​။'`, () => {
+    it(String.raw`should return number fragment with ERROR when input \u200B '၀၉​။'`, () => {
         const input = '၀၉​။';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('၀၉။');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၀၉');
-        expect(fragment.error).toEqual({
-            invalidSpaceIncluded: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၀၉။',
+            fragmentType: FragmentType.Number,
+            digitStr: '၀၉',
+            spaceIncluded: true,
+            error: {
+                invalidSpaceIncluded: true
+            }
         });
     });
 
-    it(String.raw`should return number fragment when input with \u101D 'ဝ၁။'`, () => {
-        const input = 'ဝ၁။';
+    it(String.raw`should return number fragment with ERROR when input '\u101D၁။'`, () => {
+        const input = '\u101D၁။';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('၀၁။');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၀၁');
-        expect(fragment.error).toEqual({
-            invalidU101DInsteadOfU1040: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၀၁။',
+            fragmentType: FragmentType.Number,
+            digitStr: '၀၁',
+            error: {
+                invalidU101DInsteadOfU1040: true
+            }
         });
     });
 
-    it(String.raw`should return number fragment when input with \u101D and \u104E '၉ဝ၎။'`, () => {
-        const input = '၉ဝ၎။';
+    it(String.raw`should return number fragment when input with  and  '၉\u101D\u104E။'`, () => {
+        const input = '၉\u101D\u104E။';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('၉၀၄။');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၉၀၄');
-        expect(fragment.error).toEqual({
-            invalidU101DInsteadOfU1040: true,
-            invalidU104EInsteadOfU1044: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၀၄။',
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၀၄',
+            error: {
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
+            }
         });
     });
 });
