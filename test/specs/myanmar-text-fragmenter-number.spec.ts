@@ -616,32 +616,38 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input with \u101D '(ဝ၁)'`, () => {
-        const input = '(ဝ၁)';
+    it(String.raw`should return number fragment with ERROR when input '(\u101D၁)'`, () => {
+        const input = '(\u101D၁)';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('(၀၁)');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၀၁');
-        expect(fragment.error).toEqual({
-            invalidU101DInsteadOfU1040: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '(၀၁)',
+            fragmentType: FragmentType.Number,
+            digitStr: '၀၁',
+            error: {
+                invalidU101DInsteadOfU1040: true
+            }
         });
     });
 
-    it(String.raw`should return number fragment when input with \u101D and \u104E '(၉ဝ၎)'`, () => {
-        const input = '(၉ဝ၎)';
+    it(String.raw`should return number fragment with ERROR when input '(၉\u101D\u104E)'`, () => {
+        const input = '(၉\u101D\u104E)';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
             `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment.normalizedStr).toBe('(၉၀၄)');
-        expect(fragment.fragmentType).toEqual(FragmentType.Number);
-        expect(fragment.digitStr).toBe('၉၀၄');
-        expect(fragment.error).toEqual({
-            invalidU101DInsteadOfU1040: true,
-            invalidU104EInsteadOfU1044: true
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '(၉၀၄)',
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၀၄',
+            error: {
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
+            }
         });
     });
 
