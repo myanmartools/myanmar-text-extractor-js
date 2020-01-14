@@ -707,7 +707,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input with space '၀၉ ။'`, () => {
+    it(String.raw`should return number fragmentwith ERROR when input '၀၉ ။'`, () => {
         const input = '၀၉ ။';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
@@ -760,7 +760,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return number fragment when input with  and  '၉\u101D\u104E။'`, () => {
+    it(String.raw`should return number fragment with ERROR when input '၉\u101D\u104E။'`, () => {
         const input = '၉\u101D\u104E။';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
