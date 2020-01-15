@@ -20,7 +20,7 @@ interface NumberExtractInfo {
 }
 
 interface PhoneNumberExtractInfo extends NumberExtractInfo {
-    plusIncluded?: boolean;
+    plusSignIncluded?: boolean;
     starIncluded?: boolean;
 }
 
@@ -202,6 +202,10 @@ export class MyanmarTextFragmenter {
             digitStr: numberExtractInfo.digitStr,
             possiblePhoneNumber: true
         };
+
+        if (numberExtractInfo.plusSignIncluded) {
+            numberFragment.plusSignIncluded = true;
+        }
 
         if (numberExtractInfo.separatorIncluded) {
             numberFragment.separatorIncluded = true;
@@ -794,7 +798,7 @@ export class MyanmarTextFragmenter {
         };
 
         if (this._phPlusRegExp.test(curStr[0])) {
-            extractNumberInfo.plusIncluded = true;
+            extractNumberInfo.plusSignIncluded = true;
             extractNumberInfo.normalizedStr += curStr[0];
             curStr = curStr.substring(1);
         }
