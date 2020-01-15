@@ -160,7 +160,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၁၉၉၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -181,7 +181,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၉၄၀',
             fragmentType: FragmentType.Number,
             digitStr: '၁၉၄၀',
-            digitSeparatorIncluded: true,
+            separatorIncluded: true,
             error: {
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
@@ -199,7 +199,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၁၉၉၉.၀၂',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -213,7 +213,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၉၄၀.၀၄',
             fragmentType: FragmentType.Number,
             digitStr: '၁၉၄၀.၀၄',
-            digitSeparatorIncluded: true,
+            separatorIncluded: true,
             error: {
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
@@ -231,7 +231,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -246,7 +246,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -261,7 +261,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -276,7 +276,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -291,7 +291,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: "၁'၂၃၄'၅၆၇.၈၉",
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -306,7 +306,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁_၂၃၄_၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -334,7 +334,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true,
+            separatorIncluded: true,
             spaceIncluded: true
         });
     });
@@ -349,7 +349,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -363,7 +363,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -377,7 +377,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -392,7 +392,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             digitStr: '၁၂၃၄၅၆၇.၈၉',
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
@@ -441,7 +441,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             digitStr: '၁၉၂၀',
             ancient: true,
             measureWords: ['အင်္ဂါ'],
-            digitSeparatorIncluded: true
+            separatorIncluded: true
         });
     });
 
