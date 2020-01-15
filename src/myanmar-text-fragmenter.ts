@@ -43,6 +43,7 @@ export class MyanmarTextFragmenter {
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
     private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
+    private readonly _possibleDigits = '\u1040-\u1049\u101D\u104E';
 
     // \u002E\u00B7\u02D9
     private readonly _digitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${this._visibleSpace}`;
@@ -60,9 +61,8 @@ export class MyanmarTextFragmenter {
     private readonly _phPlus = '+\uFF0B';
     private readonly _phSeparator = `-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E${this._space}`;
     private readonly _phStar = '*';
-    private readonly _phDigits = '\u1040-\u1049\u101D\u104E';
     // private readonly _phAlpha = 'A-Za-z';
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._phStar}]*[${this._phDigits}]){3,}`);
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._phStar}]*[${this._possibleDigits}]){3,}`);
     private readonly _phPlusRegExp = new RegExp(`[${this._phPlus}]`);
 
     // // [\u103B\u103C]
