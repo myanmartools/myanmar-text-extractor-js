@@ -36,12 +36,24 @@ const rVisibleSpace = '\u0020\u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
 // \u002E\u00B7\u02D9
 const rDigitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${rVisibleSpace}`;
 
+// \uFF0D\u2010-\u2015\u2212\u002F\uFF0F\u002E\uFF0E
+// \u3000\u2060
+
 export class MyanmarTextFragmenter {
+
     // private readonly _options: TextFragmenterOptions;
     private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?\u1040\u102D`);
     private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[\u104A\u104B]`);
     private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rDigitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
+
+    // Phone Number
+    private readonly _phPlus = '+\uFF0B';
+    private readonly _phPunc = '-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F \u00A0\u00AD\u200B\u2060\u3000()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E';
+    private readonly _phStar = '*';
+    private readonly _phDigits = '\u1040-\u1049\u101D\u104E';
+    private readonly _phAlpha = 'A-Za-z';
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phPunc}${this._phStar}]*[${this._phDigits}]){3,}[${this._phPunc}${this._phStar}${this._phAlpha}${this._phDigits}]*`);
 
     // // [\u103B\u103C]
     // //
@@ -146,6 +158,10 @@ export class MyanmarTextFragmenter {
         }
 
         return this.getNumberDigitGroupFragment(input);
+    }
+
+    private getPossiblePhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
+        return null;
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
