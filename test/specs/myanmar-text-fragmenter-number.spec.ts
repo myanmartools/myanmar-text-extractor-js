@@ -791,7 +791,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             digitStr: '၉၅၉',
-            possiblePhoneNumber: true
+            possiblePhoneNumber: true,
+            plusSignIncluded: true
         });
     });
 
@@ -807,6 +808,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             fragmentType: FragmentType.Number,
             digitStr: '၉၅၉',
             possiblePhoneNumber: true,
+            plusSignIncluded: true,
             spaceIncluded: true
         });
     });
@@ -823,6 +825,25 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             fragmentType: FragmentType.Number,
             digitStr: '၉၅၉',
             possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            spaceIncluded: true,
+            separatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '+၉၅ (၉) ၁၂၃ ၄၅၆၇၈၉'`, () => {
+        const input = '+၉၅ (၉) ၁၂၃ ၄၅၆၇၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၅၉၁၂၃၄၅၆၇၈၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
             spaceIncluded: true,
             separatorIncluded: true
         });
