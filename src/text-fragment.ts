@@ -14,6 +14,7 @@ export interface TextFragment {
     measureWords?: string[];
 
     possiblePhoneNumber?: boolean;
+    plusSignIncluded?: boolean;
 
     uncombinableLetter?: boolean;
     syllableIncluded?: boolean;
