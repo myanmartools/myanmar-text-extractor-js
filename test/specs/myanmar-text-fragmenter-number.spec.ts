@@ -867,8 +867,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    it(String.raw`should return phone number fragment when input '+၉၅.(၉) ၁၂၃ (၄၅၆)-၇၈၉'`, () => {
-        const input = '+၉၅.(၉) ၁၂၃ (၄၅၆)-၇၈၉';
+    it(String.raw`should return phone number fragment when input '+ ၉၅ . (၉) [၁၂၃]-(၄၅၆)-၇၈၉'`, () => {
+        const input = '+ ၉၅ . (၉) [၁၂၃]-(၄၅၆)-၇၈၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.matchedStr).toBe(input,
@@ -882,6 +882,28 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             plusSignIncluded: true,
             spaceIncluded: true,
             separatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment with ERROR when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
+        const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '+၄၀၁၂၃၄၅၆',
+            fragmentType: FragmentType.Number,
+            digitStr: '၄၀၁၂၃၄၅၆',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            spaceIncluded: true,
+            error: {
+                invalidSpaceIncluded: true,
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
+            }
         });
     });
 });
