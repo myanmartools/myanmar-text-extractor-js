@@ -794,4 +794,37 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             possiblePhoneNumber: true
         });
     });
+
+    it(String.raw`should return phone number fragment when input '+၉၅ ၉'`, () => {
+        const input = '+၉၅ ၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၅၉',
+            possiblePhoneNumber: true,
+            spaceIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '+(၉၅) ၉'`, () => {
+        const input = '+(၉၅) ၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၅၉',
+            possiblePhoneNumber: true,
+            spaceIncluded: true,
+            separatorIncluded: true
+        });
+    });
 });
