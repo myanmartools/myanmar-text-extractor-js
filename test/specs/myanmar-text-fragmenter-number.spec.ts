@@ -777,4 +777,21 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             }
         });
     });
+
+    // Phone numbers
+    //
+    it(String.raw`should return phone number fragment when input '+၉၅၉'`, () => {
+        const input = '+၉၅၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၅၉',
+            possiblePhoneNumber: true
+        });
+    });
 });
