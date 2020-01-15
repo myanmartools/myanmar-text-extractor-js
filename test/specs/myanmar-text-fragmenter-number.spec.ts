@@ -848,4 +848,40 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             separatorIncluded: true
         });
     });
+
+    it(String.raw`should return phone number fragment when input '+၉၅ (၉) ၁၂၃-၄၅၆-၇၈၉'`, () => {
+        const input = '+၉၅ (၉) ၁၂၃-၄၅၆-၇၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၅၉၁၂၃၄၅၆၇၈၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            spaceIncluded: true,
+            separatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '+၉၅.(၉) ၁၂၃ (၄၅၆)-၇၈၉'`, () => {
+        const input = '+၉၅.(၉) ၁၂၃ (၄၅၆)-၇၈၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            digitStr: '၉၅၉၁၂၃၄၅၆၇၈၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            spaceIncluded: true,
+            separatorIncluded: true
+        });
+    });
 });
