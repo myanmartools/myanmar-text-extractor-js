@@ -19,6 +19,11 @@ interface NumberExtractInfo {
     separatorIncluded?: boolean;
 }
 
+interface PhoneNumberExtractInfo extends NumberExtractInfo {
+    plusIncluded?: boolean;
+    starIncluded?: boolean;
+}
+
 interface TextFragmentPartial {
     matchedStr: string;
     normalizedStr: string;
@@ -56,8 +61,9 @@ export class MyanmarTextFragmenter {
     private readonly _phSeparator = `-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E${this._space}`;
     private readonly _phStar = '*';
     private readonly _phDigits = '\u1040-\u1049\u101D\u104E';
-    private readonly _phAlpha = 'A-Za-z';
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._phStar}]*[${this._phDigits}]){3,}[${this._phSeparator}${this._phStar}${this._phAlpha}${this._phDigits}]*`);
+    // private readonly _phAlpha = 'A-Za-z';
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._phStar}]*[${this._phDigits}]){3,}`);
+    private readonly _phPlusRegExp = new RegExp(`[${this._phPlus}]`);
 
     // // [\u103B\u103C]
     // //
@@ -130,6 +136,10 @@ export class MyanmarTextFragmenter {
     }
 
     private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+        if (input.length >= 4 && (firstCp === 0x002B || firstCp === 0xFF0B)) {
+            return this.getPossiblePhoneNumberFragment(input, firstCp);
+        }
+
         const preAncientNumberFragment = this.getPreAncientNumberFragment(input, firstCp);
         if (preAncientNumberFragment != null) {
             return preAncientNumberFragment;
@@ -180,12 +190,42 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        const numberExtractInfo = this.getNumberExtractInfo(matchedStr, true);
+        const numberExtractInfo = this.getPhoneNumberExtractInfo(matchedStr);
         if (!numberExtractInfo.digitCount) {
             return null;
         }
 
-        return null;
+        const numberFragment: TextFragment = {
+            matchedStr,
+            fragmentType: FragmentType.Number,
+            normalizedStr: numberExtractInfo.normalizedStr,
+            digitStr: numberExtractInfo.digitStr,
+            possiblePhoneNumber: true
+        };
+
+        if (numberExtractInfo.separatorIncluded) {
+            numberFragment.separatorIncluded = true;
+        }
+
+        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
+            numberFragment.spaceIncluded = true;
+            if (numberExtractInfo.invisibleSpaceIncluded) {
+                numberFragment.error = numberFragment.error || {};
+                numberFragment.error.invalidSpaceIncluded = true;
+            }
+        }
+
+        if (numberExtractInfo.u101dCount) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (numberExtractInfo.u104eCount) {
+            numberFragment.error = numberFragment.error || {};
+            numberFragment.error.invalidU104EInsteadOfU1044 = true;
+        }
+
+        return numberFragment;
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -498,7 +538,7 @@ export class MyanmarTextFragmenter {
         };
 
         if (numberExtractInfo.separatorIncluded) {
-            numberFragment.digitSeparatorIncluded = true;
+            numberFragment.separatorIncluded = true;
         }
 
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
@@ -735,6 +775,56 @@ export class MyanmarTextFragmenter {
                 extractNumberInfo.spaceIncluded = true;
                 extractNumberInfo.invisibleSpaceIncluded = true;
             } else {
+                extractNumberInfo.normalizedStr += c;
+            }
+        }
+
+        return extractNumberInfo;
+    }
+
+    private getPhoneNumberExtractInfo(matchedStr: string): PhoneNumberExtractInfo {
+        let curStr = matchedStr;
+
+        const extractNumberInfo: PhoneNumberExtractInfo = {
+            normalizedStr: '',
+            digitStr: '',
+            digitCount: 0,
+            u101dCount: 0,
+            u104eCount: 0
+        };
+
+        if (this._phPlusRegExp.test(curStr[0])) {
+            extractNumberInfo.plusIncluded = true;
+            extractNumberInfo.normalizedStr += curStr[0];
+            curStr = curStr.substring(1);
+        }
+
+        for (const c of curStr) {
+            const cp = c.codePointAt(0) as number;
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
+                ++extractNumberInfo.digitCount;
+                extractNumberInfo.digitStr += c;
+                extractNumberInfo.normalizedStr += c;
+            } else if (cp === 0x101D) {
+                ++extractNumberInfo.u101dCount;
+                extractNumberInfo.digitStr += '\u1040';
+                extractNumberInfo.normalizedStr += '\u1040';
+            } else if (cp === 0x104E) {
+                ++extractNumberInfo.u104eCount;
+                extractNumberInfo.digitStr += '\u1044';
+                extractNumberInfo.normalizedStr += '\u1044';
+            } else if (c === '*') {
+                extractNumberInfo.starIncluded = true;
+                extractNumberInfo.normalizedStr += c;
+            } else if (this._visibleSpaceRegExp.test(c)) {
+                extractNumberInfo.spaceIncluded = true;
+                extractNumberInfo.normalizedStr += ' ';
+            } else if (this._invisibleSpaceRegExp.test(c)) {
+                extractNumberInfo.spaceIncluded = true;
+                extractNumberInfo.invisibleSpaceIncluded = true;
+            } else {
+                extractNumberInfo.separatorIncluded = true;
                 extractNumberInfo.normalizedStr += c;
             }
         }
