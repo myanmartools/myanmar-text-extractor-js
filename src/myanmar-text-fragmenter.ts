@@ -16,7 +16,7 @@ interface NumberExtractInfo {
     u104eCount: number;
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
-    digitSeparatorIncluded?: boolean;
+    separatorIncluded?: boolean;
 }
 
 interface TextFragmentPartial {
@@ -31,29 +31,33 @@ interface TextFragmentPartial {
     numberOrderList?: boolean;
 }
 
-const rSpace = '\u0020\u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF';
-const rVisibleSpace = '\u0020\u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
-// \u002E\u00B7\u02D9
-const rDigitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${rVisibleSpace}`;
-
 // \uFF0D\u2010-\u2015\u2212\u002F\uFF0F\u002E\uFF0E
 // \u3000\u2060
 
 export class MyanmarTextFragmenter {
+    private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
+    private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
+    private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
+
+    // \u002E\u00B7\u02D9
+    private readonly _digitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${this._visibleSpace}`;
+
+    private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
+    private readonly _invisibleSpaceRegExp = new RegExp(`[${this._invisibleSpace}]`);
 
     // private readonly _options: TextFragmenterOptions;
-    private readonly _hsethaRegExp = new RegExp(`^[(][${rSpace}]?[\u1041-\u1049\u104E][${rSpace}]?[)][${rSpace}]?\u1040\u102D`);
-    private readonly _numberParenthesisRegExp = new RegExp(`^[(][${rSpace}]?[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[)]`);
-    private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${rSpace}]?[\u104A\u104B]`);
-    private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${rDigitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
+    private readonly _hsethaRegExp = new RegExp(`^[(][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)][${this._space}]?\u1040\u102D`);
+    private readonly _numberParenthesisRegExp = new RegExp(`^[(][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[)]`);
+    private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
+    private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._digitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
-    private readonly _phPunc = '-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F \u00A0\u00AD\u200B\u2060\u3000()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E';
+    private readonly _phSeparator = `-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E${this._space}`;
     private readonly _phStar = '*';
     private readonly _phDigits = '\u1040-\u1049\u101D\u104E';
     private readonly _phAlpha = 'A-Za-z';
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phPunc}${this._phStar}]*[${this._phDigits}]){3,}[${this._phPunc}${this._phStar}${this._phAlpha}${this._phDigits}]*`);
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._phStar}]*[${this._phDigits}]){3,}[${this._phSeparator}${this._phStar}${this._phAlpha}${this._phDigits}]*`);
 
     // // [\u103B\u103C]
     // //
@@ -161,6 +165,26 @@ export class MyanmarTextFragmenter {
     }
 
     private getPossiblePhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
+        if (input.length < 3 ||
+            !((firstCp >= 0x1040 && firstCp <= 0x1049) ||
+                firstCp === 0x101D || firstCp === 0x104E ||
+                firstCp === 0x002B || firstCp === 0xFF0B ||
+                firstCp === 0x0028 || firstCp === 0xFF08 ||
+                firstCp === 0x005B || firstCp === 0xFF3B)) {
+            return null;
+        }
+
+        const m = input.match(this._phRegExp);
+        if (m == null) {
+            return null;
+        }
+
+        const matchedStr = m[0];
+        const numberExtractInfo = this.getNumberExtractInfo(matchedStr, true);
+        if (!numberExtractInfo.digitCount) {
+            return null;
+        }
+
         return null;
     }
 
@@ -352,7 +376,7 @@ export class MyanmarTextFragmenter {
         const normalizedTextInfo = this.getNormalizedTextInfo(matchedStr, undefined, true);
         let normalizedStr = normalizedTextInfo.normalizedStr;
 
-        const numberExtractInfo = this.extractNumberInfo(normalizedStr);
+        const numberExtractInfo = this.getNumberExtractInfo(normalizedStr);
         normalizedStr = numberExtractInfo.normalizedStr;
 
         const numberFragment: TextFragment = {
@@ -392,7 +416,7 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        const numberExtractInfo = this.extractNumberInfo(matchedStr);
+        const numberExtractInfo = this.getNumberExtractInfo(matchedStr);
 
         if (numberExtractInfo.u101dCount && !numberExtractInfo.digitCount) {
             return null;
@@ -461,7 +485,7 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m1[0];
-        const numberExtractInfo = this.extractNumberInfo(matchedStr, true);
+        const numberExtractInfo = this.getNumberExtractInfo(matchedStr, true);
         if (!numberExtractInfo.digitCount) {
             return null;
         }
@@ -473,7 +497,7 @@ export class MyanmarTextFragmenter {
             digitStr: numberExtractInfo.digitStr
         };
 
-        if (numberExtractInfo.digitSeparatorIncluded) {
+        if (numberExtractInfo.separatorIncluded) {
             numberFragment.digitSeparatorIncluded = true;
         }
 
@@ -518,70 +542,6 @@ export class MyanmarTextFragmenter {
         }
 
         return numberFragment;
-    }
-
-    private extractNumberInfo(matchedStr: string, allowSpaceInNormalizedStr?: boolean): NumberExtractInfo {
-        const extractNumberInfo: NumberExtractInfo = {
-            normalizedStr: '',
-            digitStr: '',
-            digitCount: 0,
-            u101dCount: 0,
-            u104eCount: 0
-        };
-
-        for (const c of matchedStr) {
-            const cp = c.codePointAt(0) as number;
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
-                cp === 0x202F || cp === 0x205F || cp === 0x3000) {
-                extractNumberInfo.spaceIncluded = true;
-                if (allowSpaceInNormalizedStr) {
-                    extractNumberInfo.normalizedStr += '\u0020';
-                }
-
-                continue;
-            }
-
-            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
-                extractNumberInfo.spaceIncluded = true;
-                extractNumberInfo.invisibleSpaceIncluded = true;
-                continue;
-            }
-
-            if (cp >= 0x1040 && cp <= 0x1049) {
-                ++extractNumberInfo.digitCount;
-                extractNumberInfo.digitStr += c;
-                extractNumberInfo.normalizedStr += c;
-            } else if (cp === 0x002C || cp === 0x066B || cp === 0x066C || cp === 0x2396) {
-                // , ٫ ٬ ⎖
-                extractNumberInfo.digitSeparatorIncluded = true;
-                extractNumberInfo.normalizedStr += '\u002C';
-            } else if (cp === 0x0027) {
-                // '
-                extractNumberInfo.digitSeparatorIncluded = true;
-                extractNumberInfo.normalizedStr += c;
-            } else if (cp === 0x005F) {
-                // _
-                extractNumberInfo.digitSeparatorIncluded = true;
-                extractNumberInfo.normalizedStr += c;
-            } else if (cp === 0x002E || cp === 0x00B7) {
-                // . ·
-                extractNumberInfo.digitSeparatorIncluded = true;
-                extractNumberInfo.digitStr += '\u002E';
-                extractNumberInfo.normalizedStr += '\u002E';
-            } else if (cp === 0x101D) {
-                ++extractNumberInfo.u101dCount;
-                extractNumberInfo.digitStr += '\u1040';
-                extractNumberInfo.normalizedStr += '\u1040';
-            } else if (cp === 0x104E) {
-                ++extractNumberInfo.u104eCount;
-                extractNumberInfo.digitStr += '\u1044';
-                extractNumberInfo.normalizedStr += '\u1044';
-            } else {
-                extractNumberInfo.normalizedStr += c;
-            }
-        }
-
-        return extractNumberInfo;
     }
 
     private getAncientNumeralShortcutSuffixFragment(input: string, firstCp: number): TextFragmentPartial | null {
@@ -693,7 +653,7 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
+            if (this._invisibleSpaceRegExp.test(c)) {
                 if (tmpSpace) {
                     break;
                 }
@@ -704,8 +664,7 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
-                cp === 0x202F || cp === 0x205F || cp === 0x3000) {
+            if (this._visibleSpaceRegExp.test(c)) {
                 if (tmpSpace) {
                     break;
                 }
@@ -726,7 +685,64 @@ export class MyanmarTextFragmenter {
         };
     }
 
-    private getNormalizedTextInfo(str: string, upTo?: number, allChars?: boolean): NormalizedTextInfo {
+    private getNumberExtractInfo(matchedStr: string, allowSpaceInNormalizedStr?: boolean): NumberExtractInfo {
+        const extractNumberInfo: NumberExtractInfo = {
+            normalizedStr: '',
+            digitStr: '',
+            digitCount: 0,
+            u101dCount: 0,
+            u104eCount: 0
+        };
+
+        for (const c of matchedStr) {
+            const cp = c.codePointAt(0) as number;
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
+                ++extractNumberInfo.digitCount;
+                extractNumberInfo.digitStr += c;
+                extractNumberInfo.normalizedStr += c;
+            } else if (cp === 0x002C || cp === 0x066B || cp === 0x066C || cp === 0x2396) {
+                // , ٫ ٬ ⎖
+                extractNumberInfo.separatorIncluded = true;
+                extractNumberInfo.normalizedStr += '\u002C';
+            } else if (cp === 0x0027) {
+                // '
+                extractNumberInfo.separatorIncluded = true;
+                extractNumberInfo.normalizedStr += c;
+            } else if (cp === 0x005F) {
+                // _
+                extractNumberInfo.separatorIncluded = true;
+                extractNumberInfo.normalizedStr += c;
+            } else if (cp === 0x002E || cp === 0x00B7) {
+                // . ·
+                extractNumberInfo.separatorIncluded = true;
+                extractNumberInfo.digitStr += '\u002E';
+                extractNumberInfo.normalizedStr += '\u002E';
+            } else if (cp === 0x101D) {
+                ++extractNumberInfo.u101dCount;
+                extractNumberInfo.digitStr += '\u1040';
+                extractNumberInfo.normalizedStr += '\u1040';
+            } else if (cp === 0x104E) {
+                ++extractNumberInfo.u104eCount;
+                extractNumberInfo.digitStr += '\u1044';
+                extractNumberInfo.normalizedStr += '\u1044';
+            } else if (this._visibleSpaceRegExp.test(c)) {
+                extractNumberInfo.spaceIncluded = true;
+                if (allowSpaceInNormalizedStr) {
+                    extractNumberInfo.normalizedStr += '\u0020';
+                }
+            } else if (this._invisibleSpaceRegExp.test(c)) {
+                extractNumberInfo.spaceIncluded = true;
+                extractNumberInfo.invisibleSpaceIncluded = true;
+            } else {
+                extractNumberInfo.normalizedStr += c;
+            }
+        }
+
+        return extractNumberInfo;
+    }
+
+    private getNormalizedTextInfo(str: string, upTo?: number, acceptAllOtherChars?: boolean): NormalizedTextInfo {
         let matchedStr = '';
         let normalizedStr = '';
         let tmpSpace = '';
@@ -737,13 +753,23 @@ export class MyanmarTextFragmenter {
 
         while (curStr.length > 0) {
             const c = curStr[0];
+
             const cp = c.codePointAt(0);
 
             if (!cp) {
                 break;
             }
 
-            if (cp === 0x180E || cp === 0x200A || cp === 0x200B || cp === 0xFEFF) {
+            let validChar = false;
+
+            if ((cp >= 0x1000 && cp <= 0x1021) ||
+                (cp >= 0x1023 && cp <= 0x1027) ||
+                (cp >= 0x1029 && cp <= 0x1049) ||
+                cp === 0x104E) {
+                validChar = true;
+            }
+
+            if (!validChar && this._invisibleSpaceRegExp.test(c)) {
                 if (tmpSpace) {
                     break;
                 }
@@ -754,8 +780,7 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (cp === 0x0020 || cp === 0x00A0 || cp === 0x1680 || (cp >= 0x2000 && cp <= 0x2009) ||
-                cp === 0x202F || cp === 0x205F || cp === 0x3000) {
+            if (!validChar && this._visibleSpaceRegExp.test(c)) {
                 if (tmpSpace) {
                     break;
                 }
@@ -765,11 +790,7 @@ export class MyanmarTextFragmenter {
                 continue;
             }
 
-            if (allChars ||
-                (cp >= 0x1000 && cp <= 0x1021) ||
-                (cp >= 0x1023 && cp <= 0x1027) ||
-                (cp >= 0x1029 && cp <= 0x1049) ||
-                cp === 0x104E) {
+            if (validChar || acceptAllOtherChars) {
                 matchedStr += tmpSpace + c;
                 normalizedStr += c;
                 if (tmpSpace) {
