@@ -53,16 +53,17 @@ export class MyanmarTextFragmenter {
 
     // private readonly _options: TextFragmenterOptions;
     private readonly _hsethaRegExp = new RegExp(`^[(][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)][${this._space}]?\u1040\u102D`);
-    private readonly _numberParenthesisRegExp = new RegExp(`^[(][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[)]`);
+
+    private readonly _numberBoxRegExp = new RegExp(`^[(\\[\uFF08\uFF3B][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[)\\]\uFF09\uFF3D]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
     private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._digitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
-    private readonly _phSeparator = `-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E${this._space}`;
+    private readonly _phSeparator = '-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E';
     private readonly _phStar = '*';
     // private readonly _phAlpha = 'A-Za-z';
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._phStar}]*[${this._possibleDigits}]){3,}`);
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleDigits}]){3,}`);
     private readonly _phPlusRegExp = new RegExp(`[${this._phPlus}]`);
 
     // // [\u103B\u103C]
@@ -136,7 +137,7 @@ export class MyanmarTextFragmenter {
     }
 
     private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
-        if (input.length >= 4 && (firstCp === 0x002B || firstCp === 0xFF0B)) {
+        if (input.length > 3 && (firstCp === 0x002B || firstCp === 0xFF0B)) {
             return this.getPossiblePhoneNumberFragment(input, firstCp);
         }
 
@@ -145,8 +146,23 @@ export class MyanmarTextFragmenter {
             return preAncientNumberFragment;
         }
 
-        if (firstCp === 0x0028 && input.length > 2) {
-            return this.getNumberParenthesisOrOrderListFragment(input, firstCp, prevFragments);
+        if (input.length > 4 && this.isOpeningCharInBox(firstCp)) {
+            const phoneNumberFragment = this.getPossiblePhoneNumberFragment(input, firstCp);
+            const boxNumberFragment = this.getNumberBoxOrOrderListFragment(input, firstCp, prevFragments);
+            if (phoneNumberFragment != null && boxNumberFragment != null) {
+                return phoneNumberFragment.matchedStr.length > boxNumberFragment.matchedStr.length ?
+                    phoneNumberFragment : boxNumberFragment;
+            } else if (phoneNumberFragment != null) {
+                return phoneNumberFragment;
+            } else if (boxNumberFragment != null) {
+                return boxNumberFragment;
+            } else {
+                return null;
+            }
+        }
+
+        if (input.length > 2 && this.isOpeningCharInBox(firstCp)) {
+            return this.getNumberBoxOrOrderListFragment(input, firstCp, prevFragments);
         }
 
         if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x101D || firstCp === 0x104E)) {
@@ -166,7 +182,7 @@ export class MyanmarTextFragmenter {
             };
         }
 
-        const orderListFragment = this.getNumberParenthesisOrOrderListFragment(input, firstCp, prevFragments);
+        const orderListFragment = this.getNumberBoxOrOrderListFragment(input, firstCp, prevFragments);
         if (orderListFragment != null) {
             return orderListFragment;
         }
@@ -447,10 +463,10 @@ export class MyanmarTextFragmenter {
         return numberFragment;
     }
 
-    private getNumberParenthesisOrOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberBoxOrOrderListFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         let m: RegExpMatchArray | null;
-        if (firstCp === 0x0028) {
-            m = input.match(this._numberParenthesisRegExp);
+        if (this.isOpeningCharInBox(firstCp)) {
+            m = input.match(this._numberBoxRegExp);
         } else {
             m = input.match(this._orderListRegExp);
         }
@@ -912,6 +928,14 @@ export class MyanmarTextFragmenter {
             spaceIncluded,
             invisibleSpaceIncluded
         };
+    }
+
+    private isOpeningCharInBox(cp: number): boolean {
+        if (cp === 0x0028 || cp === 0xFF08 || cp === 0xFF3B || cp === 0x005B) {
+            return true;
+        }
+
+        return false;
     }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
