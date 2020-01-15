@@ -12,6 +12,7 @@ export interface TextFragment {
     digitStr?: string;
     measureWords?: string[];
     digitSeparatorIncluded?: boolean;
+    possiblePhoneNumber?: boolean;
 
     uncombinableLetter?: boolean;
     syllableIncluded?: boolean;
