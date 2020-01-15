@@ -8,10 +8,11 @@ export interface TextFragment {
     spaceIncluded?: boolean;
 
     ancient?: boolean;
+    separatorIncluded?: boolean;
 
     digitStr?: string;
     measureWords?: string[];
-    digitSeparatorIncluded?: boolean;
+
     possiblePhoneNumber?: boolean;
 
     uncombinableLetter?: boolean;
