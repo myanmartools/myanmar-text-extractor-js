@@ -4,13 +4,11 @@ export interface TextFragment {
     matchedStr: string;
     normalizedStr: string;
     fragmentType: FragmentType;
-
     spaceIncluded?: boolean;
-
     ancient?: boolean;
-    separatorIncluded?: boolean;
 
     numberStr?: string;
+    numberSeparatorIncluded?: boolean;
     measureWords?: string[];
 
     possiblePhoneNumber?: boolean;
