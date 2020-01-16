@@ -10,7 +10,7 @@ interface NormalizedTextInfo {
 
 interface NumberExtractInfo {
     normalizedStr: string;
-    digitStr: string;
+    numberStr: string;
     digitCount: number;
     u101dCount: number;
     u104eCount: number;
@@ -21,7 +21,7 @@ interface NumberExtractInfo {
 
 interface PhoneNumberExtractInfo extends NumberExtractInfo {
     plusSignIncluded?: boolean;
-    starIncluded?: boolean;
+    dotCount: number;
 }
 
 interface TextFragmentPartial {
@@ -31,7 +31,7 @@ interface TextFragmentPartial {
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
 
-    digitStr?: string;
+    numberStr?: string;
     measureWords?: string[];
     numberOrderList?: boolean;
 }
@@ -178,13 +178,38 @@ export class MyanmarTextFragmenter {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.Number,
-                digitStr: input
+                numberStr: input
             };
         }
 
         const orderListFragment = this.getNumberBoxOrOrderListFragment(input, firstCp, prevFragments);
         if (orderListFragment != null) {
             return orderListFragment;
+        }
+
+        if (input.length > 2) {
+            const phoneNumberFragment = this.getPossiblePhoneNumberFragment(input, firstCp);
+            const numberDigitGroupFragment = this.getNumberDigitGroupFragment(input);
+            if (phoneNumberFragment != null && numberDigitGroupFragment != null) {
+                if (phoneNumberFragment.matchedStr.length === numberDigitGroupFragment.matchedStr.length) {
+                    const phNumberStr = phoneNumberFragment.numberStr || '';
+                    const ndgNumberStr = numberDigitGroupFragment.numberStr || '';
+                    if (phNumberStr.length === ndgNumberStr.length) {
+                        return phoneNumberFragment;
+                    } else {
+                        return phNumberStr.length > ndgNumberStr.length ? phoneNumberFragment : numberDigitGroupFragment;
+                    }
+                }
+
+                return phoneNumberFragment.matchedStr.length > numberDigitGroupFragment.matchedStr.length ?
+                    phoneNumberFragment : numberDigitGroupFragment;
+            } else if (phoneNumberFragment != null) {
+                return phoneNumberFragment;
+            } else if (numberDigitGroupFragment != null) {
+                return numberDigitGroupFragment;
+            } else {
+                return null;
+            }
         }
 
         return this.getNumberDigitGroupFragment(input);
@@ -207,7 +232,18 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const numberExtractInfo = this.getPhoneNumberExtractInfo(matchedStr);
+        if (numberExtractInfo == null) {
+            return null;
+        }
+
         if (!numberExtractInfo.digitCount) {
+            return null;
+        }
+
+        if (numberExtractInfo.dotCount === 1 && !numberExtractInfo.spaceIncluded && !numberExtractInfo.invisibleSpaceIncluded &&
+            !(firstCp === 0x1040 || firstCp === 0x002B || firstCp === 0xFF0B ||
+                firstCp === 0x0028 || firstCp === 0xFF08 ||
+                firstCp === 0x005B || firstCp === 0xFF3B)) {
             return null;
         }
 
@@ -215,7 +251,7 @@ export class MyanmarTextFragmenter {
             matchedStr,
             fragmentType: FragmentType.Number,
             normalizedStr: numberExtractInfo.normalizedStr,
-            digitStr: numberExtractInfo.digitStr,
+            numberStr: numberExtractInfo.numberStr,
             possiblePhoneNumber: true
         };
 
@@ -348,7 +384,7 @@ export class MyanmarTextFragmenter {
             normalizedStr,
             fragmentType: FragmentType.Number,
             ancient: true,
-            digitStr: c4,
+            numberStr: c4,
             // အင်္ဂါ
             measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
@@ -406,7 +442,7 @@ export class MyanmarTextFragmenter {
             normalizedStr: matchedStr,
             fragmentType: FragmentType.Number,
             ancient: true,
-            digitStr: c4,
+            numberStr: c4,
             // အင်္ဂါ
             measureWords
         };
@@ -444,7 +480,7 @@ export class MyanmarTextFragmenter {
             normalizedStr,
             fragmentType: FragmentType.Number,
             ancient: true,
-            digitStr: numberExtractInfo.digitStr,
+            numberStr: numberExtractInfo.numberStr,
             // ဆယ်သား
             measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
@@ -482,7 +518,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        if (numberExtractInfo.u104eCount && numberExtractInfo.digitStr === '\u1044') {
+        if (numberExtractInfo.u104eCount && numberExtractInfo.numberStr === '\u1044') {
             if (!prevFragments) {
                 return null;
             }
@@ -494,7 +530,7 @@ export class MyanmarTextFragmenter {
                     continue;
                 }
 
-                if (prevFragment.digitStr === '\u1043') {
+                if (prevFragment.numberStr === '\u1043') {
                     foundMatch = true;
                 }
 
@@ -510,7 +546,7 @@ export class MyanmarTextFragmenter {
             matchedStr,
             normalizedStr: numberExtractInfo.normalizedStr,
             fragmentType: FragmentType.Number,
-            digitStr: numberExtractInfo.digitStr
+            numberStr: numberExtractInfo.numberStr
         };
 
         if (numberExtractInfo.spaceIncluded) {
@@ -554,7 +590,7 @@ export class MyanmarTextFragmenter {
             matchedStr,
             fragmentType: FragmentType.Number,
             normalizedStr: numberExtractInfo.normalizedStr,
-            digitStr: numberExtractInfo.digitStr
+            numberStr: numberExtractInfo.numberStr
         };
 
         if (numberExtractInfo.separatorIncluded) {
@@ -586,8 +622,8 @@ export class MyanmarTextFragmenter {
             if (ancientFragment != null) {
                 numberFragment.matchedStr += ancientFragment.matchedStr;
                 numberFragment.normalizedStr += ancientFragment.normalizedStr;
-                numberFragment.digitStr = numberFragment.digitStr || '';
-                numberFragment.digitStr += ancientFragment.digitStr || '';
+                numberFragment.numberStr = numberFragment.numberStr || '';
+                numberFragment.numberStr += ancientFragment.numberStr || '';
                 numberFragment.ancient = true;
                 numberFragment.measureWords = ancientFragment.measureWords;
 
@@ -748,7 +784,7 @@ export class MyanmarTextFragmenter {
     private getNumberExtractInfo(matchedStr: string, allowSpaceInNormalizedStr?: boolean): NumberExtractInfo {
         const extractNumberInfo: NumberExtractInfo = {
             normalizedStr: '',
-            digitStr: '',
+            numberStr: '',
             digitCount: 0,
             u101dCount: 0,
             u104eCount: 0
@@ -759,7 +795,7 @@ export class MyanmarTextFragmenter {
 
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++extractNumberInfo.digitCount;
-                extractNumberInfo.digitStr += c;
+                extractNumberInfo.numberStr += c;
                 extractNumberInfo.normalizedStr += c;
             } else if (cp === 0x002C || cp === 0x066B || cp === 0x066C || cp === 0x2396) {
                 // , ٫ ٬ ⎖
@@ -776,15 +812,15 @@ export class MyanmarTextFragmenter {
             } else if (cp === 0x002E || cp === 0x00B7) {
                 // . ·
                 extractNumberInfo.separatorIncluded = true;
-                extractNumberInfo.digitStr += '\u002E';
+                extractNumberInfo.numberStr += '\u002E';
                 extractNumberInfo.normalizedStr += '\u002E';
             } else if (cp === 0x101D) {
                 ++extractNumberInfo.u101dCount;
-                extractNumberInfo.digitStr += '\u1040';
+                extractNumberInfo.numberStr += '\u1040';
                 extractNumberInfo.normalizedStr += '\u1040';
             } else if (cp === 0x104E) {
                 ++extractNumberInfo.u104eCount;
-                extractNumberInfo.digitStr += '\u1044';
+                extractNumberInfo.numberStr += '\u1044';
                 extractNumberInfo.normalizedStr += '\u1044';
             } else if (this._visibleSpaceRegExp.test(c)) {
                 extractNumberInfo.spaceIncluded = true;
@@ -802,50 +838,76 @@ export class MyanmarTextFragmenter {
         return extractNumberInfo;
     }
 
-    private getPhoneNumberExtractInfo(matchedStr: string): PhoneNumberExtractInfo {
+    private getPhoneNumberExtractInfo(matchedStr: string): PhoneNumberExtractInfo | null {
         let curStr = matchedStr;
 
         const extractNumberInfo: PhoneNumberExtractInfo = {
             normalizedStr: '',
-            digitStr: '',
+            numberStr: '',
             digitCount: 0,
             u101dCount: 0,
-            u104eCount: 0
+            u104eCount: 0,
+            dotCount: 0
         };
 
         if (this._phPlusRegExp.test(curStr[0])) {
             extractNumberInfo.plusSignIncluded = true;
-            extractNumberInfo.normalizedStr += curStr[0];
+            extractNumberInfo.normalizedStr += '+';
+            extractNumberInfo.numberStr += '+';
             curStr = curStr.substring(1);
         }
+
+        let prevIsVisibleSpace = false;
 
         for (const c of curStr) {
             const cp = c.codePointAt(0) as number;
 
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++extractNumberInfo.digitCount;
-                extractNumberInfo.digitStr += c;
                 extractNumberInfo.normalizedStr += c;
+                extractNumberInfo.numberStr += c;
+                prevIsVisibleSpace = false;
             } else if (cp === 0x101D) {
                 ++extractNumberInfo.u101dCount;
-                extractNumberInfo.digitStr += '\u1040';
                 extractNumberInfo.normalizedStr += '\u1040';
+                extractNumberInfo.numberStr += '\u1040';
+                prevIsVisibleSpace = false;
             } else if (cp === 0x104E) {
                 ++extractNumberInfo.u104eCount;
-                extractNumberInfo.digitStr += '\u1044';
                 extractNumberInfo.normalizedStr += '\u1044';
+                extractNumberInfo.numberStr += '\u1044';
+                prevIsVisibleSpace = false;
             } else if (c === '*') {
-                extractNumberInfo.starIncluded = true;
+                if (prevIsVisibleSpace) {
+                    return null;
+                }
                 extractNumberInfo.normalizedStr += c;
+                extractNumberInfo.numberStr += c;
+                prevIsVisibleSpace = false;
+            } else if (c === '-' || c === '/') {
+                if (prevIsVisibleSpace) {
+                    return null;
+                }
+                extractNumberInfo.separatorIncluded = true;
+                extractNumberInfo.normalizedStr += c;
+                prevIsVisibleSpace = false;
+            } else if (c === '.') {
+                ++extractNumberInfo.dotCount;
+                extractNumberInfo.normalizedStr += '.';
+                extractNumberInfo.separatorIncluded = true;
+                prevIsVisibleSpace = false;
             } else if (this._visibleSpaceRegExp.test(c)) {
                 extractNumberInfo.spaceIncluded = true;
                 extractNumberInfo.normalizedStr += ' ';
+                prevIsVisibleSpace = true;
             } else if (this._invisibleSpaceRegExp.test(c)) {
                 extractNumberInfo.spaceIncluded = true;
                 extractNumberInfo.invisibleSpaceIncluded = true;
+                prevIsVisibleSpace = false;
             } else {
                 extractNumberInfo.separatorIncluded = true;
                 extractNumberInfo.normalizedStr += c;
+                prevIsVisibleSpace = false;
             }
         }
 
