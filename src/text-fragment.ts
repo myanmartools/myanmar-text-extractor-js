@@ -10,7 +10,7 @@ export interface TextFragment {
     ancient?: boolean;
     separatorIncluded?: boolean;
 
-    digitStr?: string;
+    numberStr?: string;
     measureWords?: string[];
 
     possiblePhoneNumber?: boolean;
