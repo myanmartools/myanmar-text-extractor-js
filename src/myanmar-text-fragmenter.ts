@@ -19,12 +19,18 @@ interface NumberExtractInfo {
     invisibleSpaceIncluded?: boolean;
 }
 
-interface PhoneNumberExtractInfo extends NumberExtractInfo {
-    plusSignIncluded?: boolean;
-    starCount: number;
+interface DateOrPhoneNumberExtractInfo extends NumberExtractInfo {
     dotCount: number;
-    slashCount: number;
-    dashCount: number;
+    plusSignIncluded?: boolean;
+    starIncluded?: boolean;
+    bracketsIncluded?: boolean;
+    hashEnded?: boolean;
+    normalizedReason?: {
+        normalizeSpace?: boolean;
+        removeInvisibleSpace?: boolean;
+        changeU101DToU1040?: boolean;
+        changeU104EToU1044?: boolean;
+    };
 }
 
 interface TextFragmentPartial {
@@ -61,9 +67,19 @@ export class MyanmarTextFragmenter {
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
     private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._digitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
+    private readonly _separatorForDtAndPh = '-./\u104A~\u002D\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
+
+    // Date
+    private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}|[${this._possibleDigits}]{2,2}`;
+    private readonly _dtMonthPattern = '[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D]';
+    private readonly _dtDayPattern = `[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]`;
+    private readonly _dtDMY = new RegExp(`(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtYearPattern})`);
+    private readonly _dtYMD = new RegExp(`(?:${this._dtYearPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtDayPattern})`);
+    private readonly _dtMDY = new RegExp(`(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtYearPattern})`);
+
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
-    private readonly _phSeparator = '\u002D\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F()\uFF08\uFF09\uFF3B\uFF3D.\\[\\]/~\u2053\u223C\uFF5E';
+    private readonly _phSeparator = `${this._separatorForDtAndPh}()\\[\\]\uFF08\uFF09\uFF3B\uFF3D`;
     private readonly _phStar = '*';
     private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleDigits}]){3,}#?`);
     private readonly _phPlusRegExp = new RegExp(`[${this._phPlus}]`);
@@ -140,7 +156,7 @@ export class MyanmarTextFragmenter {
 
     private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         if (input.length > 3 && (firstCp === 0x002B || firstCp === 0xFF0B)) {
-            return this.getPossiblePhoneNumberFragment(input, firstCp);
+            return this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
         }
 
         const preAncientNumberFragment = this.getPreAncientNumberFragment(input, firstCp);
@@ -149,7 +165,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (input.length > 4 && this.isOpeningCharInBox(firstCp)) {
-            const phoneNumberFragment = this.getPossiblePhoneNumberFragment(input, firstCp);
+            const phoneNumberFragment = this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
             const boxNumberFragment = this.getNumberBoxOrOrderListFragment(input, firstCp, prevFragments);
             if (phoneNumberFragment != null && boxNumberFragment != null) {
                 return phoneNumberFragment.matchedStr.length > boxNumberFragment.matchedStr.length ?
@@ -190,7 +206,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (input.length > 2) {
-            const phoneNumberFragment = this.getPossiblePhoneNumberFragment(input, firstCp);
+            const phoneNumberFragment = this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
             const numberDigitGroupFragment = this.getNumberDigitGroupFragment(input);
             if (phoneNumberFragment != null && numberDigitGroupFragment != null) {
                 if (phoneNumberFragment.matchedStr.length === numberDigitGroupFragment.matchedStr.length) {
@@ -217,7 +233,7 @@ export class MyanmarTextFragmenter {
         return this.getNumberDigitGroupFragment(input);
     }
 
-    private getPossiblePhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
+    private getPossibleDateOrPhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
         if (input.length < 3 ||
             !((firstCp >= 0x1040 && firstCp <= 0x1049) ||
                 firstCp === 0x101D || firstCp === 0x104E ||
@@ -233,7 +249,11 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        const numberExtractInfo = this.getPhoneNumberExtractInfo(matchedStr);
+        const numberExtractInfo = this.getDateOrPhoneNumberExtractInfo(matchedStr);
+        if (numberExtractInfo == null) {
+            return null;
+        }
+
         if (!numberExtractInfo.digitCount) {
             return null;
         }
@@ -243,7 +263,9 @@ export class MyanmarTextFragmenter {
             !numberExtractInfo.spaceIncluded &&
             !numberExtractInfo.invisibleSpaceIncluded &&
             !numberExtractInfo.plusSignIncluded &&
-            !numberExtractInfo.starCount &&
+            !numberExtractInfo.bracketsIncluded &&
+            !numberExtractInfo.starIncluded &&
+            !numberExtractInfo.hashEnded &&
             firstCp !== 0x1040) {
             return null;
         }
@@ -840,28 +862,32 @@ export class MyanmarTextFragmenter {
         return numberExtractInfo;
     }
 
-    private getPhoneNumberExtractInfo(matchedStr: string): PhoneNumberExtractInfo {
+    // tslint:disable-next-line: max-func-body-length
+    private getDateOrPhoneNumberExtractInfo(matchedStr: string): DateOrPhoneNumberExtractInfo | null {
         let curStr = matchedStr;
 
-        const numberExtractInfo: PhoneNumberExtractInfo = {
+        const numberExtractInfo: DateOrPhoneNumberExtractInfo = {
             normalizedStr: '',
             numberStr: '',
             digitCount: 0,
             u101dCount: 0,
             u104eCount: 0,
             dotCount: 0,
-            starCount: 0,
-            slashCount: 0,
-            dashCount: 0,
             separatorCount: 0
         };
 
+        let isFirstChar = true;
+        let prevIsDigit = false;
         if (this._phPlusRegExp.test(curStr[0])) {
             numberExtractInfo.plusSignIncluded = true;
             numberExtractInfo.normalizedStr += '+';
             numberExtractInfo.numberStr += '+';
             curStr = curStr.substring(1);
+            isFirstChar = false;
         }
+
+        let prevIsSpace = false;
+        let lastOpenedBracketCp: number | null = null;
 
         for (const c of curStr) {
             const cp = c.codePointAt(0) as number;
@@ -870,32 +896,94 @@ export class MyanmarTextFragmenter {
                 ++numberExtractInfo.digitCount;
                 numberExtractInfo.normalizedStr += c;
                 numberExtractInfo.numberStr += c;
+                prevIsDigit = true;
+                prevIsSpace = false;
             } else if (cp === 0x101D) {
                 ++numberExtractInfo.u101dCount;
                 numberExtractInfo.normalizedStr += '\u1040';
                 numberExtractInfo.numberStr += '\u1040';
+                numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
+                numberExtractInfo.normalizedReason.changeU101DToU1040 = true;
+                prevIsDigit = true;
+                prevIsSpace = false;
             } else if (cp === 0x104E) {
                 ++numberExtractInfo.u104eCount;
                 numberExtractInfo.normalizedStr += '\u1044';
                 numberExtractInfo.numberStr += '\u1044';
+                numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
+                numberExtractInfo.normalizedReason.changeU104EToU1044 = true;
+                prevIsDigit = true;
+                prevIsSpace = false;
             } else if (c === '*') {
-                ++numberExtractInfo.starCount;
+                if (!prevIsDigit && !prevIsSpace && !isFirstChar) {
+                    return null;
+                }
+                numberExtractInfo.starIncluded = true;
                 numberExtractInfo.normalizedStr += c;
                 numberExtractInfo.numberStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
+            }  else if (c === '#') {
+                if (!prevIsDigit && !prevIsSpace) {
+                    return null;
+                }
+                numberExtractInfo.hashEnded = true;
+                numberExtractInfo.normalizedStr += c;
+                numberExtractInfo.numberStr += c;
+                break;
             } else if (c === '.') {
+                if (!prevIsDigit && !prevIsSpace) {
+                    return null;
+                }
                 ++numberExtractInfo.dotCount;
                 ++numberExtractInfo.separatorCount;
-                numberExtractInfo.normalizedStr += '.';
+                numberExtractInfo.normalizedStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
+            } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
+                numberExtractInfo.normalizedStr += c;
+                lastOpenedBracketCp = cp;
+                prevIsDigit = false;
+                prevIsSpace = false;
+            } else if (cp === 0x0029 || cp === 0xFF09 || cp === 0x005D || cp === 0xFF3D) {
+                if (!lastOpenedBracketCp || !prevIsDigit && !prevIsSpace) {
+                    return null;
+                }
+
+                numberExtractInfo.normalizedStr += c;
+                numberExtractInfo.bracketsIncluded = true;
+
+                lastOpenedBracketCp = null;
+                prevIsDigit = false;
+                prevIsSpace = false;
             } else if (this._visibleSpaceRegExp.test(c)) {
                 numberExtractInfo.spaceIncluded = true;
                 numberExtractInfo.normalizedStr += ' ';
+                if (cp !== 0x0020) {
+                    numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
+                    numberExtractInfo.normalizedReason.normalizeSpace = true;
+                }
+                prevIsDigit = false;
+                prevIsSpace = true;
             } else if (this._invisibleSpaceRegExp.test(c)) {
                 numberExtractInfo.spaceIncluded = true;
                 numberExtractInfo.invisibleSpaceIncluded = true;
+                numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
+                numberExtractInfo.normalizedReason.removeInvisibleSpace = true;
+                prevIsDigit = false;
+                prevIsSpace = true;
             } else {
                 ++numberExtractInfo.separatorCount;
                 numberExtractInfo.normalizedStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
             }
+
+            isFirstChar = false;
+        }
+
+        if (lastOpenedBracketCp) {
+            return null;
         }
 
         return numberExtractInfo;
