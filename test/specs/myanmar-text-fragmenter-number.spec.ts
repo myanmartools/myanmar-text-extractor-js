@@ -20,7 +20,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၀'
+            numberStr: '၀'
         });
     });
 
@@ -33,20 +33,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉'
-        });
-    });
-
-    it(String.raw`should return number fragment when input '၉၉၉'`, () => {
-        const input = '၉၉၉';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: input,
-            fragmentType: FragmentType.Number,
-            digitStr: '၉၉၉'
+            numberStr: '၉'
         });
     });
 
@@ -62,6 +49,19 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
 
         expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
+    });
+
+    it(String.raw`should return number fragment when input '၀၉'`, () => {
+        const input = '၀၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '၀၉'
+        });
     });
 
     it(String.raw`should NOT return number fragment when input '\u101D\u101D'`, () => {
@@ -85,71 +85,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     });
 
-    it(String.raw`should return number fragment with ERROR when input '၉၉\u101D'`, () => {
-        const input = '၉၉\u101D';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: '၉၉၀',
-            fragmentType: FragmentType.Number,
-            digitStr: '၉၉၀',
-            error: {
-                invalidU101DInsteadOfU1040: true
-            }
-        });
-    });
-
-    it(String.raw`should return number fragment with ERROR when input '၉၉\u104E'`, () => {
-        const input = '၉၉\u104E';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: '၉၉၄',
-            fragmentType: FragmentType.Number,
-            digitStr: '၉၉၄',
-            error: {
-                invalidU104EInsteadOfU1044: true
-            }
-        });
-    });
-
-    it(String.raw`should return number fragment with ERROR when input '၉\u104E\u101D'`, () => {
-        const input = '၉\u104E\u101D';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: '၉၄၀',
-            fragmentType: FragmentType.Number,
-            digitStr: '၉၄၀',
-            error: {
-                invalidU101DInsteadOfU1040: true,
-                invalidU104EInsteadOfU1044: true
-            }
-        });
-    });
-
-    it(String.raw`should return number fragment with ERROR when input '\u101D၉၉'`, () => {
-        const input = '\u101D၉၉';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: '၀၉၉',
-            fragmentType: FragmentType.Number,
-            digitStr: '၀၉၉',
-            error: {
-                invalidU101DInsteadOfU1040: true
-            }
-        });
-    });
-
     it(String.raw`should return number fragment when input with separator '၁,၉၉၉'`, () => {
         const input = '၁,၉၉၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -159,7 +94,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၉၉၉',
+            numberStr: '၁၉၉၉',
             separatorIncluded: true
         });
     });
@@ -180,7 +115,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁,၉၄၀',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၉၄၀',
+            numberStr: '၁၉၄၀',
             separatorIncluded: true,
             error: {
                 invalidU101DInsteadOfU1040: true,
@@ -198,7 +133,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၉၉၉.၀၂',
+            numberStr: '၁၉၉၉.၀၂',
             separatorIncluded: true
         });
     });
@@ -212,7 +147,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁,၉၄၀.၀၄',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၉၄၀.၀၄',
+            numberStr: '၁၉၄၀.၀၄',
             separatorIncluded: true,
             error: {
                 invalidU101DInsteadOfU1040: true,
@@ -230,7 +165,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -245,7 +180,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -260,7 +195,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -275,7 +210,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -290,7 +225,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: "၁'၂၃၄'၅၆၇.၈၉",
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -305,22 +240,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁_၂၃၄_၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
-        });
-    });
-
-    it(String.raw`should return number fragment when input with separator and decimal dot '၁ ၂၃၄ ၅၆၇'`, () => {
-        const input = '၁ ၂၃၄ ၅၆၇';
-        const fragment = fragmenter.getNextFragment(input) as TextFragment;
-
-        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-        expect(fragment).toEqual({
-            matchedStr: input,
-            normalizedStr: input,
-            fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇',
-            spaceIncluded: true
         });
     });
 
@@ -333,7 +254,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true,
             spaceIncluded: true
         });
@@ -348,7 +269,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -362,7 +283,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -376,7 +297,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
+            numberStr: '၃.၁၄၁၅၉၂၆၅၃၅',
             separatorIncluded: true
         });
     });
@@ -391,7 +312,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၂၃၄၅၆၇.၈၉',
+            numberStr: '၁၂၃၄၅၆၇.၈၉',
             separatorIncluded: true
         });
     });
@@ -406,7 +327,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁',
+            numberStr: '၁',
             ancient: true,
             measureWords: ['အင်္ဂါ']
         });
@@ -422,7 +343,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၂၀',
+            numberStr: '၂၀',
             ancient: true,
             measureWords: ['အင်္ဂါ']
         });
@@ -438,7 +359,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၉၂၀',
+            numberStr: '၁၉၂၀',
             ancient: true,
             measureWords: ['အင်္ဂါ'],
             separatorIncluded: true
@@ -456,7 +377,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: 'င်္၁ါ',
             fragmentType: FragmentType.Number,
-            digitStr: '၁',
+            numberStr: '၁',
             ancient: true,
             measureWords: ['အင်္ဂါ'],
             spaceIncluded: true,
@@ -477,7 +398,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁',
+            numberStr: '၁',
             ancient: true,
             measureWords: ['တောင်း', 'တင်း']
         });
@@ -493,7 +414,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁၀',
+            numberStr: '၁၀',
             ancient: true,
             measureWords: ['ဆယ်သား']
         });
@@ -509,7 +430,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '(၁)၀ိ',
             fragmentType: FragmentType.Number,
-            digitStr: '၁၀',
+            numberStr: '၁၀',
             ancient: true,
             measureWords: ['ဆယ်သား'],
             spaceIncluded: true,
@@ -529,7 +450,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '(၄)၀ိ',
             fragmentType: FragmentType.Number,
-            digitStr: '၄၀',
+            numberStr: '၄၀',
             ancient: true,
             measureWords: ['ဆယ်သား'],
             error: {
@@ -548,7 +469,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁'
+            numberStr: '၁'
         });
     });
 
@@ -562,7 +483,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၀'
+            numberStr: '၉၀'
         });
     });
 
@@ -576,7 +497,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၀၉'
+            numberStr: '၀၉'
         });
     });
 
@@ -590,7 +511,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '(၉)',
             fragmentType: FragmentType.Number,
-            digitStr: '၉',
+            numberStr: '၉',
             spaceIncluded: true,
             error: {
                 invalidSpaceIncluded: true
@@ -608,7 +529,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '(၉)',
             fragmentType: FragmentType.Number,
-            digitStr: '၉',
+            numberStr: '၉',
             spaceIncluded: true,
             error: {
                 invalidSpaceIncluded: true
@@ -626,7 +547,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '(၀၁)',
             fragmentType: FragmentType.Number,
-            digitStr: '၀၁',
+            numberStr: '၀၁',
             error: {
                 invalidU101DInsteadOfU1040: true
             }
@@ -643,7 +564,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '(၉၀၄)',
             fragmentType: FragmentType.Number,
-            digitStr: '၉၀၄',
+            numberStr: '၉၀၄',
             error: {
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
@@ -661,7 +582,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁'
+            numberStr: '၁'
         });
     });
 
@@ -675,7 +596,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉'
+            numberStr: '၉'
         });
     });
 
@@ -689,7 +610,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၀'
+            numberStr: '၉၀'
         });
     });
 
@@ -703,7 +624,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၀၉'
+            numberStr: '၀၉'
         });
     });
 
@@ -717,7 +638,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၀၉။',
             fragmentType: FragmentType.Number,
-            digitStr: '၀၉',
+            numberStr: '၀၉',
             spaceIncluded: true,
             error: {
                 invalidSpaceIncluded: true
@@ -735,7 +656,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၀၉။',
             fragmentType: FragmentType.Number,
-            digitStr: '၀၉',
+            numberStr: '၀၉',
             spaceIncluded: true,
             error: {
                 invalidSpaceIncluded: true
@@ -753,7 +674,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၀၁။',
             fragmentType: FragmentType.Number,
-            digitStr: '၀၁',
+            numberStr: '၀၁',
             error: {
                 invalidU101DInsteadOfU1040: true
             }
@@ -770,7 +691,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '၉၀၄။',
             fragmentType: FragmentType.Number,
-            digitStr: '၉၀၄',
+            numberStr: '၉၀၄',
             error: {
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
@@ -790,7 +711,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၅၉',
+            numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true
         });
@@ -806,7 +727,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၅၉',
+            numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true
@@ -823,7 +744,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၅၉',
+            numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
@@ -841,7 +762,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၅၉၁၂၃၄၅၆၇၈၉',
+            numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
@@ -859,7 +780,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၅၉၁၂၃၄၅၆၇၈၉',
+            numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
@@ -877,7 +798,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၉၅၉၁၂၃၄၅၆၇၈၉',
+            numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
@@ -895,7 +816,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             matchedStr: input,
             normalizedStr: '+၄၀၁၂၃၄၅၆',
             fragmentType: FragmentType.Number,
-            digitStr: '၄၀၁၂၃၄၅၆',
+            numberStr: '+၄၀၁၂၃၄၅၆',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
@@ -903,6 +824,119 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
                 invalidSpaceIncluded: true,
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment when input '၉၉၉'`, () => {
+        const input = '၉၉၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '၉၉၉',
+            possiblePhoneNumber: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '၅၅၁၂၃'`, () => {
+        const input = '၅၅၁၂၃';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '၅၅၁၂၃',
+            possiblePhoneNumber: true
+        });
+    });
+
+    it(String.raw`should return number fragment when input with separator and decimal dot '၁ ၂၃၄ ၅၆၇'`, () => {
+        const input = '၁ ၂၃၄ ၅၆၇';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '၁၂၃၄၅၆၇',
+            spaceIncluded: true,
+            possiblePhoneNumber: true
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၉၉\u101D'`, () => {
+        const input = '၉၉\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၉၀',
+            fragmentType: FragmentType.Number,
+            numberStr: '၉၉၀',
+            possiblePhoneNumber: true,
+            error: {
+                invalidU101DInsteadOfU1040: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၉၉\u104E'`, () => {
+        const input = '၉၉\u104E';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၉၄',
+            fragmentType: FragmentType.Number,
+            numberStr: '၉၉၄',
+            possiblePhoneNumber: true,
+            error: {
+                invalidU104EInsteadOfU1044: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '၉\u104E\u101D'`, () => {
+        const input = '၉\u104E\u101D';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၉၄၀',
+            fragmentType: FragmentType.Number,
+            numberStr: '၉၄၀',
+            possiblePhoneNumber: true,
+            error: {
+                invalidU101DInsteadOfU1040: true,
+                invalidU104EInsteadOfU1044: true
+            }
+        });
+    });
+
+    it(String.raw`should return number fragment with ERROR when input '\u101D၉၉'`, () => {
+        const input = '\u101D၉၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: '၀၉၉',
+            fragmentType: FragmentType.Number,
+            numberStr: '၀၉၉',
+            possiblePhoneNumber: true,
+            error: {
+                invalidU101DInsteadOfU1040: true
             }
         });
     });

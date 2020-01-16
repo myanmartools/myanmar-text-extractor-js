@@ -17,7 +17,7 @@ describe('MyanmarTextFragmenter#temp', () => {
             matchedStr: input,
             normalizedStr: input,
             fragmentType: FragmentType.Number,
-            digitStr: '၁'
+            numberStr: '၁'
         });
     });
 });
