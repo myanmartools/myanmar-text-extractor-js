@@ -10,8 +10,9 @@ export interface TextFragment {
     numberStr?: string;
     numberSeparatorIncluded?: boolean;
     measureWords?: string[];
-
     possiblePhoneNumber?: boolean;
+    possibleDate?: boolean;
+
     plusSignIncluded?: boolean;
 
     uncombinableLetter?: boolean;
