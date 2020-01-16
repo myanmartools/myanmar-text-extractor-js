@@ -95,7 +95,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၉၉၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -116,7 +116,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၉၄၀',
             fragmentType: FragmentType.Number,
             numberStr: '၁၉၄၀',
-            separatorIncluded: true,
+            numberStrnumberSeparatorIncluded: true,
             error: {
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
@@ -134,7 +134,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၉၉၉.၀၂',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -148,7 +148,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၉၄၀.၀၄',
             fragmentType: FragmentType.Number,
             numberStr: '၁၉၄၀.၀၄',
-            separatorIncluded: true,
+            numberStrnumberSeparatorIncluded: true,
             error: {
                 invalidU101DInsteadOfU1040: true,
                 invalidU104EInsteadOfU1044: true
@@ -166,7 +166,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -181,7 +181,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -196,7 +196,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -211,7 +211,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -226,7 +226,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: "၁'၂၃၄'၅၆၇.၈၉",
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -241,7 +241,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁_၂၃၄_၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -255,7 +255,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true,
+            numberStrnumberSeparatorIncluded: true,
             spaceIncluded: true
         });
     });
@@ -270,7 +270,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -284,7 +284,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -298,7 +298,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၃.၁၄၁၅၉၂၆၅၃၅',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -313,7 +313,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -362,7 +362,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             numberStr: '၁၉၂၀',
             ancient: true,
             measureWords: ['အင်္ဂါ'],
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -734,6 +734,40 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    it(String.raw`should return phone number fragment when input '+၉ ၅ ၉'`, () => {
+        const input = '+၉ ၅ ၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '+၉၅၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            spaceIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '+(၉၅)၉'`, () => {
+        const input = '+(၉၅)၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '+၉၅၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            numberStrnumberSeparatorIncluded: true
+        });
+    });
+
     it(String.raw`should return phone number fragment when input '+(၉၅) ၉'`, () => {
         const input = '+(၉၅) ၉';
         const fragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -748,7 +782,42 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '+[၉၅] ၉'`, () => {
+        const input = '+[၉၅] ၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '+၉၅၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            spaceIncluded: true,
+            numberStrnumberSeparatorIncluded: true
+        });
+    });
+
+    it(String.raw`should return phone number fragment when input '+၉၅.၉'`, () => {
+        const input = '+၉၅.၉';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment.matchedStr).toBe(input,
+            `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Number,
+            numberStr: '+၉၅၉',
+            possiblePhoneNumber: true,
+            plusSignIncluded: true,
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -766,7 +835,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -784,7 +853,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
@@ -802,7 +871,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             possiblePhoneNumber: true,
             plusSignIncluded: true,
             spaceIncluded: true,
-            separatorIncluded: true
+            numberStrnumberSeparatorIncluded: true
         });
     });
 
