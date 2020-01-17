@@ -1,23 +1,27 @@
 import { FragmentType } from './fragment-type';
 
-export interface TextFragment {
+export interface NumberFragment {
+    numberStr?: string;
+
+    measureWords?: string[];
+}
+
+export interface DateFragment {
+    dateStr?: string;
+}
+
+export interface PhoneFragment {
+    phoneStr?: string;
+    plusSignIncluded?: boolean;
+}
+
+export interface TextFragment extends NumberFragment, DateFragment, PhoneFragment {
     matchedStr: string;
     normalizedStr: string;
     fragmentType: FragmentType;
+    ancientWrittenForm?: boolean;
     spaceIncluded?: boolean;
-    ancient?: boolean;
-
-    numberStr?: string;
-    numberSeparatorIncluded?: boolean;
-    measureWords?: string[];
-    possiblePhoneNumber?: boolean;
-    possibleDate?: boolean;
-
-    plusSignIncluded?: boolean;
-
-    uncombinableLetter?: boolean;
-    syllableIncluded?: boolean;
-
+    separatorIncluded?: boolean;
     error?: {
         invalidUnicodeForm?: boolean;
         invalidDiacriticsStart?: boolean;
