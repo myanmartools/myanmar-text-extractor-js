@@ -79,4 +79,24 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
 
         expect(actualFragment).toEqual(expactedFragment);
     });
+
+    // dd၊MM၊yyyy (INVALID \U104E)
+    it(String.raw`should return date fragment with INVALID when input '၁\u104E၊၁၂၊၂၀၂၀'`, () => {
+        const input = '၁\u104E၊၁၂၊၂၀၂၀';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
+            fragmentType: FragmentType.PossibleDate,
+            separatorIncluded: true,
+            normalizationReason: {
+                changeU104EToU1044: true
+            },
+            invalidReason: {
+                invalidU104EInsteadOfU1044: true
+            }
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 });
