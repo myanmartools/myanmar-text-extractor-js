@@ -73,9 +73,9 @@ export class MyanmarTextFragmenter {
     private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}|[${this._possibleDigits}]{2,2}`;
     private readonly _dtMonthPattern = '[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D]';
     private readonly _dtDayPattern = `[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]`;
-    private readonly _dtDMY = new RegExp(`(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtYearPattern})`);
-    private readonly _dtYMD = new RegExp(`(?:${this._dtYearPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtDayPattern})`);
-    private readonly _dtMDY = new RegExp(`(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtYearPattern})`);
+    private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtYearPattern})$`);
+    private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtDayPattern})$`);
+    private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}](?:${this._dtYearPattern})$`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -258,6 +258,11 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
+        const dateFragment = this.getPossibleDateFragment(matchedStr, numberExtractInfo);
+        if (dateFragment != null) {
+            return dateFragment;
+        }
+
         if (numberExtractInfo.dotCount === 1 &&
             numberExtractInfo.dotCount === numberExtractInfo.separatorCount &&
             !numberExtractInfo.spaceIncluded &&
@@ -305,6 +310,58 @@ export class MyanmarTextFragmenter {
         }
 
         return numberFragment;
+    }
+
+    private getPossibleDateFragment(matchedStr: string, numberExtractInfo: DateOrPhoneNumberExtractInfo): TextFragment | null {
+        if (matchedStr.length < 6) {
+            return null;
+        }
+
+        let m = matchedStr.match(this._dtDMY);
+
+        if (m === null) {
+            m = matchedStr.match(this._dtYMD);
+        }
+
+        if (m === null) {
+            m = matchedStr.match(this._dtMDY);
+        }
+
+        if (m == null) {
+            return null;
+        }
+
+        const dateFragment: TextFragment = {
+            matchedStr,
+            fragmentType: FragmentType.Number,
+            normalizedStr: numberExtractInfo.normalizedStr,
+            numberStr: numberExtractInfo.numberStr,
+            possibleDate: true
+        };
+
+        if (numberExtractInfo.separatorCount > 0) {
+            dateFragment.numberSeparatorIncluded = true;
+        }
+
+        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
+            dateFragment.spaceIncluded = true;
+            if (numberExtractInfo.invisibleSpaceIncluded) {
+                dateFragment.error = dateFragment.error || {};
+                dateFragment.error.invalidSpaceIncluded = true;
+            }
+        }
+
+        if (numberExtractInfo.u101dCount) {
+            dateFragment.error = dateFragment.error || {};
+            dateFragment.error.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (numberExtractInfo.u104eCount) {
+            dateFragment.error = dateFragment.error || {};
+            dateFragment.error.invalidU104EInsteadOfU1044 = true;
+        }
+
+        return dateFragment;
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -923,7 +980,7 @@ export class MyanmarTextFragmenter {
                 numberExtractInfo.numberStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-            }  else if (c === '#') {
+            } else if (c === '#') {
                 if (!prevIsDigit && !prevIsSpace) {
                     return null;
                 }
