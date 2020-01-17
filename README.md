@@ -4,7 +4,7 @@
 
 Myanmar Text (Burmese language) word segmentation, fragmentation and splitting JavaScript library module for Web and Node.js applications written in Typescript.
 
-[WIP]
+** Note: This is still in development!
 
 ## Feedback and Contributing
 
