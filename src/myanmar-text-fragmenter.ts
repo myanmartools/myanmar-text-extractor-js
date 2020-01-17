@@ -236,58 +236,58 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        const numberExtractInfo = this.getDateOrPhoneNumberExtractInfo(matchedStr);
-        if (numberExtractInfo == null) {
+        const extractInfo = this.getDateOrPhoneNumberExtractInfo(matchedStr);
+        if (extractInfo == null) {
             return null;
         }
 
-        if (!numberExtractInfo.digitCount) {
+        if (!extractInfo.digitCount) {
             return null;
         }
 
-        const possibleDate = this.isPossibleDate(numberExtractInfo);
+        const possibleDate = this.isPossibleDate(extractInfo);
 
-        if (!possibleDate && numberExtractInfo.dotCount === 1 &&
-            numberExtractInfo.dotCount === numberExtractInfo.separatorCount &&
-            !numberExtractInfo.spaceIncluded &&
-            !numberExtractInfo.invisibleSpaceIncluded &&
-            !numberExtractInfo.plusSignIncluded &&
-            !numberExtractInfo.bracketsIncluded &&
-            !numberExtractInfo.starIncluded &&
-            !numberExtractInfo.hashEnded &&
+        if (!possibleDate && extractInfo.dotCount === 1 &&
+            extractInfo.dotCount === extractInfo.separatorCount &&
+            !extractInfo.spaceIncluded &&
+            !extractInfo.invisibleSpaceIncluded &&
+            !extractInfo.plusSignIncluded &&
+            !extractInfo.bracketsIncluded &&
+            !extractInfo.starIncluded &&
+            !extractInfo.hashEnded &&
             firstCp !== 0x1040) {
             return null;
         }
 
-        const numberFragment: TextFragment = {
+        const fragment: TextFragment = {
             matchedStr,
             fragmentType: possibleDate ? FragmentType.PossibleDate : FragmentType.PossiblePhone,
-            normalizedStr: numberExtractInfo.normalizedStr
+            normalizedStr: extractInfo.normalizedStr
         };
 
-        if (numberExtractInfo.separatorCount > 0) {
-            numberFragment.separatorIncluded = true;
+        if (extractInfo.separatorCount > 0) {
+            fragment.separatorIncluded = true;
         }
 
-        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
-            numberFragment.spaceIncluded = true;
-            if (numberExtractInfo.invisibleSpaceIncluded) {
-                numberFragment.error = numberFragment.error || {};
-                numberFragment.error.invalidSpaceIncluded = true;
+        if (extractInfo.spaceIncluded || extractInfo.invisibleSpaceIncluded) {
+            fragment.spaceIncluded = true;
+            if (extractInfo.invisibleSpaceIncluded) {
+                fragment.error = fragment.error || {};
+                fragment.error.invalidSpaceIncluded = true;
             }
         }
 
-        if (numberExtractInfo.u101dCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU101DInsteadOfU1040 = true;
+        if (extractInfo.u101dCount) {
+            fragment.error = fragment.error || {};
+            fragment.error.invalidU101DInsteadOfU1040 = true;
         }
 
-        if (numberExtractInfo.u104eCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU104EInsteadOfU1044 = true;
+        if (extractInfo.u104eCount) {
+            fragment.error = fragment.error || {};
+            fragment.error.invalidU104EInsteadOfU1044 = true;
         }
 
-        return numberFragment;
+        return fragment;
     }
 
     private isPossibleDate(numberExtractInfo: DateOrPhoneNumberExtractInfo): boolean {
