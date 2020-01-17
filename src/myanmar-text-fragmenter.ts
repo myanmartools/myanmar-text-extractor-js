@@ -258,12 +258,9 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const dateFragment = this.getPossibleDateFragment(matchedStr, numberExtractInfo);
-        if (dateFragment != null) {
-            return dateFragment;
-        }
+        const possibleDate = this.isPossibleDate(numberExtractInfo);
 
-        if (numberExtractInfo.dotCount === 1 &&
+        if (!possibleDate && numberExtractInfo.dotCount === 1 &&
             numberExtractInfo.dotCount === numberExtractInfo.separatorCount &&
             !numberExtractInfo.spaceIncluded &&
             !numberExtractInfo.invisibleSpaceIncluded &&
@@ -279,9 +276,14 @@ export class MyanmarTextFragmenter {
             matchedStr,
             fragmentType: FragmentType.Number,
             normalizedStr: numberExtractInfo.normalizedStr,
-            numberStr: numberExtractInfo.numberStr,
-            possiblePhoneNumber: true
+            numberStr: numberExtractInfo.numberStr
         };
+
+        if (possibleDate) {
+            numberFragment.possibleDate = true;
+        } else {
+            numberFragment.possiblePhoneNumber = true;
+        }
 
         if (numberExtractInfo.plusSignIncluded) {
             numberFragment.plusSignIncluded = true;
@@ -312,56 +314,23 @@ export class MyanmarTextFragmenter {
         return numberFragment;
     }
 
-    private getPossibleDateFragment(matchedStr: string, numberExtractInfo: DateOrPhoneNumberExtractInfo): TextFragment | null {
-        if (matchedStr.length < 6) {
-            return null;
+    private isPossibleDate(numberExtractInfo: DateOrPhoneNumberExtractInfo): boolean {
+        const normalizedStr = numberExtractInfo.normalizedStr;
+        const firstCp = normalizedStr.codePointAt(0) as number;
+
+        if (normalizedStr.length < 6 || !(firstCp >= 0x1040 && firstCp <= 0x1049)) {
+            return false;
         }
 
-        let m = matchedStr.match(this._dtDMY);
-
-        if (m === null) {
-            m = matchedStr.match(this._dtYMD);
+        let matched = this._dtDMY.test(normalizedStr);
+        if (!matched) {
+            matched = this._dtYMD.test(normalizedStr);
+        }
+        if (!matched) {
+            matched = this._dtMDY.test(normalizedStr);
         }
 
-        if (m === null) {
-            m = matchedStr.match(this._dtMDY);
-        }
-
-        if (m == null) {
-            return null;
-        }
-
-        const dateFragment: TextFragment = {
-            matchedStr,
-            fragmentType: FragmentType.Number,
-            normalizedStr: numberExtractInfo.normalizedStr,
-            numberStr: numberExtractInfo.numberStr,
-            possibleDate: true
-        };
-
-        if (numberExtractInfo.separatorCount > 0) {
-            dateFragment.numberSeparatorIncluded = true;
-        }
-
-        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
-            dateFragment.spaceIncluded = true;
-            if (numberExtractInfo.invisibleSpaceIncluded) {
-                dateFragment.error = dateFragment.error || {};
-                dateFragment.error.invalidSpaceIncluded = true;
-            }
-        }
-
-        if (numberExtractInfo.u101dCount) {
-            dateFragment.error = dateFragment.error || {};
-            dateFragment.error.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (numberExtractInfo.u104eCount) {
-            dateFragment.error = dateFragment.error || {};
-            dateFragment.error.invalidU104EInsteadOfU1044 = true;
-        }
-
-        return dateFragment;
+        return matched;
     }
 
     private getPreAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
