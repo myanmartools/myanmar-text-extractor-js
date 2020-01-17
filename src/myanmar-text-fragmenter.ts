@@ -249,10 +249,6 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        if (!extractInfo.digitCount) {
-            return null;
-        }
-
         const possibleDate = this.isPossibleDate(extractInfo);
         const fragment: TextFragment = {
             matchedStr,
@@ -963,6 +959,10 @@ export class MyanmarTextFragmenter {
             }
 
             startOfString = false;
+        }
+
+        if (!extractInfo.digitCount) {
+            return null;
         }
 
         if (extractInfo.dotCount === 1 &&
