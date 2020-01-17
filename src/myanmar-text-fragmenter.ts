@@ -19,7 +19,16 @@ interface NumberExtractInfo {
     invisibleSpaceIncluded?: boolean;
 }
 
-interface DateOrPhoneNumberExtractInfo extends NumberExtractInfo {
+interface DateOrPhoneExtractInfo {
+    normalizedStr: string;
+    numberStr: string;
+    digitCount: number;
+    u101dCount: number;
+    u104eCount: number;
+    separatorCount: number;
+    spaceIncluded?: boolean;
+    invisibleSpaceIncluded?: boolean;
+
     dotCount: number;
     plusSignIncluded?: boolean;
     starIncluded?: boolean;
@@ -236,7 +245,7 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
-        const extractInfo = this.getDateOrPhoneNumberExtractInfo(matchedStr);
+        const extractInfo = this.getDateOrPhoneExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
@@ -290,7 +299,7 @@ export class MyanmarTextFragmenter {
         return fragment;
     }
 
-    private isPossibleDate(numberExtractInfo: DateOrPhoneNumberExtractInfo): boolean {
+    private isPossibleDate(numberExtractInfo: DateOrPhoneExtractInfo): boolean {
         const normalizedStr = numberExtractInfo.normalizedStr;
         const firstCp = normalizedStr.codePointAt(0) as number;
 
@@ -865,10 +874,10 @@ export class MyanmarTextFragmenter {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getDateOrPhoneNumberExtractInfo(matchedStr: string): DateOrPhoneNumberExtractInfo | null {
+    private getDateOrPhoneExtractInfo(matchedStr: string): DateOrPhoneExtractInfo | null {
         let curStr = matchedStr;
 
-        const numberExtractInfo: DateOrPhoneNumberExtractInfo = {
+        const numberExtractInfo: DateOrPhoneExtractInfo = {
             normalizedStr: '',
             numberStr: '',
             digitCount: 0,
