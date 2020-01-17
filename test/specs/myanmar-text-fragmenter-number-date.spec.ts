@@ -20,4 +20,17 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             separatorIncluded: true
         });
     });
+
+    it(String.raw`should return date number fragment when input '၁၇ ၊ ၁ ၊ ၂၀၂၀'`, () => {
+        const input = '၁၇ ၊ ၁ ၊ ၂၀၂၀';
+        const fragment = fragmenter.getNextFragment(input) as TextFragment;
+
+        expect(fragment).toEqual({
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossibleDate,
+            spaceIncluded: true,
+            separatorIncluded: true
+        });
+    });
 });
