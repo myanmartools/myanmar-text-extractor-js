@@ -245,7 +245,7 @@ export class MyanmarTextFragmenter {
         }
 
         const possibleDate = !extractInfo.plusSignIncluded && !extractInfo.hashEnded && !extractInfo.bracketsIncluded &&
-            (extractInfo.separatorCount > 0 || extractInfo.spaceIncluded) ?
+            (extractInfo.separatorCount || extractInfo.spaceIncluded) ?
             this.isPossibleDate(extractInfo) : null;
 
         const fragment: TextFragment = {
