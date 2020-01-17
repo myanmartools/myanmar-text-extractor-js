@@ -146,17 +146,18 @@ export class MyanmarTextFragmenter {
     }
 
     private getNumberDateOrPhoneFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
-        if (input.length > 3 && (firstCp === 0x002B || firstCp === 0xFF0B)) {
-            return this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
-        }
-
         const preAncientNumberFragment = this.getPreAncientNumberFragment(input, firstCp);
         if (preAncientNumberFragment != null) {
             return preAncientNumberFragment;
         }
 
+        const preDateOrPhoneFragment = this.getDateOrPhoneFragment(input, firstCp);
+        if (preDateOrPhoneFragment != null) {
+            return preDateOrPhoneFragment;
+        }
+
         if (input.length > 4 && this.isOpeningCharInBox(firstCp)) {
-            const phoneNumberFragment = this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
+            const phoneNumberFragment = this.getDateOrPhoneFragment(input, firstCp);
             const boxNumberFragment = this.getNumberBoxOrOrderListFragment(input, firstCp, prevFragments);
             if (phoneNumberFragment != null && boxNumberFragment != null) {
                 return phoneNumberFragment.matchedStr.length > boxNumberFragment.matchedStr.length ?
@@ -197,7 +198,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (input.length > 2) {
-            const phoneNumberFragment = this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
+            const phoneNumberFragment = this.getDateOrPhoneFragment(input, firstCp);
             const numberDigitGroupFragment = this.getNumberDigitGroupFragment(input);
             if (phoneNumberFragment != null && numberDigitGroupFragment != null) {
                 if (phoneNumberFragment.matchedStr.length === numberDigitGroupFragment.matchedStr.length) {
@@ -224,7 +225,7 @@ export class MyanmarTextFragmenter {
         return this.getNumberDigitGroupFragment(input);
     }
 
-    private getPossibleDateOrPhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
+    private getDateOrPhoneFragment(input: string, firstCp: number): TextFragment | null {
         if (input.length < 3 ||
             !((firstCp >= 0x1040 && firstCp <= 0x1049) ||
                 firstCp === 0x101D || firstCp === 0x104E ||
