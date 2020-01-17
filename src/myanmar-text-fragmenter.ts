@@ -266,23 +266,12 @@ export class MyanmarTextFragmenter {
 
         const numberFragment: TextFragment = {
             matchedStr,
-            fragmentType: FragmentType.Number,
-            normalizedStr: numberExtractInfo.normalizedStr,
-            numberStr: numberExtractInfo.numberStr
+            fragmentType: possibleDate ? FragmentType.PossibleDate : FragmentType.PossiblePhone,
+            normalizedStr: numberExtractInfo.normalizedStr
         };
 
-        if (possibleDate) {
-            numberFragment.possibleDate = true;
-        } else {
-            numberFragment.possiblePhoneNumber = true;
-        }
-
-        if (numberExtractInfo.plusSignIncluded) {
-            numberFragment.plusSignIncluded = true;
-        }
-
         if (numberExtractInfo.separatorCount > 0) {
-            numberFragment.numberSeparatorIncluded = true;
+            numberFragment.separatorIncluded = true;
         }
 
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
@@ -354,7 +343,7 @@ export class MyanmarTextFragmenter {
                     matchedStr: input[0] + suffixFragment.matchedStr,
                     normalizedStr: input[0] + suffixFragment.normalizedStr,
                     fragmentType: FragmentType.Number,
-                    ancient: true,
+                    ancientWrittenForm: true,
                     measureWords: suffixFragment.measureWords
                 };
 
@@ -424,7 +413,7 @@ export class MyanmarTextFragmenter {
             matchedStr,
             normalizedStr,
             fragmentType: FragmentType.Number,
-            ancient: true,
+            ancientWrittenForm: true,
             numberStr: c4,
             // အင်္ဂါ
             measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
@@ -482,7 +471,7 @@ export class MyanmarTextFragmenter {
             matchedStr,
             normalizedStr: matchedStr,
             fragmentType: FragmentType.Number,
-            ancient: true,
+            ancientWrittenForm: true,
             numberStr: c4,
             // အင်္ဂါ
             measureWords
@@ -520,7 +509,7 @@ export class MyanmarTextFragmenter {
             matchedStr,
             normalizedStr,
             fragmentType: FragmentType.Number,
-            ancient: true,
+            ancientWrittenForm: true,
             numberStr: numberExtractInfo.numberStr,
             // ဆယ်သား
             measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
@@ -635,7 +624,7 @@ export class MyanmarTextFragmenter {
         };
 
         if (numberExtractInfo.separatorCount > 0) {
-            numberFragment.numberSeparatorIncluded = true;
+            numberFragment.separatorIncluded = true;
         }
 
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
@@ -665,7 +654,7 @@ export class MyanmarTextFragmenter {
                 numberFragment.normalizedStr += ancientFragment.normalizedStr;
                 numberFragment.numberStr = numberFragment.numberStr || '';
                 numberFragment.numberStr += ancientFragment.numberStr || '';
-                numberFragment.ancient = true;
+                numberFragment.ancientWrittenForm = true;
                 numberFragment.measureWords = ancientFragment.measureWords;
 
                 if (ancientFragment.spaceIncluded) {
