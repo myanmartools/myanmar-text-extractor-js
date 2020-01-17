@@ -114,9 +114,9 @@ export class MyanmarTextFragmenter {
             return punctuationOrSingleLetterWordFragment;
         }
 
-        const numberFragment = this.getNumberFragment(input, firstCp, prevFragments);
-        if (numberFragment != null) {
-            return numberFragment;
+        const numberDateOrPhoneFragment = this.getNumberDateOrPhoneFragment(input, firstCp, prevFragments);
+        if (numberDateOrPhoneFragment != null) {
+            return numberDateOrPhoneFragment;
         }
 
         return null;
@@ -145,7 +145,7 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberDateOrPhoneFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         if (input.length > 3 && (firstCp === 0x002B || firstCp === 0xFF0B)) {
             return this.getPossibleDateOrPhoneNumberFragment(input, firstCp);
         }
