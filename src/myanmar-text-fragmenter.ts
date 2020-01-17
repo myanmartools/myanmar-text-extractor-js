@@ -104,42 +104,14 @@ export class MyanmarTextFragmenter {
     // }
 
     getNextFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
-        const firstC = input[0];
-        const firstCp = firstC.codePointAt(0);
+        const firstCp = input.codePointAt(0);
         if (!firstCp) {
             return null;
         }
 
-        // ဤ / ဪ
-        if (firstCp === 0x1024 || firstCp === 0x102A) {
-            return {
-                matchedStr: firstC,
-                normalizedStr: firstC,
-                fragmentType: FragmentType.Text,
-                uncombinableLetter: true,
-                syllableIncluded: true
-            };
-        }
-
-        // ၌ / ၍ / ၏
-        if (firstCp === 0x104C || firstCp === 0x104D || firstCp === 0x104F) {
-            return {
-                matchedStr: firstC,
-                normalizedStr: firstC,
-                fragmentType: FragmentType.Punctuation,
-                uncombinableLetter: true,
-                syllableIncluded: true
-            };
-        }
-
-        // ၊ / ။
-        if (firstCp === 0x104A || firstCp === 0x104B) {
-            return {
-                matchedStr: firstC,
-                normalizedStr: firstC,
-                fragmentType: FragmentType.Punctuation,
-                uncombinableLetter: true
-            };
+        const punctuationOrSingleLetterWordFragment = this.getPunctuationOrSingleLetterWordFragment(input, firstCp);
+        if (punctuationOrSingleLetterWordFragment != null) {
+            return punctuationOrSingleLetterWordFragment;
         }
 
         const numberFragment = this.getNumberFragment(input, firstCp, prevFragments);
@@ -147,11 +119,30 @@ export class MyanmarTextFragmenter {
             return numberFragment;
         }
 
-        return {
-            matchedStr: '',
-            normalizedStr: '',
-            fragmentType: FragmentType.Unknown
-        };
+        return null;
+    }
+
+    private getPunctuationOrSingleLetterWordFragment(input: string, firstCp: number): TextFragment | null {
+        // ဤ / ဪ
+        if (firstCp === 0x1024 || firstCp === 0x102A) {
+            return {
+                matchedStr: input[0],
+                normalizedStr: input[0],
+                fragmentType: FragmentType.Text
+            };
+        }
+
+        // ၌ / ၍ / ၏ / ၊ / ။
+        if (firstCp === 0x104C || firstCp === 0x104D || firstCp === 0x104F ||
+            firstCp === 0x104A || firstCp === 0x104B) {
+            return {
+                matchedStr: input[0],
+                normalizedStr: input[0],
+                fragmentType: FragmentType.Punctuation
+            };
+        }
+
+        return null;
     }
 
     private getNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
