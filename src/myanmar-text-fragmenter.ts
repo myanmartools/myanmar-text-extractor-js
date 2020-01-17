@@ -1,4 +1,5 @@
 import { FragmentType } from './fragment-type';
+import { NormalizationReason } from './normalization-reason';
 import { TextFragment } from './text-fragment';
 
 interface NormalizedTextInfo {
@@ -33,13 +34,7 @@ interface DateOrPhoneExtractInfo {
     starIncluded?: boolean;
     bracketsIncluded?: boolean;
     hashEnded?: boolean;
-    normalizedReason?: {
-        normalizePlusSign?: boolean;
-        normalizeSpace?: boolean;
-        removeInvisibleSpace?: boolean;
-        changeU101DToU1040?: boolean;
-        changeU104EToU1044?: boolean;
-    };
+    normalizationReason?: NormalizationReason;
 }
 
 interface TextFragmentPartial {
@@ -263,19 +258,19 @@ export class MyanmarTextFragmenter {
         if (extractInfo.spaceIncluded || extractInfo.invisibleSpaceIncluded) {
             fragment.spaceIncluded = true;
             if (extractInfo.invisibleSpaceIncluded) {
-                fragment.error = fragment.error || {};
-                fragment.error.invalidSpaceIncluded = true;
+                fragment.invalidReason = fragment.invalidReason || {};
+                fragment.invalidReason.invalidSpaceIncluded = true;
             }
         }
 
         if (extractInfo.u101DCount) {
-            fragment.error = fragment.error || {};
-            fragment.error.invalidU101DInsteadOfU1040 = true;
+            fragment.invalidReason = fragment.invalidReason || {};
+            fragment.invalidReason.invalidU101DInsteadOfU1040 = true;
         }
 
         if (extractInfo.u104ECount) {
-            fragment.error = fragment.error || {};
-            fragment.error.invalidU104EInsteadOfU1044 = true;
+            fragment.invalidReason = fragment.invalidReason || {};
+            fragment.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
         return fragment;
@@ -335,9 +330,9 @@ export class MyanmarTextFragmenter {
 
                 if (suffixFragment.spaceIncluded || suffixFragment.invisibleSpaceIncluded) {
                     numberFragment.spaceIncluded = true;
-                    numberFragment.error = numberFragment.error || {};
-                    numberFragment.error.invalidSpaceIncluded = true;
-                    numberFragment.error.invalidUnicodeForm = true;
+                    numberFragment.invalidReason = numberFragment.invalidReason || {};
+                    numberFragment.invalidReason.invalidSpaceIncluded = true;
+                    numberFragment.invalidReason.invalidUnicodeForm = true;
                 }
 
                 return numberFragment;
@@ -407,9 +402,9 @@ export class MyanmarTextFragmenter {
 
         if (spaceIncluded || invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidSpaceIncluded = true;
-            numberFragment.error.invalidUnicodeForm = true;
+            numberFragment.invalidReason = numberFragment.invalidReason || {};
+            numberFragment.invalidReason.invalidSpaceIncluded = true;
+            numberFragment.invalidReason.invalidUnicodeForm = true;
         }
 
         return numberFragment;
@@ -502,14 +497,14 @@ export class MyanmarTextFragmenter {
         };
 
         if (numberExtractInfo.u104eCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU104EInsteadOfU1044 = true;
+            numberFragment.invalidReason = numberFragment.invalidReason || {};
+            numberFragment.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
         if (normalizedTextInfo && (normalizedTextInfo.spaceIncluded || normalizedTextInfo.invisibleSpaceIncluded)) {
             numberFragment.spaceIncluded = true;
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidSpaceIncluded = true;
+            numberFragment.invalidReason = numberFragment.invalidReason || {};
+            numberFragment.invalidReason.invalidSpaceIncluded = true;
         }
 
         return numberFragment;
@@ -567,24 +562,24 @@ export class MyanmarTextFragmenter {
 
         if (numberExtractInfo.spaceIncluded) {
             textFragment.spaceIncluded = true;
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidSpaceIncluded = true;
+            textFragment.invalidReason = textFragment.invalidReason || {};
+            textFragment.invalidReason.invalidSpaceIncluded = true;
         }
 
         if (numberExtractInfo.invisibleSpaceIncluded) {
             textFragment.spaceIncluded = true;
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidSpaceIncluded = true;
+            textFragment.invalidReason = textFragment.invalidReason || {};
+            textFragment.invalidReason.invalidSpaceIncluded = true;
         }
 
         if (numberExtractInfo.u101dCount) {
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidU101DInsteadOfU1040 = true;
+            textFragment.invalidReason = textFragment.invalidReason || {};
+            textFragment.invalidReason.invalidU101DInsteadOfU1040 = true;
         }
 
         if (numberExtractInfo.u104eCount) {
-            textFragment.error = textFragment.error || {};
-            textFragment.error.invalidU104EInsteadOfU1044 = true;
+            textFragment.invalidReason = textFragment.invalidReason || {};
+            textFragment.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
         return textFragment;
@@ -616,19 +611,19 @@ export class MyanmarTextFragmenter {
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
             if (numberExtractInfo.invisibleSpaceIncluded) {
-                numberFragment.error = numberFragment.error || {};
-                numberFragment.error.invalidSpaceIncluded = true;
+                numberFragment.invalidReason = numberFragment.invalidReason || {};
+                numberFragment.invalidReason.invalidSpaceIncluded = true;
             }
         }
 
         if (numberExtractInfo.u101dCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU101DInsteadOfU1040 = true;
+            numberFragment.invalidReason = numberFragment.invalidReason || {};
+            numberFragment.invalidReason.invalidU101DInsteadOfU1040 = true;
         }
 
         if (numberExtractInfo.u104eCount) {
-            numberFragment.error = numberFragment.error || {};
-            numberFragment.error.invalidU104EInsteadOfU1044 = true;
+            numberFragment.invalidReason = numberFragment.invalidReason || {};
+            numberFragment.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
         const rightStr = input.substring(matchedStr.length);
@@ -647,8 +642,8 @@ export class MyanmarTextFragmenter {
                     numberFragment.spaceIncluded = true;
                 }
 
-                if (ancientFragment.error) {
-                    numberFragment.error = ancientFragment.error;
+                if (ancientFragment.invalidReason) {
+                    numberFragment.invalidReason = ancientFragment.invalidReason;
                 }
             }
         }
@@ -877,8 +872,8 @@ export class MyanmarTextFragmenter {
                 extractInfo.plusSignIncluded = true;
                 extractInfo.normalizedStr += '+';
                 if (c !== '+') {
-                    extractInfo.normalizedReason = extractInfo.normalizedReason || {};
-                    extractInfo.normalizedReason.normalizePlusSign = true;
+                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                    extractInfo.normalizationReason.normalizePlusSign = true;
                 }
             } else if (cp >= 0x1040 && cp <= 0x1049) {
                 ++extractInfo.digitCount;
@@ -888,15 +883,15 @@ export class MyanmarTextFragmenter {
             } else if (cp === 0x101D) {
                 ++extractInfo.u101DCount;
                 extractInfo.normalizedStr += '\u1040';
-                extractInfo.normalizedReason = extractInfo.normalizedReason || {};
-                extractInfo.normalizedReason.changeU101DToU1040 = true;
+                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                extractInfo.normalizationReason.changeU101DToU1040 = true;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (cp === 0x104E) {
                 ++extractInfo.u104ECount;
                 extractInfo.normalizedStr += '\u1044';
-                extractInfo.normalizedReason = extractInfo.normalizedReason || {};
-                extractInfo.normalizedReason.changeU104EToU1044 = true;
+                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                extractInfo.normalizationReason.changeU104EToU1044 = true;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (c === '*') {
@@ -935,16 +930,16 @@ export class MyanmarTextFragmenter {
                 extractInfo.spaceIncluded = true;
                 extractInfo.normalizedStr += ' ';
                 if (cp !== 0x0020) {
-                    extractInfo.normalizedReason = extractInfo.normalizedReason || {};
-                    extractInfo.normalizedReason.normalizeSpace = true;
+                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                    extractInfo.normalizationReason.normalizeSpace = true;
                 }
                 prevIsDigit = false;
                 prevIsSpace = true;
             } else if (this._invisibleSpaceRegExp.test(c)) {
                 extractInfo.spaceIncluded = true;
                 extractInfo.invisibleSpaceIncluded = true;
-                extractInfo.normalizedReason = extractInfo.normalizedReason || {};
-                extractInfo.normalizedReason.removeInvisibleSpace = true;
+                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                extractInfo.normalizationReason.removeInvisibleSpace = true;
                 prevIsDigit = false;
                 prevIsSpace = true;
             } else {
