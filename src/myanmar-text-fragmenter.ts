@@ -254,19 +254,6 @@ export class MyanmarTextFragmenter {
         }
 
         const possibleDate = this.isPossibleDate(extractInfo);
-
-        if (!possibleDate && extractInfo.dotCount === 1 &&
-            extractInfo.dotCount === extractInfo.separatorCount &&
-            !extractInfo.spaceIncluded &&
-            !extractInfo.invisibleSpaceIncluded &&
-            !extractInfo.plusSignIncluded &&
-            !extractInfo.bracketsIncluded &&
-            !extractInfo.starIncluded &&
-            !extractInfo.hashEnded &&
-            firstCp !== 0x1040) {
-            return null;
-        }
-
         const fragment: TextFragment = {
             matchedStr,
             fragmentType: possibleDate ? FragmentType.PossibleDate : FragmentType.PossiblePhone,
@@ -874,7 +861,7 @@ export class MyanmarTextFragmenter {
 
     // tslint:disable-next-line: max-func-body-length
     private getDateOrPhoneExtractInfo(matchedStr: string): DateOrPhoneExtractInfo | null {
-        const numberExtractInfo: DateOrPhoneExtractInfo = {
+        const extractInfo: DateOrPhoneExtractInfo = {
             normalizedStr: '',
             digitCount: 0,
             u101DCount: 0,
@@ -886,95 +873,91 @@ export class MyanmarTextFragmenter {
         let startOfString = true;
         let prevIsDigit = false;
         let prevIsSpace = false;
-        let lastOpenedBracketCp: number | null = null;
 
-        for (const c of matchedStr) {
+        for (let i = 0; i < matchedStr.length; i++) {
+            const c = matchedStr[i];
             const cp = c.codePointAt(0) as number;
             if (startOfString && (cp === 0x002B || cp === 0xFF0B)) {
-                numberExtractInfo.plusSignIncluded = true;
-                numberExtractInfo.normalizedStr += '+';
+                extractInfo.plusSignIncluded = true;
+                extractInfo.normalizedStr += '+';
                 if (c !== '+') {
-                    numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
-                    numberExtractInfo.normalizedReason.normalizePlusSign = true;
+                    extractInfo.normalizedReason = extractInfo.normalizedReason || {};
+                    extractInfo.normalizedReason.normalizePlusSign = true;
                 }
             } else if (cp >= 0x1040 && cp <= 0x1049) {
-                ++numberExtractInfo.digitCount;
-                numberExtractInfo.normalizedStr += c;
+                ++extractInfo.digitCount;
+                extractInfo.normalizedStr += c;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (cp === 0x101D) {
-                ++numberExtractInfo.u101DCount;
-                numberExtractInfo.normalizedStr += '\u1040';
-                numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
-                numberExtractInfo.normalizedReason.changeU101DToU1040 = true;
+                ++extractInfo.u101DCount;
+                extractInfo.normalizedStr += '\u1040';
+                extractInfo.normalizedReason = extractInfo.normalizedReason || {};
+                extractInfo.normalizedReason.changeU101DToU1040 = true;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (cp === 0x104E) {
-                ++numberExtractInfo.u104ECount;
-                numberExtractInfo.normalizedStr += '\u1044';
-                numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
-                numberExtractInfo.normalizedReason.changeU104EToU1044 = true;
+                ++extractInfo.u104ECount;
+                extractInfo.normalizedStr += '\u1044';
+                extractInfo.normalizedReason = extractInfo.normalizedReason || {};
+                extractInfo.normalizedReason.changeU104EToU1044 = true;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (c === '*') {
                 if (!prevIsDigit && !prevIsSpace && !startOfString) {
                     return null;
                 }
-                numberExtractInfo.starIncluded = true;
-                numberExtractInfo.normalizedStr += c;
+                extractInfo.starIncluded = true;
+                extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
             } else if (c === '#') {
                 if (!prevIsDigit && !prevIsSpace) {
                     return null;
                 }
-                numberExtractInfo.hashEnded = true;
-                numberExtractInfo.normalizedStr += c;
+                extractInfo.hashEnded = true;
+                extractInfo.normalizedStr += c;
                 break;
             } else if (c === '.') {
                 if (!prevIsDigit && !prevIsSpace) {
                     return null;
                 }
-                ++numberExtractInfo.dotCount;
-                ++numberExtractInfo.separatorCount;
-                numberExtractInfo.normalizedStr += c;
+                ++extractInfo.dotCount;
+                ++extractInfo.separatorCount;
+                extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
             } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
-                numberExtractInfo.normalizedStr += c;
-                lastOpenedBracketCp = cp;
-                prevIsDigit = false;
-                prevIsSpace = false;
-            } else if (cp === 0x0029 || cp === 0xFF09 || cp === 0x005D || cp === 0xFF3D) {
-                if (!lastOpenedBracketCp || !prevIsDigit && !prevIsSpace) {
+                if (!this.hasCorrectClosingBracket(cp, matchedStr.substring(i + 1))) {
                     return null;
                 }
-
-                numberExtractInfo.normalizedStr += c;
-                numberExtractInfo.bracketsIncluded = true;
-
-                lastOpenedBracketCp = null;
+                extractInfo.bracketsIncluded = true;
+                extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
             } else if (this._visibleSpaceRegExp.test(c)) {
-                numberExtractInfo.spaceIncluded = true;
-                numberExtractInfo.normalizedStr += ' ';
+                extractInfo.spaceIncluded = true;
+                extractInfo.normalizedStr += ' ';
                 if (cp !== 0x0020) {
-                    numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
-                    numberExtractInfo.normalizedReason.normalizeSpace = true;
+                    extractInfo.normalizedReason = extractInfo.normalizedReason || {};
+                    extractInfo.normalizedReason.normalizeSpace = true;
                 }
                 prevIsDigit = false;
                 prevIsSpace = true;
             } else if (this._invisibleSpaceRegExp.test(c)) {
-                numberExtractInfo.spaceIncluded = true;
-                numberExtractInfo.invisibleSpaceIncluded = true;
-                numberExtractInfo.normalizedReason = numberExtractInfo.normalizedReason || {};
-                numberExtractInfo.normalizedReason.removeInvisibleSpace = true;
+                extractInfo.spaceIncluded = true;
+                extractInfo.invisibleSpaceIncluded = true;
+                extractInfo.normalizedReason = extractInfo.normalizedReason || {};
+                extractInfo.normalizedReason.removeInvisibleSpace = true;
                 prevIsDigit = false;
                 prevIsSpace = true;
             } else {
-                ++numberExtractInfo.separatorCount;
-                numberExtractInfo.normalizedStr += c;
+                if (!prevIsDigit && !prevIsSpace) {
+                    return null;
+                }
+
+                ++extractInfo.separatorCount;
+                extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
             }
@@ -982,11 +965,19 @@ export class MyanmarTextFragmenter {
             startOfString = false;
         }
 
-        if (lastOpenedBracketCp) {
+        if (extractInfo.dotCount === 1 &&
+            extractInfo.dotCount === extractInfo.separatorCount &&
+            !extractInfo.spaceIncluded &&
+            !extractInfo.invisibleSpaceIncluded &&
+            !extractInfo.plusSignIncluded &&
+            !extractInfo.bracketsIncluded &&
+            !extractInfo.starIncluded &&
+            !extractInfo.hashEnded &&
+            extractInfo.normalizedStr[0] !== '\u1040') {
             return null;
         }
 
-        return numberExtractInfo;
+        return extractInfo;
     }
 
     private getNormalizedTextInfo(str: string, upTo?: number, acceptAllOtherChars?: boolean): NormalizedTextInfo {
@@ -1085,6 +1076,29 @@ export class MyanmarTextFragmenter {
 
         if (acceptU101DAndU104E && (cp === 0x101D || cp === 0x104E)) {
             return true;
+        }
+
+        return false;
+    }
+
+    private hasCorrectClosingBracket(openingBracketCp: number, str: string): boolean {
+        for (const c of str) {
+            const cp = c.codePointAt(0) as number;
+            if (cp === 0x0029 && openingBracketCp === 0x0028) {
+                return true;
+            }
+
+            if (cp === 0xFF09 && openingBracketCp === 0xFF08) {
+                return true;
+            }
+
+            if (cp === 0x005D && openingBracketCp === 0x005B) {
+                return true;
+            }
+
+            if (cp === 0xFF3D && openingBracketCp === 0xFF3B) {
+                return true;
+            }
         }
 
         return false;
