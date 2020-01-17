@@ -244,7 +244,10 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const possibleDate = this.isPossibleDate(extractInfo);
+        const possibleDate = !extractInfo.plusSignIncluded && !extractInfo.hashEnded && !extractInfo.bracketsIncluded &&
+            (extractInfo.separatorCount > 0 || extractInfo.spaceIncluded) ?
+            this.isPossibleDate(extractInfo) : null;
+
         const fragment: TextFragment = {
             matchedStr,
             fragmentType: possibleDate ? FragmentType.PossibleDate : FragmentType.PossiblePhone,
@@ -861,21 +864,28 @@ export class MyanmarTextFragmenter {
             separatorCount: 0
         };
 
+        let curStr = matchedStr;
+        const firstCp = curStr.codePointAt(0) as number;
         let startOfString = true;
         let prevIsDigit = false;
         let prevIsSpace = false;
 
-        for (let i = 0; i < matchedStr.length; i++) {
-            const c = matchedStr[i];
+        if (firstCp === 0x002B || firstCp === 0xFF0B) {
+            extractInfo.plusSignIncluded = true;
+            extractInfo.normalizedStr += '+';
+            if (firstCp !== 0x002B) {
+                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                extractInfo.normalizationReason.normalizePlusSign = true;
+            }
+            curStr = curStr.substring(1);
+            startOfString = false;
+        }
+
+        for (let i = 0; i < curStr.length; i++) {
+            const c = curStr[i];
             const cp = c.codePointAt(0) as number;
-            if (startOfString && (cp === 0x002B || cp === 0xFF0B)) {
-                extractInfo.plusSignIncluded = true;
-                extractInfo.normalizedStr += '+';
-                if (c !== '+') {
-                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
-                    extractInfo.normalizationReason.normalizePlusSign = true;
-                }
-            } else if (cp >= 0x1040 && cp <= 0x1049) {
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
                 ++extractInfo.digitCount;
                 extractInfo.normalizedStr += c;
                 prevIsDigit = true;
@@ -894,7 +904,7 @@ export class MyanmarTextFragmenter {
                 extractInfo.normalizationReason.changeU104EToU1044 = true;
                 prevIsDigit = true;
                 prevIsSpace = false;
-            } else if (c === '*') {
+            } else if (cp === 0x002A) {
                 if (!prevIsDigit && !prevIsSpace && !startOfString) {
                     return null;
                 }
@@ -902,14 +912,14 @@ export class MyanmarTextFragmenter {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-            } else if (c === '#') {
+            } else if (cp === 0x0023) {
                 if (!prevIsDigit && !prevIsSpace) {
                     return null;
                 }
                 extractInfo.hashEnded = true;
                 extractInfo.normalizedStr += c;
                 break;
-            } else if (c === '.') {
+            } else if (cp === 0x002E) {
                 if (!prevIsDigit && !prevIsSpace) {
                     return null;
                 }
@@ -919,9 +929,10 @@ export class MyanmarTextFragmenter {
                 prevIsDigit = false;
                 prevIsSpace = false;
             } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
-                if (!this.hasCorrectClosingBracket(cp, matchedStr.substring(i + 1))) {
+                if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
                     return null;
                 }
+
                 extractInfo.bracketsIncluded = true;
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
