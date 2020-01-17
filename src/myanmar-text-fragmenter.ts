@@ -254,6 +254,10 @@ export class MyanmarTextFragmenter {
             normalizedStr: extractInfo.normalizedStr
         };
 
+        if (extractInfo.normalizationReason) {
+            fragment.normalizationReason = extractInfo.normalizationReason;
+        }
+
         if (extractInfo.separatorCount > 0) {
             fragment.separatorIncluded = true;
         }
