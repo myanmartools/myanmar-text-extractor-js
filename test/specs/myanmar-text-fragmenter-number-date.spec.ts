@@ -16,7 +16,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
         expect(fragment).toEqual({
             matchedStr: input,
             normalizedStr: input,
-            fragmentType: FragmentType.PossibleDate
+            fragmentType: FragmentType.PossibleDate,
+            separatorIncluded: true
         });
     });
 });
