@@ -99,4 +99,26 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
 
         expect(actualFragment).toEqual(expactedFragment);
     });
+
+    // dd၊MM၊yyyy (INVALID \U101D and \U104E)
+    it(String.raw`should return date fragment with INVALID when input '၁\u104E၊၁၂၊၂\u101D၂\u101D'`, () => {
+        const input = '၁\u104E၊၁၂၊၂\u101D၂\u101D';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
+            fragmentType: FragmentType.PossibleDate,
+            separatorIncluded: true,
+            normalizationReason: {
+                changeU104EToU1044: true,
+                changeU101DToU1040: true
+            },
+            invalidReason: {
+                invalidU104EInsteadOfU1044: true,
+                invalidU101DInsteadOfU1040: true
+            }
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 });
