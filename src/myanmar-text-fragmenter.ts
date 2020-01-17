@@ -226,12 +226,7 @@ export class MyanmarTextFragmenter {
     }
 
     private getDateOrPhoneFragment(input: string, firstCp: number): TextFragment | null {
-        if (input.length < 3 ||
-            !((firstCp >= 0x1040 && firstCp <= 0x1049) ||
-                firstCp === 0x101D || firstCp === 0x104E ||
-                firstCp === 0x002B || firstCp === 0xFF0B ||
-                firstCp === 0x0028 || firstCp === 0xFF08 ||
-                firstCp === 0x005B || firstCp === 0xFF3B)) {
+        if (input.length < 3 || !this.startsWithPossibleNumberOrBracket(firstCp, true)) {
             return null;
         }
 
@@ -1076,6 +1071,21 @@ export class MyanmarTextFragmenter {
 
     private isOpeningCharInBox(cp: number): boolean {
         if (cp === 0x0028 || cp === 0xFF08 || cp === 0xFF3B || cp === 0x005B) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private startsWithPossibleNumberOrBracket(cp: number, acceptU101DAndU104E: boolean): boolean {
+        if ((cp >= 0x1040 && cp <= 0x1049) ||
+            cp === 0x002B || cp === 0xFF0B ||
+            cp === 0x0028 || cp === 0xFF08 ||
+            cp === 0x005B || cp === 0xFF3B) {
+            return true;
+        }
+
+        if (acceptU101DAndU104E && (cp === 0x101D || cp === 0x104E)) {
             return true;
         }
 
