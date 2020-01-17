@@ -30,6 +30,7 @@ interface DateOrPhoneExtractInfo {
     invisibleSpaceIncluded?: boolean;
 
     dotCount: number;
+    slashCount: number;
     plusSignIncluded?: boolean;
     starIncluded?: boolean;
     bracketsIncluded?: boolean;
@@ -865,6 +866,7 @@ export class MyanmarTextFragmenter {
             u101DCount: 0,
             u104ECount: 0,
             dotCount: 0,
+            slashCount: 0,
             separatorCount: 0
         };
 
@@ -932,6 +934,15 @@ export class MyanmarTextFragmenter {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
+            } else if (cp === 0x002F) {
+                if (!prevIsDigit && !prevIsSpace) {
+                    return null;
+                }
+                ++extractInfo.slashCount;
+                ++extractInfo.separatorCount;
+                extractInfo.normalizedStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
             } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
                     return null;
@@ -984,6 +995,13 @@ export class MyanmarTextFragmenter {
             !extractInfo.starIncluded &&
             !extractInfo.hashEnded &&
             extractInfo.normalizedStr[0] !== '\u1040') {
+            return null;
+        }
+
+        if (extractInfo.slashCount === 1 &&
+            extractInfo.slashCount === extractInfo.separatorCount &&
+            !extractInfo.plusSignIncluded &&
+            extractInfo.digitCount < 7) {
             return null;
         }
 
