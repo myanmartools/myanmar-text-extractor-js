@@ -27,10 +27,6 @@ export interface TextFragment {
      */
     spaceIncluded?: boolean;
     /**
-     * True if separator included.
-     */
-    separatorIncluded?: boolean;
-    /**
      * Digit string for number fragment type.
      */
     numberStr?: string;
