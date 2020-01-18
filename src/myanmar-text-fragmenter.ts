@@ -36,6 +36,7 @@ interface DateOrPhoneExtractInfo {
     starIncluded?: boolean;
     bracketsIncluded?: boolean;
     hashEnded?: boolean;
+    possibleIsoDate?: boolean;
     normalizationReason?: NormalizationReason;
 }
 
@@ -311,6 +312,9 @@ export class MyanmarTextFragmenter {
             !extractInfo.invisibleSpaceIncluded &&
             !extractInfo.separatorCount) {
             matched = this._dtYMDNoSpace.test(normalizedStr);
+            if (matched) {
+                extractInfo.possibleIsoDate = true;
+            }
         }
 
         return matched;
