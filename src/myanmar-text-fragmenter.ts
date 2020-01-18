@@ -29,7 +29,6 @@ interface DateOrPhoneExtractInfo {
     separatorCount: number;
     spaceIncluded?: boolean;
     invisibleSpaceIncluded?: boolean;
-
     dotCount: number;
     slashCount: number;
     plusSignIncluded?: boolean;
@@ -259,10 +258,6 @@ export class MyanmarTextFragmenter {
 
         if (extractInfo.normalizationReason) {
             fragment.normalizationReason = extractInfo.normalizationReason;
-        }
-
-        if (extractInfo.separatorCount > 0) {
-            fragment.separatorIncluded = true;
         }
 
         if (extractInfo.spaceIncluded || extractInfo.invisibleSpaceIncluded) {
@@ -633,10 +628,6 @@ export class MyanmarTextFragmenter {
             normalizedStr: numberExtractInfo.normalizedStr,
             numberStr: numberExtractInfo.numberStr
         };
-
-        if (numberExtractInfo.separatorCount > 0) {
-            numberFragment.separatorIncluded = true;
-        }
 
         if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
             numberFragment.spaceIncluded = true;
