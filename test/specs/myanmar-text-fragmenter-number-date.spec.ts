@@ -24,8 +24,22 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
     });
 
     // dd/MM/yyyy
-    it(String.raw`should return date fragment when input '၀၁/၁/၂၀၂၀'`, () => {
+    it(String.raw`should return date fragment when input '၀၁/၀၁/၂၀၂၀'`, () => {
         const input = '၀၁/၀၁/၂၀၂၀';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossibleDate,
+            separatorIncluded: true
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    // dd/MM/yyyy
+    it(String.raw`should return date fragment when input '၀၁_၀၁_၂၀၂၀'`, () => {
+        const input = '၀၁_၀၁_၂၀၂၀';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: input,
