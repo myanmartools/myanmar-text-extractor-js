@@ -81,6 +81,7 @@ export class MyanmarTextFragmenter {
     private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
     private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtDayPattern})$`);
     private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
+    private readonly _dtYMDNoSpace = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})[-]?(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])[-]?(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -295,6 +296,9 @@ export class MyanmarTextFragmenter {
         let matched = this._dtDMY.test(normalizedStr);
         if (!matched) {
             matched = this._dtYMD.test(normalizedStr);
+        }
+        if (!matched) {
+            matched = this._dtYMDNoSpace.test(normalizedStr);
         }
         if (!matched) {
             matched = this._dtMDY.test(normalizedStr);
