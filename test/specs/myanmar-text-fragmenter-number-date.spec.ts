@@ -9,7 +9,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
-    // dyyyyMMdd
+    // yyyyMMdd
     it(String.raw`should return date fragment when input '၂၀၂၀၀၁၀၁'`, () => {
         const input = '၂၀၂၀၀၁၀၁';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
