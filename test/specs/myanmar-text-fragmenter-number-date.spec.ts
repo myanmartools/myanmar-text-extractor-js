@@ -9,6 +9,19 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
+    // dyyyyMMdd
+    it(String.raw`should return date fragment when input '၂၀၂၀၀၁၀၁'`, () => {
+        const input = '၂၀၂၀၀၁၀၁';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossibleDate
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
+
     // dd-MM-yyyy
     it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀'`, () => {
         const input = '၀၁-၀၁-၂၀၂၀';
