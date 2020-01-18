@@ -84,7 +84,6 @@ export class MyanmarTextFragmenter {
     private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtDayPattern})$`);
     private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
     private readonly _dtYMDWithoutSpace = new RegExp(`^${this._dtIsoDatePattern}`);
-    private readonly _dtIsoTimeRegExp = new RegExp(`T(?:[\u1040\u1041\u101D][${this._possibleDigits}]|[\u1042][\u1040-\u1043\u101D])(?::[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]){2,2}(?:[+-][${this._possibleDigits}]{4,6}|Z)?`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -249,7 +248,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        let fragment = this.getPossibleDateFragment(input, matchedStr, extractInfo);
+        let fragment = this.getPossibleDateFragment(matchedStr, extractInfo);
         if (fragment == null) {
             fragment = {
                 matchedStr,
@@ -287,7 +286,7 @@ export class MyanmarTextFragmenter {
         return fragment;
     }
 
-    private getPossibleDateFragment(input: string, matchedStr: string, extractInfo: DateOrPhoneExtractInfo): TextFragment | null {
+    private getPossibleDateFragment(matchedStr: string, extractInfo: DateOrPhoneExtractInfo): TextFragment | null {
         const normalizedStr = extractInfo.normalizedStr;
         const firstCp = normalizedStr.codePointAt(0) as number;
 
@@ -307,24 +306,12 @@ export class MyanmarTextFragmenter {
             matched = this._dtMDY.test(normalizedStr);
         }
 
-        let timeStr = '';
-
         if (!matched &&
             extractInfo.digitCount === 8 &&
             !extractInfo.spaceIncluded &&
             !extractInfo.invisibleSpaceIncluded &&
             !extractInfo.separatorCount) {
             matched = this._dtYMDWithoutSpace.test(normalizedStr);
-            if (matched) {
-                const rightStr = input.substring(matchedStr.length);
-                if (rightStr.length > 8 && rightStr[0] === 'T') {
-                    const timeMatch = rightStr.match(this._dtIsoTimeRegExp);
-                    if (timeMatch != null) {
-                        timeStr = timeMatch[0];
-                    }
-
-                }
-            }
         }
 
         if (!matched) {
@@ -332,9 +319,9 @@ export class MyanmarTextFragmenter {
         }
 
         return {
-            matchedStr: matchedStr + timeStr,
+            matchedStr,
             fragmentType: FragmentType.PossibleDate,
-            normalizedStr: extractInfo.normalizedStr + timeStr
+            normalizedStr: extractInfo.normalizedStr
         };
     }
 
