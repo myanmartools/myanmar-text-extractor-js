@@ -278,20 +278,8 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        const rightFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
-        if (rightFirstCp && (rightFirstCp >= 0x1040 && rightFirstCp <= 0x1049)) {
+        if (!this.isSafeForDateOrPhone(rightStr)) {
             return null;
-        }
-
-        if (rightFirstCp && (rightFirstCp === 0x101D || rightFirstCp === 0x104E)) {
-            if (rightStr.length === 1) {
-                return null;
-            }
-
-            const f = this.getDigitGroupFragment(rightStr);
-            if (f != null && f.numberStr && f.numberStr.length > 1) {
-                return null;
-            }
         }
 
         const extractInfo = this.getDateExtractInfo(matchedStr);
@@ -1163,6 +1151,33 @@ export class MyanmarTextFragmenter {
         }
 
         return false;
+    }
+
+    private isSafeForDateOrPhone(rightStr: string): boolean {
+        if (!rightStr) {
+            return true;
+        }
+
+        const rightFirstCp = rightStr.codePointAt(0);
+
+        if (!rightFirstCp) {
+            return true;
+        }
+
+        if (rightFirstCp >= 0x1040 && rightFirstCp <= 0x1049) {
+            return false;
+        }
+
+        if (rightStr.length === 1 && (rightFirstCp === 0x101D || rightFirstCp === 0x104E)) {
+            return false;
+        }
+
+        // const f = this.getDigitGroupFragment(rightStr);
+        // if (f != null && f.numberStr && f.numberStr.length > 1) {
+        //     return null;
+        // }
+
+        return true;
     }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
