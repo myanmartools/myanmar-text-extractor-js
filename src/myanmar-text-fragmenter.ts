@@ -277,6 +277,12 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
+        const rightStr = input.substring(matchedStr.length);
+        const rightFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
+        if (rightFirstCp && (rightFirstCp >= 0x1040 && rightFirstCp >= 0x1049)) {
+            return null;
+        }
+
         const extractInfo = this.getDateExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
