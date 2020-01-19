@@ -1158,17 +1158,17 @@ export class MyanmarTextFragmenter {
             return true;
         }
 
-        const rightFirstCp = rightStr.codePointAt(0);
+        const firstCp = rightStr.codePointAt(0);
 
-        if (!rightFirstCp) {
+        if (!firstCp) {
             return true;
         }
 
-        if (rightFirstCp >= 0x1040 && rightFirstCp <= 0x1049) {
+        if (firstCp >= 0x1040 && firstCp <= 0x1049) {
             return false;
         }
 
-        if (rightStr.length === 1 && (rightFirstCp === 0x101D || rightFirstCp === 0x104E)) {
+        if (rightStr.length === 1 && (firstCp === 0x101D || firstCp === 0x104E)) {
             return false;
         }
 
