@@ -283,6 +283,17 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
+        if (rightFirstCp && (rightFirstCp === 0x101D || rightFirstCp === 0x104E)) {
+            if (rightStr.length === 1) {
+                return null;
+            }
+
+            const f = this.getDigitGroupFragment(rightStr);
+            if (f != null && f.numberStr && f.numberStr.length > 1) {
+                return null;
+            }
+        }
+
         const extractInfo = this.getDateExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
