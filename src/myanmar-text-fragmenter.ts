@@ -47,6 +47,8 @@ export class MyanmarTextFragmenter {
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
     private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
+    private readonly _spaceRegExp = new RegExp(`[${this._space}]`);
+
     private readonly _possibleDigits = '\u1040-\u1049\u101D\u104E';
 
     // \u002E\u00B7\u02D9
@@ -1172,10 +1174,20 @@ export class MyanmarTextFragmenter {
             return false;
         }
 
-        // const f = this.getDigitGroupFragment(rightStr);
-        // if (f != null && f.numberStr && f.numberStr.length > 1) {
-        //     return null;
-        // }
+        if (firstCp === 0x0040 || firstCp === 0x002B || firstCp === 0xFF0B) {
+            return false;
+        }
+
+        if (rightStr.length > 1 && ((firstCp >= 0x0021 && firstCp <= 0x002D) ||
+            firstCp === 0x003A || (firstCp >= 0x003C && firstCp <= 0x003E) ||
+            (firstCp >= 0x005E && firstCp <= 0x005F) || firstCp === 0x0060 ||
+            firstCp === 0x007E || this._spaceRegExp.test(rightStr[0]))) {
+            const rightStr2 = rightStr.substring(1);
+            const f = this.getDigitGroupFragment(rightStr2);
+            if (f != null) {
+                return false;
+            }
+        }
 
         return true;
     }
