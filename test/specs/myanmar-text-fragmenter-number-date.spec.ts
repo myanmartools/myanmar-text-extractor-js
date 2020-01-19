@@ -166,7 +166,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
         expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeFalsy();
     });
 
-    // dd၊MM၊yyyy (INVALID \U101D)
+    // dd၊MM၊yyyy(INVALID \U101D)
     it(String.raw`should return date fragment with INVALID when input '၃၁၊၁၂၊၂၀၂\u101D'`, () => {
         const input = '၃၁၊၁၂၊၂၀၂\u101D';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
