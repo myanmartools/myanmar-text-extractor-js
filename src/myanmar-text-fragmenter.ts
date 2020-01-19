@@ -278,7 +278,7 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        if (!this.isSafeForDateOrPhone(rightStr)) {
+        if (!this.isRightStrSafeForDateOrPhone(rightStr)) {
             return null;
         }
 
@@ -1153,7 +1153,7 @@ export class MyanmarTextFragmenter {
         return false;
     }
 
-    private isSafeForDateOrPhone(rightStr: string): boolean {
+    private isRightStrSafeForDateOrPhone(rightStr: string): boolean {
         if (!rightStr) {
             return true;
         }
