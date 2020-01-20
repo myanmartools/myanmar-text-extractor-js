@@ -280,7 +280,7 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        if (!this.isRightStrSafeForDateOrPhone(rightStr)) {
+        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
@@ -1155,7 +1155,7 @@ export class MyanmarTextFragmenter {
         return false;
     }
 
-    private isRightStrSafeForDateOrPhone(rightStr: string): boolean {
+    private isRightStrSafeForDateOrPhoneNumber(rightStr: string): boolean {
         if (!rightStr) {
             return true;
         }
@@ -1174,14 +1174,15 @@ export class MyanmarTextFragmenter {
             return false;
         }
 
-        if (firstCp === 0x0040 || firstCp === 0x002B || firstCp === 0xFF0B) {
+        // # $ % + @ ＋
+        if ((firstCp >= 0x0023 && firstCp <= 0x0025) || firstCp === 0x002B || firstCp === 0x0040 || firstCp === 0xFF0B) {
             return false;
         }
 
-        if (rightStr.length > 1 && ((firstCp >= 0x0021 && firstCp <= 0x002D) ||
-            firstCp === 0x003A || (firstCp >= 0x003C && firstCp <= 0x003E) ||
-            (firstCp >= 0x005E && firstCp <= 0x005F) || firstCp === 0x0060 ||
-            firstCp === 0x007E || this._spaceRegExp.test(rightStr[0]))) {
+        if (rightStr.length > 1 && ((firstCp >= 0x0021 && firstCp <= 0x002F) ||
+            firstCp === 0x003A || (firstCp >= 0x003C && firstCp <= 0x003F) ||
+            (firstCp >= 0x005B && firstCp <= 0x005F) || firstCp === 0x0060 ||
+            (firstCp >= 0x007B && firstCp <= 0x007E) || this._spaceRegExp.test(rightStr[0]))) {
             const rightStr2 = rightStr.substring(1);
             const f = this.getDigitGroupFragment(rightStr2);
             if (f != null) {
