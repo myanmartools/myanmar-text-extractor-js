@@ -1221,9 +1221,13 @@ export class MyanmarTextFragmenter {
             firstCp === 0x003A || (firstCp >= 0x003C && firstCp <= 0x003F) ||
             (firstCp >= 0x005B && firstCp <= 0x005F) || firstCp === 0x0060 ||
             (firstCp >= 0x007B && firstCp <= 0x007E) || this._spaceRegExp.test(rightStr[0]))) {
-            const rightStr2 = rightStr.substring(1);
-            const f = this.getDigitGroupFragment(rightStr2);
-            if (f != null) {
+            const cp = rightStr.codePointAt(1);
+
+            if (!cp) {
+                return true;
+            }
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
                 return false;
             }
         }
