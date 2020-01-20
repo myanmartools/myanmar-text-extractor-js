@@ -40,7 +40,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true
+            spaceDetected: true
         });
     });
 
@@ -57,7 +57,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true
+            spaceDetected: true
         });
     });
 
@@ -91,7 +91,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true,
+            spaceDetected: true,
             numberStrnumberSeparatorIncluded: true
         });
     });
@@ -109,7 +109,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true,
+            spaceDetected: true,
             numberStrnumberSeparatorIncluded: true
         });
     });
@@ -144,7 +144,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true,
+            spaceDetected: true,
             numberStrnumberSeparatorIncluded: true
         });
     });
@@ -162,7 +162,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true,
+            spaceDetected: true,
             numberStrnumberSeparatorIncluded: true
         });
     });
@@ -180,7 +180,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true,
+            spaceDetected: true,
             numberStrnumberSeparatorIncluded: true
         });
     });
@@ -198,7 +198,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             numberStr: '+၄၀၁၂၃၄၅၆',
             possiblePhoneNumber: true,
             plusSignIncluded: true,
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true,
                 invalidU101DInsteadOfU1040: true,
@@ -246,7 +246,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
             normalizedStr: input,
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇',
-            spaceIncluded: true,
+            spaceDetected: true,
             possiblePhoneNumber: true
         });
     });

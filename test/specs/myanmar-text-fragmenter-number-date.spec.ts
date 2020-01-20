@@ -96,7 +96,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossibleDate,
-                spaceIncluded: true
+                spaceDetected: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -214,7 +214,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossibleDate,
-                spaceIncluded: true
+                spaceDetected: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -243,7 +243,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                spaceIncluded: true,
+                spaceDetected: true,
                 normalizationReason: {
                     removeSpace: true
                 }
@@ -260,7 +260,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁/၁၂/၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                spaceIncluded: true,
+                spaceDetected: true,
                 normalizationReason: {
                     removeSpace: true
                 }

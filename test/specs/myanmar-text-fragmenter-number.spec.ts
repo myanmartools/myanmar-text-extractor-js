@@ -256,7 +256,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             fragmentType: FragmentType.Number,
             numberStr: '၁၂၃၄၅၆၇.၈၉',
             numberStrnumberSeparatorIncluded: true,
-            spaceIncluded: true
+            spaceDetected: true
         });
     });
 
@@ -380,7 +380,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             numberStr: '၁',
             ancient: true,
             measureWords: ['အင်္ဂါ'],
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true,
                 invalidUnicodeForm: true
@@ -433,7 +433,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             numberStr: '၁၀',
             ancient: true,
             measureWords: ['ဆယ်သား'],
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true
             }
@@ -512,7 +512,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '(၉)',
             fragmentType: FragmentType.Number,
             numberStr: '၉',
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true
             }
@@ -530,7 +530,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '(၉)',
             fragmentType: FragmentType.Number,
             numberStr: '၉',
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true
             }
@@ -639,7 +639,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၀၉။',
             fragmentType: FragmentType.Number,
             numberStr: '၀၉',
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true
             }
@@ -657,7 +657,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
             normalizedStr: '၀၉။',
             fragmentType: FragmentType.Number,
             numberStr: '၀၉',
-            spaceIncluded: true,
+            spaceDetected: true,
             error: {
                 invalidSpaceIncluded: true
             }
