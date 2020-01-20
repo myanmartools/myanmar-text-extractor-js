@@ -23,9 +23,9 @@ export interface TextFragment {
      */
     ancientWrittenForm?: boolean;
     /**
-     * True if space included.
+     * True if space detected.
      */
-    spaceIncluded?: boolean;
+    spaceDetected?: boolean;
     /**
      * Digit string for number fragment type.
      */
