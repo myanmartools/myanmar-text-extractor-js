@@ -477,5 +477,12 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
 
             expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
         });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀_၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀_၁';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+
+            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+        });
     });
 });
