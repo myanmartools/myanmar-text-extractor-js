@@ -154,19 +154,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // M/d/yy
-        it(String.raw`should return date fragment when input '၁/၃၁/၂၀'`, () => {
-            const input = '၁/၃၁/၂၀';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
         // yyyy/MM/dd
         it(String.raw`should return date fragment when input '၂၀၂၀/၀၁/၃၁'`, () => {
             const input = '၂၀၂၀/၀၁/၃၁';
@@ -227,6 +214,19 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
+                fragmentType: FragmentType.PossibleDate
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // dd-MM-yyyy
+        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀-'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀-';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate
             };
 
@@ -363,7 +363,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const input = '၃၂-၁၂-၂၀၂၀';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeFalsy();
+            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
         });
 
         // NOT #2
@@ -371,7 +371,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const input = '၃၀-၁၃-၂၀၂၀';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeFalsy();
+            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
         });
 
         // NOT #3
@@ -379,7 +379,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const input = '၃၀-၁၂-၃၀၀၀';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeFalsy();
+            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
         });
     });
 });
