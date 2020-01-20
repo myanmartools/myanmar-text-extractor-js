@@ -64,20 +64,20 @@ export class MyanmarTextFragmenter {
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
     private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._digitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
-    private readonly _separatorForDtAndPh = '-_./\u104A~\u002D\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
+    private readonly _dtOrPhSeparator = '-/._\u104A~\u002D\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
 
     // Date
     private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}|[${this._possibleDigits}]{2,2}`;
     private readonly _dtMonthPattern = '[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D]';
     private readonly _dtDayPattern = `[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]`;
-    private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
-    private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtDayPattern})$`);
-    private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._separatorForDtAndPh}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
+    private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
+    private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})$`);
+    private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
     private readonly _dtYMDWithoutSpace = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
-    private readonly _phSeparator = `${this._separatorForDtAndPh}()\\[\\]\uFF08\uFF09\uFF3B\uFF3D`;
+    private readonly _phSeparator = `${this._dtOrPhSeparator}()\\[\\]\uFF08\uFF09\uFF3B\uFF3D`;
     private readonly _phStar = '*';
     private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleDigits}]){3,}#?`);
 
