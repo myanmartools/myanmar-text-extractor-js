@@ -68,7 +68,7 @@ export class MyanmarTextFragmenter {
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
 
     // Date
-    private readonly _dtYear2DigitsPattern = `[${this._possibleDigits}]{2,2}`;
+    private readonly _dtYear2DigitsPattern = `[\u1041\u1042][${this._possibleDigits}]`;
     private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}`;
     private readonly _dtMonth1DigitPattern = '[\u1041-\u1049\u104E]';
     private readonly _dtMonthPattern = `\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtMonth1DigitPattern}`;
