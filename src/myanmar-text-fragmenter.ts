@@ -946,13 +946,13 @@ export class MyanmarTextFragmenter {
         return extractInfo;
     }
 
+    // tslint:disable-next-line: max-func-body-length
     private getDateExtractInfo(matchedStr: string): ExtractInfo | null {
-        const extractInfo: ExtractInfo = {
-            normalizedStr: ''
-        };
+        const extractInfo: ExtractInfo = { normalizedStr: '' };
 
         let prevIsDigit = false;
         let prevIsSpace = false;
+        let prevIsSeparator = false;
         let lastSeparator: string | undefined;
         let digitCount = 0;
         let u101DIncluded = false;
@@ -967,8 +967,10 @@ export class MyanmarTextFragmenter {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = true;
                 prevIsSpace = false;
+                prevIsSeparator = false;
             } else if (cp === 0x101D || cp === 0x104E) {
                 extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+
                 if (cp === 0x101D) {
                     u101DIncluded = true;
                     extractInfo.normalizedStr += '\u1040';
@@ -978,33 +980,60 @@ export class MyanmarTextFragmenter {
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.normalizationReason.changeU104EToU1044 = true;
                 }
+
                 prevIsDigit = true;
                 prevIsSpace = false;
+                prevIsSeparator = false;
             } else if (this._visibleSpaceRegExp.test(c)) {
-                extractInfo.spaceIncluded = true;
-                extractInfo.normalizedStr += ' ';
-                if (cp !== 0x0020) {
-                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
-                    extractInfo.normalizationReason.normalizeSpace = true;
+                if (prevIsSpace) {
+                    return null;
                 }
+
+                extractInfo.spaceIncluded = true;
+
+                if (prevIsSeparator) {
+                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                    extractInfo.normalizationReason.removeSpace = true;
+                } else {
+                    extractInfo.normalizedStr += ' ';
+
+                    if (cp !== 0x0020) {
+                        extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                        extractInfo.normalizationReason.normalizeSpace = true;
+                    }
+                }
+
                 prevIsDigit = false;
                 prevIsSpace = true;
+                prevIsSeparator = false;
             } else if (this._invisibleSpaceRegExp.test(c)) {
+                if (prevIsSpace) {
+                    return null;
+                }
+
                 extractInfo.spaceIncluded = true;
                 invisibleSpaceIncluded = true;
                 extractInfo.normalizationReason = extractInfo.normalizationReason || {};
                 extractInfo.normalizationReason.removeInvisibleSpace = true;
                 prevIsDigit = false;
                 prevIsSpace = true;
+                prevIsSeparator = false;
             } else {
-                if (!prevIsDigit && !prevIsSpace && lastSeparator && c !== lastSeparator) {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && lastSeparator && c !== lastSeparator)) {
                     return null;
+                }
+
+                if (prevIsSpace) {
+                    extractInfo.normalizedStr = extractInfo.normalizedStr.trimRight();
+                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                    extractInfo.normalizationReason.removeSpace = true;
                 }
 
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
                 lastSeparator = c;
+                prevIsSeparator = true;
             }
         }
 
