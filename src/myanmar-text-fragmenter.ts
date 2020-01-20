@@ -64,15 +64,20 @@ export class MyanmarTextFragmenter {
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
     private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._digitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
-    private readonly _dtOrPhSeparator = '-/._\u104A~\u002D\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
+    // -/._
+    private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
 
     // Date
-    private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}|[${this._possibleDigits}]{2,2}`;
-    private readonly _dtMonthPattern = '[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D]';
-    private readonly _dtDayPattern = `[\u1041-\u1049\u104E]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]`;
-    private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
-    private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})$`);
-    private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})$`);
+    private readonly _dtYear2DigitsPattern = `[${this._possibleDigits}]{2,2}`;
+    private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}`;
+    private readonly _dtMonth1DigitPattern = '[\u1041-\u1049\u104E]';
+    private readonly _dtMonthPattern = `\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtMonth1DigitPattern}`;
+    private readonly _dtDay1DigitPattern = '[\u1041-\u1049\u104E]';
+    private readonly _dtDayPattern = `[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtDay1DigitPattern}`;
+    private readonly _dtDMY1 = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
+    private readonly _dtDMY2 = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
+    private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
+    private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
     private readonly _dtYMDWithoutSpace = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
 
     // Phone Number
@@ -261,7 +266,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        let m = input.match(this._dtDMY);
+        let m = input.match(this._dtDMY1);
         if (m == null) {
             m = input.match(this._dtYMD);
         }
@@ -272,6 +277,10 @@ export class MyanmarTextFragmenter {
 
         if (m == null && input.length > 7) {
             m = input.match(this._dtYMDWithoutSpace);
+        }
+
+        if (m == null) {
+            m = input.match(this._dtDMY2);
         }
 
         if (m == null) {
