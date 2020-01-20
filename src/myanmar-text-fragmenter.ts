@@ -6,7 +6,7 @@ import { TextFragment } from './text-fragment';
 interface NormalizedTextInfo {
     matchedStr: string;
     normalizedStr: string;
-    spaceIncluded?: boolean;
+    spaceDetected?: boolean;
     invisibleSpaceIncluded?: boolean;
 }
 
@@ -17,13 +17,13 @@ interface NumberExtractInfo {
     u101dCount: number;
     u104eCount: number;
     separatorCount: number;
-    spaceIncluded?: boolean;
+    spaceDetected?: boolean;
     invisibleSpaceIncluded?: boolean;
 }
 
 interface ExtractInfo {
     normalizedStr: string;
-    spaceIncluded?: boolean;
+    spaceDetected?: boolean;
     normalizationReason?: NormalizationReason;
     invalidReason?: InvalidReason;
 }
@@ -32,7 +32,7 @@ interface TextFragmentPartial {
     matchedStr: string;
     normalizedStr: string;
 
-    spaceIncluded?: boolean;
+    spaceDetected?: boolean;
     invisibleSpaceIncluded?: boolean;
 
     numberStr?: string;
@@ -325,7 +325,7 @@ export class MyanmarTextFragmenter {
 
         let matchedStr = input.substring(0, 4);
         let normalizedStr = matchedStr;
-        let spaceIncluded: boolean | undefined;
+        let spaceDetected: boolean | undefined;
         let invisibleSpaceIncluded: boolean | undefined;
 
         if (input[4] !== '\u102B') {
@@ -339,7 +339,7 @@ export class MyanmarTextFragmenter {
             }
             matchedStr += normalizedTextInfo.matchedStr;
             normalizedStr += normalizedTextInfo.normalizedStr;
-            spaceIncluded = normalizedTextInfo.spaceIncluded;
+            spaceDetected = normalizedTextInfo.spaceDetected;
             invisibleSpaceIncluded = normalizedTextInfo.invisibleSpaceIncluded;
         } else {
             matchedStr += input[4];
@@ -362,8 +362,8 @@ export class MyanmarTextFragmenter {
             measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
 
-        if (spaceIncluded || invisibleSpaceIncluded) {
-            numberFragment.spaceIncluded = true;
+        if (spaceDetected || invisibleSpaceIncluded) {
+            numberFragment.spaceDetected = true;
             numberFragment.invalidReason = numberFragment.invalidReason || {};
             numberFragment.invalidReason.invalidSpaceIncluded = true;
             numberFragment.invalidReason.invalidUnicodeForm = true;
@@ -464,8 +464,8 @@ export class MyanmarTextFragmenter {
             numberFragment.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
-        if (normalizedTextInfo && (normalizedTextInfo.spaceIncluded || normalizedTextInfo.invisibleSpaceIncluded)) {
-            numberFragment.spaceIncluded = true;
+        if (normalizedTextInfo && (normalizedTextInfo.spaceDetected || normalizedTextInfo.invisibleSpaceIncluded)) {
+            numberFragment.spaceDetected = true;
             numberFragment.invalidReason = numberFragment.invalidReason || {};
             numberFragment.invalidReason.invalidSpaceIncluded = true;
         }
@@ -523,14 +523,14 @@ export class MyanmarTextFragmenter {
             numberStr: numberExtractInfo.numberStr
         };
 
-        if (numberExtractInfo.spaceIncluded) {
-            textFragment.spaceIncluded = true;
+        if (numberExtractInfo.spaceDetected) {
+            textFragment.spaceDetected = true;
             textFragment.invalidReason = textFragment.invalidReason || {};
             textFragment.invalidReason.invalidSpaceIncluded = true;
         }
 
         if (numberExtractInfo.invisibleSpaceIncluded) {
-            textFragment.spaceIncluded = true;
+            textFragment.spaceDetected = true;
             textFragment.invalidReason = textFragment.invalidReason || {};
             textFragment.invalidReason.invalidSpaceIncluded = true;
         }
@@ -567,8 +567,8 @@ export class MyanmarTextFragmenter {
             numberStr: numberExtractInfo.numberStr
         };
 
-        if (numberExtractInfo.spaceIncluded || numberExtractInfo.invisibleSpaceIncluded) {
-            numberFragment.spaceIncluded = true;
+        if (numberExtractInfo.spaceDetected || numberExtractInfo.invisibleSpaceIncluded) {
+            numberFragment.spaceDetected = true;
             if (numberExtractInfo.invisibleSpaceIncluded) {
                 numberFragment.invalidReason = numberFragment.invalidReason || {};
                 numberFragment.invalidReason.invalidSpaceIncluded = true;
@@ -597,8 +597,8 @@ export class MyanmarTextFragmenter {
                 numberFragment.ancientWrittenForm = true;
                 numberFragment.measureWords = ancientFragment.measureWords;
 
-                if (ancientFragment.spaceIncluded || ancientFragment.invisibleSpaceIncluded) {
-                    numberFragment.spaceIncluded = true;
+                if (ancientFragment.spaceDetected || ancientFragment.invisibleSpaceIncluded) {
+                    numberFragment.spaceDetected = true;
                     numberFragment.invalidReason = numberFragment.invalidReason || {};
                     numberFragment.invalidReason.invalidSpaceIncluded = true;
                 }
@@ -679,7 +679,7 @@ export class MyanmarTextFragmenter {
         return {
             matchedStr: diacriticsFragment.matchedStr,
             normalizedStr: diacriticsFragment.normalizedStr,
-            spaceIncluded: diacriticsFragment.spaceIncluded,
+            spaceDetected: diacriticsFragment.spaceDetected,
             invisibleSpaceIncluded: diacriticsFragment.invisibleSpaceIncluded,
             measureWords
         };
@@ -690,7 +690,7 @@ export class MyanmarTextFragmenter {
         let normalizedStr = input[0];
         let tmpSpace = '';
         let tmpInvisibleIncluded = false;
-        let spaceIncluded = false;
+        let spaceDetected = false;
         let invisibleSpaceIncluded = false;
         let curStr = input.substring(1);
 
@@ -706,7 +706,7 @@ export class MyanmarTextFragmenter {
                 matchedStr += tmpSpace + c;
                 normalizedStr += c;
                 if (tmpSpace) {
-                    spaceIncluded = true;
+                    spaceDetected = true;
                     if (tmpInvisibleIncluded) {
                         invisibleSpaceIncluded = true;
                     }
@@ -744,7 +744,7 @@ export class MyanmarTextFragmenter {
         return {
             matchedStr,
             normalizedStr,
-            spaceIncluded,
+            spaceDetected,
             invisibleSpaceIncluded
         };
     }
@@ -792,12 +792,12 @@ export class MyanmarTextFragmenter {
                 numberExtractInfo.numberStr += '\u1044';
                 numberExtractInfo.normalizedStr += '\u1044';
             } else if (this._visibleSpaceRegExp.test(c)) {
-                numberExtractInfo.spaceIncluded = true;
+                numberExtractInfo.spaceDetected = true;
                 if (allowSpaceInNormalizedStr) {
                     numberExtractInfo.normalizedStr += '\u0020';
                 }
             } else if (this._invisibleSpaceRegExp.test(c)) {
-                numberExtractInfo.spaceIncluded = true;
+                numberExtractInfo.spaceDetected = true;
                 numberExtractInfo.invisibleSpaceIncluded = true;
             } else {
                 numberExtractInfo.normalizedStr += c;
@@ -881,7 +881,7 @@ export class MyanmarTextFragmenter {
                 prevIsDigit = false;
                 prevIsSpace = false;
             } else if (this._visibleSpaceRegExp.test(c)) {
-                extractInfo.spaceIncluded = true;
+                extractInfo.spaceDetected = true;
                 extractInfo.normalizedStr += ' ';
                 if (cp !== 0x0020) {
                     extractInfo.normalizationReason = extractInfo.normalizationReason || {};
@@ -890,7 +890,7 @@ export class MyanmarTextFragmenter {
                 prevIsDigit = false;
                 prevIsSpace = true;
             } else if (this._invisibleSpaceRegExp.test(c)) {
-                extractInfo.spaceIncluded = true;
+                extractInfo.spaceDetected = true;
                 invisibleSpaceIncluded = true;
                 extractInfo.normalizationReason = extractInfo.normalizationReason || {};
                 extractInfo.normalizationReason.removeInvisibleSpace = true;
@@ -989,7 +989,7 @@ export class MyanmarTextFragmenter {
                     return null;
                 }
 
-                extractInfo.spaceIncluded = true;
+                extractInfo.spaceDetected = true;
 
                 if (prevIsSeparator) {
                     extractInfo.normalizationReason = extractInfo.normalizationReason || {};
@@ -1011,7 +1011,7 @@ export class MyanmarTextFragmenter {
                     return null;
                 }
 
-                extractInfo.spaceIncluded = true;
+                extractInfo.spaceDetected = true;
                 invisibleSpaceIncluded = true;
                 extractInfo.normalizationReason = extractInfo.normalizationReason || {};
                 extractInfo.normalizationReason.removeInvisibleSpace = true;
@@ -1064,7 +1064,7 @@ export class MyanmarTextFragmenter {
         let normalizedStr = '';
         let tmpSpace = '';
         let tmpInvisibleIncluded = false;
-        let spaceIncluded = false;
+        let spaceDetected = false;
         let invisibleSpaceIncluded = false;
         let curStr = str;
 
@@ -1111,7 +1111,7 @@ export class MyanmarTextFragmenter {
                 matchedStr += tmpSpace + c;
                 normalizedStr += c;
                 if (tmpSpace) {
-                    spaceIncluded = true;
+                    spaceDetected = true;
                     if (tmpInvisibleIncluded) {
                         invisibleSpaceIncluded = true;
                     }
@@ -1132,7 +1132,7 @@ export class MyanmarTextFragmenter {
         return {
             matchedStr,
             normalizedStr,
-            spaceIncluded,
+            spaceDetected,
             invisibleSpaceIncluded
         };
     }
