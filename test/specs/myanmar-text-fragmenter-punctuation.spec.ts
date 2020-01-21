@@ -10,7 +10,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     });
 
     // ၌
-    it(String.raw`should return alphabet fragment when input '\u104C'`, () => {
+    it(String.raw`should return punctuation fragment when input '\u104C'`, () => {
         const input = '\u104C';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
@@ -23,7 +23,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     });
 
     // ၍
-    it(String.raw`should return alphabet fragment when input '\u104D'`, () => {
+    it(String.raw`should return punctuation fragment when input '\u104D'`, () => {
         const input = '\u104D';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
@@ -36,7 +36,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     });
 
     // ၏
-    it(String.raw`should return alphabet fragment when input '\u104F'`, () => {
+    it(String.raw`should return punctuation fragment when input '\u104F'`, () => {
         const input = '\u104F';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
@@ -49,7 +49,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     });
 
     // ၊
-    it(String.raw`should return alphabet fragment when input '\u104A'`, () => {
+    it(String.raw`should return punctuation fragment when input '\u104A'`, () => {
         const input = '\u104A';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
@@ -62,7 +62,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     });
 
     // ။
-    it(String.raw`should return alphabet fragment when input '\u104B'`, () => {
+    it(String.raw`should return punctuation fragment when input '\u104B'`, () => {
         const input = '\u104B';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
@@ -75,7 +75,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     });
 
     // ၌ + any char
-    it(String.raw`should return alphabet fragment when input '\u104C\u1000'`, () => {
+    it(String.raw`should return punctuation fragment when input '\u104C\u1000'`, () => {
         const input = '\u104C\u1000';
         const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
         const expactedFragment: TextFragment = {
