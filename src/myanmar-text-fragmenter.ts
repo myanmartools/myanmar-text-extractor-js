@@ -298,6 +298,13 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
+        if (rightStr.length > 1 && extractInfo.spaceDetected && (this._spaceRegExp.test(rightStr[0]))) {
+            const cp = rightStr.codePointAt(1);
+            if (cp && cp >= 0x1040 && cp <= 0x1049) {
+                return null;
+            }
+        }
+
         return {
             matchedStr,
             fragmentType: FragmentType.PossibleDate,
@@ -1220,7 +1227,7 @@ export class MyanmarTextFragmenter {
         if (rightStr.length > 1 && ((firstCp >= 0x0021 && firstCp <= 0x002F) ||
             firstCp === 0x003A || (firstCp >= 0x003C && firstCp <= 0x003F) ||
             (firstCp >= 0x005B && firstCp <= 0x005F) || firstCp === 0x0060 ||
-            (firstCp >= 0x007B && firstCp <= 0x007E) || this._spaceRegExp.test(rightStr[0]))) {
+            (firstCp >= 0x007B && firstCp <= 0x007E))) {
             const cp = rightStr.codePointAt(1);
 
             if (!cp) {
