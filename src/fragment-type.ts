@@ -1,7 +1,8 @@
 export enum FragmentType {
-    Text = 0,
-    Punctuation = 1,
-    Number = 2,
-    PossibleDate = 3,
-    PossiblePhone = 4
+    Punctuation = 0,
+    Number = 1,
+    PossibleDate = 2,
+    PossibleTime = 3,
+    PossiblePhone = 4,
+    Alphabet = 5
 }
