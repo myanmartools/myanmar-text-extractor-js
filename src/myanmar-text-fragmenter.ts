@@ -129,17 +129,20 @@ export class MyanmarTextFragmenter {
             return punctuationOrSingleAlphabetFragment;
         }
 
-        const numberDateOrPhoneFragment = this.getNumberDateOrPhoneFragment(input, firstCp, prevFragments);
-        if (numberDateOrPhoneFragment != null) {
-            return numberDateOrPhoneFragment;
+        const numberDateOrPhoneNumberFragment = this.getNumberDateOrPhoneNumberFragment(input, firstCp, prevFragments);
+        if (numberDateOrPhoneNumberFragment != null) {
+            return numberDateOrPhoneNumberFragment;
         }
 
         return null;
     }
 
     private getPunctuationOrSingleAlphabetFragment(input: string, firstCp: number): TextFragment | null {
-        // ဤ / ဪ
-        if (firstCp === 0x1024 || firstCp === 0x102A) {
+        // ဤ / ဪ / Single letter length
+        if (firstCp === 0x1024 || firstCp === 0x102A ||
+            (input.length === 1 && ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
+                firstCp === 0x1023 || (firstCp >= 0x1025 && firstCp <= 0x1027) ||
+                firstCp === 0x1029 || firstCp === 0x103F || firstCp === 0x104E))) {
             return {
                 matchedStr: input[0],
                 normalizedStr: input[0],
@@ -160,7 +163,7 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getNumberDateOrPhoneFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberDateOrPhoneNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         const inputLen = input.length;
 
         if (inputLen > 3 && firstCp === 0x1004) {
