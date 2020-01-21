@@ -28,6 +28,15 @@ interface ExtractInfo {
     invalidReason?: InvalidReason;
 }
 
+interface DateExtractInfo {
+    normalizedStr: string;
+    spaceDetected?: boolean;
+    dateStr?: string;
+    timeStr?: string;
+    normalizationReason?: NormalizationReason;
+    invalidReason?: InvalidReason;
+}
+
 interface TextFragmentPartial {
     matchedStr: string;
     normalizedStr: string;
@@ -82,7 +91,7 @@ export class MyanmarTextFragmenter {
     private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
     private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
     private readonly _dtYMDWithoutSpace = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
-    private readonly _dtHMSRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})`);
+    private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})(?:[${this._space}]?:[${this._space}]?${this._dtMinuteSecondPattern})?`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -115,9 +124,9 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const punctuationOrSingleLetterWordFragment = this.getPunctuationOrSingleLetterWordFragment(input, firstCp);
-        if (punctuationOrSingleLetterWordFragment != null) {
-            return punctuationOrSingleLetterWordFragment;
+        const punctuationOrSingleAlphabetFragment = this.getPunctuationOrSingleAlphabetFragment(input, firstCp);
+        if (punctuationOrSingleAlphabetFragment != null) {
+            return punctuationOrSingleAlphabetFragment;
         }
 
         const numberDateOrPhoneFragment = this.getNumberDateOrPhoneFragment(input, firstCp, prevFragments);
@@ -128,13 +137,13 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getPunctuationOrSingleLetterWordFragment(input: string, firstCp: number): TextFragment | null {
+    private getPunctuationOrSingleAlphabetFragment(input: string, firstCp: number): TextFragment | null {
         // ဤ / ဪ
         if (firstCp === 0x1024 || firstCp === 0x102A) {
             return {
                 matchedStr: input[0],
                 normalizedStr: input[0],
-                fragmentType: FragmentType.Text
+                fragmentType: FragmentType.Alphabet
             };
         }
 
@@ -297,7 +306,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const extractInfo = this.getDateTimeExtractInfo(matchedStr);
+        const extractInfo = this.getDateExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
@@ -321,7 +330,7 @@ export class MyanmarTextFragmenter {
         };
     }
 
-    private detectAndAppendTimePart(matchedStr: string, rightStr: string, extractInfo: ExtractInfo): string | null {
+    private detectAndAppendTimePart(matchedStr: string, rightStr: string, extractInfo: DateExtractInfo): string | null {
         if (rightStr.length < 5) {
             return null;
         }
@@ -337,18 +346,20 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const m = trimedRightStr.match(this._dtHMSRegExp);
+        const m = trimedRightStr.match(this._dtTimeRegExp);
         if (m == null) {
             return null;
         }
 
         const timeMatchedStr = m[0];
-        const timeExtractInfo = this.getDateTimeExtractInfo(timeMatchedStr);
+        const timeExtractInfo = this.getDateExtractInfo(timeMatchedStr, true);
         if (timeExtractInfo == null) {
             return null;
         }
 
         const newMatchedStr = `${matchedStr}${spaceStr}${timeMatchedStr}`;
+
+        extractInfo.timeStr = timeExtractInfo.timeStr;
         extractInfo.spaceDetected = true;
         extractInfo.normalizedStr += ' ' + timeExtractInfo.normalizedStr;
 
@@ -1025,13 +1036,13 @@ export class MyanmarTextFragmenter {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getDateTimeExtractInfo(matchedStr: string): ExtractInfo | null {
-        const extractInfo: ExtractInfo = { normalizedStr: '' };
+    private getDateExtractInfo(matchedStr: string, forTime?: boolean): DateExtractInfo | null {
+        const extractInfo: DateExtractInfo = { normalizedStr: '' };
 
         let prevIsDigit = false;
         let prevIsSpace = false;
         let prevIsSeparator = false;
-        let lastSeparator: string | undefined;
+        let separator: string | undefined;
         let digitCount = 0;
         let u101DIncluded = false;
         let u104EIncluded = false;
@@ -1097,7 +1108,7 @@ export class MyanmarTextFragmenter {
                 prevIsSpace = true;
                 prevIsSeparator = false;
             } else {
-                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && lastSeparator && c !== lastSeparator)) {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && separator && c !== separator)) {
                     return null;
                 }
 
@@ -1110,7 +1121,7 @@ export class MyanmarTextFragmenter {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-                lastSeparator = c;
+                separator = c;
                 prevIsSeparator = true;
             }
         }
@@ -1132,6 +1143,12 @@ export class MyanmarTextFragmenter {
         if (u104EIncluded) {
             extractInfo.invalidReason = extractInfo.invalidReason || {};
             extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+        }
+
+        if (forTime) {
+            extractInfo.timeStr = extractInfo.normalizedStr;
+        } else {
+            extractInfo.dateStr = extractInfo.normalizedStr;
         }
 
         return extractInfo;
