@@ -35,6 +35,19 @@ describe('MyanmarTextFragmenter#getNextFragment#alphabet', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // ဤ + any char
+        it(String.raw`should return alphabet fragment when input '\u1024\u1000'`, () => {
+            const input = '\u1024\u1000';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '\u1024',
+                normalizedStr: '\u1024',
+                fragmentType: FragmentType.Alphabet
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('one-char', () => {
@@ -142,15 +155,6 @@ describe('MyanmarTextFragmenter#getNextFragment#alphabet', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
     });
-
-    // // ဤက -> ဤ
-    // it(String.raw`'\u1024\u1000' -> '\u1024'`, () => {
-    //     const fragment = fragmenter.getNextFragment('\u1024\u1000') as TextFragment;
-
-    //     expect(fragment.matchedString).toBe('\u1024',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeFalsy();
-    // });
 
     // Errors
     // 'ါ' -> 'ါ'
