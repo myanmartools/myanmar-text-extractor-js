@@ -122,9 +122,9 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const punctuationOrSingleAlphabetFragment = this.getPunctuationOrSingleAlphabetFragment(input, firstCp);
-        if (punctuationOrSingleAlphabetFragment != null) {
-            return punctuationOrSingleAlphabetFragment;
+        const punctuationOrAlphabetFragment = this.getPunctuationOrSingleCharAlphabetFragment(input, firstCp);
+        if (punctuationOrAlphabetFragment != null) {
+            return punctuationOrAlphabetFragment;
         }
 
         const numberDateOrPhoneNumberFragment = this.getNumberDateOrPhoneNumberFragment(input, firstCp, prevFragments);
@@ -135,7 +135,7 @@ export class MyanmarTextFragmenter {
         return null;
     }
 
-    private getPunctuationOrSingleAlphabetFragment(input: string, firstCp: number): TextFragment | null {
+    private getPunctuationOrSingleCharAlphabetFragment(input: string, firstCp: number): TextFragment | null {
         // ဤ / ဪ / Single letter length
         if (firstCp === 0x1024 || firstCp === 0x102A ||
             (input.length === 1 && ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
