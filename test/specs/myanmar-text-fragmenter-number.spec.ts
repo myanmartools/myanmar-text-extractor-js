@@ -39,6 +39,24 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
+    describe('inga-tin-taung-ancient', () => {
+        // င်္၁ါ
+        it(String.raw`should return number fragment when input '\u1004\u103A\u1039\u1041\u102B'`, () => {
+            const input = '\u1004\u103A\u1039\u1041\u102B';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                measureWords: ['အင်္ဂါ']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     // it(String.raw`should return number fragment when input '၀'`, () => {
     //     const input = '၀';
     //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
