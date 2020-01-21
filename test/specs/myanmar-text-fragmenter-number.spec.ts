@@ -10,9 +10,23 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     });
 
     describe('one-number', () => {
-        // က
+        // ၀
         it(String.raw`should return number fragment when input '\u1040'`, () => {
             const input = '\u1040';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // ၉
+        it(String.raw`should return number fragment when input '\u1049'`, () => {
+            const input = '\u1049';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
