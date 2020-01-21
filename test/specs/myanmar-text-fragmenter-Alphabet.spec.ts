@@ -76,6 +76,71 @@ describe('MyanmarTextFragmenter#getNextFragment#alphabet', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // ဥ
+        it(String.raw`should return alphabet fragment when input '\u1025'`, () => {
+            const input = '\u1025';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Alphabet
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // ဧ
+        it(String.raw`should return alphabet fragment when input '\u1027'`, () => {
+            const input = '\u1027';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Alphabet
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // ဩ
+        it(String.raw`should return alphabet fragment when input '\u1029'`, () => {
+            const input = '\u1029';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Alphabet
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // ဿ
+        it(String.raw`should return alphabet fragment when input '\u103F'`, () => {
+            const input = '\u103F';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Alphabet
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // ၎
+        it(String.raw`should return alphabet fragment when input '\u104E'`, () => {
+            const input = '\u104E';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Alphabet
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     // // ၊ -> ၊
