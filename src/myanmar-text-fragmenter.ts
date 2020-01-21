@@ -166,6 +166,15 @@ export class MyanmarTextFragmenter {
     private getNumberDateOrPhoneNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         const inputLen = input.length;
 
+        if (input.length === 1 && (firstCp >= 0x1040 && firstCp <= 0x1049)) {
+            return {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: input
+            };
+        }
+
         if (inputLen > 3 && firstCp === 0x1004) {
             const hsethaIngaTinOrTaungFragment = this.getIngaTinOrTaungAncientNumberFragment(input, firstCp);
             if (hsethaIngaTinOrTaungFragment != null) {
@@ -193,15 +202,6 @@ export class MyanmarTextFragmenter {
 
         if ((firstCp === 0x101D || firstCp === 0x104E) && input.length === 1) {
             return null;
-        }
-
-        if (input.length === 1) {
-            return {
-                matchedStr: input,
-                normalizedStr: input,
-                fragmentType: FragmentType.Number,
-                numberStr: input
-            };
         }
 
         const dateFragment = this.getDateFragment(input, firstCp);
