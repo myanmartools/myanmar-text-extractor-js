@@ -17,8 +17,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
-                dateStr: '၀၁-၀၁-၂၀၂၀'
+                fragmentType: FragmentType.PossibleDate
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -31,8 +30,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
-                dateStr: input
+                fragmentType: FragmentType.PossibleDate
             };
 
             expect(actualFragment).toEqual(expactedFragment);
