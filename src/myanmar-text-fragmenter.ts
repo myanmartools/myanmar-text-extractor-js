@@ -1215,8 +1215,13 @@ export class MyanmarTextFragmenter {
             return false;
         }
 
-        if (rightStr.length === 1 && (firstCp === 0x101D || firstCp === 0x104E)) {
-            return false;
+        if (firstCp === 0x101D || firstCp === 0x104E) {
+            if (rightStr.length === 1) {
+                return false;
+            }
+
+            const f = this.getDigitGroupFragment(rightStr);
+            return f == null ? true : false;
         }
 
         // # $ % + @ ＋
@@ -1236,6 +1241,11 @@ export class MyanmarTextFragmenter {
 
             if (cp >= 0x1040 && cp <= 0x1049) {
                 return false;
+            }
+
+            if (cp === 0x101D || cp === 0x104E) {
+                const f = this.getDigitGroupFragment(rightStr);
+                return f == null ? true : false;
             }
         }
 
