@@ -47,4 +47,30 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
 
         expect(actualFragment).toEqual(expactedFragment);
     });
+
+    // ၊
+    it(String.raw`should return alphabet fragment when input '\u104A'`, () => {
+        const input = '\u104A';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Punctuation
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    // ။
+    it(String.raw`should return alphabet fragment when input '\u104B'`, () => {
+        const input = '\u104B';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.Punctuation
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 });
