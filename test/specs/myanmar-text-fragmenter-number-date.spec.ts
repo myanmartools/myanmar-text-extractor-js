@@ -17,7 +17,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate
+                fragmentType: FragmentType.PossibleDate,
+                dateStr: '၀၁-၀၁-၂၀၂၀'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -30,7 +31,8 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate
+                fragmentType: FragmentType.PossibleDate,
+                dateStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -201,33 +203,6 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // dd-MM-yyyy hh:mm:ss
-        it(String.raw`should return date fragment when input '၃၁-၀၁-၂၀၂၀ ၂၃:၅၉:၅၉'`, () => {
-            const input = '၃၁-၀၁-၂၀၂၀ ၂၃:၅၉:၅၉';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // Invalid time
-        it(String.raw`should return date fragment when input '၃၁-၀၁-၂၀၂၀ ၂၄:၆၉:၆၉'`, () => {
-            const input = '၃၁-၀၁-၂၀၂၀ ၂၄:၆၉:၆၉';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: '၃၁-၀၁-၂၀၂၀',
-                normalizedStr: '၃၁-၀၁-၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate
             };
 
