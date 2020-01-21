@@ -1,4 +1,6 @@
+import { FragmentType } from '../../src/fragment-type';
 import { MyanmarTextFragmenter } from '../../src/myanmar-text-fragmenter';
+import { TextFragment } from '../../src/text-fragment';
 
 describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     let fragmenter: MyanmarTextFragmenter;
@@ -7,8 +9,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
-    it('should be defined', () => {
-        expect(fragmenter).toBeDefined();
+    describe('one-number', () => {
+        // က
+        it(String.raw`should return number fragment when input '\u1040'`, () => {
+            const input = '\u1040';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     // it(String.raw`should return number fragment when input '၀'`, () => {
