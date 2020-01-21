@@ -73,4 +73,18 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
 
         expect(actualFragment).toEqual(expactedFragment);
     });
+
+    // ၌ + Any char
+    it(String.raw`should return alphabet fragment when input '\u104C\u1000'`, () => {
+        const input = '\u104C\u1000';
+        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: '\u104C',
+            normalizedStr: '\u104C',
+            fragmentType: FragmentType.Punctuation
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
+    });
+
 });
