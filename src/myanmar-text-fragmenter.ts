@@ -272,7 +272,7 @@ export class MyanmarTextFragmenter {
 
         return {
             matchedStr,
-            fragmentType: FragmentType.PossiblePhone,
+            fragmentType: FragmentType.PossiblePhoneNumber,
             ...extractInfo
         };
     }
