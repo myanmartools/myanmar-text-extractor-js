@@ -21,7 +21,7 @@ interface NumberExtractInfo {
     invisibleSpaceIncluded?: boolean;
 }
 
-interface ExtractInfo {
+interface PhoneNumberExtractInfo {
     normalizedStr: string;
     spaceDetected?: boolean;
     normalizationReason?: NormalizationReason;
@@ -31,8 +31,6 @@ interface ExtractInfo {
 interface DateExtractInfo {
     normalizedStr: string;
     spaceDetected?: boolean;
-    dateStr?: string;
-    timeStr?: string;
     normalizationReason?: NormalizationReason;
     invalidReason?: InvalidReason;
 }
@@ -355,14 +353,12 @@ export class MyanmarTextFragmenter {
         }
 
         const timeMatchedStr = m[0];
-        const timeExtractInfo = this.getDateExtractInfo(timeMatchedStr, true);
+        const timeExtractInfo = this.getDateExtractInfo(timeMatchedStr);
         if (timeExtractInfo == null) {
             return null;
         }
 
         const newMatchedStr = `${matchedStr}${spaceStr}${timeMatchedStr}`;
-
-        extractInfo.timeStr = timeExtractInfo.timeStr;
         extractInfo.spaceDetected = true;
         extractInfo.normalizedStr += ' ' + timeExtractInfo.normalizedStr;
 
@@ -900,8 +896,8 @@ export class MyanmarTextFragmenter {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getPhoneExtractInfo(matchedStr: string): ExtractInfo | null {
-        const extractInfo: ExtractInfo = {
+    private getPhoneExtractInfo(matchedStr: string): PhoneNumberExtractInfo | null {
+        const extractInfo: PhoneNumberExtractInfo = {
             normalizedStr: ''
         };
 
@@ -1039,7 +1035,7 @@ export class MyanmarTextFragmenter {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getDateExtractInfo(matchedStr: string, forTime?: boolean): DateExtractInfo | null {
+    private getDateExtractInfo(matchedStr: string): DateExtractInfo | null {
         const extractInfo: DateExtractInfo = { normalizedStr: '' };
 
         let prevIsDigit = false;
@@ -1146,12 +1142,6 @@ export class MyanmarTextFragmenter {
         if (u104EIncluded) {
             extractInfo.invalidReason = extractInfo.invalidReason || {};
             extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
-        }
-
-        if (forTime) {
-            extractInfo.timeStr = extractInfo.normalizedStr;
-        } else {
-            extractInfo.dateStr = extractInfo.normalizedStr;
         }
 
         return extractInfo;
