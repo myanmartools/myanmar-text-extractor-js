@@ -2,7 +2,7 @@ import { FragmentType } from '../../src/fragment-type';
 import { MyanmarTextFragmenter } from '../../src/myanmar-text-fragmenter';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
+describe('MyanmarTextFragmenter#getNextFragment#date', () => {
     let fragmenter: MyanmarTextFragmenter;
 
     beforeEach(() => {
