@@ -207,6 +207,20 @@ describe('MyanmarTextFragmenter#getNextFragment#number#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // dd-MM-yyyy hh:mm:ss
+        it(String.raw`should return date fragment when input '၃၁-၀၁-၂၀၂၀ ၂၃:၅၉:၅၉'`, () => {
+            const input = '၃၁-၀၁-၂၀၂၀ ၂၃:၅၉:၅၉';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.PossibleDate,
+                spaceDetected: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Ends with -
         it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀-'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀-';
