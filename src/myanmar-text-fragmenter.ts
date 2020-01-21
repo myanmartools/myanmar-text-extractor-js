@@ -414,21 +414,15 @@ export class MyanmarTextFragmenter {
         let matchedStr = input.substring(0, 4);
         let normalizedStr = matchedStr;
         let spaceDetected: boolean | undefined;
-        let invisibleSpaceIncluded: boolean | undefined;
 
         if (input[4] !== '\u102B') {
-            if (input.length < 6 || input[5] !== '\u102B') {
+            if (input.length < 6 || input[5] !== '\u102B' || !this._spaceRegExp.test(input[4])) {
                 return null;
             }
-            const subStr = input.substring(matchedStr.length);
-            const normalizedTextInfo = this.getNormalizedTextInfo(subStr, 2);
-            if (normalizedTextInfo.normalizedStr !== '\u102B') {
-                return null;
-            }
-            matchedStr += normalizedTextInfo.matchedStr;
-            normalizedStr += normalizedTextInfo.normalizedStr;
-            spaceDetected = normalizedTextInfo.spaceDetected;
-            invisibleSpaceIncluded = normalizedTextInfo.invisibleSpaceIncluded;
+
+            matchedStr += input[4] + input[5];
+            normalizedStr += input[5];
+            spaceDetected = true;
         } else {
             matchedStr += input[4];
             normalizedStr += input[4];
@@ -450,7 +444,7 @@ export class MyanmarTextFragmenter {
             measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
 
-        if (spaceDetected || invisibleSpaceIncluded) {
+        if (spaceDetected) {
             numberFragment.spaceDetected = true;
             numberFragment.invalidReason = numberFragment.invalidReason || {};
             numberFragment.invalidReason.invalidSpaceIncluded = true;
