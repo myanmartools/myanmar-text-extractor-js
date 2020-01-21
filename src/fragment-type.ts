@@ -3,6 +3,6 @@ export enum FragmentType {
     Number = 1,
     PossibleDate = 2,
     PossibleTime = 3,
-    PossiblePhone = 4,
+    PossiblePhoneNumber = 4,
     Alphabet = 5
 }
