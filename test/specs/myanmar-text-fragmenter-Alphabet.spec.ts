@@ -1,6 +1,6 @@
 import { MyanmarTextFragmenter } from '../../src/myanmar-text-fragmenter';
 
-describe('MyanmarTextFragmenter#getNextFragment#text', () => {
+describe('MyanmarTextFragmenter#getNextFragment#alphabet', () => {
     let fragmenter: MyanmarTextFragmenter;
 
     beforeEach(() => {
