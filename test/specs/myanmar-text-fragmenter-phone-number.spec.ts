@@ -4,7 +4,7 @@ import { TextFragment } from '../../src/text-fragment';
 
 import { formatCodePoints } from './../shared/format-code-points';
 
-describe('MyanmarTextFragmenter#getNextFragment#number#phone', () => {
+describe('MyanmarTextFragmenter#getNextFragment#phone-number', () => {
     let fragmenter: MyanmarTextFragmenter;
 
     beforeEach(() => {
