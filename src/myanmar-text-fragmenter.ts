@@ -74,11 +74,15 @@ export class MyanmarTextFragmenter {
     private readonly _dtMonthPattern = `\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtMonth1DigitPattern}`;
     private readonly _dtDay1DigitPattern = '[\u1041-\u1049\u104E]';
     private readonly _dtDayPattern = `[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtDay1DigitPattern}`;
+    private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043]|[\u1041-\u1049\u104E]`;
+    private readonly _dtMinuteSecondPattern = `[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E]`;
+
     private readonly _dtDMY1 = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
     private readonly _dtDMY2 = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
     private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
     private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
     private readonly _dtYMDWithoutSpace = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
+    private readonly _dtHMSRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -287,21 +291,26 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
         if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
-        const extractInfo = this.getDateExtractInfo(matchedStr);
+        const extractInfo = this.getDateTimeExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
 
-        if (rightStr.length > 1 && extractInfo.spaceDetected && (this._spaceRegExp.test(rightStr[0]))) {
-            const cp = rightStr.codePointAt(1);
-            if (cp && cp >= 0x1040 && cp <= 0x1049) {
-                return null;
+        if (rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
+            const newMatchedStr = this.detectAndAppendTimePart(matchedStr, rightStr, extractInfo);
+            if (newMatchedStr) {
+                matchedStr = newMatchedStr;
+            } else {
+                const cp = rightStr.codePointAt(1);
+                if (extractInfo.spaceDetected && cp && cp >= 0x1040 && cp <= 0x1049) {
+                    return null;
+                }
             }
         }
 
@@ -310,6 +319,59 @@ export class MyanmarTextFragmenter {
             fragmentType: FragmentType.PossibleDate,
             ...extractInfo
         };
+    }
+
+    private detectAndAppendTimePart(matchedStr: string, rightStr: string, extractInfo: ExtractInfo): string | null {
+        if (rightStr.length < 5) {
+            return null;
+        }
+
+        let spaceStr = '';
+        let trimedRightStr = rightStr;
+        while (this._spaceRegExp.test(trimedRightStr[0])) {
+            spaceStr += trimedRightStr[0];
+            trimedRightStr = trimedRightStr.substring(1);
+        }
+
+        if (trimedRightStr.length < 5) {
+            return null;
+        }
+
+        const m = trimedRightStr.match(this._dtHMSRegExp);
+        if (m == null) {
+            return null;
+        }
+
+        const timeMatchedStr = m[0];
+        const timeExtractInfo = this.getDateTimeExtractInfo(timeMatchedStr);
+        if (timeExtractInfo == null) {
+            return null;
+        }
+
+        const newMatchedStr = `${matchedStr}${spaceStr}${timeMatchedStr}`;
+        extractInfo.spaceDetected = true;
+        extractInfo.normalizedStr += ' ' + timeExtractInfo.normalizedStr;
+
+        if (spaceStr !== ' ') {
+            extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+            extractInfo.normalizationReason.normalizeSpace = true;
+        }
+
+        if (timeExtractInfo.normalizationReason) {
+            extractInfo.normalizationReason = {
+                ...extractInfo.normalizationReason,
+                ...timeExtractInfo.normalizationReason
+            };
+        }
+
+        if (timeExtractInfo.invalidReason) {
+            extractInfo.invalidReason = {
+                ...extractInfo.invalidReason,
+                ...timeExtractInfo.invalidReason
+            };
+        }
+
+        return newMatchedStr;
     }
 
     private getIngaTinOrTaungAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -963,7 +1025,7 @@ export class MyanmarTextFragmenter {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getDateExtractInfo(matchedStr: string): ExtractInfo | null {
+    private getDateTimeExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = { normalizedStr: '' };
 
         let prevIsDigit = false;
