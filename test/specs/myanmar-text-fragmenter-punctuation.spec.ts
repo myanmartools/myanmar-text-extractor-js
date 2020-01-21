@@ -86,5 +86,4 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
 
         expect(actualFragment).toEqual(expactedFragment);
     });
-
 });
