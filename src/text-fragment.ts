@@ -30,14 +30,6 @@ export interface TextFragment {
      * Digit string for number fragment type.
      */
     numberStr?: string;
-    /**
-     * Date part string for date fragment type.
-     */
-    dateStr?: string;
-    /**
-     * Time part string for date fragment type.
-     */
-    timeStr?: string;
     measureWords?: string[];
     /**
      * The reason object for normalized string.
