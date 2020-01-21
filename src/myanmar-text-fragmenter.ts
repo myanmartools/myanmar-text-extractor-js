@@ -174,9 +174,9 @@ export class MyanmarTextFragmenter {
         }
 
         if (inputLen > 3 && firstCp === 0x1004) {
-            const hsethaIngaTinOrTaungFragment = this.getIngaTinOrTaungAncientNumberFragment(input, firstCp);
-            if (hsethaIngaTinOrTaungFragment != null) {
-                return hsethaIngaTinOrTaungFragment;
+            const ingaTinOrTaungAncientNumberFragment = this.getIngaTinOrTaungAncientNumberFragment(input, firstCp);
+            if (ingaTinOrTaungAncientNumberFragment != null) {
+                return ingaTinOrTaungAncientNumberFragment;
             }
         }
 
