@@ -34,6 +34,8 @@ export interface TextFragment {
      * Detected measure words for ancient number fragment type.
      */
     ancientMeasureWords?: string[];
+    dateFormat?: string;
+    dateSeparator?: string;
     /**
      * The reason object for normalized string.
      */
