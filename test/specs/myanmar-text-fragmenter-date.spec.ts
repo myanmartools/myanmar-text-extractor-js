@@ -9,7 +9,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
-    describe('valid', () => {
+    describe('day-month-year', () => {
         // dd-MM-yyyy
         it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀';
@@ -141,19 +141,47 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // M/d/yyyy
-        it(String.raw`should return date fragment when input '၁/၃၁/၂၀၂၀'`, () => {
-            const input = '၁/၃၁/၂၀၂၀';
+        // Ends with -
+        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀-'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀-';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
             const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with /
+        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀/'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀/';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
+                fragmentType: FragmentType.PossibleDate
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with \u1000
+        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀\u1000'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀\u1000';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
+                fragmentType: FragmentType.PossibleDate
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('year-month-day', () => {
         // yyyy/MM/dd
         it(String.raw`should return date fragment when input '၂၀၂၀/၀၁/၃၁'`, () => {
             const input = '၂၀၂၀/၀၁/၃၁';
@@ -219,14 +247,29 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+    });
 
-        // Ends with -
-        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀-'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀-';
+    describe('month-day-year', () => {
+        // MM/dd/yyyy
+        it(String.raw`should return date fragment when input '၁၂/၃၁/၂၀၂၀'`, () => {
+            const input = '၁၂/၃၁/၂၀၂၀';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
             const expactedFragment: TextFragment = {
-                matchedStr: '၀၁-၀၁-၂၀၂၀',
-                normalizedStr: '၀၁-၀၁-၂၀၂၀',
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.PossibleDate
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // M/d/yyyy
+        it(String.raw`should return date fragment when input '၁/၃၁/၂၀၂၀'`, () => {
+            const input = '၁/၃၁/၂၀၂၀';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
                 fragmentType: FragmentType.PossibleDate
             };
 
