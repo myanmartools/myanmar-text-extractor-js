@@ -30,7 +30,10 @@ export interface TextFragment {
      * Digit string for number fragment type.
      */
     numberStr?: string;
-    measureWords?: string[];
+    /**
+     * Detected measure words for ancient number fragment type.
+     */
+    ancientMeasureWords?: string[];
     /**
      * The reason object for normalized string.
      */
