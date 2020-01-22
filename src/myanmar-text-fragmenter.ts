@@ -164,6 +164,40 @@ export class MyanmarTextFragmenter {
     private getNumberDateOrPhoneNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         const inputLen = input.length;
 
+        if (inputLen === 1 && (firstCp === 0x101D || firstCp === 0x104E)) {
+            return null;
+        }
+
+        if ((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x101D || firstCp === 0x104E) {
+            const dateFragment = this.getDateFragment(input, firstCp);
+            if (dateFragment != null) {
+                return dateFragment;
+            }
+
+            const orderListFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
+            if (orderListFragment != null) {
+                return orderListFragment;
+            }
+
+            if (inputLen > 2) {
+                const phoneFragment = this.getPhoneFragment(input, firstCp);
+                const digitGroupFragment = this.getDigitGroupFragment(input);
+
+                if (phoneFragment != null && digitGroupFragment != null) {
+                    return digitGroupFragment.matchedStr.length > phoneFragment.matchedStr.length ?
+                        digitGroupFragment : phoneFragment;
+                }
+
+                if (phoneFragment != null) {
+                    return phoneFragment;
+                }
+
+                return digitGroupFragment;
+            }
+
+            return this.getDigitGroupFragment(input);
+        }
+
         if (input.length === 1 && (firstCp >= 0x1040 && firstCp <= 0x1049)) {
             return {
                 matchedStr: input,
@@ -194,41 +228,7 @@ export class MyanmarTextFragmenter {
             }
         }
 
-        if (!((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x101D || firstCp === 0x104E)) {
-            return null;
-        }
-
-        if ((firstCp === 0x101D || firstCp === 0x104E) && input.length === 1) {
-            return null;
-        }
-
-        const dateFragment = this.getDateFragment(input, firstCp);
-        if (dateFragment != null) {
-            return dateFragment;
-        }
-
-        const orderListFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
-        if (orderListFragment != null) {
-            return orderListFragment;
-        }
-
-        if (inputLen > 2) {
-            const phoneFragment = this.getPhoneFragment(input, firstCp);
-            const digitGroupFragment = this.getDigitGroupFragment(input);
-
-            if (phoneFragment != null && digitGroupFragment != null) {
-                return digitGroupFragment.matchedStr.length > phoneFragment.matchedStr.length ?
-                    digitGroupFragment : phoneFragment;
-            }
-
-            if (phoneFragment != null) {
-                return phoneFragment;
-            }
-
-            return digitGroupFragment;
-        }
-
-        return this.getDigitGroupFragment(input);
+        return null;
     }
 
     private getBracketPrefixFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
