@@ -50,7 +50,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
                 fragmentType: FragmentType.Number,
                 numberStr: '၁',
                 ancientWrittenForm: true,
-                measureWords: ['အင်္ဂါ']
+                ancientMeasureWords: ['အင်္ဂါ']
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -375,7 +375,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၁',
     //         ancient: true,
-    //         measureWords: ['အင်္ဂါ']
+    //         ancientMeasureWords: ['အင်္ဂါ']
     //     });
     // });
 
@@ -391,7 +391,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၂၀',
     //         ancient: true,
-    //         measureWords: ['အင်္ဂါ']
+    //         ancientMeasureWords: ['အင်္ဂါ']
     //     });
     // });
 
@@ -407,7 +407,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၁၉၂၀',
     //         ancient: true,
-    //         measureWords: ['အင်္ဂါ'],
+    //         ancientMeasureWords: ['အင်္ဂါ'],
     //         numberStrnumberSeparatorIncluded: true
     //     });
     // });
@@ -425,7 +425,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၁',
     //         ancient: true,
-    //         measureWords: ['အင်္ဂါ'],
+    //         ancientMeasureWords: ['အင်္ဂါ'],
     //         spaceDetected: true,
     //         error: {
     //             invalidSpaceIncluded: true,
@@ -446,7 +446,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၁',
     //         ancient: true,
-    //         measureWords: ['တောင်း', 'တင်း']
+    //         ancientMeasureWords: ['တောင်း', 'တင်း']
     //     });
     // });
 
@@ -462,7 +462,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၁၀',
     //         ancient: true,
-    //         measureWords: ['ဆယ်သား']
+    //         ancientMeasureWords: ['ဆယ်သား']
     //     });
     // });
 
@@ -478,7 +478,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၁၀',
     //         ancient: true,
-    //         measureWords: ['ဆယ်သား'],
+    //         ancientMeasureWords: ['ဆယ်သား'],
     //         spaceDetected: true,
     //         error: {
     //             invalidSpaceIncluded: true
@@ -498,7 +498,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     //         fragmentType: FragmentType.Number,
     //         numberStr: '၄၀',
     //         ancient: true,
-    //         measureWords: ['ဆယ်သား'],
+    //         ancientMeasureWords: ['ဆယ်သား'],
     //         error: {
     //             invalidU104EInsteadOfU1044: true
     //         }
