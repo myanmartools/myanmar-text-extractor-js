@@ -62,7 +62,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate
+                fragmentType: FragmentType.PossibleDate,
+                dateFormat: 'dd_MM_yyyy',
+                dateSeparator: '_'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
