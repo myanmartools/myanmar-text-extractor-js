@@ -84,11 +84,12 @@ export class MyanmarTextFragmenter {
     private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043]|[\u1041-\u1049\u104E]`;
     private readonly _dtMinuteSecondPattern = `[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E]`;
 
-    private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
-    private readonly _dtDMYWith2DigitYear = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
-    private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
-    private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
-    private readonly _dtYMDIso = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
+    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigits}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,4})`);
+    private readonly _dtDMYRegExp = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
+    private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
+    private readonly _dtYMDRegExp = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
+    private readonly _dtMDYRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
+    private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
     private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})(?:[${this._space}]?:[${this._space}]?${this._dtMinuteSecondPattern})?`);
 
     // Phone Number
@@ -280,21 +281,25 @@ export class MyanmarTextFragmenter {
     }
 
     private getDateFragment(input: string): TextFragment | null {
-        let m = input.match(this._dtDMY);
+        if (!this._dtDateQuickRegExp.test(input)) {
+            return null;
+        }
+
+        let m = input.match(this._dtDMYRegExp);
         if (m == null) {
-            m = input.match(this._dtYMD);
+            m = input.match(this._dtYMDRegExp);
         }
 
         if (m == null) {
-            m = input.match(this._dtMDY);
+            m = input.match(this._dtMDYRegExp);
         }
 
         if (m == null && input.length > 7) {
-            m = input.match(this._dtYMDIso);
+            m = input.match(this._dtYMDIsoRegExp);
         }
 
         if (m == null) {
-            m = input.match(this._dtDMYWith2DigitYear);
+            m = input.match(this._dtDMYWith2DigitYearRegExp);
         }
 
         if (m == null) {
