@@ -328,7 +328,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 spaceDetected: true,
                 normalizationReason: {
                     normalizeSpace: true
-                }
+                },
+                dateFormat: 'dd MM yyyy',
+                dateSeparator: ' '
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -345,7 +347,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 spaceDetected: true,
                 normalizationReason: {
                     removeSpace: true
-                }
+                },
+                dateFormat: 'dd၊MM၊yyyy',
+                dateSeparator: '၊'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -362,7 +366,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 spaceDetected: true,
                 normalizationReason: {
                     removeSpace: true
-                }
+                },
+                dateFormat: 'dd/MM/yyyy',
+                dateSeparator: '/'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
