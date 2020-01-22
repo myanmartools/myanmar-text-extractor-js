@@ -389,7 +389,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 },
                 invalidReason: {
                     invalidU101DInsteadOfU1040: true
-                }
+                },
+                dateFormat: 'dd၊MM၊yyyy',
+                dateSeparator: '၊'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -408,7 +410,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 },
                 invalidReason: {
                     invalidU104EInsteadOfU1044: true
-                }
+                },
+                dateFormat: 'dd၊MM၊yyyy',
+                dateSeparator: '၊'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -429,7 +433,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 invalidReason: {
                     invalidU104EInsteadOfU1044: true,
                     invalidU101DInsteadOfU1040: true
-                }
+                },
+                dateFormat: 'dd၊MM၊yyyy',
+                dateSeparator: '၊'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -449,7 +455,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 },
                 invalidReason: {
                     invalidSpaceIncluded: true
-                }
+                },
+                dateFormat: 'dd MM yyyy',
+                dateSeparator: ' '
             };
 
             expect(actualFragment).toEqual(expactedFragment);
