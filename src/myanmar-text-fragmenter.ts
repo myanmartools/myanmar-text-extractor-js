@@ -179,11 +179,6 @@ export class MyanmarTextFragmenter {
                 }
             }
 
-            const orderListFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
-            if (orderListFragment != null) {
-                return orderListFragment;
-            }
-
             if (inputLen > 2) {
                 const phoneFragment = this.getPhoneFragment(input, firstCp);
                 const digitGroupFragment = this.getDigitGroupFragment(input);
@@ -198,6 +193,11 @@ export class MyanmarTextFragmenter {
                 }
 
                 return digitGroupFragment;
+            }
+
+            const orderListFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
+            if (orderListFragment != null) {
+                return orderListFragment;
             }
 
             return this.getDigitGroupFragment(input);
