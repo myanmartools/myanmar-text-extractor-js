@@ -39,7 +39,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         });
     });
 
-    describe('inga-tin-taung-ancient', () => {
+    describe('inga-tin-taung-ancient-number', () => {
         // င်္၁ါ
         it(String.raw`should return number fragment when input '\u1004\u103A\u1039\u1041\u102B'`, () => {
             const input = '\u1004\u103A\u1039\u1041\u102B';
