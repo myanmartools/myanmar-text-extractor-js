@@ -43,7 +43,7 @@ interface TextFragmentPartial {
     invisibleSpaceIncluded?: boolean;
 
     numberStr?: string;
-    measureWords?: string[];
+    ancientMeasureWords?: string[];
     numberOrderList?: boolean;
 }
 
@@ -317,17 +317,12 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        // if (rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
-        //     const newMatchedStr = this.detectAndAppendTimePart(matchedStr, rightStr, extractInfo);
-        //     if (newMatchedStr) {
-        //         matchedStr = newMatchedStr;
-        //     } else {
-        //         const cp = rightStr.codePointAt(1);
-        //         if (extractInfo.spaceDetected && cp && cp >= 0x1040 && cp <= 0x1049) {
-        //             return null;
-        //         }
-        //     }
-        // }
+        if (rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
+            const cp = rightStr.codePointAt(1);
+            if (extractInfo.spaceDetected && cp && cp >= 0x1040 && cp <= 0x1049) {
+                return null;
+            }
+        }
 
         return {
             matchedStr,
@@ -446,7 +441,7 @@ export class MyanmarTextFragmenter {
             ancientWrittenForm: true,
             numberStr: c4,
             // အင်္ဂါ
-            measureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
+            ancientMeasureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
 
         if (spaceDetected) {
@@ -485,13 +480,13 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        let measureWords: string[];
+        let ancientMeasureWords: string[];
         if (rightStr && rightStr.trimLeft().startsWith('\u1010\u1031\u102C\u1004\u103A\u1038')) {
-            measureWords = ['\u1010\u1031\u102C\u1004\u103A\u1038'];
+            ancientMeasureWords = ['\u1010\u1031\u102C\u1004\u103A\u1038'];
         } else if (rightStr && rightStr.trimLeft().startsWith('\u1010\u1004\u103A\u1038')) {
-            measureWords = ['\u1010\u1004\u103A\u1038'];
+            ancientMeasureWords = ['\u1010\u1004\u103A\u1038'];
         } else {
-            measureWords = [
+            ancientMeasureWords = [
                 '\u1010\u1031\u102C\u1004\u103A\u1038',
                 '\u1010\u1004\u103A\u1038'
             ];
@@ -504,7 +499,7 @@ export class MyanmarTextFragmenter {
             ancientWrittenForm: true,
             numberStr: c4,
             // အင်္ဂါ
-            measureWords
+            ancientMeasureWords
         };
     }
 
@@ -543,7 +538,7 @@ export class MyanmarTextFragmenter {
             ancientWrittenForm: true,
             numberStr: numberExtractInfo.numberStr,
             // ဆယ်သား
-            measureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
+            ancientMeasureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
 
         if (numberExtractInfo.u104eCount) {
@@ -682,7 +677,7 @@ export class MyanmarTextFragmenter {
                 numberFragment.numberStr = numberFragment.numberStr || '';
                 numberFragment.numberStr += ancientFragment.numberStr || '';
                 numberFragment.ancientWrittenForm = true;
-                numberFragment.measureWords = ancientFragment.measureWords;
+                numberFragment.ancientMeasureWords = ancientFragment.ancientMeasureWords;
 
                 if (ancientFragment.spaceDetected || ancientFragment.invisibleSpaceIncluded) {
                     numberFragment.spaceDetected = true;
@@ -702,64 +697,64 @@ export class MyanmarTextFragmenter {
 
         const diacriticsFragment = this.getDiacriticsFragment(input);
 
-        let measureWords: string[] | undefined;
+        let ancientMeasureWords: string[] | undefined;
 
         if (diacriticsFragment.normalizedStr === '\u103D\u1031') {
             // ရွေး
-            measureWords = ['\u101B\u103D\u1031\u1038'];
+            ancientMeasureWords = ['\u101B\u103D\u1031\u1038'];
         } else if (diacriticsFragment.normalizedStr === '\u102D') {
             // ကျပ် / စိတ် / မိုက်
-            measureWords = [
+            ancientMeasureWords = [
                 '\u1000\u103B\u1015\u103A',
                 '\u1005\u102D\u1010\u103A',
                 '\u1019\u102D\u102F\u1000\u103A'
             ];
         } else if (diacriticsFragment.normalizedStr === '\u103D\u102C') {
             // ထွာ
-            measureWords = ['\u1011\u103D\u102C'];
+            ancientMeasureWords = ['\u1011\u103D\u102C'];
         } else if (diacriticsFragment.normalizedStr === '\u1032') {
             // ပဲ / စလယ် / ပယ်
-            measureWords = [
+            ancientMeasureWords = [
                 '\u1015\u1032',
                 '\u1005\u101C\u101A\u103A',
                 '\u1015\u101A\u103A'
             ];
         } else if (diacriticsFragment.normalizedStr === '\u1030') {
             // မူး
-            measureWords = ['\u1019\u1030\u1038'];
+            ancientMeasureWords = ['\u1019\u1030\u1038'];
         } else if (diacriticsFragment.normalizedStr === '\u1036') {
             // လက်သစ် / မတ်
-            measureWords = [
+            ancientMeasureWords = [
                 '\u101C\u1000\u103A\u101E\u1005\u103A',
                 '\u1019\u1010\u103A'
             ];
         } else if (diacriticsFragment.normalizedStr === '\u103B\u1000\u103A') {
             // လမျက်
-            measureWords = ['\u101C\u1019\u103B\u1000\u103A'];
+            ancientMeasureWords = ['\u101C\u1019\u103B\u1000\u103A'];
         } else if (diacriticsFragment.normalizedStr === '\u101A\u103A') {
             // လမယ်
-            measureWords = ['\u101C\u1019\u101A\u103A'];
+            ancientMeasureWords = ['\u101C\u1019\u101A\u103A'];
         } else if (diacriticsFragment.normalizedStr === '\u103D\u1000\u103A') {
             // ခွက်
-            measureWords = ['\u1001\u103D\u1000\u103A'];
+            ancientMeasureWords = ['\u1001\u103D\u1000\u103A'];
         } else if (diacriticsFragment.normalizedStr === '\u103A') {
             // ပြည်
-            measureWords = ['\u1015\u103C\u100A\u103A'];
+            ancientMeasureWords = ['\u1015\u103C\u100A\u103A'];
         } else if (diacriticsFragment.normalizedStr === '\u103D\u1032') {
             // ခွဲ
-            measureWords = ['\u1001\u103D\u1032'];
+            ancientMeasureWords = ['\u1001\u103D\u1032'];
         } else if (diacriticsFragment.normalizedStr === '\u102B') {
             // ပိဿာ
-            measureWords = ['\u1015\u102D\u103F\u102C'];
+            ancientMeasureWords = ['\u1015\u102D\u103F\u102C'];
         } else if (diacriticsFragment.normalizedStr === '\u102B\u1038') {
             // ပြား / ပါး
-            measureWords = [
+            ancientMeasureWords = [
                 '\u1015\u103C\u102C\u1038',
                 '\u1015\u102B\u1038'
             ];
         }
 
-        if (!measureWords || !measureWords.length) {
+        if (!ancientMeasureWords || !ancientMeasureWords.length) {
             return null;
         }
 
@@ -768,7 +763,7 @@ export class MyanmarTextFragmenter {
             normalizedStr: diacriticsFragment.normalizedStr,
             spaceDetected: diacriticsFragment.spaceDetected,
             invisibleSpaceIncluded: diacriticsFragment.invisibleSpaceIncluded,
-            measureWords
+            ancientMeasureWords
         };
     }
 
