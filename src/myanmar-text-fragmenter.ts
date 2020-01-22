@@ -84,11 +84,11 @@ export class MyanmarTextFragmenter {
     private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043]|[\u1041-\u1049\u104E]`;
     private readonly _dtMinuteSecondPattern = `[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E]`;
 
-    private readonly _dtDMY1 = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
-    private readonly _dtDMY2 = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
+    private readonly _dtDMY = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
+    private readonly _dtDMYWith2DigitYear = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
     private readonly _dtYMD = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
     private readonly _dtMDY = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
-    private readonly _dtYMDWithoutSpace = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
+    private readonly _dtYMDIso = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
     private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})(?:[${this._space}]?:[${this._space}]?${this._dtMinuteSecondPattern})?`);
 
     // Phone Number
@@ -163,15 +163,19 @@ export class MyanmarTextFragmenter {
 
     private getNumberDateOrPhoneNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
         const inputLen = input.length;
+        const isStartsWithNumber = firstCp >= 0x1040 && firstCp <= 0x1049;
+        const isStartsWithPossibleNumber = !isStartsWithNumber && (firstCp === 0x101D || firstCp === 0x104E);
 
-        if (inputLen === 1 && (firstCp === 0x101D || firstCp === 0x104E)) {
-            return null;
-        }
+        if (isStartsWithNumber || isStartsWithPossibleNumber) {
+            if (inputLen === 1 && isStartsWithPossibleNumber) {
+                return null;
+            }
 
-        if ((firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x101D || firstCp === 0x104E) {
-            const dateFragment = this.getDateFragment(input, firstCp);
-            if (dateFragment != null) {
-                return dateFragment;
+            if (inputLen > 5) {
+                const dateFragment = this.getDateFragment(input);
+                if (dateFragment != null) {
+                    return dateFragment;
+                }
             }
 
             const orderListFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
@@ -275,12 +279,8 @@ export class MyanmarTextFragmenter {
         };
     }
 
-    private getDateFragment(input: string, firstCp: number): TextFragment | null {
-        if (input.length < 6 || !this.startsWithPossibleNumber(firstCp)) {
-            return null;
-        }
-
-        let m = input.match(this._dtDMY1);
+    private getDateFragment(input: string): TextFragment | null {
+        let m = input.match(this._dtDMY);
         if (m == null) {
             m = input.match(this._dtYMD);
         }
@@ -290,11 +290,11 @@ export class MyanmarTextFragmenter {
         }
 
         if (m == null && input.length > 7) {
-            m = input.match(this._dtYMDWithoutSpace);
+            m = input.match(this._dtYMDIso);
         }
 
         if (m == null) {
-            m = input.match(this._dtDMY2);
+            m = input.match(this._dtDMYWith2DigitYear);
         }
 
         if (m == null) {
