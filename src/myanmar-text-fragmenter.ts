@@ -31,6 +31,8 @@ interface PhoneNumberExtractInfo {
 interface DateExtractInfo {
     normalizedStr: string;
     spaceDetected?: boolean;
+    dateSeparator?: string;
+    dateFormat?: string;
     normalizationReason?: NormalizationReason;
     invalidReason?: InvalidReason;
 }
@@ -1034,13 +1036,13 @@ export class MyanmarTextFragmenter {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getDateExtractInfo(matchedStr: string): DateExtractInfo | null {
+    private getDateExtractInfo(matchedStr: string, monthStart?: boolean): DateExtractInfo | null {
         const extractInfo: DateExtractInfo = { normalizedStr: '' };
 
         let prevIsDigit = false;
         let prevIsSpace = false;
         let prevIsSeparator = false;
-        let separator: string | undefined;
+        let dateSeparator: string | undefined;
         let digitCount = 0;
         let u101DIncluded = false;
         let u104EIncluded = false;
@@ -1106,7 +1108,7 @@ export class MyanmarTextFragmenter {
                 prevIsSpace = true;
                 prevIsSeparator = false;
             } else {
-                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && separator && c !== separator)) {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && dateSeparator && c !== dateSeparator)) {
                     return null;
                 }
 
@@ -1119,13 +1121,48 @@ export class MyanmarTextFragmenter {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-                separator = c;
+                dateSeparator = c;
                 prevIsSeparator = true;
             }
         }
 
         if (!digitCount) {
             return null;
+        }
+
+        if (dateSeparator) {
+            extractInfo.dateSeparator = dateSeparator;
+        } else if (extractInfo.spaceDetected) {
+            extractInfo.dateSeparator = ' ';
+        }
+
+        if (extractInfo.dateSeparator != null) {
+            const dParts = extractInfo.normalizedStr.split(extractInfo.dateSeparator);
+            if (dParts[0].length === 4) {
+                if (dParts[1].length === 2 && dParts[2].length === 2) {
+                    extractInfo.dateFormat = `yyyy${extractInfo.dateSeparator}MM${extractInfo.dateSeparator}dd`;
+                } else {
+                    extractInfo.dateFormat = `yyyy${extractInfo.dateSeparator}M${extractInfo.dateSeparator}d`;
+                }
+            } else if (dParts[2].length === 4) {
+                if (dParts[0].length === 2 && dParts[1].length === 2) {
+                    extractInfo.dateFormat = monthStart ?
+                        `MM${extractInfo.dateSeparator}dd${extractInfo.dateSeparator}yyyy` : `dd${extractInfo.dateSeparator}MM${extractInfo.dateSeparator}yyyy`;
+                } else {
+                    extractInfo.dateFormat = monthStart ?
+                        `M${extractInfo.dateSeparator}d${extractInfo.dateSeparator}yyyy` : `d${extractInfo.dateSeparator}M${extractInfo.dateSeparator}yyyy`;
+                }
+            } else {
+                if (dParts[0].length === 2 && dParts[1].length === 2) {
+                    extractInfo.dateFormat = monthStart ?
+                        `MM${extractInfo.dateSeparator}dd${extractInfo.dateSeparator}yy` : `dd${extractInfo.dateSeparator}MM${extractInfo.dateSeparator}yy`;
+                } else {
+                    extractInfo.dateFormat = monthStart ?
+                        `M${extractInfo.dateSeparator}d${extractInfo.dateSeparator}yy` : `d${extractInfo.dateSeparator}M${extractInfo.dateSeparator}yy`;
+                }
+            }
+        } else {
+            extractInfo.dateFormat = 'yyyyMMdd';
         }
 
         if (invisibleSpaceIncluded) {
