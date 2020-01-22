@@ -288,6 +288,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
+        let monthStart = false;
         let m = input.match(this._dtDMYRegExp);
         if (m == null) {
             m = input.match(this._dtYMDRegExp);
@@ -295,6 +296,9 @@ export class MyanmarTextFragmenter {
 
         if (m == null) {
             m = input.match(this._dtMDYRegExp);
+            if (m != null) {
+                monthStart = true;
+            }
         }
 
         if (m == null && input.length > 7) {
@@ -307,6 +311,9 @@ export class MyanmarTextFragmenter {
 
         if (m == null) {
             m = input.match(this._dtMDYWith2DigitYearRegExp);
+            if (m != null) {
+                monthStart = true;
+            }
         }
 
         if (m == null) {
@@ -319,7 +326,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        const extractInfo = this.getDateExtractInfo(matchedStr);
+        const extractInfo = this.getDateExtractInfo(matchedStr, monthStart);
         if (extractInfo == null) {
             return null;
         }
@@ -1073,7 +1080,7 @@ export class MyanmarTextFragmenter {
                 prevIsDigit = true;
                 prevIsSpace = false;
                 prevIsSeparator = false;
-            } else if (this._visibleSpaceRegExp.test(c)) {
+            } else if (this._spaceRegExp.test(c)) {
                 if (prevIsSpace) {
                     return null;
                 }
@@ -1087,23 +1094,14 @@ export class MyanmarTextFragmenter {
                     extractInfo.normalizedStr += ' ';
 
                     if (cp !== 0x0020) {
+                        if (this._invisibleSpaceRegExp.test(c)) {
+                            invisibleSpaceIncluded = true;
+                        }
                         extractInfo.normalizationReason = extractInfo.normalizationReason || {};
                         extractInfo.normalizationReason.normalizeSpace = true;
                     }
                 }
 
-                prevIsDigit = false;
-                prevIsSpace = true;
-                prevIsSeparator = false;
-            } else if (this._invisibleSpaceRegExp.test(c)) {
-                if (prevIsSpace) {
-                    return null;
-                }
-
-                extractInfo.spaceDetected = true;
-                invisibleSpaceIncluded = true;
-                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
-                extractInfo.normalizationReason.removeInvisibleSpace = true;
                 prevIsDigit = false;
                 prevIsSpace = true;
                 prevIsSeparator = false;
