@@ -183,16 +183,16 @@ export class MyanmarTextFragmenter {
             }
 
             if (inputLen > 2) {
-                const phoneFragment = this.getPhoneFragment(input, firstCp);
+                const phoneNumberFragment = this.getPhoneNumberFragment(input, firstCp);
                 const digitGroupFragment = this.getDigitGroupFragment(input);
 
-                if (phoneFragment != null && digitGroupFragment != null) {
-                    return digitGroupFragment.matchedStr.length > phoneFragment.matchedStr.length ?
-                        digitGroupFragment : phoneFragment;
+                if (phoneNumberFragment != null && digitGroupFragment != null) {
+                    return digitGroupFragment.matchedStr.length > phoneNumberFragment.matchedStr.length ?
+                        digitGroupFragment : phoneNumberFragment;
                 }
 
-                if (phoneFragment != null) {
-                    return phoneFragment;
+                if (phoneNumberFragment != null) {
+                    return phoneNumberFragment;
                 }
 
                 return digitGroupFragment;
@@ -223,9 +223,9 @@ export class MyanmarTextFragmenter {
         }
 
         if (inputLen > 3 && (firstCp === 0x002A || firstCp === 0x002B || firstCp === 0xFF0B)) {
-            const phoneFragment = this.getPhoneFragment(input, firstCp);
-            if (phoneFragment != null) {
-                return phoneFragment;
+            const phoneNumberFragment = this.getPhoneNumberFragment(input, firstCp);
+            if (phoneNumberFragment != null) {
+                return phoneNumberFragment;
             }
         }
 
@@ -245,7 +245,7 @@ export class MyanmarTextFragmenter {
             return hsethaFragment;
         }
 
-        const phoneNumberFragment = this.getPhoneFragment(input, firstCp);
+        const phoneNumberFragment = this.getPhoneNumberFragment(input, firstCp);
         const boxNumberFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
 
         if (phoneNumberFragment != null && boxNumberFragment != null) {
@@ -260,7 +260,7 @@ export class MyanmarTextFragmenter {
         }
     }
 
-    private getPhoneFragment(input: string, firstCp: number): TextFragment | null {
+    private getPhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
         if (input.length < 3 || !this.startsWithPossibleNumberOrBracket(firstCp)) {
             return null;
         }
