@@ -10,6 +10,13 @@ interface NormalizedTextInfo {
     invisibleSpaceIncluded?: boolean;
 }
 
+interface ExtractInfo {
+    normalizedStr: string;
+    spaceDetected?: boolean;
+    normalizationReason?: NormalizationReason;
+    invalidReason?: InvalidReason;
+}
+
 interface NumberExtractInfo {
     normalizedStr: string;
     numberStr: string;
@@ -28,13 +35,9 @@ interface PhoneNumberExtractInfo {
     invalidReason?: InvalidReason;
 }
 
-interface DateExtractInfo {
-    normalizedStr: string;
-    spaceDetected?: boolean;
+interface DateExtractInfo extends ExtractInfo {
     dateSeparator?: string;
     dateFormat?: string;
-    normalizationReason?: NormalizationReason;
-    invalidReason?: InvalidReason;
 }
 
 interface TextFragmentPartial {
@@ -83,8 +86,8 @@ export class MyanmarTextFragmenter {
     private readonly _dtMonthPattern = `\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtMonth1DigitPattern}`;
     private readonly _dtDay1DigitPattern = '[\u1041-\u1049\u104E]';
     private readonly _dtDayPattern = `[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtDay1DigitPattern}`;
-    // private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043]|[\u1041-\u1049\u104E]`;
-    // private readonly _dtMinuteSecondPattern = `[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E]`;
+    private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043]|[\u1041-\u1049\u104E]`;
+    private readonly _dtMinuteSecondPattern = `[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E]`;
 
     private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigits}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,4})`);
     private readonly _dtDMYRegExp = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
@@ -93,7 +96,7 @@ export class MyanmarTextFragmenter {
     private readonly _dtMDYRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
     private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
     private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
-    // private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})(?:[${this._space}]?:[${this._space}]?${this._dtMinuteSecondPattern})?`);
+    private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})(?:[${this._space}]?:[${this._space}]?${this._dtMinuteSecondPattern})?`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -183,7 +186,12 @@ export class MyanmarTextFragmenter {
             }
 
             if (inputLen > 2) {
-                const phoneNumberFragment = this.getPhoneNumberFragment(input, firstCp);
+                const timeFragment = this.getTimeFragment(input);
+                if (timeFragment != null) {
+                    return timeFragment;
+                }
+
+                const phoneNumberFragment = this.getPhoneNumberFragment(input);
                 const digitGroupFragment = this.getDigitGroupFragment(input);
 
                 if (phoneNumberFragment != null && digitGroupFragment != null) {
@@ -223,7 +231,7 @@ export class MyanmarTextFragmenter {
         }
 
         if (inputLen > 3 && (firstCp === 0x002A || firstCp === 0x002B || firstCp === 0xFF0B)) {
-            const phoneNumberFragment = this.getPhoneNumberFragment(input, firstCp);
+            const phoneNumberFragment = this.getPhoneNumberFragment(input);
             if (phoneNumberFragment != null) {
                 return phoneNumberFragment;
             }
@@ -245,7 +253,7 @@ export class MyanmarTextFragmenter {
             return hsethaFragment;
         }
 
-        const phoneNumberFragment = this.getPhoneNumberFragment(input, firstCp);
+        const phoneNumberFragment = this.getPhoneNumberFragment(input);
         const boxNumberFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
 
         if (phoneNumberFragment != null && boxNumberFragment != null) {
@@ -258,29 +266,6 @@ export class MyanmarTextFragmenter {
         } else {
             return null;
         }
-    }
-
-    private getPhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
-        if (input.length < 3 || !this.startsWithPossibleNumberOrBracket(firstCp)) {
-            return null;
-        }
-
-        const m = input.match(this._phRegExp);
-        if (m == null) {
-            return null;
-        }
-
-        const matchedStr = m[0];
-        const extractInfo = this.getPhoneExtractInfo(matchedStr);
-        if (extractInfo == null) {
-            return null;
-        }
-
-        return {
-            matchedStr,
-            fragmentType: FragmentType.PossiblePhoneNumber,
-            ...extractInfo
-        };
     }
 
     private getDateFragment(input: string): TextFragment | null {
@@ -341,6 +326,53 @@ export class MyanmarTextFragmenter {
         return {
             matchedStr,
             fragmentType: FragmentType.PossibleDate,
+            ...extractInfo
+        };
+    }
+
+    private getTimeFragment(input: string): TextFragment | null {
+        const m = input.match(this._dtTimeRegExp);
+
+        if (m == null) {
+            return null;
+        }
+
+        const matchedStr = m[0];
+        const rightStr = input.substring(matchedStr.length);
+        if (rightStr) {
+            const cp = rightStr.codePointAt(0);
+            if (cp && cp >= 0x1040 && cp <= 0x1049) {
+                return null;
+            }
+        }
+
+        const extractInfo = this.getTimeExtractInfo(matchedStr);
+        if (extractInfo == null) {
+            return null;
+        }
+
+        return {
+            matchedStr,
+            fragmentType: FragmentType.PossibleTime,
+            ...extractInfo
+        };
+    }
+
+    private getPhoneNumberFragment(input: string): TextFragment | null {
+        const m = input.match(this._phRegExp);
+        if (m == null) {
+            return null;
+        }
+
+        const matchedStr = m[0];
+        const extractInfo = this.getPhoneExtractInfo(matchedStr);
+        if (extractInfo == null) {
+            return null;
+        }
+
+        return {
+            matchedStr,
+            fragmentType: FragmentType.PossiblePhoneNumber,
             ...extractInfo
         };
     }
@@ -1181,6 +1213,61 @@ export class MyanmarTextFragmenter {
         return extractInfo;
     }
 
+    private getTimeExtractInfo(matchedStr: string): ExtractInfo | null {
+        const extractInfo: ExtractInfo = { normalizedStr: '' };
+
+        let digitCount = 0;
+        let u101DIncluded = false;
+        let u104EIncluded = false;
+
+        for (const c of matchedStr) {
+            const cp = c.codePointAt(0) as number;
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
+                ++digitCount;
+                extractInfo.normalizedStr += c;
+            } else if (cp === 0x101D || cp === 0x104E) {
+                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+
+                if (cp === 0x101D) {
+                    u101DIncluded = true;
+                    extractInfo.normalizedStr += '\u1040';
+                    extractInfo.normalizationReason.changeU101DToU1040 = true;
+                } else {
+                    u104EIncluded = true;
+                    extractInfo.normalizedStr += '\u1044';
+                    extractInfo.normalizationReason.changeU104EToU1044 = true;
+                }
+            } else if (this._spaceRegExp.test(c)) {
+                extractInfo.spaceDetected = true;
+
+                extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                extractInfo.normalizationReason.removeSpace = true;
+
+                extractInfo.invalidReason = extractInfo.invalidReason || {};
+                extractInfo.invalidReason.invalidSpaceIncluded = true;
+            } else {
+                extractInfo.normalizedStr += c;
+            }
+        }
+
+        if (!digitCount) {
+            return null;
+        }
+
+        if (u101DIncluded) {
+            extractInfo.invalidReason = extractInfo.invalidReason || {};
+            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (u104EIncluded) {
+            extractInfo.invalidReason = extractInfo.invalidReason || {};
+            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+        }
+
+        return extractInfo;
+    }
+
     private getNormalizedTextInfo(str: string, upTo?: number, acceptAllOtherChars?: boolean): NormalizedTextInfo {
         let matchedStr = '';
         let normalizedStr = '';
@@ -1267,21 +1354,21 @@ export class MyanmarTextFragmenter {
         return false;
     }
 
-    private startsWithPossibleNumber(cp: number): boolean {
-        if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x101D || cp === 0x104E) {
-            return true;
-        }
+    // private startsWithPossibleNumber(cp: number): boolean {
+    //     if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x101D || cp === 0x104E) {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    private startsWithPossibleNumberOrBracket(cp: number): boolean {
-        if (this.startsWithPossibleNumber(cp) || this.startsWithOpeningBracket(cp)) {
-            return true;
-        }
+    // private startsWithPossibleNumberOrBracket(cp: number): boolean {
+    //     if (this.startsWithPossibleNumber(cp) || this.startsWithOpeningBracket(cp)) {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     private hasCorrectClosingBracket(openingBracketCp: number, str: string): boolean {
         for (const c of str) {
