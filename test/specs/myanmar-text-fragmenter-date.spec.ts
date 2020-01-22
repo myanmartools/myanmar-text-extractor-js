@@ -168,7 +168,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate
+                fragmentType: FragmentType.PossibleDate,
+                dateFormat: 'dd-MM-yyyy',
+                dateSeparator: '-'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -181,7 +183,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate
+                fragmentType: FragmentType.PossibleDate,
+                dateFormat: 'dd/MM/yyyy',
+                dateSeparator: '/'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -194,7 +198,9 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate
+                fragmentType: FragmentType.PossibleDate,
+                dateFormat: 'dd-MM-yyyy',
+                dateSeparator: '-'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
