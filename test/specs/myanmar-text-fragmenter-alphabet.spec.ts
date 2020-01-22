@@ -50,7 +50,7 @@ describe('MyanmarTextFragmenter#getNextFragment#alphabet', () => {
         });
     });
 
-    describe('one-char', () => {
+    describe('single-char-input', () => {
         // က
         it(String.raw`should return alphabet fragment when input '\u1000'`, () => {
             const input = '\u1000';

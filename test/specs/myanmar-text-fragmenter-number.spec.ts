@@ -9,7 +9,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         fragmenter = new MyanmarTextFragmenter();
     });
 
-    describe('one-number', () => {
+    describe('single-char-input', () => {
         // ၀
         it(String.raw`should return number fragment when input '\u1040'`, () => {
             const input = '\u1040';
