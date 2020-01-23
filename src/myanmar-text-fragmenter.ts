@@ -1265,22 +1265,17 @@ export class MyanmarTextFragmenter {
             }
         }
 
-        if (!digitCount) {
+        if (!digitCount || !colonSeparatorCount) {
             return null;
         }
 
-        if (!colonSeparatorCount) {
-            return null;
-        }
-
-        if (u101DIncluded) {
+        if (u101DIncluded || u104EIncluded) {
             extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (u104EIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+            if (u101DIncluded) {
+                extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
+            } else {
+                extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+            }
         }
 
         return extractInfo;
