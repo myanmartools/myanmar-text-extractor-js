@@ -61,6 +61,45 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Ends with \u1000
+        it(String.raw`should return time fragment when input '၂၃:၅၉:၅၉\u1000'`, () => {
+            const input = '၂၃:၅၉:၅၉\u1000';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                fragmentType: FragmentType.PossibleTime
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with \u101D
+        it(String.raw`should return time fragment when input '၂၃:၅၉:၅၉\u101D'`, () => {
+            const input = '၂၃:၅၉:၅၉\u101D';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                fragmentType: FragmentType.PossibleTime
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with \u104E
+        it(String.raw`should return time fragment when input '၂၃:၅၉:၅၉\u104E'`, () => {
+            const input = '၂၃:၅၉:၅၉\u104E';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                fragmentType: FragmentType.PossibleTime
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('hour-minute', () => {
