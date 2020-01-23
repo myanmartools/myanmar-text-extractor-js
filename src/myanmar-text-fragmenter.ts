@@ -333,7 +333,7 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        if (rightStr && this.isRightStrPossibleNumber(rightStr)) {
+        if (rightStr && !this.isRightStrSafeForTime(rightStr)) {
             return null;
         }
 
@@ -1433,6 +1433,36 @@ export class MyanmarTextFragmenter {
             cp === 0x003A || (cp >= 0x003C && cp <= 0x003F) ||
             (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
             (cp >= 0x007B && cp <= 0x007E))) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleNumber(rightStr2)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private isRightStrSafeForTime(rightStr: string): boolean {
+        if (!rightStr) {
+            return true;
+        }
+
+        if (this.isRightStrPossibleNumber(rightStr)) {
+            return false;
+        }
+
+        const cp = rightStr.codePointAt(0);
+
+        if (!cp) {
+            return true;
+        }
+
+        if (rightStr.length > 1 && (cp === 0x0021 ||
+            (cp >= 0x0023 && cp <= 0x0027) ||
+            (cp >= 0x002A && cp <= 0x002F) ||
+            (cp >= 0x003A && cp <= 0x003F) ||
+            cp === 0x005C || cp === 0x005E || cp === 0x005F ||
+            cp === 0x0060 || cp === 0x007C || cp === 0x007E)) {
             const rightStr2 = rightStr.substring(1);
             if (this.isRightStrPossibleNumber(rightStr2)) {
                 return false;
