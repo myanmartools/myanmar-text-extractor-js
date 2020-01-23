@@ -931,148 +931,6 @@ export class MyanmarTextExtractor implements TextExtractor {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getPhoneExtractInfo(matchedStr: string): ExtractInfo | null {
-        const extractInfo: ExtractInfo = {
-            normalizedStr: ''
-        };
-
-        let curStr = matchedStr;
-        let startOfString = true;
-        let prevIsDigit = false;
-        let prevIsSpace = false;
-        let digitCount = 0;
-        let possibleDigitCount = 0;
-        let dotCount = 0;
-        let slashCount = 0;
-        let u101DIncluded = false;
-        let u104EIncluded = false;
-        let invisibleSpaceIncluded = false;
-
-        if (curStr[0] === '+' || curStr[0] === '\uFF0B') {
-            extractInfo.normalizedStr += '+';
-            if (curStr[0] !== '+') {
-                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                extractInfo.normalizeReason.normalizePlusSign = true;
-            }
-
-            curStr = curStr.substring(1);
-            startOfString = false;
-        }
-
-        for (let i = 0; i < curStr.length; i++) {
-            const c = curStr[i];
-            const cp = c.codePointAt(0) as number;
-
-            if (cp >= 0x1040 && cp <= 0x1049) {
-                ++digitCount;
-                ++possibleDigitCount;
-                extractInfo.normalizedStr += c;
-                prevIsDigit = true;
-                prevIsSpace = false;
-            } else if (cp === 0x101D || cp === 0x104E) {
-                ++possibleDigitCount;
-                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                if (cp === 0x101D) {
-                    u101DIncluded = true;
-                    extractInfo.normalizedStr += '\u1040';
-                    extractInfo.normalizeReason.changeU101DToU1040 = true;
-                } else {
-                    u104EIncluded = true;
-                    extractInfo.normalizedStr += '\u1044';
-                    extractInfo.normalizeReason.changeU104EToU1044 = true;
-                }
-
-                prevIsDigit = true;
-                prevIsSpace = false;
-            } else if (cp === 0x002A) {
-                if (!prevIsDigit && !startOfString) {
-                    return null;
-                }
-
-                extractInfo.normalizedStr += c;
-                prevIsDigit = false;
-                prevIsSpace = false;
-            } else if (cp === 0x0023) {
-                if (!prevIsDigit) {
-                    return null;
-                }
-
-                extractInfo.normalizedStr += c;
-                break;
-            } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
-                if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
-                    return null;
-                }
-
-                extractInfo.normalizedStr += c;
-                prevIsDigit = false;
-                prevIsSpace = false;
-            } else if (this._visibleSpaceRegExp.test(c)) {
-                extractInfo.spaceDetected = true;
-                extractInfo.normalizedStr += ' ';
-                if (cp !== 0x0020) {
-                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.normalizeSpace = true;
-                }
-                prevIsDigit = false;
-                prevIsSpace = true;
-            } else if (this._invisibleSpaceRegExp.test(c)) {
-                extractInfo.spaceDetected = true;
-                invisibleSpaceIncluded = true;
-                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                extractInfo.normalizeReason.removeInvisibleSpace = true;
-                prevIsDigit = false;
-                prevIsSpace = true;
-            } else {
-                if (!prevIsDigit && !prevIsSpace && !startOfString) {
-                    return null;
-                }
-
-                if (cp === 0x002E) {
-                    ++dotCount;
-                } else if (cp === 0x002F) {
-                    ++slashCount;
-                }
-
-                extractInfo.normalizedStr += c;
-                prevIsDigit = false;
-                prevIsSpace = false;
-            }
-
-            startOfString = false;
-        }
-
-        if (!digitCount) {
-            return null;
-        }
-
-        if (invisibleSpaceIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidSpaceIncluded = true;
-        }
-
-        if (u101DIncluded || u104EIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            if (u101DIncluded) {
-                extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-            } else {
-                extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
-            }
-        }
-
-        if (dotCount === 1 && possibleDigitCount + 1 === extractInfo.normalizedStr.length && extractInfo.normalizedStr[0] !== '\u1040') {
-            return null;
-        }
-
-        if (slashCount === 1 && possibleDigitCount + 1 === extractInfo.normalizedStr.length &&
-            possibleDigitCount < 8 && extractInfo.normalizedStr[0] !== '\u1040') {
-            return null;
-        }
-
-        return extractInfo;
-    }
-
-    // tslint:disable-next-line: max-func-body-length
     private getDateExtractInfo(matchedStr: string, monthStart?: boolean): DateExtractInfo | null {
         const extractInfo: DateExtractInfo = { normalizedStr: '' };
 
@@ -1267,13 +1125,157 @@ export class MyanmarTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (u101DIncluded || u104EIncluded) {
+        if (u101DIncluded) {
             extractInfo.invalidReason = extractInfo.invalidReason || {};
-            if (u101DIncluded) {
-                extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-            } else {
-                extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (u104EIncluded) {
+            extractInfo.invalidReason = extractInfo.invalidReason || {};
+            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+        }
+
+        return extractInfo;
+    }
+
+    // tslint:disable-next-line: max-func-body-length
+    private getPhoneExtractInfo(matchedStr: string): ExtractInfo | null {
+        const extractInfo: ExtractInfo = {
+            normalizedStr: ''
+        };
+
+        let curStr = matchedStr;
+        let startOfString = true;
+        let prevIsDigit = false;
+        let prevIsSpace = false;
+        let digitCount = 0;
+        let possibleDigitCount = 0;
+        let dotCount = 0;
+        let slashCount = 0;
+        let u101DIncluded = false;
+        let u104EIncluded = false;
+        let invisibleSpaceIncluded = false;
+
+        if (curStr[0] === '+' || curStr[0] === '\uFF0B') {
+            extractInfo.normalizedStr += '+';
+            if (curStr[0] !== '+') {
+                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                extractInfo.normalizeReason.normalizePlusSign = true;
             }
+
+            curStr = curStr.substring(1);
+            startOfString = false;
+        }
+
+        for (let i = 0; i < curStr.length; i++) {
+            const c = curStr[i];
+            const cp = c.codePointAt(0) as number;
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
+                ++digitCount;
+                ++possibleDigitCount;
+                extractInfo.normalizedStr += c;
+                prevIsDigit = true;
+                prevIsSpace = false;
+            } else if (cp === 0x101D || cp === 0x104E) {
+                ++possibleDigitCount;
+                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                if (cp === 0x101D) {
+                    u101DIncluded = true;
+                    extractInfo.normalizedStr += '\u1040';
+                    extractInfo.normalizeReason.changeU101DToU1040 = true;
+                } else {
+                    u104EIncluded = true;
+                    extractInfo.normalizedStr += '\u1044';
+                    extractInfo.normalizeReason.changeU104EToU1044 = true;
+                }
+
+                prevIsDigit = true;
+                prevIsSpace = false;
+            } else if (cp === 0x002A) {
+                if (!prevIsDigit && !startOfString) {
+                    return null;
+                }
+
+                extractInfo.normalizedStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
+            } else if (cp === 0x0023) {
+                if (!prevIsDigit) {
+                    return null;
+                }
+
+                extractInfo.normalizedStr += c;
+                break;
+            } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
+                if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
+                    return null;
+                }
+
+                extractInfo.normalizedStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
+            } else if (this._visibleSpaceRegExp.test(c)) {
+                extractInfo.spaceDetected = true;
+                extractInfo.normalizedStr += ' ';
+                if (cp !== 0x0020) {
+                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                    extractInfo.normalizeReason.normalizeSpace = true;
+                }
+                prevIsDigit = false;
+                prevIsSpace = true;
+            } else if (this._invisibleSpaceRegExp.test(c)) {
+                extractInfo.spaceDetected = true;
+                invisibleSpaceIncluded = true;
+                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                extractInfo.normalizeReason.removeInvisibleSpace = true;
+                prevIsDigit = false;
+                prevIsSpace = true;
+            } else {
+                if (!prevIsDigit && !prevIsSpace && !startOfString) {
+                    return null;
+                }
+
+                if (cp === 0x002E) {
+                    ++dotCount;
+                } else if (cp === 0x002F) {
+                    ++slashCount;
+                }
+
+                extractInfo.normalizedStr += c;
+                prevIsDigit = false;
+                prevIsSpace = false;
+            }
+
+            startOfString = false;
+        }
+
+        if (!digitCount) {
+            return null;
+        }
+
+        if (invisibleSpaceIncluded) {
+            extractInfo.invalidReason = extractInfo.invalidReason || {};
+            extractInfo.invalidReason.invalidSpaceIncluded = true;
+        }
+
+        if (u101DIncluded) {
+            extractInfo.invalidReason = extractInfo.invalidReason || {};
+            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
+        }
+
+        if (u104EIncluded) {
+            extractInfo.invalidReason = extractInfo.invalidReason || {};
+            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
+        }
+
+        if (dotCount === 1 && possibleDigitCount + 1 === extractInfo.normalizedStr.length && extractInfo.normalizedStr[0] !== '\u1040') {
+            return null;
+        }
+
+        if (slashCount === 1 && possibleDigitCount + 1 === extractInfo.normalizedStr.length &&
+            possibleDigitCount < 8 && extractInfo.normalizedStr[0] !== '\u1040') {
+            return null;
         }
 
         return extractInfo;
