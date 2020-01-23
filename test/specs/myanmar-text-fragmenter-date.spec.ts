@@ -326,7 +326,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
                 spaceDetected: true,
-                normalizationReason: {
+                normalizeReason: {
                     normalizeSpace: true
                 },
                 dateFormat: 'dd MM yyyy',
@@ -345,7 +345,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
                 spaceDetected: true,
-                normalizationReason: {
+                normalizeReason: {
                     removeSpace: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
@@ -364,7 +364,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 normalizedStr: '၃၁/၁၂/၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
                 spaceDetected: true,
-                normalizationReason: {
+                normalizeReason: {
                     removeSpace: true
                 },
                 dateFormat: 'dd/MM/yyyy',
@@ -384,7 +384,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                normalizationReason: {
+                normalizeReason: {
                     changeU101DToU1040: true
                 },
                 invalidReason: {
@@ -405,7 +405,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 matchedStr: input,
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                normalizationReason: {
+                normalizeReason: {
                     changeU104EToU1044: true
                 },
                 invalidReason: {
@@ -426,7 +426,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 matchedStr: input,
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                normalizationReason: {
+                normalizeReason: {
                     changeU104EToU1044: true,
                     changeU101DToU1040: true
                 },
@@ -450,7 +450,7 @@ describe('MyanmarTextFragmenter#getNextFragment#date', () => {
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
                 spaceDetected: true,
-                normalizationReason: {
+                normalizeReason: {
                     normalizeSpace: true
                 },
                 invalidReason: {
