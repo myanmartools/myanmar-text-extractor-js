@@ -118,7 +118,7 @@ export class MyanmarTextExtractor implements TextExtractor {
     //     this._options = options || {};
     // }
 
-    extractNext(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+    extractNext(input: string): TextFragment | null {
         const firstCp = input.codePointAt(0);
         if (!firstCp) {
             return null;
@@ -129,7 +129,7 @@ export class MyanmarTextExtractor implements TextExtractor {
             return punctuationOrSingleCharAlphabetFragment;
         }
 
-        const numberDateOrPhoneNumberFragment = this.getNumberDateOrPhoneNumberFragment(input, firstCp, prevFragments);
+        const numberDateOrPhoneNumberFragment = this.getNumberDateOrPhoneNumberFragment(input, firstCp);
         if (numberDateOrPhoneNumberFragment != null) {
             return numberDateOrPhoneNumberFragment;
         }
@@ -163,14 +163,19 @@ export class MyanmarTextExtractor implements TextExtractor {
         return null;
     }
 
-    private getNumberDateOrPhoneNumberFragment(input: string, firstCp: number, prevFragments?: TextFragment[]): TextFragment | null {
+    private getNumberDateOrPhoneNumberFragment(input: string, firstCp: number): TextFragment | null {
         const inputLen = input.length;
         const isStartsWithNumber = firstCp >= 0x1040 && firstCp <= 0x1049;
         const isStartsWithPossibleNumber = !isStartsWithNumber && (firstCp === 0x101D || firstCp === 0x104E);
 
         if (isStartsWithNumber || isStartsWithPossibleNumber) {
-            if (inputLen === 1 && isStartsWithPossibleNumber) {
-                return null;
+            if (inputLen === 1) {
+                return isStartsWithNumber ? {
+                    matchedStr: input,
+                    normalizedStr: input,
+                    fragmentType: FragmentType.Number,
+                    numberStr: input
+                } : null;
             }
 
             if (inputLen > 5) {
@@ -192,21 +197,7 @@ export class MyanmarTextExtractor implements TextExtractor {
                 }
             }
 
-            const orderListFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp, prevFragments);
-            if (orderListFragment != null) {
-                return orderListFragment;
-            }
-
             return this.getDigitGroupFragment(input);
-        }
-
-        if (input.length === 1 && (firstCp >= 0x1040 && firstCp <= 0x1049)) {
-            return {
-                matchedStr: input,
-                normalizedStr: input,
-                fragmentType: FragmentType.Number,
-                numberStr: input
-            };
         }
 
         if (inputLen > 3 && firstCp === 0x1004) {
