@@ -1224,7 +1224,6 @@ export class MyanmarTextFragmenter {
         let u101DIncluded = false;
         let u104EIncluded = false;
         let colonSeparatorCount = 0;
-        let nonColonSeparatorCount = 0;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
@@ -1257,8 +1256,6 @@ export class MyanmarTextFragmenter {
                 if (cp === 0x003A) {
                     ++colonSeparatorCount;
                 } else {
-                    ++nonColonSeparatorCount;
-
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     extractInfo.normalizeReason.normalizeColon = true;
 
@@ -1272,7 +1269,7 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        if (nonColonSeparatorCount > colonSeparatorCount) {
+        if (!colonSeparatorCount) {
             return null;
         }
 
