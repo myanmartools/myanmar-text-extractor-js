@@ -1,4 +1,6 @@
+import { FragmentType } from '../../src/fragment-type';
 import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
+import { TextFragment } from '../../src/text-fragment';
 
 describe('MyanmarTextExtractor#extractNext#phone-number', () => {
     let extractor: MyanmarTextExtractor;
@@ -7,76 +9,55 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
         extractor = new MyanmarTextExtractor();
     });
 
-    it('should be defined', () => {
-        expect(extractor).toBeDefined();
+    it(String.raw`should return phone number fragment when input '+၉၅၉'`, () => {
+        const input = '+၉၅၉';
+        const actualFragment = extractor.extractNext(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossiblePhoneNumber
+        };
+
+        expect(actualFragment).toEqual(expactedFragment);
     });
 
-    // it(String.raw`should return phone number fragment when input '+၉၅၉'`, () => {
-    //     const input = '+၉၅၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
+    it(String.raw`should return phone number fragment when input '+၉၅ ၉'`, () => {
+        const input = '+၉၅ ၉';
+        const actualFragment = extractor.extractNext(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossiblePhoneNumber,
+            spaceDetected: true
+        };
 
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '+၉၅၉',
-    //         possiblePhoneNumber: true,
-    //         plusSignIncluded: true
-    //     });
-    // });
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 
-    // it(String.raw`should return phone number fragment when input '+၉၅ ၉'`, () => {
-    //     const input = '+၉၅ ၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
+    it(String.raw`should return phone number fragment when input '+၉ ၅ ၉'`, () => {
+        const input = '+၉ ၅ ၉';
+        const actualFragment = extractor.extractNext(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossiblePhoneNumber,
+            spaceDetected: true
+        };
 
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '+၉၅၉',
-    //         possiblePhoneNumber: true,
-    //         plusSignIncluded: true,
-    //         spaceDetected: true
-    //     });
-    // });
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 
-    // it(String.raw`should return phone number fragment when input '+၉ ၅ ၉'`, () => {
-    //     const input = '+၉ ၅ ၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
+    it(String.raw`should return phone number fragment when input '+(၉၅)၉'`, () => {
+        const input = '+(၉၅)၉';
+        const actualFragment = extractor.extractNext(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossiblePhoneNumber
+        };
 
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '+၉၅၉',
-    //         possiblePhoneNumber: true,
-    //         plusSignIncluded: true,
-    //         spaceDetected: true
-    //     });
-    // });
-
-    // it(String.raw`should return phone number fragment when input '+(၉၅)၉'`, () => {
-    //     const input = '+(၉၅)၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '+၉၅၉',
-    //         possiblePhoneNumber: true,
-    //         plusSignIncluded: true,
-    //         numberStrnumberSeparatorIncluded: true
-    //     });
-    // });
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 
     // it(String.raw`should return phone number fragment when input '+(၉၅) ၉'`, () => {
     //     const input = '+(၉၅) ၉';
