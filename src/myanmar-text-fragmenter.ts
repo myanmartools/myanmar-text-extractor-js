@@ -340,13 +340,11 @@ export class MyanmarTextFragmenter {
                 }
 
                 if (cp === 0x101D || cp === 0x104E) {
-                    if (rightStr.length === 1) {
-                        return null;
-                    }
-
-                    const f = this.getDigitGroupFragment(rightStr);
-                    if (f != null) {
-                        return null;
+                    if (rightStr.length > 1) {
+                        const f = this.getDigitGroupFragment(rightStr);
+                        if (f != null) {
+                            return null;
+                        }
                     }
                 }
             }
