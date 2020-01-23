@@ -105,6 +105,24 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
     });
 
     describe('invalid', () => {
+        it(String.raw`should return time fragment when input '၁၂:၅၉;၅၉'`, () => {
+            const input = '၁၂:၅၉;၅၉';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁၂:၅၉:၅၉',
+                fragmentType: FragmentType.PossibleTime,
+                normalizeReason: {
+                    normalizeColon: true
+                },
+                invalidReason: {
+                    invalidCharInsteadOfColon: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return time fragment when input '၁၂ : ၅၉: ၅၉'`, () => {
             const input = '၁၂ : ၅၉: ၅၉';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
@@ -141,6 +159,15 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('not', () => {
+        it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
+            const input = '၁၂;၅၉';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+
+            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
     });
 });
