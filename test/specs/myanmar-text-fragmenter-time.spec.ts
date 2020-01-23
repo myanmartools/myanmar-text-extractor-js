@@ -345,6 +345,13 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
             expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
 
+        it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉.၁'`, () => {
+            const input = '၁၂:၅၉:၅၉.၁';
+            const actualFragment = fragmenter.getNextFragment(input);
+
+            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+        });
+
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
             const actualFragment = fragmenter.getNextFragment(input);
