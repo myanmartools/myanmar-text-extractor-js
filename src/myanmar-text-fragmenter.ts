@@ -1258,10 +1258,14 @@ export class MyanmarTextFragmenter {
                     ++colonSeparatorCount;
                 } else {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.normalizeColon = true;
-
                     extractInfo.invalidReason = extractInfo.invalidReason || {};
-                    extractInfo.invalidReason.invalidCharInsteadOfColon = true;
+                    extractInfo.normalizeReason.normalizeColon = true;
+                    if (cp === 0x0038) {
+                        ++colonSeparatorCount;
+                        extractInfo.invalidReason.invalidU1038InsteadOfColon = true;
+                    } else {
+                        extractInfo.invalidReason.invalidCharInsteadOfColon = true;
+                    }
                 }
             }
         }
