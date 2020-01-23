@@ -123,23 +123,18 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
         expect(actualFragment).toEqual(expactedFragment);
     });
 
-    // it(String.raw`should return phone number fragment when input '+ ၉၅ . (၉) [၁၂၃]-(၄၅၆)-၇၈၉'`, () => {
-    //     const input = '+ ၉၅ . (၉) [၁၂၃]-(၄၅၆)-၇၈၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
+    it(String.raw`should return phone number fragment when input '+ ၉၅ . (၉) [၁၂၃] (၄၅၆) ၇၈၉'`, () => {
+        const input = '+ ၉၅ . (၉) [၁၂၃] (၄၅၆) ၇၈၉';
+        const actualFragment = extractor.extractNext(input) as TextFragment;
+        const expactedFragment: TextFragment = {
+            matchedStr: input,
+            normalizedStr: input,
+            fragmentType: FragmentType.PossiblePhoneNumber,
+            spaceDetected: true
+        };
 
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
-    //         possiblePhoneNumber: true,
-    //         plusSignIncluded: true,
-    //         spaceDetected: true,
-    //         numberStrnumberSeparatorIncluded: true
-    //     });
-    // });
+        expect(actualFragment).toEqual(expactedFragment);
+    });
 
     // it(String.raw`should return phone number fragment with ERROR when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
     //     const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
