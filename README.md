@@ -11,6 +11,7 @@ Myanmar Text (Burmese language) word segmentation, fragmentation, extraction and
 * Possible phone number fragment extraction
 * Number fragment extraction
 * Non-digit alphabet fragment extraction
+* Punctuation fragment extraction
 
 ** Note: This is still in development!
 
