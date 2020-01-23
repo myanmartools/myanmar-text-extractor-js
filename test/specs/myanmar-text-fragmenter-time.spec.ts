@@ -35,6 +35,19 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // h:m:s
+        it(String.raw`should return time fragment when input '၁:၁:၁'`, () => {
+            const input = '၁:၁:၁';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.PossibleTime
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('hour-minute', () => {
