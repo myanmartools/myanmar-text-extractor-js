@@ -54,10 +54,11 @@ export class MyanmarTextFragmenter {
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
     private readonly _spaceRegExp = new RegExp(`[${this._space}]`);
 
-    private readonly _possibleDigits = '\u1040-\u1049\u101D\u104E';
+    private readonly _possibleNumber = '\u1040-\u1049\u101D\u104E';
 
-    // \u002E\u00B7\u02D9
-    private readonly _digitSeparator1 = `\u002C\u066B\u066C\u2396\u005F\u0027${this._visibleSpace}`;
+    private readonly _numberDotSeparator = '\u002E\u00B7\u02D9';
+    private readonly _numberThousandSeparator = '\u002C\u066B\u066C\u2396\u005F\u0027';
+    private readonly _numberSeparator = `${this._numberThousandSeparator}${this._visibleSpace}`;
 
     private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
     private readonly _invisibleSpaceRegExp = new RegExp(`[${this._invisibleSpace}]`);
@@ -67,36 +68,35 @@ export class MyanmarTextFragmenter {
 
     private readonly _numberBoxRegExp = new RegExp(`^[(\\[\uFF08\uFF3B][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[)\\]\uFF09\uFF3D]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
-    private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._digitSeparator1}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
+    private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._numberSeparator}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
 
+    private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._numberSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
     // -/._
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
 
     // Date
-    private readonly _dtYear2DigitsPattern = `[\u1041\u1042][${this._possibleDigits}]`;
-    private readonly _dtYearPattern = `[\u1041\u1042][${this._possibleDigits}]{3,3}`;
-    private readonly _dtMonth1DigitPattern = '[\u1041-\u1049\u104E]';
-    private readonly _dtMonthPattern = `\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtMonth1DigitPattern}`;
-    private readonly _dtDay1DigitPattern = '[\u1041-\u1049\u104E]';
-    private readonly _dtDayPattern = `[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtDay1DigitPattern}`;
-    private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
-    private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E])`;
+    private readonly _dtYear2DigitsGroup = `(?:[\u1041\u1042][${this._possibleNumber}])`;
+    private readonly _dtYearGroup = `(?:[\u1041\u1042][${this._possibleNumber}]{3,3})`;
+    private readonly _dtMonthGroup = '(?:\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])';
+    private readonly _dtDayGroup = `(?:[\u1041-\u1042][${this._possibleNumber}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])`;
+    private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleNumber}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
+    private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleNumber}]|[\u1041-\u1049\u104E])`;
     private readonly _dtTimeSeparatorGroup = `[${this._space}]?[:;\u1038][${this._space}]?`;
 
-    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigits}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,4})`);
-    private readonly _dtDMYRegExp = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
-    private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
-    private readonly _dtYMDRegExp = new RegExp(`^(?:${this._dtYearPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})`);
-    private readonly _dtMDYRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
-    private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
-    private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
+    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleNumber}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleNumber}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleNumber}]{1,4})`);
+    private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
+    private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
+    private readonly _dtYMDRegExp = new RegExp(`^${this._dtYearGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}`);
+    private readonly _dtMDYRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
+    private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
+    private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleNumber}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleNumber}]|\u1043[\u1040-\u1041\u101D])`);
     private readonly _dtTimeRegExp = new RegExp(`^${this._dtHourGroup}(?:${this._dtTimeSeparatorGroup}${this._dtMinuteSecondGroup}){1,2}`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
     private readonly _phSeparator = `${this._dtOrPhSeparator}()\\[\\]\uFF08\uFF09\uFF3B\uFF3D`;
     private readonly _phStar = '*';
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleDigits}]){3,}#?`);
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}#?`);
 
     // // [\u103B\u103C]
     // //
@@ -310,9 +310,9 @@ export class MyanmarTextFragmenter {
             return null;
         }
 
-        if (rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
-            const cp = rightStr.codePointAt(1);
-            if (extractInfo.spaceDetected && cp && cp >= 0x1040 && cp <= 0x1049) {
+        if (extractInfo.spaceDetected && rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleNumber(rightStr2)) {
                 return null;
             }
         }
@@ -333,22 +333,8 @@ export class MyanmarTextFragmenter {
 
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        if (rightStr) {
-            const cp = rightStr.codePointAt(0);
-            if (cp) {
-                if (cp >= 0x1040 && cp <= 0x1049) {
-                    return null;
-                }
-
-                if (cp === 0x101D || cp === 0x104E) {
-                    if (rightStr.length > 1) {
-                        const f = this.getDigitGroupFragment(rightStr);
-                        if (f != null) {
-                            return null;
-                        }
-                    }
-                }
-            }
+        if (rightStr && this.isRightStrPossibleNumber(rightStr)) {
+            return null;
         }
 
         const extractInfo = this.getTimeExtractInfo(matchedStr);
@@ -370,9 +356,21 @@ export class MyanmarTextFragmenter {
         }
 
         const matchedStr = m[0];
+        const rightStr = input.substring(matchedStr.length);
+        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
+            return null;
+        }
+
         const extractInfo = this.getPhoneExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
+        }
+
+        if (extractInfo.spaceDetected && rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleNumber(rightStr2)) {
+                return null;
+            }
         }
 
         return {
@@ -1416,51 +1414,54 @@ export class MyanmarTextFragmenter {
             return true;
         }
 
-        const firstCp = rightStr.codePointAt(0);
+        if (this.isRightStrPossibleNumber(rightStr)) {
+            return false;
+        }
 
-        if (!firstCp) {
+        const cp = rightStr.codePointAt(0);
+
+        if (!cp) {
             return true;
         }
 
-        if (firstCp >= 0x1040 && firstCp <= 0x1049) {
-            return false;
-        }
-
-        if (firstCp === 0x101D || firstCp === 0x104E) {
-            if (rightStr.length === 1) {
-                return false;
-            }
-
-            const f = this.getDigitGroupFragment(rightStr);
-            return f == null ? true : false;
-        }
-
         // # $ % + @ ＋
-        if ((firstCp >= 0x0023 && firstCp <= 0x0025) || firstCp === 0x002B || firstCp === 0x0040 || firstCp === 0xFF0B) {
+        if ((cp >= 0x0023 && cp <= 0x0025) || cp === 0x002B || cp === 0x0040 || cp === 0xFF0B) {
             return false;
         }
 
-        if (rightStr.length > 1 && ((firstCp >= 0x0021 && firstCp <= 0x002F) ||
-            firstCp === 0x003A || (firstCp >= 0x003C && firstCp <= 0x003F) ||
-            (firstCp >= 0x005B && firstCp <= 0x005F) || firstCp === 0x0060 ||
-            (firstCp >= 0x007B && firstCp <= 0x007E))) {
-            const cp = rightStr.codePointAt(1);
-
-            if (!cp) {
-                return true;
-            }
-
-            if (cp >= 0x1040 && cp <= 0x1049) {
+        if (rightStr.length > 1 && ((cp >= 0x0021 && cp <= 0x002F) ||
+            cp === 0x003A || (cp >= 0x003C && cp <= 0x003F) ||
+            (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
+            (cp >= 0x007B && cp <= 0x007E))) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleNumber(rightStr2)) {
                 return false;
-            }
-
-            if (cp === 0x101D || cp === 0x104E) {
-                const f = this.getDigitGroupFragment(rightStr);
-                return f == null ? true : false;
             }
         }
 
         return true;
+    }
+
+    private isRightStrPossibleNumber(rightStr: string): boolean {
+        if (!rightStr) {
+            return false;
+        }
+
+        const cp = rightStr.codePointAt(0);
+        if (!cp) {
+            return false;
+        }
+
+        if (cp >= 0x1040 && cp <= 0x1049) {
+            return true;
+        }
+
+        if (rightStr.length > 1 && (cp === 0x101D || cp === 0x104E) &&
+            this._possibleNumberGroupStartsWithU101DOrU104ERegExp.test(rightStr)) {
+            return true;
+        }
+
+        return false;
     }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
