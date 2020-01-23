@@ -200,74 +200,43 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return phone number fragment when input '၉၉\u101D'`, () => {
+            const input = '၉၉\u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၉၉၀',
+                fragmentType: FragmentType.PossiblePhoneNumber,
+                normalizeReason: {
+                    changeU101DToU1040: true
+                },
+                invalidReason: {
+                    invalidU101DInsteadOfU1040: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '\u104E၉၉\u101D'`, () => {
+            const input = '\u104E၉၉\u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၄၉၉၀',
+                fragmentType: FragmentType.PossiblePhoneNumber,
+                normalizeReason: {
+                    changeU101DToU1040: true,
+                    changeU104EToU1044: true
+                },
+                invalidReason: {
+                    invalidU101DInsteadOfU1040: true,
+                    invalidU104EInsteadOfU1044: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
-
-    // it(String.raw`should return number fragment with ERROR when input '၉၉\u101D'`, () => {
-    //     const input = '၉၉\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '၉၉၀',
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၉၉၀',
-    //         possiblePhoneNumber: true,
-    //         error: {
-    //             invalidU101DInsteadOfU1040: true
-    //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment with ERROR when input '၉၉\u104E'`, () => {
-    //     const input = '၉၉\u104E';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '၉၉၄',
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၉၉၄',
-    //         possiblePhoneNumber: true,
-    //         error: {
-    //             invalidU104EInsteadOfU1044: true
-    //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment with ERROR when input '၉\u104E\u101D'`, () => {
-    //     const input = '၉\u104E\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '၉၄၀',
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၉၄၀',
-    //         possiblePhoneNumber: true,
-    //         error: {
-    //             invalidU101DInsteadOfU1040: true,
-    //             invalidU104EInsteadOfU1044: true
-    //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment with ERROR when input '\u101D၉၉'`, () => {
-    //     const input = '\u101D၉၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '၀၉၉',
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၀၉၉',
-    //         possiblePhoneNumber: true,
-    //         error: {
-    //             invalidU101DInsteadOfU1040: true
-    //         }
-    //     });
-    // });
 });
