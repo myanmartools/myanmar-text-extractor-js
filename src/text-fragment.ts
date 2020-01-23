@@ -1,6 +1,6 @@
 import { FragmentType } from './fragment-type';
 import { InvalidReason } from './invalid-reason';
-import { NormalizationReason } from './normalization-reason';
+import { NormalizeReason } from './normalize-reason';
 
 /**
  * Text fragment model for fragmented result.
@@ -39,7 +39,7 @@ export interface TextFragment {
     /**
      * The reason object for normalized string.
      */
-    normalizationReason?: NormalizationReason;
+    normalizeReason?: NormalizeReason;
     /**
      * The reason object for invalid fragmented string result.
      */
