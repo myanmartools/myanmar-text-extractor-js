@@ -86,7 +86,7 @@ export class MyanmarTextFragmenter {
     private readonly _dtMonthPattern = `\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtMonth1DigitPattern}`;
     private readonly _dtDay1DigitPattern = '[\u1041-\u1049\u104E]';
     private readonly _dtDayPattern = `[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|${this._dtDay1DigitPattern}`;
-    private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043]|[\u1041-\u1049\u104E]`;
+    private readonly _dtHourPattern = `[\u1040\u1041\u101D][${this._possibleDigits}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E]`;
     private readonly _dtMinuteSecondPattern = `[\u1040-\u1045\u101D\u104E][${this._possibleDigits}]|[\u1041-\u1049\u104E]`;
 
     private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigits}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigits}]{1,4})`);
@@ -96,7 +96,7 @@ export class MyanmarTextFragmenter {
     private readonly _dtMDYRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYearPattern})`);
     private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^(?:${this._dtMonthPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtDayPattern})[${this._dtOrPhSeparator}${this._space}]{1,3}(?:${this._dtYear2DigitsPattern})`);
     private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigits}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigits}]|\u1043[\u1040-\u1041\u101D])`);
-    private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})[${this._space}]?:[${this._space}]?(?:${this._dtMinuteSecondPattern})(?:[${this._space}]?:[${this._space}]?${this._dtMinuteSecondPattern})?`);
+    private readonly _dtTimeRegExp = new RegExp(`^(?:${this._dtHourPattern})(?:[${this._space}]?[:;][${this._space}]?(?:${this._dtMinuteSecondPattern})){1,2}`);
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
@@ -341,8 +341,21 @@ export class MyanmarTextFragmenter {
         const rightStr = input.substring(matchedStr.length);
         if (rightStr) {
             const cp = rightStr.codePointAt(0);
-            if (cp && cp >= 0x1040 && cp <= 0x1049) {
-                return null;
+            if (cp) {
+                if (cp >= 0x1040 && cp <= 0x1049) {
+                    return null;
+                }
+
+                if (cp === 0x101D || cp === 0x104E) {
+                    if (rightStr.length === 1) {
+                        return null;
+                    }
+
+                    const f = this.getDigitGroupFragment(rightStr);
+                    if (f != null) {
+                        return null;
+                    }
+                }
             }
         }
 
@@ -1219,6 +1232,8 @@ export class MyanmarTextFragmenter {
         let digitCount = 0;
         let u101DIncluded = false;
         let u104EIncluded = false;
+        let colonSeparatorCount = 0;
+        let nonColonSeparatorCount = 0;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
@@ -1247,11 +1262,26 @@ export class MyanmarTextFragmenter {
                 extractInfo.invalidReason = extractInfo.invalidReason || {};
                 extractInfo.invalidReason.invalidSpaceIncluded = true;
             } else {
-                extractInfo.normalizedStr += c;
+                extractInfo.normalizedStr += ':';
+                if (cp === 0x003A) {
+                    ++colonSeparatorCount;
+                } else {
+                    ++nonColonSeparatorCount;
+
+                    extractInfo.normalizationReason = extractInfo.normalizationReason || {};
+                    extractInfo.normalizationReason.normalizeColon = true;
+
+                    extractInfo.invalidReason = extractInfo.invalidReason || {};
+                    extractInfo.invalidReason.invalidCharInsteadOfColon = true;
+                }
             }
         }
 
         if (!digitCount) {
+            return null;
+        }
+
+        if (nonColonSeparatorCount > colonSeparatorCount) {
             return null;
         }
 
