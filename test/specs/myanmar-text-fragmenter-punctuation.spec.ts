@@ -1,18 +1,18 @@
 import { FragmentType } from '../../src/fragment-type';
-import { MyanmarTextFragmenter } from '../../src/myanmar-text-fragmenter';
+import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
-    let fragmenter: MyanmarTextFragmenter;
+describe('MyanmarTextExtractor#extractNext#punctuation', () => {
+    let extractor: MyanmarTextExtractor;
 
     beforeEach(() => {
-        fragmenter = new MyanmarTextFragmenter();
+        extractor = new MyanmarTextExtractor();
     });
 
     // ၌
     it(String.raw`should return punctuation fragment when input '\u104C'`, () => {
         const input = '\u104C';
-        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const actualFragment = extractor.extractNext(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: input,
             normalizedStr: input,
@@ -25,7 +25,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     // ၍
     it(String.raw`should return punctuation fragment when input '\u104D'`, () => {
         const input = '\u104D';
-        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const actualFragment = extractor.extractNext(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: input,
             normalizedStr: input,
@@ -38,7 +38,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     // ၏
     it(String.raw`should return punctuation fragment when input '\u104F'`, () => {
         const input = '\u104F';
-        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const actualFragment = extractor.extractNext(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: input,
             normalizedStr: input,
@@ -51,7 +51,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     // ၊
     it(String.raw`should return punctuation fragment when input '\u104A'`, () => {
         const input = '\u104A';
-        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const actualFragment = extractor.extractNext(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: input,
             normalizedStr: input,
@@ -64,7 +64,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     // ။
     it(String.raw`should return punctuation fragment when input '\u104B'`, () => {
         const input = '\u104B';
-        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const actualFragment = extractor.extractNext(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: input,
             normalizedStr: input,
@@ -77,7 +77,7 @@ describe('MyanmarTextFragmenter#getNextFragment#punctuation', () => {
     // ၌ + any char
     it(String.raw`should return punctuation fragment when input '\u104C\u1000'`, () => {
         const input = '\u104C\u1000';
-        const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+        const actualFragment = extractor.extractNext(input) as TextFragment;
         const expactedFragment: TextFragment = {
             matchedStr: '\u104C',
             normalizedStr: '\u104C',

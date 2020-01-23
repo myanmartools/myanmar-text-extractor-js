@@ -1,17 +1,17 @@
 {
-  "name": "@myanmartools/myanmar-text-fragmenter-js",
+  "name": "@myanmartools/myanmar-text-extractor-js",
   "version": "0.0.0",
   "author": "DagonMetric",
   "description": "Myanmar Text (Burmese language) word segmentation, fragmentation and splitting JavaScript library module for Web and Node.js applications written in Typescript.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/myanmartools/myanmar-text-fragmenter-js.git"
+    "url": "git+https://github.com/myanmartools/myanmar-text-extractor-js.git"
   },
   "bugs": {
-    "url": "https://github.com/myanmartools/myanmar-text-fragmenter-js/issues"
+    "url": "https://github.com/myanmartools/myanmar-text-extractor-js/issues"
   },
-  "homepage": "https://github.com/myanmartools/myanmar-text-fragmenter-js",
+  "homepage": "https://github.com/myanmartools/myanmar-text-extractor-js",
   "scripts": {
     "karma": "karma",
     "test": "karma start karma.conf.js",

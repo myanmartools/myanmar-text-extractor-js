@@ -48,7 +48,7 @@ interface TextFragmentPartial {
 // \uFF0D\u2010-\u2015\u2212\u002F\uFF0F\u002E\uFF0E
 // \u3000\u2060
 
-export class MyanmarTextFragmenter {
+export class MyanmarTextExtractor {
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
     private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
@@ -117,7 +117,7 @@ export class MyanmarTextFragmenter {
     //     this._options = options || {};
     // }
 
-    getNextFragment(input: string, prevFragments?: TextFragment[]): TextFragment | null {
+    extractNext(input: string, prevFragments?: TextFragment[]): TextFragment | null {
         const firstCp = input.codePointAt(0);
         if (!firstCp) {
             return null;

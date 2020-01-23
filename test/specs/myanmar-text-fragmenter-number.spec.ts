@@ -1,19 +1,19 @@
 import { FragmentType } from '../../src/fragment-type';
-import { MyanmarTextFragmenter } from '../../src/myanmar-text-fragmenter';
+import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextFragmenter#getNextFragment#number', () => {
-    let fragmenter: MyanmarTextFragmenter;
+describe('MyanmarTextExtractor#extractNext#number', () => {
+    let extractor: MyanmarTextExtractor;
 
     beforeEach(() => {
-        fragmenter = new MyanmarTextFragmenter();
+        extractor = new MyanmarTextExtractor();
     });
 
     describe('single-char-input', () => {
         // ၀
         it(String.raw`should return number fragment when input '\u1040'`, () => {
             const input = '\u1040';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -27,7 +27,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         // ၉
         it(String.raw`should return number fragment when input '\u1049'`, () => {
             const input = '\u1049';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -43,7 +43,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
         // င်္၁ါ
         it(String.raw`should return number fragment when input '\u1004\u103A\u1039\u1041\u102B'`, () => {
             const input = '\u1004\u103A\u1039\u1041\u102B';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -59,7 +59,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '၀'`, () => {
     //     const input = '၀';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -72,7 +72,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '၉'`, () => {
     //     const input = '၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -85,21 +85,21 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
     //     const input = '\u101D';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     // });
 
     // it(String.raw`should NOT return number fragment when input '\u104E'`, () => {
     //     const input = '\u104E';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     // });
 
     // it(String.raw`should return number fragment when input '၀၉'`, () => {
     //     const input = '၀၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -112,28 +112,28 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should NOT return number fragment when input '\u101D\u101D'`, () => {
     //     const input = '\u101D\u101D';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     // });
 
     // it(String.raw`should NOT return number fragment when input '\u104E\u104E'`, () => {
     //     const input = '\u104E\u104E';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     // });
 
     // it(String.raw`should NOT return number fragment when input '\u104E\u101D'`, () => {
     //     const input = '\u104E\u101D';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     // });
 
     // it(String.raw`should return number fragment when input with separator '၁,၉၉၉'`, () => {
     //     const input = '၁,၉၉၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -147,14 +147,14 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
     //     const input = '\u104E,\u104E\u104E\u101D';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
     // });
 
     // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D'`, () => {
     //     const input = '၁,၉\u104E\u101D';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -172,7 +172,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁,၉၉၉.၀၂'`, () => {
     //     const input = '၁,၉၉၉.၀၂';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -186,7 +186,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
     //     const input = '၁,၉\u104E\u101D.\u101D\u104E';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -204,7 +204,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇.၈၉'`, () => {
     //     const input = '၁,၂၃၄,၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -219,7 +219,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // \u066B
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁٫၂၃၄٫၅၆၇.၈၉'`, () => {
     //     const input = '၁٫၂၃၄٫၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -234,7 +234,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // \u066C
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁٬၂၃၄٬၅၆၇.၈၉'`, () => {
     //     const input = '၁٬၂၃၄٬၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -249,7 +249,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // \u2396
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁⎖၂၃၄⎖၅၆၇.၈၉'`, () => {
     //     const input = '၁⎖၂၃၄⎖၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -264,7 +264,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // \u0027
     // it(String.raw`should return number fragment when input with separator and decimal dot "၁'၂၃၄'၅၆၇.၈၉"`, () => {
     //     const input = "၁'၂၃၄'၅၆၇.၈၉";
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -279,7 +279,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // \u005F
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁_၂၃၄_၅၆၇.၈၉'`, () => {
     //     const input = '၁_၂၃၄_၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -293,7 +293,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁ ၂၃၄ ၅၆၇.၈၉'`, () => {
     //     const input = '၁ ၂၃၄ ၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -308,7 +308,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁၂,၃၄,၅၆၇.၈၉'`, () => {
     //     const input = '၁၂,၃၄,၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -322,7 +322,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁၂၃,၄၅၆၇.၈၉'`, () => {
     //     const input = '၁၂၃,၄၅၆၇.၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -336,7 +336,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input with separator and decimal dot '၃.၁၄၁၅၉၂၆၅၃၅'`, () => {
     //     const input = '၃.၁၄၁၅၉၂၆၅၃၅';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -351,7 +351,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // \u00B7
     // it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇·၈၉'`, () => {
     //     const input = '၁,၂၃၄,၅၆၇·၈၉';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
     //     expect(fragment).toEqual({
@@ -365,7 +365,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
     //     const input = 'င်္၁ါ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -381,7 +381,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'အင်္ဂါ' number fragment when input '၂င်္၀ါ'`, () => {
     //     const input = '၂င်္၀ါ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -397,7 +397,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'အင်္ဂါ' number fragment when input '၁,၉၂င်္၀ါ'`, () => {
     //     const input = '၁,၉၂င်္၀ါ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -415,7 +415,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
     // // invalid space
     // it(String.raw`should return 'အင်္ဂါ' number fragment with ERROR when input 'င်္၁ ါ'`, () => {
     //     const input = 'င်္၁ ါ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -436,7 +436,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'တင်း' / 'တောင်း' number fragment when input 'င်္၁'`, () => {
     //     const input = 'င်္၁';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -452,7 +452,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'ဆယ်သား' number fragment when input '(၁)၀ိ'`, () => {
     //     const input = '(၁)၀ိ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -468,7 +468,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'ဆယ်သား' number fragment with ERROR when input '( ၁ ) ၀ိ'`, () => {
     //     const input = '( ၁ ) ၀ိ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -488,7 +488,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return 'ဆယ်သား' number fragment with ERROR when input '(\u104E)၀ိ'`, () => {
     //     const input = '(\u104E)၀ိ';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -507,7 +507,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '(၁)'`, () => {
     //     const input = '(၁)';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -521,7 +521,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '(၉၀)'`, () => {
     //     const input = '(၉၀)';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -535,7 +535,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '(၀၉)'`, () => {
     //     const input = '(၀၉)';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -549,7 +549,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input '( ၉ )'`, () => {
     //     const input = '( ၉ )';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -567,7 +567,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input \u200B '(​၉​)'`, () => {
     //     const input = '(​၉​)';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -585,7 +585,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input '(\u101D၁)'`, () => {
     //     const input = '(\u101D၁)';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -602,7 +602,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input '(၉\u101D\u104E)'`, () => {
     //     const input = '(၉\u101D\u104E)';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -620,7 +620,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '၁။'`, () => {
     //     const input = '၁။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -634,7 +634,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '၉၊'`, () => {
     //     const input = '၉၊';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -648,7 +648,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '၉၀။'`, () => {
     //     const input = '၉၀။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -662,7 +662,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment when input '၀၉။'`, () => {
     //     const input = '၀၉။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -676,7 +676,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragmentwith ERROR when input '၀၉ ။'`, () => {
     //     const input = '၀၉ ။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -694,7 +694,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input \u200B '၀၉​။'`, () => {
     //     const input = '၀၉​။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -712,7 +712,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input '\u101D၁။'`, () => {
     //     const input = '\u101D၁။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
@@ -729,7 +729,7 @@ describe('MyanmarTextFragmenter#getNextFragment#number', () => {
 
     // it(String.raw`should return number fragment with ERROR when input '၉\u101D\u104E။'`, () => {
     //     const input = '၉\u101D\u104E။';
-    //     const fragment = fragmenter.getNextFragment(input) as TextFragment;
+    //     const fragment = extractor.extractNext(input) as TextFragment;
 
     //     expect(fragment.matchedStr).toBe(input,
     //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
