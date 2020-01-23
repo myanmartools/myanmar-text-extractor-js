@@ -204,30 +204,37 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
     describe('not', () => {
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉၁'`, () => {
             const input = '၁၂:၅၉:၅၉၁';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = fragmenter.getNextFragment(input);
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u101D၁'`, () => {
             const input = '၁၂:၅၉:၅၉\u101D၁';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = fragmenter.getNextFragment(input);
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u104E၁'`, () => {
             const input = '၁၂:၅၉:၅၉\u104E၁';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = fragmenter.getNextFragment(input);
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
-            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+            const actualFragment = fragmenter.getNextFragment(input);
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return time fragment when input '\u104E:\u101D'`, () => {
+            const input = '\u104E:\u101D';
+            const actualFragment = fragmenter.getNextFragment(input);
+
+            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
     });
 });
