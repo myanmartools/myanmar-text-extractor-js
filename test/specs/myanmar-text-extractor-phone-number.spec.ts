@@ -138,6 +138,31 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
         });
     });
 
+    describe('invalid', () => {
+        it(String.raw`should return phone number fragment when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
+            const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '+၄၀၁၂၃၄၅၆',
+                fragmentType: FragmentType.PossiblePhoneNumber,
+                spaceDetected: true,
+                normalizeReason: {
+                    changeU101DToU1040: true,
+                    changeU104EToU1044: true,
+                    removeInvisibleSpace: true
+                },
+                invalidReason: {
+                    invalidU101DInsteadOfU1040: true,
+                    invalidU104EInsteadOfU1044: true,
+                    invalidSpaceIncluded: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     // it(String.raw`should return phone number fragment with ERROR when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
     //     const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
     //     const fragment = extractor.extractNext(input) as TextFragment;
