@@ -170,6 +170,20 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
             expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
         });
 
+        it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u101D၁'`, () => {
+            const input = '၁၂:၅၉:၅၉\u101D၁';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+
+            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u104E၁'`, () => {
+            const input = '၁၂:၅၉:၅၉\u104E၁';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+
+            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+        });
+
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
