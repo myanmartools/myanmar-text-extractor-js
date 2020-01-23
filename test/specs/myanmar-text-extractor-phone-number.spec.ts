@@ -9,7 +9,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
         extractor = new MyanmarTextExtractor();
     });
 
-    describe('valid', () => {
+    describe('valid-international', () => {
         it(String.raw`should return phone number fragment when input '+၉၅၉'`, () => {
             const input = '+၉၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -138,6 +138,45 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
         });
     });
 
+    describe('valid-local', () => {
+        it(String.raw`should return phone number fragment when input '၉၉၉'`, () => {
+            const input = '၉၉၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.PossiblePhoneNumber
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '၅၅၁၂၃'`, () => {
+            const input = '၅၅၁၂၃';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.PossiblePhoneNumber
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
+            const input = '၁ ၂၃၄ ၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.PossiblePhoneNumber,
+                spaceDetected: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('invalid', () => {
         it(String.raw`should return phone number fragment when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
             const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
@@ -162,72 +201,6 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
     });
-
-    // it(String.raw`should return phone number fragment with ERROR when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
-    //     const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '+၄၀၁၂၃၄၅၆',
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '+၄၀၁၂၃၄၅၆',
-    //         possiblePhoneNumber: true,
-    //         plusSignIncluded: true,
-    //         spaceDetected: true,
-    //         error: {
-    //             invalidSpaceIncluded: true,
-    //             invalidU101DInsteadOfU1040: true,
-    //             invalidU104EInsteadOfU1044: true
-    //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment when input '၉၉၉'`, () => {
-    //     const input = '၉၉၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၉၉၉',
-    //         possiblePhoneNumber: true
-    //     });
-    // });
-
-    // it(String.raw`should return phone number fragment when input '၅၅၁၂၃'`, () => {
-    //     const input = '၅၅၁၂၃';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၅၅၁၂၃',
-    //         possiblePhoneNumber: true
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment when input with separator and decimal dot '၁ ၂၃၄ ၅၆၇'`, () => {
-    //     const input = '၁ ၂၃၄ ၅၆၇';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၁၂၃၄၅၆၇',
-    //         spaceDetected: true,
-    //         possiblePhoneNumber: true
-    //     });
-    // });
 
     // it(String.raw`should return number fragment with ERROR when input '၉၉\u101D'`, () => {
     //     const input = '၉၉\u101D';
