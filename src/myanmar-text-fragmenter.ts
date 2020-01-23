@@ -1260,7 +1260,7 @@ export class MyanmarTextFragmenter {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     extractInfo.invalidReason = extractInfo.invalidReason || {};
                     extractInfo.normalizeReason.normalizeColon = true;
-                    if (cp === 0x0038) {
+                    if (cp === 0x1038) {
                         ++colonSeparatorCount;
                         extractInfo.invalidReason.invalidU1038InsteadOfColon = true;
                     } else {
