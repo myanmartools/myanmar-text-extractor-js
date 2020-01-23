@@ -1,4 +1,4 @@
-export interface NormalizationReason {
+export interface NormalizeReason {
     normalizePlusSign?: boolean;
     normalizeSpace?: boolean;
     removeSpace?: boolean;
