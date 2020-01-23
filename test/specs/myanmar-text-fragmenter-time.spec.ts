@@ -163,6 +163,13 @@ describe('MyanmarTextFragmenter#getNextFragment#time', () => {
     });
 
     describe('not', () => {
+        it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉၁'`, () => {
+            const input = '၁၂:၅၉:၅၉၁';
+            const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
+
+            expect(actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+        });
+
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
             const actualFragment = fragmenter.getNextFragment(input) as TextFragment;
