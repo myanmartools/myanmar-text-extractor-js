@@ -20,7 +20,7 @@ interface ExtractInfo {
 
 interface NumberExtractInfo extends ExtractInfo {
     numberStr: string;
-    thousandSeparator?: string;
+    numberSeparator?: string;
 }
 
 interface DateExtractInfo extends ExtractInfo {
@@ -790,7 +790,7 @@ export class MyanmarTextExtractor implements TextExtractor {
         let prevIsDigit = false;
         let prevIsSpace = false;
         let prevIsSeparator = false;
-        let thousandSeparator: string | undefined;
+        let numberSeparator: string | undefined;
         let digitCount = 0;
         let u101DIncluded = false;
         let u104EIncluded = false;
@@ -850,7 +850,7 @@ export class MyanmarTextExtractor implements TextExtractor {
                 prevIsSpace = true;
                 prevIsSeparator = false;
             } else {
-                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && thousandSeparator && c !== thousandSeparator)) {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && numberSeparator && c !== numberSeparator)) {
                     return null;
                 }
 
@@ -874,7 +874,7 @@ export class MyanmarTextExtractor implements TextExtractor {
 
                 prevIsDigit = false;
                 prevIsSpace = false;
-                thousandSeparator = c;
+                numberSeparator = c;
                 prevIsSeparator = true;
             }
         }
@@ -883,8 +883,8 @@ export class MyanmarTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (thousandSeparator) {
-            extractInfo.thousandSeparator = thousandSeparator;
+        if (numberSeparator) {
+            extractInfo.numberSeparator = numberSeparator;
         }
 
         if (invisibleSpaceIncluded) {
