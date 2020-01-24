@@ -197,7 +197,7 @@ export class MyanmarTextExtractor implements TextExtractor {
                 }
             }
 
-            return this.getDigitGroupFragment(input);
+            return this.getNumberGroupFragment(input);
         }
 
         if (inputLen > 3 && firstCp === 0x1004) {
@@ -662,7 +662,7 @@ export class MyanmarTextExtractor implements TextExtractor {
         return textFragment;
     }
 
-    private getDigitGroupFragment(input: string): TextFragment | null {
+    private getNumberGroupFragment(input: string): TextFragment | null {
         const m1 = input.match(this._numberGroup1Regex);
         if (m1 == null) {
             return null;
