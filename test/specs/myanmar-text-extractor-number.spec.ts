@@ -98,69 +98,22 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '၁,၉၉၉.၀၂'`, () => {
+            const input = '၁,၉၉၉.၀၂';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၉၉၉.၀၂',
+                numberSeparator: ','
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
-    // it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
-    //     const input = '\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    // });
-
-    // it(String.raw`should NOT return number fragment when input '\u104E'`, () => {
-    //     const input = '\u104E';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    // });
-
-    // it(String.raw`should return number fragment when input '၀၉'`, () => {
-    //     const input = '၀၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၀၉'
-    //     });
-    // });
-
-    // it(String.raw`should NOT return number fragment when input '\u101D\u101D'`, () => {
-    //     const input = '\u101D\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    // });
-
-    // it(String.raw`should NOT return number fragment when input '\u104E\u104E'`, () => {
-    //     const input = '\u104E\u104E';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    // });
-
-    // it(String.raw`should NOT return number fragment when input '\u104E\u101D'`, () => {
-    //     const input = '\u104E\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    // });
-
-    // it(String.raw`should return number fragment when input with separator '၁,၉၉၉'`, () => {
-    //     const input = '၁,၉၉၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၁၉၉၉',
-    //         numberStrnumberSeparatorIncluded: true
-    //     });
-    // });
 
     // it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
     //     const input = '\u104E,\u104E\u104E\u101D';
@@ -187,19 +140,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     });
     // });
 
-    // it(String.raw`should return number fragment when input with separator and decimal dot '၁,၉၉၉.၀၂'`, () => {
-    //     const input = '၁,၉၉၉.၀၂';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
 
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၁၉၉၉.၀၂',
-    //         numberStrnumberSeparatorIncluded: true
-    //     });
-    // });
 
     // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
     //     const input = '၁,၉\u104E\u101D.\u101D\u104E';
