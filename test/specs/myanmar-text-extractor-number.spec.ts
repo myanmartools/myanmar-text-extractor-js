@@ -70,6 +70,20 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '၁,၀၀'`, () => {
+            const input = '၁,၀၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၀၀',
+                numberSeparator: ','
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     // it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
