@@ -599,12 +599,12 @@ export class MyanmarTextExtractor implements TextExtractor {
     }
 
     private getNumberGroupFragment(input: string): TextFragment | null {
-        const m1 = input.match(this._numberGroupRegex);
-        if (m1 == null) {
+        const m = input.match(this._numberGroupRegex);
+        if (m == null) {
             return null;
         }
 
-        const matchedStr = m1[0];
+        const matchedStr = m[0];
         const extractInfo = this.getNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
@@ -613,7 +613,6 @@ export class MyanmarTextExtractor implements TextExtractor {
         const numberFragment: TextFragment = {
             ...extractInfo,
             matchedStr,
-            normalizedStr: extractInfo.normalizedStr,
             fragmentType: FragmentType.Number
         };
 
@@ -803,6 +802,7 @@ export class MyanmarTextExtractor implements TextExtractor {
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++digitCount;
                 extractInfo.normalizedStr += c;
+                extractInfo.numberStr += c;
                 prevIsDigit = true;
                 prevIsSpace = false;
                 prevIsSeparator = false;
@@ -812,10 +812,12 @@ export class MyanmarTextExtractor implements TextExtractor {
                 if (cp === 0x101D) {
                     u101DIncluded = true;
                     extractInfo.normalizedStr += '\u1040';
+                    extractInfo.numberStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     u104EIncluded = true;
                     extractInfo.normalizedStr += '\u1044';
+                    extractInfo.numberStr += '\u104E';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
 
@@ -858,7 +860,18 @@ export class MyanmarTextExtractor implements TextExtractor {
                     extractInfo.normalizeReason.removeSpace = true;
                 }
 
-                extractInfo.normalizedStr += c;
+                if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
+                    extractInfo.numberStr += '.';
+                    extractInfo.normalizedStr += '.';
+
+                    if (cp !== 0x002E) {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.normalizeDecimalPoint = true;
+                    }
+                } else {
+                    extractInfo.normalizedStr += c;
+                }
+
                 prevIsDigit = false;
                 prevIsSpace = false;
                 thousandSeparator = c;
