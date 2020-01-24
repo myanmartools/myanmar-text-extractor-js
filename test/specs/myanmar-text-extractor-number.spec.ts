@@ -112,6 +112,20 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '၁,၂၃၄,၅၆၇.၈၉'`, () => {
+            const input = '၁,၂၃၄,၅၆၇.၈၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇.၈၉',
+                numberSeparator: ','
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
 
@@ -140,8 +154,6 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     });
     // });
 
-
-
     // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
     //     const input = '၁,၉\u104E\u101D.\u101D\u104E';
     //     const fragment = extractor.extractNext(input) as TextFragment;
@@ -157,20 +169,6 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //             invalidU101DInsteadOfU1040: true,
     //             invalidU104EInsteadOfU1044: true
     //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment when input with separator and decimal dot '၁,၂၃၄,၅၆၇.၈၉'`, () => {
-    //     const input = '၁,၂၃၄,၅၆၇.၈၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၁၂၃၄၅၆၇.၈၉',
-    //         numberStrnumberSeparatorIncluded: true
     //     });
     // });
 
