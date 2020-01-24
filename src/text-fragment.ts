@@ -31,9 +31,9 @@ export interface TextFragment {
      */
     numberStr?: string;
     /**
-     * Thousand separator for number fragment type.
+     * Noumber / thousand separator for number fragment type.
      */
-    thousandSeparator?: string;
+    numberSeparator?: string;
     /**
      * Detected measure words for ancient number fragment type.
      */
