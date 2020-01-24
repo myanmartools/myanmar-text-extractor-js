@@ -57,31 +57,20 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
         });
     });
 
-    // it(String.raw`should return number fragment when input '၀'`, () => {
-    //     const input = '၀';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
+    describe('number-group', () => {
+        it(String.raw`should return number fragment when input '၁၀'`, () => {
+            const input = '၁၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: input
+            };
 
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၀'
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment when input '၉'`, () => {
-    //     const input = '၉';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
-    //         numberStr: '၉'
-    //     });
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
 
     // it(String.raw`should NOT return number fragment when input '\u101D'`, () => {
     //     const input = '\u101D';
