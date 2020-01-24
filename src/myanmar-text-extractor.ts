@@ -69,7 +69,7 @@ export class MyanmarTextExtractor implements TextExtractor {
 
     private readonly _numberBoxRegExp = new RegExp(`^[(\\[\uFF08\uFF3B][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[)\\]\uFF09\uFF3D]`);
     private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
-    private readonly _numberGroup1Regex = new RegExp(`^[\u1040-\u1049\u101D\u104E]{1,3}([${this._numberSeparator}][\u1040-\u1049\u101D\u104E]{2,4})*([\u002E\u00B7][\u1040-\u1049\u101D\u104E]+)?`);
+    private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._numberSeparator}][${this._possibleNumber}]{2,4})*(?:${this._numberDotSeparator}[${this._possibleNumber}]+)?`);
 
     private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._numberSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
     // -/._
@@ -663,7 +663,7 @@ export class MyanmarTextExtractor implements TextExtractor {
     }
 
     private getNumberGroupFragment(input: string): TextFragment | null {
-        const m1 = input.match(this._numberGroup1Regex);
+        const m1 = input.match(this._numberGroupRegex);
         if (m1 == null) {
             return null;
         }
