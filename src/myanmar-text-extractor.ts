@@ -1244,7 +1244,9 @@ export class MyanmarTextExtractor implements TextExtractor {
             extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
-        if (dotCount === 1 && possibleDigitCount + 1 === extractInfo.normalizedStr.length && extractInfo.normalizedStr[0] !== '\u1040') {
+        if (dotCount === 1 && extractInfo.normalizedStr[0] !== '+' &&
+            extractInfo.normalizedStr[0] !== '*' &&
+            extractInfo.normalizedStr[0] !== '\u1040') {
             return null;
         }
 
