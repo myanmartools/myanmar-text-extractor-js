@@ -1,4 +1,3 @@
-import { FragmentType } from './fragment-type';
 import { InvalidReason } from './invalid-reason';
 import { NormalizeReason } from './normalize-reason';
 import { TextExtractor } from './text-extractor';
@@ -126,32 +125,6 @@ export class MyanmarTextExtractor implements TextExtractor {
         const numberDateOrPhoneNumberFragment = this.getNumberDateOrPhoneNumberFragment(input, firstCp);
         if (numberDateOrPhoneNumberFragment != null) {
             return numberDateOrPhoneNumberFragment;
-        }
-
-        return null;
-    }
-
-    private getPunctuationOrSingleCharAlphabetFragment(input: string, firstCp: number): TextFragment | null {
-        // ဤ / ဪ / Single letter length
-        if (firstCp === 0x1024 || firstCp === 0x102A ||
-            (input.length === 1 && ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
-                firstCp === 0x1023 || (firstCp >= 0x1025 && firstCp <= 0x1027) ||
-                firstCp === 0x1029 || firstCp === 0x103F || firstCp === 0x104E))) {
-            return {
-                matchedStr: input[0],
-                normalizedStr: input[0],
-                fragmentType: FragmentType.Alphabet
-            };
-        }
-
-        // ၌ / ၍ / ၏ / ၊ / ။
-        if (firstCp === 0x104C || firstCp === 0x104D || firstCp === 0x104F ||
-            firstCp === 0x104A || firstCp === 0x104B) {
-            return {
-                matchedStr: input[0],
-                normalizedStr: input[0],
-                fragmentType: FragmentType.Punctuation
-            };
         }
 
         return null;

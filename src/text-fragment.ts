@@ -1,4 +1,3 @@
-import { FragmentType } from './fragment-type';
 import { InvalidReason } from './invalid-reason';
 import { NormalizeReason } from './normalize-reason';
 
@@ -15,9 +14,29 @@ export interface TextFragment {
      */
     normalizedStr: string;
     /**
-     * Fragment type.
+     * True if a punctuation symbol. ပုဒ်ဖြတ်၊ ပုဒ်ရပ် အက္ခရာ (သို့) သင်္ကေတ။
      */
-    fragmentType: FragmentType;
+    punctuation?: boolean;
+    /**
+     * True if digit or number group fragment.
+     */
+    number?: boolean;
+    /**
+     * True if alphabet fragment. အက္ခရာအစိတ်အပိုင်း။
+     */
+    alphabet?: boolean;
+    /**
+     * True if possible date fragment.
+     */
+    possibleDate?: boolean;
+    /**
+     * True if possible time fragment.
+     */
+    possibleTime?: boolean;
+    /**
+     * True if possible phone number fragment.
+     */
+    possiblePhone?: boolean;
     /**
      * True if ancient written form.
      */
