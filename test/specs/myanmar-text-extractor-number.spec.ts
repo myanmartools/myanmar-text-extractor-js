@@ -141,7 +141,6 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // \u066C
         it(String.raw`should return number fragment when input '၁٬၂၃၄٬၅၆၇.၈၉'`, () => {
             const input = '၁٬၂၃၄٬၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -156,7 +155,6 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // \u0027
         it(String.raw`should return number fragment when input "၁'၂၃၄'၅၆၇.၈၉"`, () => {
             const input = "၁'၂၃၄'၅၆၇.၈၉";
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -171,7 +169,6 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // \u005F
         it(String.raw`should return number fragment when input '၁_၂၃၄_၅၆၇.၈၉'`, () => {
             const input = '၁_၂၃၄_၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
