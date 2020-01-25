@@ -51,25 +51,20 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
         });
     });
 
-    describe('inga-tin-taung-ancient-number', () => {
-        // င်္၁ါ
-        it(String.raw`should return number fragment when input '\u1004\u103A\u1039\u1041\u102B'`, () => {
-            const input = '\u1004\u103A\u1039\u1041\u102B';
+    describe('number-group', () => {
+        it(String.raw`should return number fragment when input '၀၉'`, () => {
+            const input = '၀၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.Number,
-                numberStr: '၁',
-                ancientWrittenForm: true,
-                ancientMeasureWords: ['အင်္ဂါ']
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
-    });
 
-    describe('number-group', () => {
         it(String.raw`should return number fragment when input '၁၀'`, () => {
             const input = '၁၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -268,6 +263,23 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
         });
     });
 
+    describe('inga-tin-taung-ancient-number', () => {
+        // င်္၁ါ
+        it(String.raw`should return number fragment when input '\u1004\u103A\u1039\u1041\u102B'`, () => {
+            const input = '\u1004\u103A\u1039\u1041\u102B';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['အင်္ဂါ']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
 
     // it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
     //     const input = '\u104E,\u104E\u104E\u101D';
