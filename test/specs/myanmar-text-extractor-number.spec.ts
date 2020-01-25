@@ -121,6 +121,20 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '၁⎖၂၃၄⎖၅၆၇'`, () => {
+            const input = '၁⎖၂၃၄⎖၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: '⎖'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('number-group-with-decimal-point', () => {
