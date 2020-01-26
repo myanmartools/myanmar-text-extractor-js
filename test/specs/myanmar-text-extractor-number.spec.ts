@@ -135,6 +135,91 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // \u066C
+        it(String.raw`should return number fragment when input '၁٬၂၃၄٬၅၆၇'`, () => {
+            const input = '၁٬၂၃၄٬၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: '٬'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input "၁'၂၃၄'၅၆၇"`, () => {
+            const input = "၁'၂၃၄'၅၆၇";
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: "'"
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁_၂၃၄_၅၆၇'`, () => {
+            const input = '၁_၂၃၄_၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: '_'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
+            const input = '၁ ၂၃၄ ၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                spaceDetected: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁၂,၃၄,၅၆၇'`, () => {
+            const input = '၁၂,၃၄,၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: ','
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁၂၃,၄၅၆၇'`, () => {
+            const input = '၁၂၃,၄၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                fragmentType: FragmentType.Number,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: ','
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('number-group-with-decimal-point', () => {
