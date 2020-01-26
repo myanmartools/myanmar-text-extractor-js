@@ -1,11 +1,13 @@
-import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
+import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
+
+import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextExtractor#extractNext#date', () => {
-    let extractor: MyanmarTextExtractor;
+describe('NumberGroupTextExtractor#date', () => {
+    let extractor: TextExtractor;
 
     beforeEach(() => {
-        extractor = new MyanmarTextExtractor();
+        extractor = new NumberGroupTextExtractor();
     });
 
     describe('day-month-year', () => {
@@ -16,7 +18,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
                 dateSeparator: '-'
             };
@@ -31,7 +33,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd/MM/yyyy',
                 dateSeparator: '/'
             };
@@ -46,7 +48,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd.MM.yyyy',
                 dateSeparator: '.'
             };
@@ -61,7 +63,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd_MM_yyyy',
                 dateSeparator: '_'
             };
@@ -76,7 +78,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊'
             };
@@ -91,7 +93,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd~MM~yyyy',
                 dateSeparator: '~'
             };
@@ -106,7 +108,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 spaceIncluded: true,
                 dateFormat: 'dd MM yyyy',
                 dateSeparator: ' '
@@ -122,7 +124,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'd/M/yyyy',
                 dateSeparator: '/'
             };
@@ -137,7 +139,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd/MM/yy',
                 dateSeparator: '/'
             };
@@ -152,7 +154,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'd/M/yy',
                 dateSeparator: '/'
             };
@@ -167,7 +169,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
                 dateSeparator: '-'
             };
@@ -182,7 +184,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
                 dateSeparator: '-'
             };
@@ -197,7 +199,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
                 dateSeparator: '-'
             };
@@ -214,7 +216,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'yyyy/MM/dd',
                 dateSeparator: '/'
             };
@@ -229,7 +231,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'yyyy-MM-dd',
                 dateSeparator: '-'
             };
@@ -244,7 +246,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'yyyy/M/d',
                 dateSeparator: '/'
             };
@@ -259,7 +261,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 spaceIncluded: true,
                 dateFormat: 'yyyy MM dd',
                 dateSeparator: ' '
@@ -275,7 +277,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'yyyyMMdd'
             };
 
@@ -291,7 +293,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'MM/dd/yyyy',
                 dateSeparator: '/'
             };
@@ -306,7 +308,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 dateFormat: 'M/d/yyyy',
                 dateSeparator: '/'
             };
@@ -323,7 +325,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     normalizeSpace: true
@@ -342,7 +344,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
@@ -361,7 +363,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁/၁၂/၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
@@ -382,12 +384,9 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 normalizeReason: {
                     changeU101DToU1040: true
-                },
-                invalidReason: {
-                    invalidU101DInsteadOfU1040: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊'
@@ -403,12 +402,9 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 normalizeReason: {
                     changeU104EToU1044: true
-                },
-                invalidReason: {
-                    invalidU104EInsteadOfU1044: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊'
@@ -424,14 +420,10 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
                     changeU101DToU1040: true
-                },
-                invalidReason: {
-                    invalidU104EInsteadOfU1044: true,
-                    invalidU101DInsteadOfU1040: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊'
@@ -447,13 +439,10 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
-                fragmentType: FragmentType.PossibleDate,
+                possibleDate: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     normalizeSpace: true
-                },
-                invalidReason: {
-                    invalidSpaceIncluded: true
                 },
                 dateFormat: 'dd MM yyyy',
                 dateSeparator: ' '
@@ -468,140 +457,140 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
             const input = '၃၂-၁၂-၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၃၀-၁၃-၂၀၂၀'`, () => {
             const input = '၃၀-၁၃-၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၃၀-၁၂-၃၀၀၀'`, () => {
             const input = '၃၀-၁၂-၃၀၀၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၂၀/၁/၃၁'`, () => {
             const input = '၂၀/၁/၃၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀၅'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀၅';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀#'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀#';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀$'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀$';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀%'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀%';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀+'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀+';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀@'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀@';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀\uFF0B'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀\uFF0B';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀!၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀!၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀/၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀/၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀:၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀:၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀>၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀>၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀?၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀?၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀[၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀[၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀_၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀_၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀|၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀|၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
 
         it(String.raw`should NOT return date fragment when input '၀၁ ၀၁ ၂၀၂၀ ၁'`, () => {
             const input = '၀၁ ၀၁ ၂၀၂၀ ၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
-            expect(actualFragment.fragmentType !== FragmentType.PossibleDate).toBeTruthy();
+            expect(actualFragment.possibleDate).toBeFalsy();
         });
     });
 });
