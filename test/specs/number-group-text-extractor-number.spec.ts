@@ -1,12 +1,12 @@
-import { FragmentType } from '../../src/fragment-type';
-import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
+import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
+import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextExtractor#extractNext#number', () => {
-    let extractor: MyanmarTextExtractor;
+describe('NumberGroupTextExtractor#number', () => {
+    let extractor: TextExtractor;
 
     beforeEach(() => {
-        extractor = new MyanmarTextExtractor();
+        extractor = new NumberGroupTextExtractor();
     });
 
     describe('single-number-input', () => {
@@ -16,7 +16,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: input
             };
 
@@ -29,7 +29,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: input
             };
 
@@ -43,7 +43,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: input
             };
 
@@ -58,7 +58,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: input
             };
 
@@ -71,7 +71,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: input
             };
 
@@ -86,7 +86,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၀၀',
                 numberSeparator: ','
             };
@@ -100,7 +100,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၀၀၀',
                 numberSeparator: ','
             };
@@ -114,7 +114,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
             };
@@ -128,7 +128,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: '⎖'
             };
@@ -143,7 +143,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: '٬'
             };
@@ -157,7 +157,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: "'"
             };
@@ -171,7 +171,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: '_'
             };
@@ -185,7 +185,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 spaceIncluded: true
             };
@@ -199,7 +199,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
             };
@@ -213,7 +213,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
             };
@@ -229,7 +229,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၉၉၉.၀၂',
                 numberSeparator: ','
             };
@@ -243,7 +243,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ','
             };
@@ -257,7 +257,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: '⎖'
             };
@@ -271,7 +271,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: '٬'
             };
@@ -285,7 +285,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: "'"
             };
@@ -299,7 +299,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: '_'
             };
@@ -313,7 +313,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 spaceIncluded: true
             };
@@ -327,7 +327,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ','
             };
@@ -341,7 +341,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ','
             };
@@ -355,7 +355,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၃.၁၄၁၅၉၂၆၅၃၅'
             };
 
@@ -368,7 +368,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ',',
                 normalizeReason: {
@@ -388,7 +388,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.Number,
+                number: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
@@ -413,7 +413,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '၁,၉၄၀',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁၉၄၀',
     //         numberStrnumberSeparatorIncluded: true,
     //         error: {
@@ -431,7 +431,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '၁,၉၄၀.၀၄',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁၉၄၀.၀၄',
     //         numberStrnumberSeparatorIncluded: true,
     //         error: {
@@ -451,7 +451,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁',
     //         ancient: true,
     //         ancientMeasureWords: ['အင်္ဂါ']
@@ -467,7 +467,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၂၀',
     //         ancient: true,
     //         ancientMeasureWords: ['အင်္ဂါ']
@@ -483,7 +483,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁၉၂၀',
     //         ancient: true,
     //         ancientMeasureWords: ['အင်္ဂါ'],
@@ -501,7 +501,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: 'င်္၁ါ',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁',
     //         ancient: true,
     //         ancientMeasureWords: ['အင်္ဂါ'],
@@ -522,7 +522,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁',
     //         ancient: true,
     //         ancientMeasureWords: ['တောင်း', 'တင်း']
@@ -538,7 +538,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁၀',
     //         ancient: true,
     //         ancientMeasureWords: ['ဆယ်သား']
@@ -554,7 +554,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '(၁)၀ိ',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁၀',
     //         ancient: true,
     //         ancientMeasureWords: ['ဆယ်သား'],
@@ -574,7 +574,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '(၄)၀ိ',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၄၀',
     //         ancient: true,
     //         ancientMeasureWords: ['ဆယ်သား'],
@@ -593,7 +593,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁'
     //     });
     // });
@@ -607,7 +607,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉၀'
     //     });
     // });
@@ -621,7 +621,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၀၉'
     //     });
     // });
@@ -635,7 +635,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '(၉)',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉',
     //         spaceIncluded: true,
     //         error: {
@@ -653,7 +653,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '(၉)',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉',
     //         spaceIncluded: true,
     //         error: {
@@ -671,7 +671,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '(၀၁)',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၀၁',
     //         error: {
     //             invalidU101DInsteadOfU1040: true
@@ -688,7 +688,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '(၉၀၄)',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉၀၄',
     //         error: {
     //             invalidU101DInsteadOfU1040: true,
@@ -706,7 +706,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၁'
     //     });
     // });
@@ -720,7 +720,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉'
     //     });
     // });
@@ -734,7 +734,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉၀'
     //     });
     // });
@@ -748,7 +748,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: input,
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၀၉'
     //     });
     // });
@@ -762,7 +762,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '၀၉။',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၀၉',
     //         spaceIncluded: true,
     //         error: {
@@ -780,7 +780,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '၀၉။',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၀၉',
     //         spaceIncluded: true,
     //         error: {
@@ -798,7 +798,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '၀၁။',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၀၁',
     //         error: {
     //             invalidU101DInsteadOfU1040: true
@@ -815,7 +815,7 @@ describe('MyanmarTextExtractor#extractNext#number', () => {
     //     expect(fragment).toEqual({
     //         matchedStr: input,
     //         normalizedStr: '၉၀၄။',
-    //         fragmentType: FragmentType.Number,
+    //         number: true,
     //         numberStr: '၉၀၄',
     //         error: {
     //             invalidU101DInsteadOfU1040: true,

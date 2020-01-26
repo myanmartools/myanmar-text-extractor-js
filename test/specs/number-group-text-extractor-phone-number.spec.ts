@@ -1,12 +1,12 @@
-import { FragmentType } from '../../src/fragment-type';
-import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
+import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
+import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
 describe('MyanmarTextExtractor#extractNext#phone-number', () => {
-    let extractor: MyanmarTextExtractor;
+    let extractor: TextExtractor;
 
     beforeEach(() => {
-        extractor = new MyanmarTextExtractor();
+        extractor = new NumberGroupTextExtractor();
     });
 
     describe('valid-international', () => {
@@ -16,7 +16,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber
+                possiblePhoneNumber: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -28,7 +28,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -41,7 +41,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -54,7 +54,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber
+                possiblePhoneNumber: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -66,7 +66,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -79,7 +79,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -92,7 +92,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber
+                possiblePhoneNumber: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -104,7 +104,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -117,7 +117,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -130,7 +130,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -145,7 +145,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber
+                possiblePhoneNumber: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -157,7 +157,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber
+                possiblePhoneNumber: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -169,7 +169,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true
             };
 
@@ -184,17 +184,12 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '+၄၀၁၂၃၄၅၆',
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true,
-                    removeInvisibleSpace: true
-                },
-                invalidReason: {
-                    invalidU101DInsteadOfU1040: true,
-                    invalidU104EInsteadOfU1044: true,
-                    invalidSpaceIncluded: true
+                    removeSpace: true
                 }
             };
 
@@ -207,13 +202,11 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၉၉၀',
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 normalizeReason: {
                     changeU101DToU1040: true
-                },
-                invalidReason: {
-                    invalidU101DInsteadOfU1040: true
                 }
+
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -225,14 +218,10 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၄၉၉၀',
-                fragmentType: FragmentType.PossiblePhoneNumber,
+                possiblePhoneNumber: true,
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true
-                },
-                invalidReason: {
-                    invalidU101DInsteadOfU1040: true,
-                    invalidU104EInsteadOfU1044: true
                 }
             };
 

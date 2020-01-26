@@ -233,7 +233,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return {
             ...extractInfo,
             matchedStr,
-            possiblePhone: true
+            possiblePhoneNumber: true
         };
     }
 

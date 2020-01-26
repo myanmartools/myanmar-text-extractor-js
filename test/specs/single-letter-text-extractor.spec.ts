@@ -2,7 +2,7 @@ import { SingleLetterTextExtractor } from '../../src/single-letter-text-extracto
 import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('SingleLetterTextExtractor#extractNext', () => {
+describe('SingleLetterTextExtractor', () => {
     let extractor: TextExtractor;
 
     beforeEach(() => {

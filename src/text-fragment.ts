@@ -35,7 +35,7 @@ export interface TextFragment {
     /**
      * True if possible phone number fragment.
      */
-    possiblePhone?: boolean;
+    possiblePhoneNumber?: boolean;
     /**
      * True if ancient written form.
      */
