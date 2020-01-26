@@ -9,7 +9,7 @@ describe('SingleLetterTextExtractor#extractNext', () => {
         extractor = new SingleLetterTextExtractor();
     });
 
-    describe('alphabet', () => {
+    describe('single-alphabet', () => {
         it(String.raw`should return alphabet fragment when input 'ဤ'`, () => {
             const input = 'ဤ';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -47,7 +47,7 @@ describe('SingleLetterTextExtractor#extractNext', () => {
         });
     });
 
-    describe('single-alphabet-input', () => {
+    describe('single-char-input', () => {
         it(String.raw`should return alphabet fragment when input 'က'`, () => {
             const input = 'က';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -145,70 +145,93 @@ describe('SingleLetterTextExtractor#extractNext', () => {
         });
     });
 
-    // Errors
-    // 'ါ' -> 'ါ'
-    // it(String.raw`'\u102B' -> '\u102B'`, () => {
-    //     const fragment = extractor.extractNext('\u102B') as TextFragment;
+    describe('punctuation', () => {
+        it(String.raw`should return punctuation fragment when input '၌'`, () => {
+            const input = '၌';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true,
+                alphabet: true
+            };
 
-    //     expect(fragment.matchedString).toBe('\u102B',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeTruthy();
-    //     expect(fragment.error!.invalidStart).toBeTruthy();
-    //     expect(fragment.error!.invalidUnicodeForm).toBeTruthy();
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
 
-    // // '္' -> '္'
-    // it(String.raw`'\u1039' -> '\u1039'`, () => {
-    //     const fragment = extractor.extractNext('\u1039') as TextFragment;
+        it(String.raw`should return punctuation fragment when input '၍'`, () => {
+            const input = '၍';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true,
+                alphabet: true
+            };
 
-    //     expect(fragment.matchedString).toBe('\u1039',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeTruthy();
-    //     expect(fragment.error!.invalidStart).toBeTruthy();
-    //     expect(fragment.error!.invalidUnicodeForm).toBeTruthy();
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
 
-    // // '္က' -> '္က'
-    // it(String.raw`'\u1039\u1000' -> '\u1039\u1000'`, () => {
-    //     const fragment = extractor.extractNext('\u1039\u1000') as TextFragment;
+        it(String.raw`should return punctuation fragment when input '၏'`, () => {
+            const input = '၏';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true,
+                alphabet: true
+            };
 
-    //     expect(fragment.matchedString).toBe('\u1039\u1000',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeTruthy();
-    //     expect(fragment.error!.invalidStart).toBeTruthy();
-    //     expect(fragment.error!.invalidUnicodeForm).toBeTruthy();
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
 
-    // // 'ါက' -> 'ါ'
-    // it(String.raw`'\u102B\u1000' -> '\u102B'`, () => {
-    //     const fragment = extractor.extractNext('\u102B\u1000') as TextFragment;
+        it(String.raw`should return punctuation fragment when input '၊'`, () => {
+            const input = '၊';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true
+            };
 
-    //     expect(fragment.matchedString).toBe('\u102B',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeTruthy();
-    //     expect(fragment.error!.invalidStart).toBeTruthy();
-    //     expect(fragment.error!.invalidUnicodeForm).toBeTruthy();
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
 
-    // // 'ျြွှေိီုူံဲ့ါာ်းက' -> 'ျြွှေိီုူံဲ့ါာ်း'
-    // it(String.raw`'\u103B\u103C\u103D\u103E\u1031\u102D\u102E\u102F\u1030\u1036\u1032\u1037\u102B\u102C\u103A\u1038\u1000' -> '\u103B\u103C\u103D\u103E\u1031\u102D\u102E\u102F\u1030\u1036\u1032\u1037\u102B\u102C\u103A\u1038'`, () => {
-    //     const fragment = extractor.extractNext('\u103B\u103C\u103D\u103E\u1031\u102D\u102E\u102F\u1030\u1036\u1032\u1037\u102B\u102C\u103A\u1038\u1000') as TextFragment;
+        it(String.raw`should return punctuation fragment when input '။'`, () => {
+            const input = '။';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true
+            };
 
-    //     expect(fragment.matchedString).toBe('\u103B\u103C\u103D\u103E\u1031\u102D\u102E\u102F\u1030\u1036\u1032\u1037\u102B\u102C\u103A\u1038',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeTruthy();
-    //     expect(fragment.error!.invalidStart).toBeTruthy();
-    //     expect(fragment.error!.invalidUnicodeForm).toBeTruthy();
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
 
-    // // 'ဳဴဵက' -> 'ဳဴဵ'
-    // it(String.raw`'\u1033\u1034\u1035\u1000' -> '\u1033\u1034\u1035'`, () => {
-    //     const fragment = extractor.extractNext('\u1033\u1034\u1035\u1000') as TextFragment;
+        it(String.raw`should return punctuation fragment when input '၌က'`, () => {
+            const input = '၌က';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၌',
+                normalizedStr: '၌က',
+                punctuation: true,
+                alphabet: true
+            };
 
-    //     expect(fragment.matchedString).toBe('\u1033\u1034\u1035',
-    //         `\n\nActual fragmentedString: ${formatCodePoints(fragment.matchedString)}`);
-    //     expect(fragment.error).toBeTruthy();
-    //     expect(fragment.error!.invalidStart).toBeTruthy();
-    //     expect(fragment.error!.invalidUnicodeForm).toBeTruthy();
-    // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return punctuation fragment when input '၊က'`, () => {
+            const input = '၊က';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၊',
+                normalizedStr: '၊',
+                punctuation: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
 });
