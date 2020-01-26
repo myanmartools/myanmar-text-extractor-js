@@ -1,4 +1,3 @@
-import { InvalidReason } from './invalid-reason';
 import { NormalizeReason } from './normalize-reason';
 
 /**
@@ -44,7 +43,7 @@ export interface TextFragment {
     /**
      * True if space detected.
      */
-    spaceDetected?: boolean;
+    spaceIncluded?: boolean;
     /**
      * Digit string for number fragment type.
      */
@@ -63,8 +62,4 @@ export interface TextFragment {
      * The reason object for normalized string.
      */
     normalizeReason?: NormalizeReason;
-    /**
-     * The reason object for invalid fragmented string result.
-     */
-    invalidReason?: InvalidReason;
 }

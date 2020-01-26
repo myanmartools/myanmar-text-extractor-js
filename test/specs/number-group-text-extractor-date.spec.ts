@@ -1,4 +1,3 @@
-import { FragmentType } from '../../src/fragment-type';
 import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
@@ -108,7 +107,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true,
+                spaceIncluded: true,
                 dateFormat: 'dd MM yyyy',
                 dateSeparator: ' '
             };
@@ -261,7 +260,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true,
+                spaceIncluded: true,
                 dateFormat: 'yyyy MM dd',
                 dateSeparator: ' '
             };
@@ -325,7 +324,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     normalizeSpace: true
                 },
@@ -344,7 +343,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 },
@@ -363,7 +362,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁/၁၂/၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 },
@@ -449,7 +448,7 @@ describe('MyanmarTextExtractor#extractNext#date', () => {
                 matchedStr: input,
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
                 fragmentType: FragmentType.PossibleDate,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     normalizeSpace: true
                 },

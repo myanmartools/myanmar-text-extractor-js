@@ -70,7 +70,7 @@ export class MyanmarTextExtractor implements TextExtractor {
     //     }
 
     //     const newMatchedStr = `${matchedStr}${spaceStr}${timeMatchedStr}`;
-    //     extractInfo.spaceDetected = true;
+    //     extractInfo.spaceIncluded = true;
     //     extractInfo.normalizedStr += ' ' + timeExtractInfo.normalizedStr;
 
     //     if (spaceStr !== ' ') {

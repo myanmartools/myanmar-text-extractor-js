@@ -29,7 +29,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -42,7 +42,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -67,7 +67,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -80,7 +80,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -105,7 +105,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -118,7 +118,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -131,7 +131,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -170,7 +170,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -185,7 +185,7 @@ describe('MyanmarTextExtractor#extractNext#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '+၄၀၁၂၃၄၅၆',
                 fragmentType: FragmentType.PossiblePhoneNumber,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true,

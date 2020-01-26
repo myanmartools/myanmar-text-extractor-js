@@ -18,7 +18,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _numberSeparator = `${this._numberThousandSeparator}${this._visibleSpace}`;
 
     private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
-    private readonly _invisibleSpaceRegExp = new RegExp(`[${this._invisibleSpace}]`);
 
     // private readonly _options: TextFragmenterOptions;
     private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
@@ -168,7 +167,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (extractInfo.spaceDetected && rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
+        if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
             const rightStr2 = rightStr.substring(1);
             if (this.isRightStrPossibleNumber(rightStr2)) {
                 return null;
@@ -224,7 +223,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (extractInfo.spaceDetected && rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
+        if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._spaceRegExp.test(rightStr[0]))) {
             const rightStr2 = rightStr.substring(1);
             if (this.isRightStrPossibleNumber(rightStr2)) {
                 return null;
@@ -288,7 +287,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let matchedStr = input.substring(0, 4);
         let normalizedStr = matchedStr;
-        let spaceDetected: boolean | undefined;
+        let spaceIncluded: boolean | undefined;
 
         if (input[4] !== '\u102B') {
             if (input.length < 6 || input[5] !== '\u102B' || !this._spaceRegExp.test(input[4])) {
@@ -297,33 +296,33 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
             matchedStr += input[4] + input[5];
             normalizedStr += input[5];
-            spaceDetected = true;
+            spaceIncluded = true;
         } else {
             matchedStr += input[4];
             normalizedStr += input[4];
         }
 
         const rightStr = input.substring(matchedStr.length);
-        const rFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
-        if (rFirstCp && rFirstCp >= 0x102B && rFirstCp <= 0x103E) {
+        const right1stCp = rightStr ? rightStr.codePointAt(0) : undefined;
+        if (right1stCp && right1stCp >= 0x102B && right1stCp <= 0x103E) {
             return null;
         }
 
         const numberFragment: TextFragment = {
             matchedStr,
             normalizedStr,
+            numberStr: c4,
             number: true,
             ancientWrittenForm: true,
-            numberStr: c4,
             // အင်္ဂါ
             ancientMeasureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
 
-        if (spaceDetected) {
-            numberFragment.spaceDetected = true;
-            numberFragment.invalidReason = numberFragment.invalidReason || {};
-            numberFragment.invalidReason.invalidSpaceIncluded = true;
-            numberFragment.invalidReason.invalidUnicodeForm = true;
+        if (spaceIncluded) {
+            numberFragment.spaceIncluded = true;
+
+            numberFragment.normalizeReason = numberFragment.normalizeReason || {};
+            numberFragment.normalizeReason.removeSpace = true;
         }
 
         return numberFragment;
@@ -547,12 +546,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
         numberFragment.ancientWrittenForm = true;
         numberFragment.ancientMeasureWords = ancientMeasureWords;
 
-        if (diacriticsFragment.spaceDetected) {
-            numberFragment.spaceDetected = true;
+        if (diacriticsFragment.spaceIncluded) {
+            numberFragment.spaceIncluded = true;
             numberFragment.normalizeReason = numberFragment.normalizeReason || {};
             numberFragment.normalizeReason.removeSpace = true;
-            numberFragment.invalidReason = numberFragment.invalidReason || {};
-            numberFragment.invalidReason.invalidSpaceIncluded = true;
         }
     }
 
@@ -577,7 +574,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 textFragment.matchedStr += tmpSpace + c;
                 textFragment.normalizedStr += c;
                 if (tmpSpace) {
-                    textFragment.spaceDetected = true;
+                    textFragment.spaceIncluded = true;
                     tmpSpace = '';
                 }
             } else if (acceptSpaceBetween && !tmpSpace && this._spaceRegExp.test(c)) {
@@ -602,9 +599,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let prevIsSeparator = false;
         let numberSeparator: string | undefined;
         let digitCount = 0;
-        let u101DIncluded = false;
-        let u104EIncluded = false;
-        let invisibleSpaceIncluded = false;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
@@ -620,12 +614,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
 
                 if (cp === 0x101D) {
-                    u101DIncluded = true;
                     extractInfo.normalizedStr += '\u1040';
                     extractInfo.numberStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
-                    u104EIncluded = true;
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.numberStr += '\u104E';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
@@ -639,7 +631,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     return null;
                 }
 
-                extractInfo.spaceDetected = true;
+                extractInfo.spaceIncluded = true;
 
                 if (prevIsSeparator) {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
@@ -648,9 +640,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     extractInfo.normalizedStr += ' ';
 
                     if (cp !== 0x0020) {
-                        if (this._invisibleSpaceRegExp.test(c)) {
-                            invisibleSpaceIncluded = true;
-                        }
                         extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                         extractInfo.normalizeReason.normalizeSpace = true;
                     }
@@ -697,21 +686,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             extractInfo.numberSeparator = numberSeparator;
         }
 
-        if (invisibleSpaceIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidSpaceIncluded = true;
-        }
-
-        if (u101DIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (u104EIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
-        }
-
         return extractInfo;
     }
 
@@ -724,9 +698,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let prevIsSeparator = false;
         let dateSeparator: string | undefined;
         let digitCount = 0;
-        let u101DIncluded = false;
-        let u104EIncluded = false;
-        let invisibleSpaceIncluded = false;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
@@ -741,11 +712,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
 
                 if (cp === 0x101D) {
-                    u101DIncluded = true;
                     extractInfo.normalizedStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
-                    u104EIncluded = true;
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
@@ -758,7 +727,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     return null;
                 }
 
-                extractInfo.spaceDetected = true;
+                extractInfo.spaceIncluded = true;
 
                 if (prevIsSeparator) {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
@@ -767,9 +736,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     extractInfo.normalizedStr += ' ';
 
                     if (cp !== 0x0020) {
-                        if (this._invisibleSpaceRegExp.test(c)) {
-                            invisibleSpaceIncluded = true;
-                        }
                         extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                         extractInfo.normalizeReason.normalizeSpace = true;
                     }
@@ -803,7 +769,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (dateSeparator) {
             extractInfo.dateSeparator = dateSeparator;
-        } else if (extractInfo.spaceDetected) {
+        } else if (extractInfo.spaceIncluded) {
             extractInfo.dateSeparator = ' ';
         }
 
@@ -836,21 +802,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             extractInfo.dateFormat = 'yyyyMMdd';
         }
 
-        if (invisibleSpaceIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidSpaceIncluded = true;
-        }
-
-        if (u101DIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (u104EIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
-        }
-
         return extractInfo;
     }
 
@@ -858,8 +809,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const extractInfo: ExtractInfo = { normalizedStr: '' };
 
         let digitCount = 0;
-        let u101DIncluded = false;
-        let u104EIncluded = false;
         let colonSeparatorCount = 0;
 
         for (const c of matchedStr) {
@@ -872,35 +821,27 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
 
                 if (cp === 0x101D) {
-                    u101DIncluded = true;
                     extractInfo.normalizedStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
-                    u104EIncluded = true;
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
             } else if (this._spaceRegExp.test(c)) {
-                extractInfo.spaceDetected = true;
+                extractInfo.spaceIncluded = true;
 
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 extractInfo.normalizeReason.removeSpace = true;
-
-                extractInfo.invalidReason = extractInfo.invalidReason || {};
-                extractInfo.invalidReason.invalidSpaceIncluded = true;
             } else {
                 extractInfo.normalizedStr += ':';
                 if (cp === 0x003A) {
                     ++colonSeparatorCount;
                 } else {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.invalidReason = extractInfo.invalidReason || {};
                     extractInfo.normalizeReason.normalizeColon = true;
+
                     if (cp === 0x1038) {
                         ++colonSeparatorCount;
-                        extractInfo.invalidReason.invalidU1038InsteadOfColon = true;
-                    } else {
-                        extractInfo.invalidReason.invalidCharInsteadOfColon = true;
                     }
                 }
             }
@@ -908,16 +849,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (!digitCount || !colonSeparatorCount) {
             return null;
-        }
-
-        if (u101DIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (u104EIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
         return extractInfo;
@@ -937,9 +868,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let possibleDigitCount = 0;
         let dotCount = 0;
         let slashCount = 0;
-        let u101DIncluded = false;
-        let u104EIncluded = false;
-        let invisibleSpaceIncluded = false;
 
         if (curStr[0] === '+' || curStr[0] === '\uFF0B') {
             extractInfo.normalizedStr += '+';
@@ -966,11 +894,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 ++possibleDigitCount;
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 if (cp === 0x101D) {
-                    u101DIncluded = true;
                     extractInfo.normalizedStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
-                    u104EIncluded = true;
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
@@ -1000,20 +926,23 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-            } else if (this._visibleSpaceRegExp.test(c)) {
-                extractInfo.spaceDetected = true;
-                extractInfo.normalizedStr += ' ';
-                if (cp !== 0x0020) {
-                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.normalizeSpace = true;
+            } else if (this._spaceRegExp.test(c)) {
+                if (prevIsSpace) {
+                    return null;
                 }
-                prevIsDigit = false;
-                prevIsSpace = true;
-            } else if (this._invisibleSpaceRegExp.test(c)) {
-                extractInfo.spaceDetected = true;
-                invisibleSpaceIncluded = true;
-                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                extractInfo.normalizeReason.removeSpace = true;
+
+                extractInfo.spaceIncluded = true;
+                if (this._visibleSpaceRegExp.test(c)) {
+                    extractInfo.normalizedStr += ' ';
+                    if (cp !== 0x0020) {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.normalizeSpace = true;
+                    }
+                } else {
+                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                    extractInfo.normalizeReason.removeSpace = true;
+                }
+
                 prevIsDigit = false;
                 prevIsSpace = true;
             } else {
@@ -1037,21 +966,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (!digitCount) {
             return null;
-        }
-
-        if (invisibleSpaceIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidSpaceIncluded = true;
-        }
-
-        if (u101DIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
-        }
-
-        if (u104EIncluded) {
-            extractInfo.invalidReason = extractInfo.invalidReason || {};
-            extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
         }
 
         if (dotCount === 1 && extractInfo.normalizedStr[0] !== '+' &&
@@ -1084,15 +998,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
             } else if (cp === 0x101D || cp === 0x104E) {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                extractInfo.invalidReason = extractInfo.invalidReason || {};
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
-                    extractInfo.invalidReason.invalidU101DInsteadOfU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
-                    extractInfo.invalidReason.invalidU104EInsteadOfU1044 = true;
                 }
             } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, matchedStr.substring(i + 1))) {
@@ -1101,16 +1012,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
                 extractInfo.normalizedStr += c;
             } else if (this._spaceRegExp.test(c)) {
-                extractInfo.spaceDetected = true;
+                extractInfo.spaceIncluded = true;
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                if (this._invisibleSpaceRegExp.test(c)) {
-                    extractInfo.normalizeReason.removeInvisibleSpace = true;
-                } else {
-                    extractInfo.normalizeReason.removeSpace = true;
-                }
-
-                extractInfo.invalidReason = extractInfo.invalidReason || {};
-                extractInfo.invalidReason.invalidSpaceIncluded = true;
+                extractInfo.normalizeReason.removeSpace = true;
             } else {
                 extractInfo.normalizedStr += c;
             }

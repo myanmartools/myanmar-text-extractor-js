@@ -291,7 +291,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
                 fragmentType: FragmentType.PossibleTime,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 },
@@ -310,7 +310,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
                 fragmentType: FragmentType.PossibleTime,
-                spaceDetected: true,
+                spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 },
