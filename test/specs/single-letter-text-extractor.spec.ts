@@ -1,14 +1,15 @@
-import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
+import { SingleLetterTextExtractor } from '../../src/single-letter-text-extractor';
+import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextExtractor#extractNext#single-letter-text', () => {
-    let extractor: MyanmarTextExtractor;
+describe('SingleLetterTextExtractor#extractNext', () => {
+    let extractor: TextExtractor;
 
     beforeEach(() => {
-        extractor = new MyanmarTextExtractor();
+        extractor = new SingleLetterTextExtractor();
     });
 
-    describe('single-alphabet', () => {
+    describe('alphabet', () => {
         it(String.raw`should return alphabet fragment when input 'ဤ'`, () => {
             const input = 'ဤ';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -46,7 +47,7 @@ describe('MyanmarTextExtractor#extractNext#single-letter-text', () => {
         });
     });
 
-    describe('single-char-input', () => {
+    describe('single-alphabet-input', () => {
         it(String.raw`should return alphabet fragment when input 'က'`, () => {
             const input = 'က';
             const actualFragment = extractor.extractNext(input) as TextFragment;
