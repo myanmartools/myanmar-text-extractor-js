@@ -1,13 +1,14 @@
-import { FragmentType } from '../../src/fragment-type';
-import { MyanmarTextExtractor } from '../../src/myanmar-text-extractor';
+import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
+import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
 describe('MyanmarTextExtractor#extractNext#time', () => {
-    let extractor: MyanmarTextExtractor;
+    let extractor: TextExtractor;
 
     beforeEach(() => {
-        extractor = new MyanmarTextExtractor();
+        extractor = new NumberGroupTextExtractor();
     });
+
 
     describe('hour-minute-second', () => {
         // hh:mm:ss
@@ -17,7 +18,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -30,7 +31,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -43,7 +44,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -56,7 +57,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -69,7 +70,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -82,7 +83,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -95,7 +96,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -108,7 +109,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -121,7 +122,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -134,7 +135,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -147,7 +148,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -160,7 +161,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -173,7 +174,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -186,7 +187,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -199,7 +200,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -214,7 +215,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -227,7 +228,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -240,7 +241,7 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                fragmentType: FragmentType.PossibleTime
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -254,12 +255,9 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime,
+                possibleTime: true,
                 normalizeReason: {
                     normalizeColon: true
-                },
-                invalidReason: {
-                    invalidU1038InsteadOfColon: true
                 }
             };
 
@@ -272,12 +270,9 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime,
+                possibleTime: true,
                 normalizeReason: {
                     normalizeColon: true
-                },
-                invalidReason: {
-                    invalidCharInsteadOfColon: true
                 }
             };
 
@@ -290,13 +285,10 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime,
+                possibleTime: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
-                },
-                invalidReason: {
-                    invalidSpaceIncluded: true
                 }
             };
 
@@ -309,13 +301,10 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
-                fragmentType: FragmentType.PossibleTime,
+                possibleTime: true,
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
-                },
-                invalidReason: {
-                    invalidSpaceIncluded: true
                 }
             };
 
@@ -328,42 +317,42 @@ describe('MyanmarTextExtractor#extractNext#time', () => {
             const input = '၁၂:၅၉:၅၉၁';
             const actualFragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u101D၁'`, () => {
             const input = '၁၂:၅၉:၅၉\u101D၁';
             const actualFragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u104E၁'`, () => {
             const input = '၁၂:၅၉:၅၉\u104E၁';
             const actualFragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉.၁'`, () => {
             const input = '၁၂:၅၉:၅၉.၁';
             const actualFragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
             const actualFragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '\u104E:\u101D'`, () => {
             const input = '\u104E:\u101D';
             const actualFragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || actualFragment.fragmentType !== FragmentType.PossibleTime).toBeTruthy();
+            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
         });
     });
 });

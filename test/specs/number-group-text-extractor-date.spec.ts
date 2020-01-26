@@ -1,5 +1,4 @@
 import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
-
 import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
