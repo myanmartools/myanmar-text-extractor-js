@@ -1,12 +1,12 @@
+import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
-import { TextFragmenter } from './text-fragmenter';
 
-export class SingleLetterTextFragmenter implements TextFragmenter {
+export class SingleLetterTextExtractor implements TextExtractor {
     get priority(): number {
         return 0;
     }
 
-    getNextFragment(input: string, firstCp: number): TextFragment | null {
+    extractNext(input: string, firstCp: number): TextFragment | null {
         // ဤ / ဪ နှင့် [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ / ဿ / ၎ တစ်လုံးတည်း
         if (firstCp === 0x1024 || firstCp === 0x102A ||
             (input.length === 1 && ((firstCp >= 0x1000 && firstCp <= 0x1021) ||

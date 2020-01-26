@@ -1,3 +1,5 @@
+import { NumberGroupTextExtractor } from './number-group-text-extractor';
+import { SingleLetterTextExtractor } from './single-letter-text-extractor';
 import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
 
@@ -17,14 +19,24 @@ export class MyanmarTextExtractor implements TextExtractor {
     // // ကျေး / ကျေ့ / ကျေ (Length: 2)
     // private readonly _d3bOr3c31O37Or38RegExp = new RegExp('^[\u103B\u103C]\u1031[\u1037\u1038]?');
 
-    // constructor(options?: TextFragmenterOptions) {
-    //     this._options = options || {};
-    // }
+    constructor(
+        private readonly _singleLetterTextExtractor: SingleLetterTextExtractor,
+        private readonly _numberGroupTextExtractor: NumberGroupTextExtractor) { }
 
-    extractNext(input: string): TextFragment | null {
-        const firstCp = input.codePointAt(0);
+    extractNext(input: string, firstCp?: number): TextFragment | null {
+        firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
         if (!firstCp) {
             return null;
+        }
+
+        const singleLetterTextFragment = this._singleLetterTextExtractor.extractNext(input, firstCp);
+        if (singleLetterTextFragment != null) {
+            return singleLetterTextFragment;
+        }
+
+        const numberGroupTextFragment = this._numberGroupTextExtractor.extractNext(input, firstCp);
+        if (numberGroupTextFragment != null) {
+            return numberGroupTextFragment;
         }
 
         return null;
