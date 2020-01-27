@@ -8,7 +8,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
         extractor = new NumberGroupTextExtractor();
     });
 
-    describe('valid-international', () => {
+    describe('international', () => {
         it(String.raw`should return phone number fragment when input '+၉၅၉'`, () => {
             const input = '+၉၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -137,14 +137,16 @@ describe('NumberGroupTextExtractor#phone-number', () => {
         });
     });
 
-    describe('valid-local', () => {
+    describe('local', () => {
         it(String.raw`should return phone number fragment when input '၉၉၉'`, () => {
             const input = '၉၉၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                possiblePhoneNumber: true
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -156,7 +158,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                possiblePhoneNumber: true
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -169,14 +173,47 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၁၂၃၄၅၆၇',
                 spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return phone number fragment when input '၁_၂၃၄_၅၆၇'`, () => {
+            const input = '၁_၂၃၄_၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: '_'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
+            const input = '၁ ၂၃၄ ၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၁၂၃၄၅၆၇',
+                spaceIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
     });
 
-    describe('invalid', () => {
+    describe('normalize', () => {
         it(String.raw`should return phone number fragment when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
             const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -202,10 +239,11 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '၉၉၀',
                 possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၉၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true
                 }
-
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -218,6 +256,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '၄၉၉၀',
                 possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၄၉၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true
