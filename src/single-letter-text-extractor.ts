@@ -6,7 +6,12 @@ export class SingleLetterTextExtractor implements TextExtractor {
         return 0;
     }
 
-    extractNext(input: string, firstCp: number): TextFragment | null {
+    extractNext(input: string, firstCp?: number): TextFragment | null {
+        firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
+        if (!firstCp) {
+            return null;
+        }
+
         // ဤ / ဪ နှင့် [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ / ဿ / ၎ တစ်လုံးတည်း
         if (firstCp === 0x1024 || firstCp === 0x102A ||
             (input.length === 1 && ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
