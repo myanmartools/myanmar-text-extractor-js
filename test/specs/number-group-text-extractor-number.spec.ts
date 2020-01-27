@@ -442,12 +442,35 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
-    // it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
-    //     const input = '\u104E,\u104E\u104E\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
+    describe('not', () => {
+        it(String.raw`should NOT return number fragment with when input '\u104E'`, () => {
+            const input = '\u104E';
+            const fragment = extractor.extractNext(input);
 
-    //     expect(fragment.fragmentType === FragmentType.Number).toBeFalsy();
-    // });
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return number fragment with when input '\u101D'`, () => {
+            const input = '\u101D';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return number fragment with when input '\u104E\u101D'`, () => {
+            const input = '\u101D\u104E';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
+            const input = '\u104E,\u104E\u104E\u101D';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+    });
 
     // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D'`, () => {
     //     const input = '၁,၉\u104E\u101D';
