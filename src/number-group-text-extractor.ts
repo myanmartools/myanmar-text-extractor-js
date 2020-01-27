@@ -873,6 +873,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let numberStr = '';
         let numberGroup = true;
+        let numberSeparator = '';
         let curStr = matchedStr;
         let startOfString = true;
         let prevIsDigit = false;
@@ -971,15 +972,24 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
 
                 if (cp === 0x005F) {
-                    numberStr += c;
-                } else {
-                    numberGroup = false;
-                }
-
-                if (cp === 0x002E) {
+                    if (numberSeparator && numberSeparator !== c) {
+                        numberGroup = false;
+                    } else {
+                        numberSeparator = c;
+                    }
+                } else if (cp === 0x002E) {
                     ++dotCount;
-                } else if (cp === 0x002F) {
-                    ++slashCount;
+                    if (dotCount > 1) {
+                        numberGroup = false;
+                    } else {
+                        numberStr += c;
+                        numberSeparator = c;
+                    }
+                } else {
+                    if (cp === 0x002F) {
+                        ++slashCount;
+                    }
+                    numberGroup = false;
                 }
 
                 extractInfo.normalizedStr += c;
@@ -996,6 +1006,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (numberGroup) {
             extractInfo.numberStr = numberStr;
+            if (numberSeparator) {
+                extractInfo.numberSeparator = numberSeparator;
+            }
         }
 
         if (dotCount === 1 && extractInfo.normalizedStr[0] !== '+' &&
