@@ -235,11 +235,17 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         }
 
-        return {
+        const fragment: TextFragment = {
             ...extractInfo,
             matchedStr,
             possiblePhoneNumber: true
         };
+
+        if (extractInfo.numberStr) {
+            fragment.number = true;
+        }
+
+        return fragment;
     }
 
     private getBracketPrefixFragment(input: string, firstCp: number): TextFragment | null {
@@ -865,6 +871,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             normalizedStr: ''
         };
 
+        let numberGroup = true;
         let curStr = matchedStr;
         let startOfString = true;
         let prevIsDigit = false;
@@ -883,6 +890,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
             curStr = curStr.substring(1);
             startOfString = false;
+            numberGroup = false;
         }
 
         for (let i = 0; i < curStr.length; i++) {
@@ -916,12 +924,14 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
+                numberGroup = false;
             } else if (cp === 0x0023) {
                 if (!prevIsDigit) {
                     return null;
                 }
 
                 extractInfo.normalizedStr += c;
+                numberGroup = false;
                 break;
             } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
@@ -931,6 +941,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
+                numberGroup = false;
             } else if (this._spaceRegExp.test(c)) {
                 if (prevIsSpace) {
                     return null;
@@ -955,6 +966,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     return null;
                 }
 
+                if (cp !== 0x005F) {
+                    numberGroup = false;
+                }
+
                 if (cp === 0x002E) {
                     ++dotCount;
                 } else if (cp === 0x002F) {
@@ -971,6 +986,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (!digitCount) {
             return null;
+        }
+
+        if (numberGroup) {
+            extractInfo.numberStr = extractInfo.normalizedStr;
         }
 
         if (dotCount === 1 && extractInfo.normalizedStr[0] !== '+' &&
