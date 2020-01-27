@@ -425,15 +425,45 @@ describe('NumberGroupTextExtractor#number', () => {
     });
 
     describe('inga-tin-taung-ancient-number', () => {
-        // င်္၁ါ
-        it(String.raw`should return number fragment when input '\u1004\u103A\u1039\u1041\u102B'`, () => {
-            const input = '\u1004\u103A\u1039\u1041\u102B';
+        it(String.raw`should return number fragment when input 'င်္၁ါ'`, () => {
+            const input = 'င်္၁ါ';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
                 number: true,
                 numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['အင်္ဂါ']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁င်္၀ါ'`, () => {
+            const input = '၁င်္၀ါ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁၀',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['အင်္ဂါ']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁,၉၂င်္၀ါ'`, () => {
+            const input = '၁,၉၂င်္၀ါ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁၉၂၀',
+                numberSeparator: ',',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
             };
@@ -526,77 +556,6 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
-
-    // it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
-    //     const input = 'င်္၁ါ';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၁',
-    //         ancient: true,
-    //         ancientMeasureWords: ['အင်္ဂါ']
-    //     });
-    // });
-
-    // it(String.raw`should return 'အင်္ဂါ' number fragment when input '၂င်္၀ါ'`, () => {
-    //     const input = '၂င်္၀ါ';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၂၀',
-    //         ancient: true,
-    //         ancientMeasureWords: ['အင်္ဂါ']
-    //     });
-    // });
-
-    // it(String.raw`should return 'အင်္ဂါ' number fragment when input '၁,၉၂င်္၀ါ'`, () => {
-    //     const input = '၁,၉၂င်္၀ါ';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၁၉၂၀',
-    //         ancient: true,
-    //         ancientMeasureWords: ['အင်္ဂါ'],
-    //         numberStrnumberSeparatorIncluded: true
-    //     });
-    // });
-
-    // // invalid space
-    // it(String.raw`should return 'အင်္ဂါ' number fragment with ERROR when input 'င်္၁ ါ'`, () => {
-    //     const input = 'င်္၁ ါ';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: 'င်္၁ါ',
-    //         number: true,
-    //         numberStr: '၁',
-    //         ancient: true,
-    //         ancientMeasureWords: ['အင်္ဂါ'],
-    //         spaceIncluded: true,
-    //         error: {
-    //             invalidSpaceIncluded: true,
-    //             invalidUnicodeForm: true
-    //         }
-    //     });
-    // });
 
     // it(String.raw`should return 'တင်း' / 'တောင်း' number fragment when input 'င်္၁'`, () => {
     //     const input = 'င်္၁';
