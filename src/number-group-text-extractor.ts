@@ -58,7 +58,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return 1;
     }
 
-    extractNext(input: string, firstCp: number): TextFragment | null {
+    extractNext(input: string, firstCp?: number): TextFragment | null {
+        firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
+        if (!firstCp) {
+            return null;
+        }
+
         const inputLen = input.length;
         const isStartsWithNumber = firstCp >= 0x1040 && firstCp <= 0x1049;
         const isStartsWithPossibleNumber = !isStartsWithNumber && (firstCp === 0x101D || firstCp === 0x104E);
