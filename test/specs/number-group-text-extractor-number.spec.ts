@@ -470,6 +470,21 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input 'င်္၁'`, () => {
+            const input = 'င်္၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['တောင်း', 'တင်း']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('normalize', () => {
@@ -557,21 +572,6 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
-    // it(String.raw`should return 'တင်း' / 'တောင်း' number fragment when input 'င်္၁'`, () => {
-    //     const input = 'င်္၁';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၁',
-    //         ancient: true,
-    //         ancientMeasureWords: ['တောင်း', 'တင်း']
-    //     });
-    // });
 
     // it(String.raw`should return 'ဆယ်သား' number fragment when input '(၁)၀ိ'`, () => {
     //     const input = '(၁)၀ိ';
