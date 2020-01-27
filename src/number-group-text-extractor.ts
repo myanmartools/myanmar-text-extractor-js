@@ -871,6 +871,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             normalizedStr: ''
         };
 
+        let numberStr = '';
         let numberGroup = true;
         let curStr = matchedStr;
         let startOfString = true;
@@ -901,6 +902,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 ++digitCount;
                 ++possibleDigitCount;
                 extractInfo.normalizedStr += c;
+                numberStr += c;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (cp === 0x101D || cp === 0x104E) {
@@ -908,9 +910,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
+                    numberStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
+                    numberStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
 
@@ -966,7 +970,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     return null;
                 }
 
-                if (cp !== 0x005F) {
+                if (cp === 0x005F) {
+                    numberStr += c;
+                } else {
                     numberGroup = false;
                 }
 
@@ -989,7 +995,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         if (numberGroup) {
-            extractInfo.numberStr = extractInfo.normalizedStr;
+            extractInfo.numberStr = numberStr;
         }
 
         if (dotCount === 1 && extractInfo.normalizedStr[0] !== '+' &&
