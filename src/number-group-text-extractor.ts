@@ -630,7 +630,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
-                    extractInfo.numberStr += '\u104E';
+                    extractInfo.numberStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
 
