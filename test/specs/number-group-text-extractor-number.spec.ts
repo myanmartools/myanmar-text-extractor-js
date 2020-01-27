@@ -443,6 +443,23 @@ describe('NumberGroupTextExtractor#number', () => {
     });
 
     describe('normalize', () => {
+        it(String.raw`should return number fragment when input '၁၉\u101D'`, () => {
+            const input = '၁၉\u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁၉၀',
+                number: true,
+                numberStr: '၁၉၀',
+                possiblePhoneNumber: true,
+                normalizeReason: {
+                    changeU101DToU1040: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁,၉\u104E\u101D'`, () => {
             const input = '၁,၉\u104E\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
