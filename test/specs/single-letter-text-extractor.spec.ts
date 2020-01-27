@@ -1,15 +1,14 @@
 import { SingleLetterTextExtractor } from '../../src/single-letter-text-extractor';
-import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
 describe('SingleLetterTextExtractor', () => {
-    let extractor: TextExtractor;
+    let extractor: SingleLetterTextExtractor;
 
     beforeEach(() => {
         extractor = new SingleLetterTextExtractor();
     });
 
-    describe('single-alphabet', () => {
+    describe('single-char-alphabet', () => {
         it(String.raw`should return alphabet fragment when input 'ဤ'`, () => {
             const input = 'ဤ';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -214,7 +213,7 @@ describe('SingleLetterTextExtractor', () => {
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: '၌',
-                normalizedStr: '၌က',
+                normalizedStr: '၌',
                 punctuation: true,
                 alphabet: true
             };
