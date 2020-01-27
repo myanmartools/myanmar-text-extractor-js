@@ -1,9 +1,8 @@
 import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
-import { TextExtractor } from '../../src/text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('MyanmarTextExtractor#extractNext#phone-number', () => {
-    let extractor: TextExtractor;
+describe('NumberGroupTextExtractor#phone-number', () => {
+    let extractor: NumberGroupTextExtractor;
 
     beforeEach(() => {
         extractor = new NumberGroupTextExtractor();
