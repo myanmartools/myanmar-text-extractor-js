@@ -165,33 +165,33 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return number fragment when input '၁_၂၃၄_၅၆၇'`, () => {
-            const input = '၁_၂၃၄_၅၆၇';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                number: true,
-                numberStr: '၁၂၃၄၅၆၇',
-                numberSeparator: '_'
-            };
+        // it(String.raw`should return number fragment when input '၁_၂၃၄_၅၆၇'`, () => {
+        //     const input = '၁_၂၃၄_၅၆၇';
+        //     const actualFragment = extractor.extractNext(input) as TextFragment;
+        //     const expactedFragment: TextFragment = {
+        //         matchedStr: input,
+        //         normalizedStr: input,
+        //         number: true,
+        //         numberStr: '၁၂၃၄၅၆၇',
+        //         numberSeparator: '_'
+        //     };
 
-            expect(actualFragment).toEqual(expactedFragment);
-        });
+        //     expect(actualFragment).toEqual(expactedFragment);
+        // });
 
-        it(String.raw`should return number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
-            const input = '၁ ၂၃၄ ၅၆၇';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                number: true,
-                numberStr: '၁၂၃၄၅၆၇',
-                spaceIncluded: true
-            };
+        // it(String.raw`should return number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
+        //     const input = '၁ ၂၃၄ ၅၆၇';
+        //     const actualFragment = extractor.extractNext(input) as TextFragment;
+        //     const expactedFragment: TextFragment = {
+        //         matchedStr: input,
+        //         normalizedStr: input,
+        //         number: true,
+        //         numberStr: '၁၂၃၄၅၆၇',
+        //         spaceIncluded: true
+        //     };
 
-            expect(actualFragment).toEqual(expactedFragment);
-        });
+        //     expect(actualFragment).toEqual(expactedFragment);
+        // });
 
         it(String.raw`should return number fragment when input '၁၂,၃၄,၅၆၇'`, () => {
             const input = '၁၂,၃၄,၅၆၇';
