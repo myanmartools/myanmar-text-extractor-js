@@ -104,6 +104,21 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Ends with က
+        it(String.raw`should return number fragment when input '၁၀၀၀က'`, () => {
+            const input = '၁၀၀၀က';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၁၀၀၀',
+                normalizedStr: '၁၀၀၀',
+                number: true,
+                numberStr: '၁၀၀၀',
+                possiblePhoneNumber: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('number-group-with-separator', () => {
@@ -215,6 +230,36 @@ describe('NumberGroupTextExtractor#number', () => {
                 number: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
+            const input = '၁ ၂၃၄ ၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၁၂၃၄၅၆၇',
+                spaceIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁_၂၃၄_၅၆၇'`, () => {
+            const input = '၁_၂၃၄_၅၆၇';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: '၁၂၃၄၅၆၇',
+                numberSeparator: '_'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
