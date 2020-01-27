@@ -474,6 +474,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return numberFragment;
     }
 
+    // tslint:disable-next-line: max-func-body-length
     private mergeAncientNumeralShortcutSuffixFragment(input: string, numberFragment: TextFragment): void {
         const rightStr = input.substring(numberFragment.matchedStr.length);
         if (!rightStr) {
@@ -482,6 +483,28 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const right1stCp = rightStr.codePointAt(0);
         if (!right1stCp) {
+            return;
+        }
+
+        const ingaTinOrTaungAncientNumberFragment = this.getIngaTinOrTaungAncientNumberFragment(rightStr, right1stCp);
+        if (ingaTinOrTaungAncientNumberFragment != null) {
+            numberFragment.matchedStr += ingaTinOrTaungAncientNumberFragment.matchedStr;
+            numberFragment.normalizedStr += ingaTinOrTaungAncientNumberFragment.normalizedStr;
+            numberFragment.numberStr += ingaTinOrTaungAncientNumberFragment.numberStr || '';
+            numberFragment.ancientWrittenForm = true;
+            numberFragment.ancientMeasureWords = ingaTinOrTaungAncientNumberFragment.ancientMeasureWords;
+
+            if (ingaTinOrTaungAncientNumberFragment.spaceIncluded) {
+                numberFragment.spaceIncluded = true;
+            }
+
+            if (ingaTinOrTaungAncientNumberFragment.normalizeReason) {
+                numberFragment.normalizeReason = {
+                    ...numberFragment.normalizeReason,
+                    ...ingaTinOrTaungAncientNumberFragment.normalizeReason
+                };
+            }
+
             return;
         }
 
