@@ -372,9 +372,7 @@ describe('NumberGroupTextExtractor#date', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
-    });
 
-    describe('invalid', () => {
         // Invalid \U101D
         it(String.raw`should return date fragment with INVALID when input '၃၁၊၁၂၊၂၀၂\u101D'`, () => {
             const input = '၃၁၊၁၂၊၂၀၂\u101D';

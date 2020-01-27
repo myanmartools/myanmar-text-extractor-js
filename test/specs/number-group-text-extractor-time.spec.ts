@@ -8,7 +8,6 @@ describe('NumberGroupTextExtractor#time', () => {
         extractor = new NumberGroupTextExtractor();
     });
 
-
     describe('hour-minute-second', () => {
         // hh:mm:ss
         it(String.raw`should return time fragment when input '၂၃:၅၉:၅၉'`, () => {
@@ -204,6 +203,19 @@ describe('NumberGroupTextExtractor#time', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Ends with ၊
+        it(String.raw`should return time fragment when input '၂၃:၅၉:၅၉၊'`, () => {
+            const input = '၂၃:၅၉:၅၉၊';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('hour-minute', () => {
@@ -247,7 +259,7 @@ describe('NumberGroupTextExtractor#time', () => {
         });
     });
 
-    describe('invalid', () => {
+    describe('normalize', () => {
         it(String.raw`should return time fragment when input '၁၂း၅၉း၅၉'`, () => {
             const input = '၁၂း၅၉း၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
