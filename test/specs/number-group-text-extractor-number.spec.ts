@@ -442,6 +442,44 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
+    describe('normalize', () => {
+        it(String.raw`should return number fragment when input '၁,၉\u104E\u101D'`, () => {
+            const input = '၁,၉\u104E\u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁,၉၄၀',
+                number: true,
+                numberStr: '၁၉၄၀',
+                numberSeparator: ',',
+                normalizeReason: {
+                    changeU104EToU1044: true,
+                    changeU101DToU1040: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
+            const input = '၁,၉\u104E\u101D.\u101D\u104E';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁,၉၄၀.၀၄',
+                number: true,
+                numberStr: '၁၉၄၀.၀၄',
+                numberSeparator: ',',
+                normalizeReason: {
+                    changeU104EToU1044: true,
+                    changeU101DToU1040: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('not', () => {
         it(String.raw`should NOT return number fragment with when input '\u104E'`, () => {
             const input = '\u104E';
@@ -471,43 +509,6 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
-
-    // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D'`, () => {
-    //     const input = '၁,၉\u104E\u101D';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '၁,၉၄၀',
-    //         number: true,
-    //         numberStr: '၁၉၄၀',
-    //         numberStrnumberSeparatorIncluded: true,
-    //         error: {
-    //             invalidU101DInsteadOfU1040: true,
-    //             invalidU104EInsteadOfU1044: true
-    //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment with ERROR when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
-    //     const input = '၁,၉\u104E\u101D.\u101D\u104E';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input, `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '၁,၉၄၀.၀၄',
-    //         number: true,
-    //         numberStr: '၁၉၄၀.၀၄',
-    //         numberStrnumberSeparatorIncluded: true,
-    //         error: {
-    //             invalidU101DInsteadOfU1040: true,
-    //             invalidU104EInsteadOfU1044: true
-    //         }
-    //     });
-    // });
-
 
     // it(String.raw`should return 'အင်္ဂါ' number fragment when input 'င်္၁ါ'`, () => {
     //     const input = 'င်္၁ါ';
