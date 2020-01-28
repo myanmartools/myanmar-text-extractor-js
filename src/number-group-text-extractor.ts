@@ -63,10 +63,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _phSeparator = `${this._dtOrPhSeparator}${this._openingBrackets}${this._closingBrackets}`;
     private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}${this._phHash}?`);
 
-    get priority(): number {
-        return 1;
-    }
-
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
         if (!firstCp) {
