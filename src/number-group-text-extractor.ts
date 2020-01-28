@@ -570,6 +570,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         numberFragment.ancientMeasureWords = ancientMeasureWords;
 
         if (spaceIncluded) {
+            numberFragment.spaceIncluded = true;
             numberFragment.normalizeReason = numberFragment.normalizeReason || {};
             numberFragment.normalizeReason.removeSpace = true;
         }
