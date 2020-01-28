@@ -581,6 +581,21 @@ describe('NumberGroupTextExtractor#number', () => {
     });
 
     describe('other-ancient-number-shortcuts', () => {
+        it(String.raw`should return number fragment when input '၁ွေ'`, () => {
+            const input = '၁ွေ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['ရွေး']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁ွေး'`, () => {
             const input = '၁ွေး';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -644,6 +659,36 @@ describe('NumberGroupTextExtractor#number', () => {
                     'စလယ်',
                     'ပယ်'
                 ]
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁ူ'`, () => {
+            const input = '၁ူ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['မူး']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁ူး'`, () => {
+            const input = '၁ူး';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['မူး']
             };
 
             expect(actualFragment).toEqual(expactedFragment);
