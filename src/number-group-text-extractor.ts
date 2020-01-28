@@ -6,27 +6,40 @@ import { TextFragment } from './text-fragment';
 // \u3000\u2060
 
 export class NumberGroupTextExtractor implements TextExtractor {
+    // Spaces
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
     private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
+    private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
     private readonly _spaceRegExp = new RegExp(`[${this._space}]`);
 
+    // Number
     private readonly _possibleNumber = '\u1040-\u1049\u101D\u104E';
 
+    // Dot
     private readonly _numberDotSeparator = '\u002E\u00B7\u02D9';
+
+    // Thousand separator
     private readonly _numberThousandSeparator = '\u002C\u066B\u066C\u2396\u005F\u0027';
+
+    // Number separator
     private readonly _numberSeparator = `${this._numberThousandSeparator}${this._visibleSpace}`;
 
-    private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
+    // Brackets
+    private readonly _openingBrackets = '(\\[\uFF08\uFF3B';
+    private readonly _closingBrackets = ')\\]\uFF09\uFF3D';
 
-    // private readonly _options: TextFragmenterOptions;
+    // Number with hsettha (ဆယ်သား)
     private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
 
-    private readonly _numberBoxRegExp = new RegExp(`^[(\\[\uFF08\uFF3B][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[)\\]\uFF09\uFF3D]`);
-    private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
+    // Number with brackets
+    private readonly _numberBracketsRegExp = new RegExp(`^[${this._openingBrackets}][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[${this._closingBrackets}]`);
+
+    // private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
     private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._numberSeparator}][${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
 
     private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._numberSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
+
     // -/._
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
 
@@ -38,7 +51,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleNumber}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
     private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleNumber}]|[\u1041-\u1049\u104E])`;
     private readonly _dtTimeSeparatorGroup = `[${this._space}]?[:;\u1038][${this._space}]?`;
-
     private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleNumber}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleNumber}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleNumber}]{1,4})`);
     private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
     private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
@@ -50,9 +62,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     // Phone Number
     private readonly _phPlus = '+\uFF0B';
-    private readonly _phSeparator = `${this._dtOrPhSeparator}()\\[\\]\uFF08\uFF09\uFF3B\uFF3D`;
     private readonly _phStar = '*';
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}#?`);
+    private readonly _phHash = '#';
+    private readonly _phSeparator = `${this._dtOrPhSeparator}${this._openingBrackets}${this._closingBrackets}`;
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}${this._phHash}?`);
 
     get priority(): number {
         return 1;
@@ -100,6 +113,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return this.getNumberGroupFragment(input);
         }
 
+        // င (အင်္ဂါ / တင်း / တောင်း)
         if (inputLen > 3 && firstCp === 0x1004) {
             const ingaTinOrTaungAncientNumberFragment = this.getIngaTinOrTaungAncientNumberFragment(input, firstCp);
             if (ingaTinOrTaungAncientNumberFragment != null) {
@@ -115,10 +129,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         }
 
-        if (inputLen > 2 && (firstCp === 0x0028 || firstCp === 0xFF08 || firstCp === 0x005B || firstCp === 0xFF3B)) {
-            const bracketPrefixFragment = this.getBracketPrefixFragment(input, firstCp);
-            if (bracketPrefixFragment != null) {
-                return bracketPrefixFragment;
+        // ( [ （ ［
+        if (inputLen > 2 && (firstCp === 0x0028 || firstCp === 0x005B || firstCp === 0xFF08 || firstCp === 0xFF3B)) {
+            const openingBracketsNumberFragment = this.getOpeningBracketsNumberFragment(input, firstCp);
+            if (openingBracketsNumberFragment != null) {
+                return openingBracketsNumberFragment;
             }
         }
 
@@ -224,7 +239,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const extractInfo = this.getPhoneExtractInfo(matchedStr);
+        const extractInfo = this.getPhoneNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
@@ -249,25 +264,38 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return fragment;
     }
 
-    private getBracketPrefixFragment(input: string, firstCp: number): TextFragment | null {
-        const hsethaFragment = this.getNumberHsethaFragment(input, firstCp);
-        if (hsethaFragment != null) {
-            return hsethaFragment;
+    private getOpeningBracketsNumberFragment(input: string, firstCp: number): TextFragment | null {
+        if (input.length > 4 && (firstCp === 0x0028 || firstCp === 0xFF08)) {
+            const hsethaFragment = this.getNumberHsethaFragment(input);
+            if (hsethaFragment != null) {
+                return hsethaFragment;
+            }
         }
 
-        const phoneNumberFragment = this.getPhoneNumberFragment(input);
-        const boxNumberFragment = this.getNumberWithBracketsOrOrderListFragment(input, firstCp);
+        if (input.length > 4) {
+            const phoneNumberFragment = this.getPhoneNumberFragment(input);
+            if (phoneNumberFragment != null) {
+                return phoneNumberFragment;
+            }
+        }
 
-        if (phoneNumberFragment != null && boxNumberFragment != null) {
-            return phoneNumberFragment.matchedStr.length > boxNumberFragment.matchedStr.length ?
-                phoneNumberFragment : boxNumberFragment;
-        } else if (phoneNumberFragment != null) {
-            return phoneNumberFragment;
-        } else if (boxNumberFragment != null) {
-            return boxNumberFragment;
-        } else {
+        const m = input.match(this._numberBracketsRegExp);
+
+        if (m == null) {
             return null;
         }
+
+        const matchedStr = m[0];
+        const extractInfo = this.getNumberExtractInfo(matchedStr);
+        if (extractInfo == null) {
+            return null;
+        }
+
+        return {
+            ...extractInfo,
+            matchedStr,
+            number: true
+        };
     }
 
     private getIngaTinOrTaungAncientNumberFragment(input: string, firstCp: number): TextFragment | null {
@@ -392,11 +420,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     /**
      * Get ancient `ဆယ်သား` number fragment - e.g. \u0028\u1041\u0029\u1040\u102D (၁)၀ိ - (၁)ဆယ်သား.
      */
-    private getNumberHsethaFragment(input: string, firstCp: number): TextFragment | null {
-        if (!(firstCp === 0x0028 || firstCp === 0xFF08) || input.length < 5) {
-            return null;
-        }
-
+    private getNumberHsethaFragment(input: string): TextFragment | null {
         const m = input.match(this._hsethaRegExp);
         if (m == null) {
             return null;
@@ -425,31 +449,31 @@ export class NumberGroupTextExtractor implements TextExtractor {
         };
     }
 
-    private getNumberWithBracketsOrOrderListFragment(input: string, firstCp: number): TextFragment | null {
-        let m: RegExpMatchArray | null;
-        if (this.startsWithOpeningBracket(firstCp)) {
-            m = input.match(this._numberBoxRegExp);
-        } else {
-            m = input.match(this._orderListRegExp);
-        }
+    // private getNumberWithBracketsOrOrderListFragment(input: string, firstCp: number): TextFragment | null {
+    //     let m: RegExpMatchArray | null;
+    //     if (this.startsWithOpeningBracket(firstCp)) {
+    //         m = input.match(this._numberBoxRegExp);
+    //     } else {
+    //         m = input.match(this._orderListRegExp);
+    //     }
 
-        if (m == null) {
-            return null;
-        }
+    //     if (m == null) {
+    //         return null;
+    //     }
 
-        const matchedStr = m[0];
-        const extractInfo = this.getNumberExtractInfo(matchedStr);
-        if (extractInfo == null) {
-            return null;
-        }
+    //     const matchedStr = m[0];
+    //     const extractInfo = this.getNumberExtractInfo(matchedStr);
+    //     if (extractInfo == null) {
+    //         return null;
+    //     }
 
-        return {
-            ...extractInfo,
-            matchedStr,
-            normalizedStr: extractInfo.normalizedStr,
-            number: true
-        };
-    }
+    //     return {
+    //         ...extractInfo,
+    //         matchedStr,
+    //         normalizedStr: extractInfo.normalizedStr,
+    //         number: true
+    //     };
+    // }
 
     private getNumberGroupFragment(input: string): TextFragment | null {
         const m = input.match(this._numberGroupRegex);
@@ -587,7 +611,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             numberFragment.normalizeReason.removeSpace = true;
         }
     }
-
 
     private getDiacriticsFragment(input: string, acceptSpaceBetween: boolean): TextFragment {
         const textFragment: TextFragment = {
@@ -890,7 +913,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private getPhoneExtractInfo(matchedStr: string): ExtractInfo | null {
+    private getPhoneNumberExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = {
             normalizedStr: ''
         };
@@ -1096,14 +1119,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         return extractInfo;
-    }
-
-    private startsWithOpeningBracket(cp: number): boolean {
-        if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
-            return true;
-        }
-
-        return false;
     }
 
     private hasCorrectClosingBracket(openingBracketCp: number, str: string): boolean {
