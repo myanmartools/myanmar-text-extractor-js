@@ -299,9 +299,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return this.getNumberTinOrTaungFragment(input, firstCp);
     }
 
-    /**
-     * Get ancient 'အင်္ဂါ' number fragment - e.g. \u1004\u103A\u1039\u1041\u102B င်္၁ါ - (၁)အင်္ဂါ
-     */
     private getNumberIngaFragment(input: string, firstCp: number): TextFragment | null {
         if (firstCp !== 0x1004 || input.length < 5) {
             return null;
@@ -360,9 +357,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return numberFragment;
     }
 
-    /**
-     * Get ancient `တင်း` / `တောင်း` number fragment - e.g. \u1004\u103A\u1039\u1041 င်္၁ - (၁)တင်း / (၁)တောင်း
-     */
     private getNumberTinOrTaungFragment(input: string, firstCp: number): TextFragment | null {
         if (firstCp !== 0x1004 || input.length < 4) {
             return null;
@@ -409,9 +403,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         };
     }
 
-    /**
-     * Get ancient `ဆယ်သား` number fragment - e.g. \u0028\u1041\u0029\u1040\u102D (၁)၀ိ - (၁)ဆယ်သား.
-     */
     private getNumberHsethaFragment(input: string): TextFragment | null {
         const m = input.match(this._hsethaRegExp);
         if (m == null) {
@@ -507,7 +498,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let ancientMeasureWords: string[] | undefined;
 
-        if (diacriticsFragment.normalizedStr === '\u103D\u1031') {
+        if (diacriticsFragment.normalizedStr === '\u103D\u1031\u1038') {
             // ရွေး
             ancientMeasureWords = ['\u101B\u103D\u1031\u1038'];
         } else if (diacriticsFragment.normalizedStr === '\u102D') {
