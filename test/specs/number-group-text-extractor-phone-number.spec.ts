@@ -228,6 +228,21 @@ describe('NumberGroupTextExtractor#phone-number', () => {
     });
 
     describe('normalize', () => {
+        it(String.raw`should return phone number fragment when input '\uFF0B၉၅၉'`, () => {
+            const input = '\uFF0B၉၅၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '+၉၅၉',
+                possiblePhoneNumber: true,
+                normalizeReason: {
+                    normalizePlusSign: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return phone number fragment when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
             const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input) as TextFragment;
