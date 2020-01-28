@@ -216,50 +216,8 @@ describe('NumberGroupTextExtractor#time', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
-    });
 
-    describe('hour-minute', () => {
-        // hh:mm
-        it(String.raw`should return time fragment when input '၂၃:၅၉'`, () => {
-            const input = '၂၃:၅၉';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleTime: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // hh:mm
-        it(String.raw`should return time fragment when input '၀၁:၀၅'`, () => {
-            const input = '၀၁:၀၅';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleTime: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // h:m
-        it(String.raw`should return time fragment when input '၁:၀၅'`, () => {
-            const input = '၁:၀၅';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleTime: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-    });
-
-    describe('normalize', () => {
+        // Normalize
         it(String.raw`should return time fragment when input '၁၂း၅၉း၅၉'`, () => {
             const input = '၁၂း၅၉း၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -317,6 +275,47 @@ describe('NumberGroupTextExtractor#time', () => {
                 normalizeReason: {
                     removeSpace: true
                 }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('hour-minute', () => {
+        // hh:mm
+        it(String.raw`should return time fragment when input '၂၃:၅၉'`, () => {
+            const input = '၂၃:၅၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // hh:mm
+        it(String.raw`should return time fragment when input '၀၁:၀၅'`, () => {
+            const input = '၀၁:၀၅';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // h:m
+        it(String.raw`should return time fragment when input '၁:၀၅'`, () => {
+            const input = '၁:၀၅';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
