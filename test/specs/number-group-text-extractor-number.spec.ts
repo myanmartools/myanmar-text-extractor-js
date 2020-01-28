@@ -487,6 +487,23 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
+    describe('hsettha', () => {
+        it(String.raw`should return number fragment when input '(၁)၀ိ'`, () => {
+            const input = '(၁)၀ိ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁၀',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['ဆယ်သား']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('normalize', () => {
         it(String.raw`should return number fragment when input '၁၉\u101D'`, () => {
             const input = '၁၉\u101D';
@@ -571,23 +588,6 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
-
-
-    // it(String.raw`should return 'ဆယ်သား' number fragment when input '(၁)၀ိ'`, () => {
-    //     const input = '(၁)၀ိ';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၁၀',
-    //         ancient: true,
-    //         ancientMeasureWords: ['ဆယ်သား']
-    //     });
-    // });
 
     // it(String.raw`should return 'ဆယ်သား' number fragment with ERROR when input '( ၁ ) ၀ိ'`, () => {
     //     const input = '( ၁ ) ၀ိ';
