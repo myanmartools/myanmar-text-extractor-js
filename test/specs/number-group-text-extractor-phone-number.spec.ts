@@ -213,6 +213,20 @@ describe('NumberGroupTextExtractor#phone-number', () => {
 
     });
 
+    describe('*-#', () => {
+        it(String.raw`should return phone number fragment when input '*၁၂၃#'`, () => {
+            const input = '*၁၂၃#';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('normalize', () => {
         it(String.raw`should return phone number fragment when input '+\u104E\u101D\u200B၁၂၃၄၅၆'`, () => {
             const input = '+\u104E\u101D\u200B၁၂၃၄၅၆';
