@@ -517,6 +517,32 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '(၉၀)'`, () => {
+            const input = '(၉၀)';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၉၀'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '(၀၉)'`, () => {
+            const input = '(၀၉)';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၀၉'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('normalize', () => {
@@ -641,33 +667,6 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
-    // it(String.raw`should return number fragment when input '(၉၀)'`, () => {
-    //     const input = '(၉၀)';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၉၀'
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment when input '(၀၉)'`, () => {
-    //     const input = '(၀၉)';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၀၉'
-    //     });
-    // });
 
     // it(String.raw`should return number fragment with ERROR when input '( ၉ )'`, () => {
     //     const input = '( ၉ )';
