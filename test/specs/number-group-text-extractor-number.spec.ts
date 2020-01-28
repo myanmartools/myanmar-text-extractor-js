@@ -504,6 +504,21 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
+    describe('brackets', () => {
+        it(String.raw`should return number fragment when input '(၁)'`, () => {
+            const input = '(၁)';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('normalize', () => {
         it(String.raw`should return number fragment when input '၁၉\u101D'`, () => {
             const input = '၁၉\u101D';
@@ -625,20 +640,6 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
-
-    // it(String.raw`should return number fragment when input '(၁)'`, () => {
-    //     const input = '(၁)';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: input,
-    //         number: true,
-    //         numberStr: '၁'
-    //     });
-    // });
 
     // it(String.raw`should return number fragment when input '(၉၀)'`, () => {
     //     const input = '(၉၀)';
