@@ -775,20 +775,20 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // it(String.raw`should return number fragment when input '၁ျက်'`, () => {
-        //     const input = '၁ျက်';
-        //     const actualFragment = extractor.extractNext(input) as TextFragment;
-        //     const expactedFragment: TextFragment = {
-        //         matchedStr: input,
-        //         normalizedStr: input,
-        //         number: true,
-        //         numberStr: '၁',
-        //         ancientWrittenForm: true,
-        //         ancientMeasureWords: ['လမျက်']
-        //     };
+        it(String.raw`should return number fragment when input '၁ျက်'`, () => {
+            const input = '၁ျက်';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['လမျက်']
+            };
 
-        //     expect(actualFragment).toEqual(expactedFragment);
-        // });
+            expect(actualFragment).toEqual(expactedFragment);
+        });
 
         // it(String.raw`should return number fragment when input '၁ယ်'`, () => {
         //     const input = '၁ယ်';
