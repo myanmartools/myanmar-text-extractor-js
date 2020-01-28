@@ -2,9 +2,6 @@ import { ExtractInfo } from './extract-info';
 import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
 
-// \uFF0D\u2010-\u2015\u2212\u002F\uFF0F\u002E\uFF0E
-// \u3000\u2060
-
 export class NumberGroupTextExtractor implements TextExtractor {
     // Spaces
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
@@ -35,9 +32,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Number with brackets
     private readonly _numberBracketsRegExp = new RegExp(`^[${this._openingBrackets}][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[${this._closingBrackets}]`);
 
-    // private readonly _orderListRegExp = new RegExp(`^[\u101D\u1040-\u1049\u104E]+[${this._space}]?[\u104A\u104B]`);
+    // Number group
     private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._numberSeparator}][${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
 
+    // Number group starts with 'ဝ' / '၎'
     private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._numberSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
 
     // -/._
@@ -448,32 +446,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             ancientMeasureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
         };
     }
-
-    // private getNumberWithBracketsOrOrderListFragment(input: string, firstCp: number): TextFragment | null {
-    //     let m: RegExpMatchArray | null;
-    //     if (this.startsWithOpeningBracket(firstCp)) {
-    //         m = input.match(this._numberBoxRegExp);
-    //     } else {
-    //         m = input.match(this._orderListRegExp);
-    //     }
-
-    //     if (m == null) {
-    //         return null;
-    //     }
-
-    //     const matchedStr = m[0];
-    //     const extractInfo = this.getNumberExtractInfo(matchedStr);
-    //     if (extractInfo == null) {
-    //         return null;
-    //     }
-
-    //     return {
-    //         ...extractInfo,
-    //         matchedStr,
-    //         normalizedStr: extractInfo.normalizedStr,
-    //         number: true
-    //     };
-    // }
 
     private getNumberGroupFragment(input: string): TextFragment | null {
         const m = input.match(this._numberGroupRegex);
