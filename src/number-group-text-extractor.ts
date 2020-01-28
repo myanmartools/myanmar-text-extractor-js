@@ -498,7 +498,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let ancientMeasureWords: string[] | undefined;
 
-        if (diacriticsFragment.normalizedStr === '\u103D\u1031\u1038') {
+        if (diacriticsFragment.normalizedStr === '\u103D\u1031\u1038' || diacriticsFragment.normalizedStr === '\u103D\u1031') {
             // ရွေး
             ancientMeasureWords = ['\u101B\u103D\u1031\u1038'];
         } else if (diacriticsFragment.normalizedStr === '\u102D') {
@@ -518,7 +518,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 '\u1005\u101C\u101A\u103A',
                 '\u1015\u101A\u103A'
             ];
-        } else if (diacriticsFragment.normalizedStr === '\u1030') {
+        } else if (diacriticsFragment.normalizedStr === '\u1030\u1038' || diacriticsFragment.normalizedStr === '\u1030') {
             // မူး
             ancientMeasureWords = ['\u1019\u1030\u1038'];
         } else if (diacriticsFragment.normalizedStr === '\u1036') {
