@@ -9,20 +9,6 @@ describe('NumberGroupTextExtractor#phone-number', () => {
     });
 
     describe('international', () => {
-        it(String.raw`should return phone number fragment when input '၀၀၉၅၉'`, () => {
-            const input = '၀၀၉၅၉';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possiblePhoneNumber: true,
-                number: true,
-                numberStr: input
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
         it(String.raw`should return phone number fragment when input '+၉၅၉'`, () => {
             const input = '+၉၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -145,6 +131,32 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 normalizedStr: input,
                 possiblePhoneNumber: true,
                 spaceIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '(၀၀)၉၅၉'`, () => {
+            const input = '(၀၀)၉၅၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '၀၀၉၅၉'`, () => {
+            const input = '၀၀၉၅၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                number: true,
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
