@@ -580,6 +580,23 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
+    describe('other-ancient-number-shortcuts', () => {
+        it(String.raw`should return number fragment when input '၁ွေး'`, () => {
+            const input = '၁ွေး';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['ရွေး']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('hsettha', () => {
         it(String.raw`should return number fragment when input '(၁)၀ိ'`, () => {
             const input = '(၁)၀ိ';
