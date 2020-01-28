@@ -543,6 +543,54 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '(၉၉၉)'`, () => {
+            const input = '(၉၉၉)';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၉၉၉'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Normalize
+        it(String.raw`should return number fragment when input '( ၁ )'`, () => {
+            const input = '( ၁ )';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '(၁)',
+                number: true,
+                numberStr: '၁',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '(\u200B၁\u200B)'`, () => {
+            const input = '(\u200B၁\u200B)';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '(၁)',
+                number: true,
+                numberStr: '၁',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('normalize', () => {
@@ -666,43 +714,6 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
-
-
-    // it(String.raw`should return number fragment with ERROR when input '( ၉ )'`, () => {
-    //     const input = '( ၉ )';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '(၉)',
-    //         number: true,
-    //         numberStr: '၉',
-    //         spaceIncluded: true,
-    //         error: {
-    //             invalidSpaceIncluded: true
-    //         }
-    //     });
-    // });
-
-    // it(String.raw`should return number fragment with ERROR when input \u200B '(​၉​)'`, () => {
-    //     const input = '(​၉​)';
-    //     const fragment = extractor.extractNext(input) as TextFragment;
-
-    //     expect(fragment.matchedStr).toBe(input,
-    //         `\n\nActual matchedStr: ${formatCodePoints(fragment.matchedStr)}`);
-    //     expect(fragment).toEqual({
-    //         matchedStr: input,
-    //         normalizedStr: '(၉)',
-    //         number: true,
-    //         numberStr: '၉',
-    //         spaceIncluded: true,
-    //         error: {
-    //             invalidSpaceIncluded: true
-    //         }
-    //     });
-    // });
 
     // it(String.raw`should return number fragment with ERROR when input '(\u101D၁)'`, () => {
     //     const input = '(\u101D၁)';
