@@ -164,6 +164,18 @@ describe('NumberGroupTextExtractor#phone-number', () => {
     });
 
     describe('local', () => {
+        it(String.raw`should return phone number fragment when input '(၀၉)၁၂၃၄၅၆'`, () => {
+            const input = '(၀၉)၁၂၃၄၅၆';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return phone number fragment when input '၉၉၉'`, () => {
             const input = '၉၉၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -328,6 +340,15 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('not', () => {
+        it(String.raw`should NOT return phone number fragment when input '*၁၂၃'`, () => {
+            const input = '*၁၂၃';
+            const actualFragment = extractor.extractNext(input);
+
+            expect(actualFragment == null || !actualFragment.possiblePhoneNumber).toBeTruthy();
         });
     });
 });
