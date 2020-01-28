@@ -180,21 +180,6 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return phone number fragment when input '၁ ၂၃၄ ၅၆၇'`, () => {
-            const input = '၁ ၂၃၄ ၅၆၇';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possiblePhoneNumber: true,
-                number: true,
-                numberStr: '၁၂၃၄၅၆၇',
-                spaceIncluded: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
         it(String.raw`should return phone number fragment when input '၁_၂၃၄_၅၆၇'`, () => {
             const input = '၁_၂၃၄_၅၆၇';
             const actualFragment = extractor.extractNext(input) as TextFragment;
