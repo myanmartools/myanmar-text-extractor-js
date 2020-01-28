@@ -2,10 +2,6 @@ import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
 
 export class SingleLetterTextExtractor implements TextExtractor {
-    get priority(): number {
-        return 0;
-    }
-
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
         if (!firstCp) {
