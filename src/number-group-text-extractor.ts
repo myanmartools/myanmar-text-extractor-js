@@ -432,7 +432,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const extractInfo = this.getNumberWithBracketsExtractInfo(matchedStr);
+        const extractInfo = this.getBracketsNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
@@ -615,108 +615,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         return textFragment;
-    }
-
-    // tslint:disable-next-line: max-func-body-length
-    private getNumberExtractInfo(matchedStr: string): ExtractInfo | null {
-        const extractInfo: ExtractInfo = {
-            normalizedStr: '',
-            numberStr: ''
-        };
-
-        let prevIsDigit = false;
-        let prevIsSpace = false;
-        let prevIsSeparator = false;
-        let numberSeparator: string | undefined;
-        let digitCount = 0;
-
-        for (const c of matchedStr) {
-            const cp = c.codePointAt(0) as number;
-
-            if (cp >= 0x1040 && cp <= 0x1049) {
-                ++digitCount;
-                extractInfo.normalizedStr += c;
-                extractInfo.numberStr += c;
-                prevIsDigit = true;
-                prevIsSpace = false;
-                prevIsSeparator = false;
-            } else if (cp === 0x101D || cp === 0x104E) {
-                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-
-                if (cp === 0x101D) {
-                    extractInfo.normalizedStr += '\u1040';
-                    extractInfo.numberStr += '\u1040';
-                    extractInfo.normalizeReason.changeU101DToU1040 = true;
-                } else {
-                    extractInfo.normalizedStr += '\u1044';
-                    extractInfo.numberStr += '\u1044';
-                    extractInfo.normalizeReason.changeU104EToU1044 = true;
-                }
-
-                prevIsDigit = true;
-                prevIsSpace = false;
-                prevIsSeparator = false;
-            } else if (this._spaceRegExp.test(c)) {
-                if (prevIsSpace) {
-                    return null;
-                }
-
-                extractInfo.spaceIncluded = true;
-
-                if (prevIsSeparator) {
-                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.removeSpace = true;
-                } else {
-                    extractInfo.normalizedStr += ' ';
-
-                    if (cp !== 0x0020) {
-                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                        extractInfo.normalizeReason.normalizeSpace = true;
-                    }
-                }
-
-                prevIsDigit = false;
-                prevIsSpace = true;
-                prevIsSeparator = false;
-            } else {
-                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && numberSeparator && c !== numberSeparator)) {
-                    return null;
-                }
-
-                if (prevIsSpace) {
-                    extractInfo.normalizedStr = extractInfo.normalizedStr.trimRight();
-                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.removeSpace = true;
-                }
-
-                if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
-                    extractInfo.numberStr += '.';
-                    extractInfo.normalizedStr += '.';
-
-                    if (cp !== 0x002E) {
-                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                        extractInfo.normalizeReason.normalizeDecimalPoint = true;
-                    }
-                } else {
-                    extractInfo.normalizedStr += c;
-                    numberSeparator = c;
-                }
-
-                prevIsDigit = false;
-                prevIsSpace = false;
-                prevIsSeparator = true;
-            }
-        }
-
-        if (!digitCount) {
-            return null;
-        }
-
-        if (numberSeparator) {
-            extractInfo.numberSeparator = numberSeparator;
-        }
-
-        return extractInfo;
     }
 
     // tslint:disable-next-line: max-func-body-length
@@ -1048,9 +946,112 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return extractInfo;
     }
 
-    private getNumberWithBracketsExtractInfo(matchedStr: string): ExtractInfo | null {
+    // tslint:disable-next-line: max-func-body-length
+    private getNumberExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = {
-            normalizedStr: ''
+            normalizedStr: '',
+            numberStr: ''
+        };
+
+        let prevIsDigit = false;
+        let prevIsSpace = false;
+        let prevIsSeparator = false;
+        let numberSeparator: string | undefined;
+        let digitCount = 0;
+
+        for (const c of matchedStr) {
+            const cp = c.codePointAt(0) as number;
+
+            if (cp >= 0x1040 && cp <= 0x1049) {
+                ++digitCount;
+                extractInfo.normalizedStr += c;
+                extractInfo.numberStr += c;
+                prevIsDigit = true;
+                prevIsSpace = false;
+                prevIsSeparator = false;
+            } else if (cp === 0x101D || cp === 0x104E) {
+                extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+
+                if (cp === 0x101D) {
+                    extractInfo.normalizedStr += '\u1040';
+                    extractInfo.numberStr += '\u1040';
+                    extractInfo.normalizeReason.changeU101DToU1040 = true;
+                } else {
+                    extractInfo.normalizedStr += '\u1044';
+                    extractInfo.numberStr += '\u1044';
+                    extractInfo.normalizeReason.changeU104EToU1044 = true;
+                }
+
+                prevIsDigit = true;
+                prevIsSpace = false;
+                prevIsSeparator = false;
+            } else if (this._spaceRegExp.test(c)) {
+                if (prevIsSpace) {
+                    return null;
+                }
+
+                extractInfo.spaceIncluded = true;
+
+                if (prevIsSeparator) {
+                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                    extractInfo.normalizeReason.removeSpace = true;
+                } else {
+                    extractInfo.normalizedStr += ' ';
+
+                    if (cp !== 0x0020) {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.normalizeSpace = true;
+                    }
+                }
+
+                prevIsDigit = false;
+                prevIsSpace = true;
+                prevIsSeparator = false;
+            } else {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && numberSeparator && c !== numberSeparator)) {
+                    return null;
+                }
+
+                if (prevIsSpace) {
+                    extractInfo.normalizedStr = extractInfo.normalizedStr.trimRight();
+                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                    extractInfo.normalizeReason.removeSpace = true;
+                }
+
+                if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
+                    extractInfo.numberStr += '.';
+                    extractInfo.normalizedStr += '.';
+
+                    if (cp !== 0x002E) {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.normalizeDecimalPoint = true;
+                    }
+                } else {
+                    extractInfo.normalizedStr += c;
+                    numberSeparator = c;
+                }
+
+                prevIsDigit = false;
+                prevIsSpace = false;
+                prevIsSeparator = true;
+            }
+        }
+
+        if (!digitCount) {
+            return null;
+        }
+
+        if (numberSeparator) {
+            extractInfo.numberSeparator = numberSeparator;
+        }
+
+        return extractInfo;
+    }
+
+    private getBracketsNumberExtractInfo(matchedStr: string): ExtractInfo | null {
+        const extractInfo: ExtractInfo = {
+            normalizedStr: '',
+            numberStr: ''
         };
 
         let digitCount = 0;
@@ -1062,13 +1063,16 @@ export class NumberGroupTextExtractor implements TextExtractor {
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++digitCount;
                 extractInfo.normalizedStr += c;
+                extractInfo.numberStr += c;
             } else if (cp === 0x101D || cp === 0x104E) {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
+                    extractInfo.numberStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
+                    extractInfo.numberStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
             } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
