@@ -727,6 +727,54 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return number fragment when input '၁ွဲ'`, () => {
+            const input = '၁ွဲ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['ခွဲ']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁ါ'`, () => {
+            const input = '၁ါ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['ပိဿာ']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁ါး'`, () => {
+            const input = '၁ါး';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: [
+                    'ပြား',
+                    'ပါး'
+                ]
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // it(String.raw`should return number fragment when input '၁ျက်'`, () => {
         //     const input = '၁ျက်';
         //     const actualFragment = extractor.extractNext(input) as TextFragment;
