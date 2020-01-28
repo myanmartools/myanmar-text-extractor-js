@@ -107,6 +107,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         }
 
+        // * + ＋
         if (inputLen > 3 && (firstCp === 0x002A || firstCp === 0x002B || firstCp === 0xFF0B)) {
             const phoneNumberFragment = this.getPhoneNumberFragment(input);
             if (phoneNumberFragment != null) {
@@ -1024,6 +1025,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         if (!digitCount) {
+            return null;
+        }
+
+        if (extractInfo.normalizedStr[0] === '*' && extractInfo.normalizedStr[extractInfo.normalizedStr.length - 1] !== '#') {
             return null;
         }
 
