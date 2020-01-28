@@ -726,6 +726,21 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return number fragment when input '၁ယ်'`, () => {
+            const input = '၁ယ်';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['လမယ်']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('hsettha', () => {
