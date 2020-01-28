@@ -24,17 +24,17 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _openingBrackets = '(\\[\uFF08\uFF3B';
     private readonly _closingBrackets = ')\\]\uFF09\uFF3D';
 
-    // Number with hsettha (ဆယ်သား)
-    private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
-
-    // Number with brackets
-    private readonly _numberBracketsRegExp = new RegExp(`^[${this._openingBrackets}][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[${this._closingBrackets}]`);
-
     // Number group
     private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._thousandSeparator}${this._visibleSpace}][${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
 
     // Number group starts with 'ဝ' / '၎'
     private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._thousandSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
+
+    // Number with hsettha (ဆယ်သား)
+    private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
+
+    // Number with brackets
+    private readonly _numberBracketsRegExp = new RegExp(`^[${this._openingBrackets}][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[${this._closingBrackets}]`);
 
     // -/._
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
