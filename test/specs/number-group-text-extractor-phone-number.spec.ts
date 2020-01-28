@@ -164,6 +164,18 @@ describe('NumberGroupTextExtractor#phone-number', () => {
     });
 
     describe('local', () => {
+        it(String.raw`should return phone number fragment when input '(၀၉)၁'`, () => {
+            const input = '(၀၉)၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return phone number fragment when input '(၀၉)၁၂၃၄၅၆'`, () => {
             const input = '(၀၉)၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -184,6 +196,31 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 normalizedStr: input,
                 possiblePhoneNumber: true,
                 spaceIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '(၀၉) ၁၂၃-၄၅၆'`, () => {
+            const input = '(၀၉) ၁၂၃-၄၅၆';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                spaceIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '[၀၉]၁၂၃၄၅၆'`, () => {
+            const input = '[၀၉]၁၂၃၄၅၆';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
