@@ -17,10 +17,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _numberDotSeparator = '\u002E\u00B7\u02D9';
 
     // Thousand separator
-    private readonly _numberThousandSeparator = '\u002C\u066B\u066C\u2396\u005F\u0027';
-
-    // Number separator
-    private readonly _numberSeparator = `${this._numberThousandSeparator}${this._visibleSpace}`;
+    private readonly _thousandSeparator = '\u002C\u066B\u066C\u2396\u005F\u0027';
+    private readonly _thousandSeparatorRegExp = new RegExp(`^[${this._thousandSeparator}]`);
 
     // Brackets
     private readonly _openingBrackets = '(\\[\uFF08\uFF3B';
@@ -33,10 +31,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _numberBracketsRegExp = new RegExp(`^[${this._openingBrackets}][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[${this._closingBrackets}]`);
 
     // Number group
-    private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._numberSeparator}][${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
+    private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._thousandSeparator}${this._visibleSpace}][${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
 
     // Number group starts with 'ဝ' / '၎'
-    private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._numberSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
+    private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._thousandSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
 
     // -/._
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
@@ -284,7 +282,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const matchedStr = m[0];
-        const extractInfo = this.getNumberExtractInfo(matchedStr);
+        const extractInfo = this.getBracketsNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
@@ -855,7 +853,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
                 numberGroup = false;
                 break;
-            } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
+            } else if (cp === 0x0028 || cp === 0x005B || cp === 0xFF08 || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
                     return null;
                 }
@@ -888,28 +886,37 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     return null;
                 }
 
-                if (cp === 0x005F) {
+                if (this._thousandSeparatorRegExp.test(c)) {
                     if (numberSeparator && numberSeparator !== c) {
                         numberGroup = false;
                     } else {
                         numberSeparator = c;
                     }
-                } else if (cp === 0x002E) {
+
+                    extractInfo.normalizedStr += c;
+                } else if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
                     ++dotCount;
                     if (dotCount > 1) {
                         numberGroup = false;
                     } else {
-                        numberStr += c;
-                        numberSeparator = c;
+                        numberStr += '.';
+                    }
+
+                    extractInfo.normalizedStr += '.';
+
+                    if (cp !== 0x002E) {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.normalizeDecimalPoint = true;
                     }
                 } else {
                     if (cp === 0x002F) {
                         ++slashCount;
                     }
+
                     numberGroup = false;
+                    extractInfo.normalizedStr += c;
                 }
 
-                extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
             }
@@ -956,7 +963,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let prevIsDigit = false;
         let prevIsSpace = false;
         let prevIsSeparator = false;
-        let numberSeparator: string | undefined;
+        let numberSeparator = '';
         let digitCount = 0;
 
         for (const c of matchedStr) {
@@ -1075,7 +1082,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     extractInfo.numberStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
-            } else if (cp === 0x0028 || cp === 0xFF08 || cp === 0x005B || cp === 0xFF3B) {
+            } else if (cp === 0x0028 || cp === 0x005B || cp === 0xFF08 || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, matchedStr.substring(i + 1))) {
                     return null;
                 }
