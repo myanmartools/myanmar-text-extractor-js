@@ -63,6 +63,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _phSeparator = `${this._dtOrPhSeparator}${this._openingBrackets}${this._closingBrackets}`;
     private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}${this._phHash}?`);
 
+    // Diacritics and AThet
+    private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:[\u102B-\u103E]+)|(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)`);
+
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
         if (!firstCp) {
@@ -490,62 +493,66 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return;
         }
 
-        if (!(right1stCp >= 0x102B && right1stCp <= 0x103E)) {
+        const diacriticsOrAThetMatch = rightStr.match(this._diacriticsAndAThetRegExp);
+        if (diacriticsOrAThetMatch == null) {
             return;
         }
 
-        const diacriticsFragment = this.getDiacriticsFragment(rightStr, true);
+        const diacriticsOrAThetMatchedStr = diacriticsOrAThetMatch[0];
+        const spaceIncluded = diacriticsOrAThetMatch[1] ? true : false;
+        const diacriticsOrAThetNormalizedStr = spaceIncluded ?
+            diacriticsOrAThetMatchedStr.replace(this._spaceRegExp, '') : diacriticsOrAThetMatchedStr;
 
         let ancientMeasureWords: string[] | undefined;
 
-        if (diacriticsFragment.normalizedStr === '\u103D\u1031\u1038' || diacriticsFragment.normalizedStr === '\u103D\u1031') {
+        if (diacriticsOrAThetNormalizedStr === '\u103D\u1031\u1038' || diacriticsOrAThetNormalizedStr === '\u103D\u1031') {
             // ရွေး
             ancientMeasureWords = ['\u101B\u103D\u1031\u1038'];
-        } else if (diacriticsFragment.normalizedStr === '\u102D') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u102D') {
             // ကျပ် / စိတ် / မိုက်
             ancientMeasureWords = [
                 '\u1000\u103B\u1015\u103A',
                 '\u1005\u102D\u1010\u103A',
                 '\u1019\u102D\u102F\u1000\u103A'
             ];
-        } else if (diacriticsFragment.normalizedStr === '\u103D\u102C') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u103D\u102C') {
             // ထွာ
             ancientMeasureWords = ['\u1011\u103D\u102C'];
-        } else if (diacriticsFragment.normalizedStr === '\u1032') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u1032') {
             // ပဲ / စလယ် / ပယ်
             ancientMeasureWords = [
                 '\u1015\u1032',
                 '\u1005\u101C\u101A\u103A',
                 '\u1015\u101A\u103A'
             ];
-        } else if (diacriticsFragment.normalizedStr === '\u1030\u1038' || diacriticsFragment.normalizedStr === '\u1030') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u1030\u1038' || diacriticsOrAThetNormalizedStr === '\u1030') {
             // မူး
             ancientMeasureWords = ['\u1019\u1030\u1038'];
-        } else if (diacriticsFragment.normalizedStr === '\u1036') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u1036') {
             // လက်သစ် / မတ်
             ancientMeasureWords = [
                 '\u101C\u1000\u103A\u101E\u1005\u103A',
                 '\u1019\u1010\u103A'
             ];
-        } else if (diacriticsFragment.normalizedStr === '\u103B\u1000\u103A') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u103B\u1000\u103A') {
             // လမျက်
             ancientMeasureWords = ['\u101C\u1019\u103B\u1000\u103A'];
-        } else if (diacriticsFragment.normalizedStr === '\u101A\u103A') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u101A\u103A') {
             // လမယ်
             ancientMeasureWords = ['\u101C\u1019\u101A\u103A'];
-        } else if (diacriticsFragment.normalizedStr === '\u103D\u1000\u103A') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u103D\u1000\u103A') {
             // ခွက်
             ancientMeasureWords = ['\u1001\u103D\u1000\u103A'];
-        } else if (diacriticsFragment.normalizedStr === '\u103A') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u103A') {
             // ပြည်
             ancientMeasureWords = ['\u1015\u103C\u100A\u103A'];
-        } else if (diacriticsFragment.normalizedStr === '\u103D\u1032') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u103D\u1032') {
             // ခွဲ
             ancientMeasureWords = ['\u1001\u103D\u1032'];
-        } else if (diacriticsFragment.normalizedStr === '\u102B') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u102B') {
             // ပိဿာ
             ancientMeasureWords = ['\u1015\u102D\u103F\u102C'];
-        } else if (diacriticsFragment.normalizedStr === '\u102B\u1038') {
+        } else if (diacriticsOrAThetNormalizedStr === '\u102B\u1038') {
             // ပြား / ပါး
             ancientMeasureWords = [
                 '\u1015\u103C\u102C\u1038',
@@ -557,49 +564,15 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return;
         }
 
-        numberFragment.matchedStr += diacriticsFragment.matchedStr;
-        numberFragment.normalizedStr += diacriticsFragment.normalizedStr;
+        numberFragment.matchedStr += diacriticsOrAThetMatchedStr;
+        numberFragment.normalizedStr += diacriticsOrAThetNormalizedStr;
         numberFragment.ancientWrittenForm = true;
         numberFragment.ancientMeasureWords = ancientMeasureWords;
 
-        if (diacriticsFragment.spaceIncluded) {
-            numberFragment.spaceIncluded = true;
+        if (spaceIncluded) {
             numberFragment.normalizeReason = numberFragment.normalizeReason || {};
             numberFragment.normalizeReason.removeSpace = true;
         }
-    }
-
-    private getDiacriticsFragment(input: string, acceptSpaceBetween: boolean): TextFragment {
-        const textFragment: TextFragment = {
-            matchedStr: input[0],
-            normalizedStr: input[0]
-        };
-
-        let tmpSpace = '';
-        const curStr = input.substring(1);
-
-        for (const c of curStr) {
-            const cp = c.codePointAt(0);
-
-            if (!cp) {
-                break;
-            }
-
-            if (cp >= 0x102B && cp <= 0x103E) {
-                textFragment.matchedStr += tmpSpace + c;
-                textFragment.normalizedStr += c;
-                if (tmpSpace) {
-                    textFragment.spaceIncluded = true;
-                    tmpSpace = '';
-                }
-            } else if (acceptSpaceBetween && !tmpSpace && this._spaceRegExp.test(c)) {
-                tmpSpace = c;
-            } else {
-                break;
-            }
-        }
-
-        return textFragment;
     }
 
     // tslint:disable-next-line: max-func-body-length
