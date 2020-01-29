@@ -172,11 +172,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let matchedStr = m[0];
+        const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
-        if (!matchedStr) {
+        const newMatchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (matchedStr.length !== newMatchedStr.length) {
             return null;
         }
 
@@ -196,11 +196,16 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         }
 
-        return {
+        const fragment: TextFragment = {
             ...extractInfo,
-            matchedStr,
             possibleDate: true
         };
+
+        if (extractInfo.numberStr) {
+            fragment.number = true;
+        }
+
+        return fragment;
     }
 
     private getTimeFragment(input: string): TextFragment | null {
@@ -229,7 +234,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         return {
             ...extractInfo,
-            matchedStr,
             possibleTime: true
         };
     }
@@ -266,7 +270,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const fragment: TextFragment = {
             ...extractInfo,
-            matchedStr,
             possiblePhoneNumber: true
         };
 
@@ -312,7 +315,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         return {
             ...extractInfo,
-            matchedStr,
             number: true
         };
     }
@@ -451,7 +453,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         return {
             ...extractInfo,
-            matchedStr,
             number: true,
             ancientWrittenForm: true,
             // ဆယ်သား
@@ -719,6 +720,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         } else {
             extractInfo.dateFormat = 'yyyyMMdd';
+            extractInfo.numberStr = extractInfo.normalizedStr;
         }
 
         return extractInfo;
