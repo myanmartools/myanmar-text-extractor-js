@@ -264,7 +264,7 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // Invalid \U101D
+        // \U101D
         it(String.raw`should return date fragment with INVALID when input '၃၁၊၁၂၊၂၀၂\u101D'`, () => {
             const input = '၃၁၊၁၂၊၂၀၂\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -282,7 +282,7 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // Invalid \U104E
+        // \U104E
         it(String.raw`should return date fragment with INVALID when input '၁\u104E၊၁၂၊၂၀၂၀'`, () => {
             const input = '၁\u104E၊၁၂၊၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -300,7 +300,7 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // Invalid \U101D and \U104E
+        // \U101D and \U104E
         it(String.raw`should return date fragment with INVALID when input '၁\u104E၊၁၂၊၂\u101D၂\u101D'`, () => {
             const input = '၁\u104E၊၁၂၊၂\u101D၂\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -319,7 +319,7 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // Invalid space
+        // Space (\u200B)
         it(String.raw`should return date fragment with INVALID when input '၃၁\u200B၁၂\u200B၂၀၂၀'`, () => {
             const input = '၃၁\u200B၁၂\u200B၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -337,135 +337,9 @@ describe('NumberGroupTextExtractor#date', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
-    });
 
-    describe('year-month-day', () => {
-        // yyyy/MM/dd
-        it(String.raw`should return date fragment when input '၂၀၂၀/၀၁/၃၁'`, () => {
-            const input = '၂၀၂၀/၀၁/၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'yyyy/MM/dd',
-                dateSeparator: '/'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // yyyy-MM-dd
-        it(String.raw`should return date fragment when input '၂၀၂၀-၀၁-၃၁'`, () => {
-            const input = '၂၀၂၀-၀၁-၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'yyyy-MM-dd',
-                dateSeparator: '-'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // yyyy/M/d
-        it(String.raw`should return date fragment when input '၂၀၂၀/၁/၃၁'`, () => {
-            const input = '၂၀၂၀/၁/၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'yyyy/M/d',
-                dateSeparator: '/'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // yyyy MM dd
-        it(String.raw`should return date fragment when input '၂၀၂၀ ၀၁ ၃၁'`, () => {
-            const input = '၂၀၂၀ ၀၁ ၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                spaceIncluded: true,
-                dateFormat: 'yyyy MM dd',
-                dateSeparator: ' '
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // yyyyMMdd
-        it(String.raw`should return date fragment when input '၂၀၂၀၀၁၃၁'`, () => {
-            const input = '၂၀၂၀၀၁၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'yyyyMMdd',
-                number: true,
-                numberStr: input
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-    });
-
-    describe('month-day-year', () => {
-        // MM/dd/yyyy
-        it(String.raw`should return date fragment when input '၁၂/၃၁/၂၀၂၀'`, () => {
-            const input = '၁၂/၃၁/၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'MM/dd/yyyy',
-                dateSeparator: '/'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // M/d/yyyy
-        it(String.raw`should return date fragment when input '၁/၃၁/၂၀၂၀'`, () => {
-            const input = '၁/၃၁/၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'M/d/yyyy',
-                dateSeparator: '/'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // M/d/yy
-        it(String.raw`should return date fragment when input '၁/၃၁/၂၀'`, () => {
-            const input = '၁/၃၁/၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                possibleDate: true,
-                dateFormat: 'M/d/yy',
-                dateSeparator: '/'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-    });
-
-    describe('not', () => {
+        // Not
+        //
         it(String.raw`should NOT return date fragment when input '၃၂-၁၂-၂၀၂၀'`, () => {
             const input = '၃၂-၁၂-၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -604,6 +478,132 @@ describe('NumberGroupTextExtractor#date', () => {
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
             expect(actualFragment.possibleDate).toBeFalsy();
+        });
+    });
+
+    describe('year-month-day', () => {
+        // yyyy/MM/dd
+        it(String.raw`should return date fragment when input '၂၀၂၀/၀၁/၃၁'`, () => {
+            const input = '၂၀၂၀/၀၁/၃၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'yyyy/MM/dd',
+                dateSeparator: '/'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // yyyy-MM-dd
+        it(String.raw`should return date fragment when input '၂၀၂၀-၀၁-၃၁'`, () => {
+            const input = '၂၀၂၀-၀၁-၃၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'yyyy-MM-dd',
+                dateSeparator: '-'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // yyyy/M/d
+        it(String.raw`should return date fragment when input '၂၀၂၀/၁/၃၁'`, () => {
+            const input = '၂၀၂၀/၁/၃၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'yyyy/M/d',
+                dateSeparator: '/'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // yyyy MM dd
+        it(String.raw`should return date fragment when input '၂၀၂၀ ၀၁ ၃၁'`, () => {
+            const input = '၂၀၂၀ ၀၁ ၃၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                spaceIncluded: true,
+                dateFormat: 'yyyy MM dd',
+                dateSeparator: ' '
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // yyyyMMdd
+        it(String.raw`should return date fragment when input '၂၀၂၀၀၁၃၁'`, () => {
+            const input = '၂၀၂၀၀၁၃၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'yyyyMMdd',
+                number: true,
+                numberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('month-day-year', () => {
+        // MM/dd/yyyy
+        it(String.raw`should return date fragment when input '၁၂/၃၁/၂၀၂၀'`, () => {
+            const input = '၁၂/၃၁/၂၀၂၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'MM/dd/yyyy',
+                dateSeparator: '/'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // M/d/yyyy
+        it(String.raw`should return date fragment when input '၁/၃၁/၂၀၂၀'`, () => {
+            const input = '၁/၃၁/၂၀၂၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'M/d/yyyy',
+                dateSeparator: '/'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // M/d/yy
+        it(String.raw`should return date fragment when input '၁/၃၁/၂၀'`, () => {
+            const input = '၁/၃၁/၂၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'M/d/yy',
+                dateSeparator: '/'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
         });
     });
 });
