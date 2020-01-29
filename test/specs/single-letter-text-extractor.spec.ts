@@ -143,6 +143,19 @@ describe('SingleLetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // With first codepoint
+        it(String.raw`should return alphabet fragment when input 'က' (with codepoint)`, () => {
+            const input = 'က';
+            const actualFragment = extractor.extractNext(input, 0x1000) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                alphabet: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Not
         //
         it(String.raw`should NOT return alphabet fragment with when input '\u1050'`, () => {
