@@ -479,6 +479,22 @@ describe('NumberGroupTextExtractor#date', () => {
 
             expect(actualFragment.possibleDate).toBeFalsy();
         });
+
+        // Ends with ဝဲ (\u101D)
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂ဝဲ'`, () => {
+            const input = '၀၁-၀၁-၂၀၂ဝဲ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+
+            expect(actualFragment.possibleDate).toBeFalsy();
+        });
+
+        // Ends with ဝဲ (\u104E)
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၎င်း'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၎င်း';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+
+            expect(actualFragment.possibleDate).toBeFalsy();
+        });
     });
 
     describe('year-month-day', () => {
