@@ -613,6 +613,23 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return number fragment when input '၁\u200B.\u200B၂'`, () => {
+            const input = '၁\u200B.\u200B၂';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁.၂',
+                number: true,
+                numberStr: '၁.၂',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁,၂၃၄,၅၆၇\u00B7၈၉'`, () => {
             const input = '၁,၂၃၄,၅၆၇\u00B7၈၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
