@@ -446,6 +446,21 @@ describe('NumberGroupTextExtractor#date', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // M/d/yy
+        it(String.raw`should return date fragment when input '၁/၃၁/၂၀'`, () => {
+            const input = '၁/၃၁/၂၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'M/d/yy',
+                dateSeparator: '/'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('not', () => {
