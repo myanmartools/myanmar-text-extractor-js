@@ -121,6 +121,20 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with ၊
+        it(String.raw`should return number fragment when input '၁၊'`, () => {
+            const input = '၁၊';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၁',
+                normalizedStr: '၁',
+                number: true,
+                numberStr: '၁'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Ends with က
         it(String.raw`should return number fragment when input '၁၀၀၀က'`, () => {
             const input = '၁၀၀၀က';
