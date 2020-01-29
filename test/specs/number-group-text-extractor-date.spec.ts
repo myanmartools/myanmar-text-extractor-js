@@ -409,7 +409,9 @@ describe('NumberGroupTextExtractor#date', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
-                dateFormat: 'yyyyMMdd'
+                dateFormat: 'yyyyMMdd',
+                number: true,
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
