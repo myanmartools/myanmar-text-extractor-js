@@ -136,15 +136,28 @@ describe('NumberGroupTextExtractor#number', () => {
         });
 
         // Ends with က
-        it(String.raw`should return number fragment when input '၁၀၀၀က'`, () => {
-            const input = '၁၀၀၀က';
+        it(String.raw`should return number fragment when input '၁၀က'`, () => {
+            const input = '၁၀က';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
-                matchedStr: '၁၀၀၀',
-                normalizedStr: '၁၀၀၀',
+                matchedStr: '၁၀',
+                normalizedStr: '၁၀',
                 number: true,
-                numberStr: '၁၀၀၀',
-                possiblePhoneNumber: true
+                numberStr: '၁၀'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with ၎င်း
+        it(String.raw`should return number fragment when input '၁၎င်း'`, () => {
+            const input = '၁၎င်း';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၁',
+                normalizedStr: '၁',
+                number: true,
+                numberStr: '၁'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -152,6 +165,22 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Normalize
         //
+        it(String.raw`should return number fragment when input '၁\u104E'`, () => {
+            const input = '၁\u104E';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁၄',
+                number: true,
+                numberStr: '၁၄',
+                normalizeReason: {
+                    changeU104EToU1044: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁၉\u101D'`, () => {
             const input = '၁၉\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
