@@ -171,6 +171,15 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Not
+        //
+        it(String.raw`should NOT return number fragment with when input '\u104E\u101D'`, () => {
+            const input = '\u101D\u104E';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
     });
 
     describe('number-group-with-separator', () => {
@@ -318,6 +327,7 @@ describe('NumberGroupTextExtractor#number', () => {
         });
 
         // Normalize
+        //
         it(String.raw`should return number fragment when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
             const input = '၁,၉\u104E\u101D.\u101D\u104E';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -334,6 +344,15 @@ describe('NumberGroupTextExtractor#number', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Not
+        //
+        it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
+            const input = '\u104E,\u104E\u104E\u101D';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
 
@@ -994,22 +1013,6 @@ describe('NumberGroupTextExtractor#number', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
-        });
-    });
-
-    describe('not', () => {
-        it(String.raw`should NOT return number fragment with when input '\u104E\u101D'`, () => {
-            const input = '\u101D\u104E';
-            const fragment = extractor.extractNext(input);
-
-            expect(fragment == null || !fragment.number).toBeTruthy();
-        });
-
-        it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
-            const input = '\u104E,\u104E\u104E\u101D';
-            const fragment = extractor.extractNext(input);
-
-            expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
 });
