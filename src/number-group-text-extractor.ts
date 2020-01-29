@@ -25,7 +25,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _closingBrackets = ')\\]\uFF09\uFF3D';
 
     // Number group
-    private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._thousandSeparator}${this._visibleSpace}][${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
+    private readonly _numberGroupRegex = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleNumber}]{2,4})*(?:[${this._numberDotSeparator}][${this._possibleNumber}]+)?`);
 
     // Number group starts with 'ဝ' / '၎'
     private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._thousandSeparator}${this._numberDotSeparator}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
