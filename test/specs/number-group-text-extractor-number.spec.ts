@@ -48,6 +48,22 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Not
+        //
+        it(String.raw`should NOT return number fragment with when input '\u104E'`, () => {
+            const input = '\u104E';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return number fragment with when input '\u101D'`, () => {
+            const input = '\u101D';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
     });
 
     describe('number-group', () => {
@@ -982,20 +998,6 @@ describe('NumberGroupTextExtractor#number', () => {
     });
 
     describe('not', () => {
-        it(String.raw`should NOT return number fragment with when input '\u104E'`, () => {
-            const input = '\u104E';
-            const fragment = extractor.extractNext(input);
-
-            expect(fragment == null || !fragment.number).toBeTruthy();
-        });
-
-        it(String.raw`should NOT return number fragment with when input '\u101D'`, () => {
-            const input = '\u101D';
-            const fragment = extractor.extractNext(input);
-
-            expect(fragment == null || !fragment.number).toBeTruthy();
-        });
-
         it(String.raw`should NOT return number fragment with when input '\u104E\u101D'`, () => {
             const input = '\u101D\u104E';
             const fragment = extractor.extractNext(input);
