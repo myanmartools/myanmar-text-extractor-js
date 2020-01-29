@@ -172,8 +172,14 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
+
+        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (!matchedStr) {
+            return null;
+        }
+
         if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
@@ -204,8 +210,14 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
+
+        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (!matchedStr) {
+            return null;
+        }
+
         if (rightStr && !this.isRightStrSafeForTime(rightStr)) {
             return null;
         }
@@ -228,8 +240,14 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
+
+        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (!matchedStr) {
+            return null;
+        }
+
         if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
@@ -280,7 +298,13 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
+        const rightStr = input.substring(matchedStr.length);
+        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (!matchedStr) {
+            return null;
+        }
+
         const extractInfo = this.getBracketsNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
@@ -441,7 +465,13 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
+        const rightStr = input.substring(matchedStr.length);
+        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (!matchedStr) {
+            return null;
+        }
+
         const extractInfo = this.getNumberGroupExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
@@ -449,7 +479,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const numberFragment: TextFragment = {
             ...extractInfo,
-            matchedStr,
             number: true
         };
 
@@ -578,7 +607,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     // tslint:disable-next-line: max-func-body-length
     private getDateExtractInfo(matchedStr: string, monthStart?: boolean): ExtractInfo | null {
-        const extractInfo: ExtractInfo = { normalizedStr: '' };
+        const extractInfo: ExtractInfo = {
+            matchedStr,
+            normalizedStr: ''
+        };
 
         let prevIsDigit = false;
         let prevIsSpace = false;
@@ -693,7 +725,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private getTimeExtractInfo(matchedStr: string): ExtractInfo | null {
-        const extractInfo: ExtractInfo = { normalizedStr: '' };
+        const extractInfo: ExtractInfo = {
+            matchedStr,
+            normalizedStr: ''
+        };
 
         let digitCount = 0;
         let colonSeparatorCount = 0;
@@ -744,6 +779,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // tslint:disable-next-line: max-func-body-length
     private getPhoneNumberExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = {
+            matchedStr,
             normalizedStr: ''
         };
 
@@ -917,6 +953,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // tslint:disable-next-line: max-func-body-length
     private getNumberGroupExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = {
+            matchedStr,
             normalizedStr: '',
             numberStr: ''
         };
@@ -926,14 +963,27 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let prevIsSeparator = false;
         let numberSeparator = '';
         let digitCount = 0;
+        let tmpSpace = '';
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
 
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++digitCount;
-                extractInfo.normalizedStr += c;
                 extractInfo.numberStr += c;
+                if (tmpSpace) {
+                    extractInfo.spaceIncluded = true;
+                    extractInfo.normalizedStr += ' ' + c;
+                    if (tmpSpace !== ' ') {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.normalizeSpace = true;
+                    }
+
+                    tmpSpace = '';
+                } else {
+                    extractInfo.normalizedStr += c;
+                }
+
                 prevIsDigit = true;
                 prevIsSpace = false;
                 prevIsSeparator = false;
@@ -963,13 +1013,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 if (prevIsSeparator) {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     extractInfo.normalizeReason.removeSpace = true;
+                    tmpSpace = '';
                 } else {
-                    extractInfo.normalizedStr += ' ';
-
-                    if (cp !== 0x0020) {
-                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                        extractInfo.normalizeReason.normalizeSpace = true;
-                    }
+                    tmpSpace = c;
                 }
 
                 prevIsDigit = false;
@@ -981,7 +1027,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
 
                 if (prevIsSpace) {
-                    extractInfo.normalizedStr = extractInfo.normalizedStr.trimRight();
+                    tmpSpace = '';
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     extractInfo.normalizeReason.removeSpace = true;
                 }
@@ -1018,6 +1064,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     private getBracketsNumberExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = {
+            matchedStr,
             normalizedStr: '',
             numberStr: ''
         };
@@ -1063,6 +1110,19 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         return extractInfo;
+    }
+
+    private getMatchedStrWithU101DAndU104EEndCheck(matchedStr: string, rightStr: string): string {
+        if (!rightStr) {
+            return matchedStr;
+        }
+
+        const lastMatachedC = matchedStr[matchedStr.length - 1];
+        if ((lastMatachedC === '\u101D' || lastMatachedC === '\u101E') && this._diacriticsAndAThetRegExp.test(rightStr)) {
+            return matchedStr.substring(0, matchedStr.length - 1);
+        }
+
+        return matchedStr;
     }
 
     private hasCorrectClosingBracket(openingBracketCp: number, str: string): boolean {
