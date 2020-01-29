@@ -137,6 +137,7 @@ describe('NumberGroupTextExtractor#number', () => {
         });
 
         // Normalize
+        //
         it(String.raw`should return number fragment when input '၁၉\u101D'`, () => {
             const input = '၁၉\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
