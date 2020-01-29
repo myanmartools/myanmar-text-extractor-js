@@ -155,17 +155,16 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return number fragment when input '၁,၉\u104E\u101D'`, () => {
-            const input = '၁,၉\u104E\u101D';
+        it(String.raw`should return number fragment when input '\u101D၁၉'`, () => {
+            const input = '\u101D၁၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
-                normalizedStr: '၁,၉၄၀',
+                normalizedStr: '၀၁၉',
                 number: true,
-                numberStr: '၁၉၄၀',
-                numberSeparator: ',',
+                numberStr: '၀၁၉',
+                possiblePhoneNumber: true,
                 normalizeReason: {
-                    changeU104EToU1044: true,
                     changeU101DToU1040: true
                 }
             };
@@ -329,6 +328,24 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Normalize
         //
+        it(String.raw`should return number fragment when input '၁,၉\u104E\u101D'`, () => {
+            const input = '၁,၉\u104E\u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁,၉၄၀',
+                number: true,
+                numberStr: '၁၉၄၀',
+                numberSeparator: ',',
+                normalizeReason: {
+                    changeU104EToU1044: true,
+                    changeU101DToU1040: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁,၉\u104E\u101D.\u101D\u104E'`, () => {
             const input = '၁,၉\u104E\u101D.\u101D\u104E';
             const actualFragment = extractor.extractNext(input) as TextFragment;
