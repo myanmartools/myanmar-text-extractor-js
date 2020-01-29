@@ -328,6 +328,24 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Normalize
         //
+        it(String.raw`should return number fragment when input '၁, ၀၀၀'`, () => {
+            const input = '၁, ၀၀၀';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁,၀၀၀',
+                number: true,
+                numberStr: '၁၀၀၀',
+                numberSeparator: ',',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁,၉\u104E\u101D'`, () => {
             const input = '၁,၉\u104E\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
