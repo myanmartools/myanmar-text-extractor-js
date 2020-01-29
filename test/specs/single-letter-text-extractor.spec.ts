@@ -44,15 +44,6 @@ describe('SingleLetterTextExtractor', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
-
-        // Not
-        //
-        it(String.raw`should NOT return alphabet fragment with when input '\u1050'`, () => {
-            const input = '\u1050';
-            const fragment = extractor.extractNext(input);
-
-            expect(fragment).toBeFalsy();
-        });
     });
 
     describe('single-char-input', () => {
@@ -150,6 +141,15 @@ describe('SingleLetterTextExtractor', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Not
+        //
+        it(String.raw`should NOT return alphabet fragment with when input '\u1050'`, () => {
+            const input = '\u1050';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment).toBeFalsy();
         });
     });
 
