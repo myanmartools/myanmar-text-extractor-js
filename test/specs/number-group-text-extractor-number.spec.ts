@@ -429,6 +429,32 @@ describe('NumberGroupTextExtractor#number', () => {
     });
 
     describe('number-group-with-decimal-point', () => {
+        it(String.raw`should return number fragment when input '၁.၂'`, () => {
+            const input = '၁.၂';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁.၂'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return number fragment when input '၁၀.၀၂'`, () => {
+            const input = '၁၀.၀၂';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: '၁၀.၀၂'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return number fragment when input '၁,၉၉၉.၀၂'`, () => {
             const input = '၁,၉၉၉.၀၂';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -563,6 +589,25 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 number: true,
                 numberStr: '၃.၁၄၁၅၉၂၆၅၃၅'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Normalize
+        //
+        it(String.raw`should return number fragment when input '၁ . ၂'`, () => {
+            const input = '၁ . ၂';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁.၂',
+                number: true,
+                numberStr: '၁.၂',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
             };
 
             expect(actualFragment).toEqual(expactedFragment);
