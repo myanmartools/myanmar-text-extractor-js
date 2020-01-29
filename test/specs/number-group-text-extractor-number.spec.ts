@@ -1253,5 +1253,14 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Not
+        //
+        it(String.raw`should NOT return number fragment when input '(ဝ)'`, () => {
+            const input = '(ဝ)';
+            const fragment = extractor.extractNext(input) as TextFragment;
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
     });
 });
