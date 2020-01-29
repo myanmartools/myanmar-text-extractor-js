@@ -8,6 +8,17 @@ describe('SingleLetterTextExtractor', () => {
         extractor = new SingleLetterTextExtractor();
     });
 
+    describe('empty-input', () => {
+        // Not
+        //
+        it(String.raw`should NOT return fragment with when input empty`, () => {
+            const input = '';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment).toBeFalsy();
+        });
+    });
+
     describe('single-char-alphabet', () => {
         it(String.raw`should return alphabet fragment when input 'ဤ'`, () => {
             const input = 'ဤ';
@@ -158,7 +169,7 @@ describe('SingleLetterTextExtractor', () => {
 
         // Not
         //
-        it(String.raw`should NOT return alphabet fragment with when input '\u1050'`, () => {
+        it(String.raw`should NOT return fragment with when input '\u1050'`, () => {
             const input = '\u1050';
             const fragment = extractor.extractNext(input);
 
