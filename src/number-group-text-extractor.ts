@@ -215,11 +215,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let matchedStr = m[0];
+        const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
-        if (!matchedStr) {
+        const newMatchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        if (matchedStr.length !== newMatchedStr.length) {
             return null;
         }
 
