@@ -64,7 +64,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}${this._phHash}?`);
 
     // Diacritics and AThet
-    private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)|(?:[\u102B-\u103E]+)`);
+    private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)|(?:[\u102B-\u103E]+))`);
 
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
