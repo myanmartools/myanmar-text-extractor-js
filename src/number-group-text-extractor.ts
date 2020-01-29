@@ -1117,8 +1117,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return matchedStr;
         }
 
-        const lastMatachedC = matchedStr[matchedStr.length - 1];
-        if ((lastMatachedC === '\u101D' || lastMatachedC === '\u101E') && this._diacriticsAndAThetRegExp.test(rightStr)) {
+        const lastC = matchedStr[matchedStr.length - 1];
+        if ((lastC === '\u101D' || lastC === '\u104E') && this._diacriticsAndAThetRegExp.test(rightStr)) {
             return matchedStr.substring(0, matchedStr.length - 1);
         }
 
