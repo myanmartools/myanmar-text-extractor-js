@@ -8,6 +8,17 @@ describe('NumberGroupTextExtractor#number', () => {
         extractor = new NumberGroupTextExtractor();
     });
 
+    describe('empty-input', () => {
+        // Not
+        //
+        it(String.raw`should NOT return fragment with when input empty`, () => {
+            const input = '';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment).toBeFalsy();
+        });
+    });
+
     describe('single-number-input', () => {
         it(String.raw`should return number fragment when input '၀'`, () => {
             const input = '၀';
@@ -39,6 +50,20 @@ describe('NumberGroupTextExtractor#number', () => {
         it(String.raw`should return number fragment when input '၉'`, () => {
             const input = '၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                number: true,
+                numberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // With first char codepoint
+        it(String.raw`should return number fragment when input '၀' (with first char codepoint)`, () => {
+            const input = '၀';
+            const actualFragment = extractor.extractNext(input, 0x1040) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,

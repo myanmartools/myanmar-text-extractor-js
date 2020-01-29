@@ -154,8 +154,8 @@ describe('SingleLetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // With first codepoint
-        it(String.raw`should return alphabet fragment when input 'က' (with codepoint)`, () => {
+        // With first char codepoint
+        it(String.raw`should return alphabet fragment when input 'က' (with first char codepoint)`, () => {
             const input = 'က';
             const actualFragment = extractor.extractNext(input, 0x1000) as TextFragment;
             const expactedFragment: TextFragment = {
