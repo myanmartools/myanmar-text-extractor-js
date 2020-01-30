@@ -163,6 +163,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
         });
 
         // Normalize
+        //
         it(String.raw`should return phone number fragment when input '\uFF0B၉၅၉'`, () => {
             const input = '\uFF0B၉၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -190,6 +191,22 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true,
                     removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '+၉၅\u00A0၉'`, () => {
+            const input = '+၉၅\u00A0၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '+၉၅ ၉',
+                possiblePhoneNumber: true,
+                spaceIncluded: true,
+                normalizeReason: {
+                    normalizeSpace: true
                 }
             };
 
