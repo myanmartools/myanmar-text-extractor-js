@@ -188,34 +188,6 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // Ends with ဝိ (\u101D)
-        it(String.raw`should return number fragment when input '၁ဝိ'`, () => {
-            const input = '၁ဝိ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: '၁',
-                normalizedStr: '၁',
-                number: true,
-                numberStr: '၁'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // Ends with ဝူ (\u101D)
-        it(String.raw`should return number fragment when input '၁ဝူ'`, () => {
-            const input = '၁ဝူ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: '၁',
-                normalizedStr: '၁',
-                number: true,
-                numberStr: '၁'
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
         // Normalize
         //
         it(String.raw`should return number fragment when input '၁\u104E'`, () => {
@@ -1108,6 +1080,29 @@ describe('NumberGroupTextExtractor#number', () => {
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with ဝိ (\u101D)
+        it(String.raw`should return number fragment when input '၁ဝိ' (\u101D)`, () => {
+            const input = '၁ဝိ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၁၀ိ',
+                number: true,
+                numberStr: '၁၀',
+                ancientWrittenForm: true,
+                ancientMeasureWords: [
+                    'ကျပ်',
+                    'စိတ်',
+                    'မိုက်'
+                ],
+                normalizeReason: {
+                    changeU101DToU1040: true
                 }
             };
 
