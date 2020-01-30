@@ -331,7 +331,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (input[1] !== '\u103A' || input[2] !== '\u1039') {
+        if (input[1] !== '\u103A' || input[2] !== '\u1039' || input[4] !== '\u102B') {
             return null;
         }
 
@@ -343,10 +343,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let matchedStr = input.substring(0, 4);
         let normalizedStr = matchedStr;
-
-        if (input[4] !== '\u102B') {
-            return null;
-        }
 
         matchedStr += input[4];
         normalizedStr += input[4];
