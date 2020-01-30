@@ -351,6 +351,20 @@ describe('NumberGroupTextExtractor#time', () => {
             expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
+        it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၎င်း'`, () => {
+            const input = '၁၂:၅၉:၎င်း';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return time fragment when input '၁၂:ဝု'`, () => {
+            const input = '၁၂:ဝု';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
+        });
+
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
             const fragment = extractor.extractNext(input);
