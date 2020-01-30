@@ -244,6 +244,7 @@ describe('NumberGroupTextExtractor#time', () => {
         });
 
         // Normalize
+        //
         it(String.raw`should return time fragment when input '၁၂း၅၉း၅၉'`, () => {
             const input = '၁၂း၅၉း၅၉';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -300,6 +301,22 @@ describe('NumberGroupTextExtractor#time', () => {
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return time fragment when input '၂\u101D:\u104E၉:၅၉'`, () => {
+            const input = '၂\u101D:\u104E၉:၅၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '၂၀:၄၉:၅၉',
+                possibleTime: true,
+                normalizeReason: {
+                    changeU101DToU1040: true,
+                    changeU104EToU1044: true
                 }
             };
 
