@@ -619,13 +619,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let prevIsSpace = false;
         let prevIsSeparator = false;
         let dateSeparator: string | undefined;
-        let digitCount = 0;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
 
             if (cp >= 0x1040 && cp <= 0x1049) {
-                ++digitCount;
                 extractInfo.normalizedStr += c;
                 prevIsDigit = true;
                 prevIsSpace = false;
@@ -685,10 +683,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         }
 
-        if (!digitCount) {
-            return null;
-        }
-
         if (dateSeparator) {
             extractInfo.dateSeparator = dateSeparator;
         } else if (extractInfo.spaceIncluded) {
@@ -697,6 +691,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (extractInfo.dateSeparator != null) {
             const dParts = extractInfo.normalizedStr.split(extractInfo.dateSeparator);
+            if (dParts.length !== 3) {
+                return null;
+            }
+
             if (dParts[0].length === 4) {
                 if (dParts[1].length === 2 && dParts[2].length === 2) {
                     extractInfo.dateFormat = `yyyy${extractInfo.dateSeparator}MM${extractInfo.dateSeparator}dd`;
