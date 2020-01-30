@@ -305,9 +305,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const matchedStr = m[0];
-        if (!matchedStr) {
-            return null;
-        }
 
         const extractInfo = this.getBracketsNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
