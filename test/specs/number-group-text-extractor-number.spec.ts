@@ -779,6 +779,7 @@ describe('NumberGroupTextExtractor#number', () => {
         });
 
         // Normalize
+        //
         it(String.raw`should return number fragment when input '( ၁ ) ၀ိ'`, () => {
             const input = '( ၁ ) ၀ိ';
             const actualFragment = extractor.extractNext(input) as TextFragment;
