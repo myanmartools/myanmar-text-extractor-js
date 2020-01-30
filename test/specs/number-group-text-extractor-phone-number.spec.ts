@@ -212,6 +212,22 @@ describe('NumberGroupTextExtractor#phone-number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return phone number fragment when input '+၉၅\u200B၉'`, () => {
+            const input = '+၉၅\u200B၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: '+၉၅၉',
+                possiblePhoneNumber: true,
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('local', () => {
