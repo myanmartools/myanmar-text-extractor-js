@@ -205,9 +205,9 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // Ends with \u1000
-        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀\u1000'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀\u1000';
+        // Ends with က
+        it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀က'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀က';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
@@ -215,6 +215,22 @@ describe('NumberGroupTextExtractor#date', () => {
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
                 dateSeparator: '-'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with က
+        it(String.raw`should return date fragment when input '၀၁ ၀၁ ၂၀၂၀ က'`, () => {
+            const input = '၀၁ ၀၁ ၂၀၂၀ က';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၀၁ ၀၁ ၂၀၂၀',
+                normalizedStr: '၀၁ ၀၁ ၂၀၂၀',
+                possibleDate: true,
+                dateFormat: 'dd MM yyyy',
+                dateSeparator: ' ',
+                spaceIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
