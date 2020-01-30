@@ -818,8 +818,22 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Not
         //
-        it(String.raw`should NOT return number fragment when input 'င်္ဝါ'`, () => {
+        it(String.raw`should NOT return number fragment when input 'င်္ဝါ' \u101D)`, () => {
             const input = 'င်္ဝါ';
+            const fragment = extractor.extractNext(input) as TextFragment;
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return number fragment when input 'င\u1039၁၁၁'`, () => {
+            const input = 'င\u1039၁၁၁';
+            const fragment = extractor.extractNext(input) as TextFragment;
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return number fragment when input 'င်၁၁၁'`, () => {
+            const input = 'င်၁၁၁';
             const fragment = extractor.extractNext(input) as TextFragment;
 
             expect(fragment == null || !fragment.number).toBeTruthy();
