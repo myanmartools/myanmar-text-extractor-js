@@ -1141,10 +1141,51 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with ဝိ (\u101D\u104B)
+        it(String.raw`should return number fragment when input '၁ဝိ။' (\u101D\u104B)`, () => {
+            const input = '၁ဝိ။';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၁ဝိ',
+                normalizedStr: '၁၀ိ',
+                number: true,
+                numberStr: '၁၀',
+                ancientWrittenForm: true,
+                ancientMeasureWords: [
+                    'ကျပ်',
+                    'စိတ်',
+                    'မိုက်'
+                ],
+                normalizeReason: {
+                    changeU101DToU1040: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // NOT
         //
         it(String.raw`should NOT return ancient number fragment when input '၁ဝိက' (\u101D\u1000)`, () => {
             const input = '၁ဝိက';
+            const fragment = extractor.extractNext(input) as TextFragment;
+            expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return ancient number fragment when input '၁ဝိ၏' (\u101D\u104F)`, () => {
+            const input = '၁ဝိ၏';
+            const fragment = extractor.extractNext(input) as TextFragment;
+            expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return ancient number fragment when input '၁ဝိꩠ' (\u101D\uAA60)`, () => {
+            const input = '၁ဝိꩠ';
+            const fragment = extractor.extractNext(input) as TextFragment;
+            expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return ancient number fragment when input '၁ဝိꧠ' (\u101D\uA9E0)`, () => {
+            const input = '၁ဝိꧠ';
             const fragment = extractor.extractNext(input) as TextFragment;
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
