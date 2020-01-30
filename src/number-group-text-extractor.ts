@@ -587,7 +587,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const lastC = numberFragment.matchedStr[numberFragment.matchedStr.length - 1];
         if ((lastC === '\u101D' || lastC === '\u104E') && rightStr.length > diacriticsOrAThetMatchedStr.length) {
             const nextRightCp = rightStr.codePointAt(diacriticsOrAThetMatchedStr.length);
-            if (nextRightCp && ((nextRightCp >= 0x1000 && nextRightCp <= 0x1049) || (nextRightCp >= 0x104C && nextRightCp <= 0x104F))) {
+            if (nextRightCp && ((nextRightCp >= 0x1000 && nextRightCp <= 0x109F) ||
+                (nextRightCp >= 0xAA60 && nextRightCp <= 0xAA7F) ||
+                (nextRightCp >= 0xA9E0 && nextRightCp <= 0xA9FE))) {
                 return false;
             }
         }
