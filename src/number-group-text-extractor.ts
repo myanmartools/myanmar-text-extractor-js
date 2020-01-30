@@ -175,7 +175,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
+        if (rightStr && !this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
@@ -190,7 +190,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumber(rightStr2)) {
+            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
                 return null;
             }
         }
@@ -251,7 +251,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
+        if (rightStr && !this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
@@ -266,7 +266,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumber(rightStr2)) {
+            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
                 return null;
             }
         }
@@ -506,7 +506,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         if (ingaTinOrTaungAncientNumberFragment != null) {
             numberFragment.matchedStr += ingaTinOrTaungAncientNumberFragment.matchedStr;
             numberFragment.normalizedStr += ingaTinOrTaungAncientNumberFragment.normalizedStr;
-            numberFragment.numberStr += ingaTinOrTaungAncientNumberFragment.numberStr || '';
+            numberFragment.numberStr += ingaTinOrTaungAncientNumberFragment.numberStr as string;
             numberFragment.ancientWrittenForm = true;
             numberFragment.ancientMeasureWords = ingaTinOrTaungAncientNumberFragment.ancientMeasureWords;
 
@@ -1138,16 +1138,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private isRightStrSafeForDateOrPhoneNumber(rightStr: string): boolean {
-        if (!rightStr) {
-            return true;
-        }
-
-        if (this.isRightStrPossibleNumber(rightStr)) {
+        if (this.isRightStrPossibleNumberGroup(rightStr)) {
             return false;
         }
 
         const cp = rightStr.codePointAt(0);
-
         if (!cp) {
             return true;
         }
@@ -1162,7 +1157,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
             (cp >= 0x007B && cp <= 0x007E))) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumber(rightStr2)) {
+            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
                 return false;
             }
         }
@@ -1171,16 +1166,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private isRightStrSafeForTime(rightStr: string): boolean {
-        if (!rightStr) {
-            return true;
-        }
-
-        if (this.isRightStrPossibleNumber(rightStr)) {
+        if (this.isRightStrPossibleNumberGroup(rightStr)) {
             return false;
         }
 
         const cp = rightStr.codePointAt(0);
-
         if (!cp) {
             return true;
         }
@@ -1192,7 +1182,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             cp === 0x005C || cp === 0x005E || cp === 0x005F ||
             cp === 0x0060 || cp === 0x007C || cp === 0x007E)) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumber(rightStr2)) {
+            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
                 return false;
             }
         }
@@ -1200,11 +1190,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return true;
     }
 
-    private isRightStrPossibleNumber(rightStr: string): boolean {
-        if (!rightStr) {
-            return false;
-        }
-
+    private isRightStrPossibleNumberGroup(rightStr: string): boolean {
         const cp = rightStr.codePointAt(0);
         if (!cp) {
             return false;
