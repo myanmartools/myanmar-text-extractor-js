@@ -467,19 +467,23 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     }
                 }
 
-                if (this._numberGroupRegExp.test(newMatchedStr)) {
-                    const newExtractInfo = this.getNumberGroupExtractInfo(newMatchedStr);
-                    if (newExtractInfo == null) {
-                        return null;
-                    }
-
-                    return {
-                        ...newExtractInfo,
-                        number: true
-                    };
-                } else {
+                const m2 = newMatchedStr.match(this._numberGroupRegExp);
+                if (m2 == null) {
                     return null;
                 }
+
+                const m2Str = m2[0];
+                const newExtractInfo = this.getNumberGroupExtractInfo(m2Str);
+                if (newExtractInfo == null) {
+                    return null;
+                }
+
+                return {
+                    ...newExtractInfo,
+                    number: true
+                };
+
+
             }
 
             return numberFragment;
