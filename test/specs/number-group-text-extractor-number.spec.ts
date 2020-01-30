@@ -14,7 +14,6 @@ describe('NumberGroupTextExtractor#number', () => {
         it(String.raw`should NOT return fragment with when input empty`, () => {
             const input = '';
             const fragment = extractor.extractNext(input);
-
             expect(fragment).toBeFalsy();
         });
     });
@@ -79,14 +78,12 @@ describe('NumberGroupTextExtractor#number', () => {
         it(String.raw`should NOT return number fragment with when input '\u104E'`, () => {
             const input = '\u104E';
             const fragment = extractor.extractNext(input);
-
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
 
         it(String.raw`should NOT return number fragment with when input '\u101D'`, () => {
             const input = '\u101D';
             const fragment = extractor.extractNext(input);
-
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
@@ -502,7 +499,6 @@ describe('NumberGroupTextExtractor#number', () => {
         it(String.raw`should NOT return number fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
             const input = '\u104E,\u104E\u104E\u101D';
             const fragment = extractor.extractNext(input);
-
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
@@ -830,38 +826,33 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Not
         //
-        it(String.raw`should NOT return number fragment when input 'င်္၁ာ'`, () => {
+        it(String.raw`should NOT return ancient number fragment when input 'င်္၁ာ'`, () => {
             const input = 'င်္၁ာ';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
 
-        it(String.raw`should NOT return number fragment when input 'င်္၁ါ့'`, () => {
+        it(String.raw`should NOT return ancient number fragment when input 'င်္၁ါ့'`, () => {
             const input = 'င်္၁ါ့';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
 
-        it(String.raw`should NOT return number fragment when input 'င်္ဝါ' \u101D)`, () => {
+        it(String.raw`should NOT return ancient number fragment when input 'င်္ဝါ' \u101D)`, () => {
             const input = 'င်္ဝါ';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
 
-        it(String.raw`should NOT return number fragment when input 'င\u1039၁၁၁'`, () => {
+        it(String.raw`should NOT return ancient number fragment when input 'င\u1039၁၁၁'`, () => {
             const input = 'င\u1039၁၁၁';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
 
-        it(String.raw`should NOT return number fragment when input 'င်၁၁၁'`, () => {
+        it(String.raw`should NOT return ancient number fragment when input 'င်၁၁၁'`, () => {
             const input = 'င်၁၁၁';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
     });
@@ -1107,6 +1098,7 @@ describe('NumberGroupTextExtractor#number', () => {
         });
 
         // Normalize
+        //
         it(String.raw`should return number fragment when input '၁ွ က်'`, () => {
             const input = '၁ွ က်';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -1148,6 +1140,14 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // NOT
+        //
+        it(String.raw`should NOT return ancient number fragment when input '၁ဝိက' (\u101D\u1000)`, () => {
+            const input = '၁ဝိက';
+            const fragment = extractor.extractNext(input) as TextFragment;
+            expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
+        });
     });
 
     describe('hsettha', () => {
@@ -1168,17 +1168,15 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Not
         //
-        it(String.raw`should NOT return number fragment when input '(၁)၀ို'`, () => {
+        it(String.raw`should NOT return ancient number fragment when input '(၁)၀ို'`, () => {
             const input = '(၁)၀ို';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
 
-        it(String.raw`should NOT return number fragment when input '(၁\uFF09၀ိ'`, () => {
+        it(String.raw`should NOT return ancient number fragment when input '(၁\uFF09၀ိ'`, () => {
             const input = '(၁\uFF09၀ိ';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
     });
@@ -1310,14 +1308,12 @@ describe('NumberGroupTextExtractor#number', () => {
         it(String.raw`should NOT return number fragment when input '(ဝ)'`, () => {
             const input = '(ဝ)';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
 
         it(String.raw`should NOT return number fragment when input '(၁၁'`, () => {
             const input = '(၁၁';
             const fragment = extractor.extractNext(input) as TextFragment;
-
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
     });
