@@ -428,6 +428,31 @@ describe('NumberGroupTextExtractor#phone-number', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return phone number fragment when input '*၁၂၃# \u101D'`, () => {
+            const input = '*၁၂၃# \u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '*၁၂၃#',
+                normalizedStr: '*၁၂၃#',
+                possiblePhoneNumber: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return phone number fragment when input '*၁၂၃ ၄၅၆# \u101D'`, () => {
+            const input = '*၁၂၃ ၄၅၆# \u101D';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '*၁၂၃ ၄၅၆#',
+                normalizedStr: '*၁၂၃ ၄၅၆#',
+                possiblePhoneNumber: true,
+                spaceIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('not', () => {
@@ -465,6 +490,13 @@ describe('NumberGroupTextExtractor#phone-number', () => {
 
         it(String.raw`should NOT return phone number fragment when input '*၁၂၃'`, () => {
             const input = '*၁၂၃';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return phone number fragment when input '၁၂၃ ၄၉၆# ၁'`, () => {
+            const input = '၁၂၃ ၄၉၆# ၁';
             const fragment = extractor.extractNext(input);
 
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
