@@ -296,7 +296,7 @@ describe('NumberGroupTextExtractor#date', () => {
         });
 
         // \U101D
-        it(String.raw`should return date fragment with INVALID when input '၃၁၊၁၂၊၂၀၂\u101D'`, () => {
+        it(String.raw`should return date fragment when input '၃၁၊၁၂၊၂၀၂\u101D'`, () => {
             const input = '၃၁၊၁၂၊၂၀၂\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
@@ -314,7 +314,7 @@ describe('NumberGroupTextExtractor#date', () => {
         });
 
         // \U104E
-        it(String.raw`should return date fragment with INVALID when input '၁\u104E၊၁၂၊၂၀၂၀'`, () => {
+        it(String.raw`should return date fragment when input '၁\u104E၊၁၂၊၂၀၂၀'`, () => {
             const input = '၁\u104E၊၁၂၊၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
@@ -332,7 +332,7 @@ describe('NumberGroupTextExtractor#date', () => {
         });
 
         // \U101D and \U104E
-        it(String.raw`should return date fragment with INVALID when input '၁\u104E၊၁၂၊၂\u101D၂\u101D'`, () => {
+        it(String.raw`should return date fragment when input '၁\u104E၊၁၂၊၂\u101D၂\u101D'`, () => {
             const input = '၁\u104E၊၁၂၊၂\u101D၂\u101D';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
@@ -351,7 +351,7 @@ describe('NumberGroupTextExtractor#date', () => {
         });
 
         // Space (\u200B)
-        it(String.raw`should return date fragment with INVALID when input '၃၁\u200B၁၂\u200B၂၀၂၀'`, () => {
+        it(String.raw`should return date fragment when input '၃၁\u200B၁၂\u200B၂၀၂၀'`, () => {
             const input = '၃၁\u200B၁၂\u200B၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
             const expactedFragment: TextFragment = {
@@ -367,164 +367,6 @@ describe('NumberGroupTextExtractor#date', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // Not
-        //
-        it(String.raw`should NOT return date fragment when input '၃၂-၁၂-၂၀၂၀'`, () => {
-            const input = '၃၂-၁၂-၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၃၀-၁၃-၂၀၂၀'`, () => {
-            const input = '၃၀-၁၃-၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၂၀/၁/၃၁'`, () => {
-            const input = '၂၀/၁/၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀၅'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀၅';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀#'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀#';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀$'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀$';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀%'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀%';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀+'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀+';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀@'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀@';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀\uFF0B'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀\uFF0B';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀!၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀!၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀/၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀/၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀:၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀:၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀>၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀>၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀?၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀?၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀[၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀[၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀_၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀_၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀|၁'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၀|၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁--၀၁--၂၀၂၀'`, () => {
-            const input = '၀၁--၀၁--၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        it(String.raw`should NOT return date fragment when input '၀၁ ၀၁ ၂၀၂၀ ၁'`, () => {
-            const input = '၀၁ ၀၁ ၂၀၂၀ ၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        // Ends with ဝဲ (\u101D)
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂ဝဲ'`, () => {
-            const input = '၀၁-၀၁-၂၀၂ဝဲ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
-        // Ends with ဝဲ (\u104E)
-        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၎င်း'`, () => {
-            const input = '၀၁-၀၁-၂၀၂၎င်း';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
         });
     });
 
@@ -651,6 +493,142 @@ describe('NumberGroupTextExtractor#date', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('not', () => {
+        it(String.raw`should NOT return date fragment when input '၃၂-၁၂-၂၀၂၀'`, () => {
+            const input = '၃၂-၁၂-၂၀၂၀';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၃၀-၁၃-၂၀၂၀'`, () => {
+            const input = '၃၀-၁၃-၂၀၂၀';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၂၀/၁/၃၁'`, () => {
+            const input = '၂၀/၁/၃၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀၅'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀၅';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀#'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀#';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀$'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀$';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀%'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀%';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀+'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀+';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀@'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀@';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀\uFF0B'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀\uFF0B';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀!၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀!၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀/၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀/၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀:၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀:၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀>၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀>၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀?၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀?၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀[၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀[၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀_၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀_၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀|၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀|၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁--၀၁--၂၀၂၀'`, () => {
+            const input = '၀၁--၀၁--၂၀၂၀';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁ ၀၁ ၂၀၂၀ ၁'`, () => {
+            const input = '၀၁ ၀၁ ၂၀၂၀ ၁';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Ends with ဝဲ (\u101D)
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂ဝဲ'`, () => {
+            const input = '၀၁-၀၁-၂၀၂ဝဲ';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Ends with ဝဲ (\u104E)
+        it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၎င်း'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၎င်း';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
     });
 });

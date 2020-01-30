@@ -325,44 +325,44 @@ describe('NumberGroupTextExtractor#time', () => {
     describe('not', () => {
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉၁'`, () => {
             const input = '၁၂:၅၉:၅၉၁';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u101D၁'`, () => {
             const input = '၁၂:၅၉:၅၉\u101D၁';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉\u104E၁'`, () => {
             const input = '၁၂:၅၉:၅၉\u104E၁';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂:၅၉:၅၉.၁'`, () => {
             const input = '၁၂:၅၉:၅၉.၁';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '၁၂;၅၉'`, () => {
             const input = '၁၂;၅၉';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
         it(String.raw`should NOT return time fragment when input '\u104E:\u101D'`, () => {
             const input = '\u104E:\u101D';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possibleTime).toBeTruthy();
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
     });
 });
