@@ -510,17 +510,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             numberFragment.ancientWrittenForm = true;
             numberFragment.ancientMeasureWords = ingaTinOrTaungAncientNumberFragment.ancientMeasureWords;
 
-            if (ingaTinOrTaungAncientNumberFragment.spaceIncluded) {
-                numberFragment.spaceIncluded = true;
-            }
-
-            if (ingaTinOrTaungAncientNumberFragment.normalizeReason) {
-                numberFragment.normalizeReason = {
-                    ...numberFragment.normalizeReason,
-                    ...ingaTinOrTaungAncientNumberFragment.normalizeReason
-                };
-            }
-
             return true;
         }
 
