@@ -390,17 +390,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let ancientMeasureWords: string[];
-        if (rightStr && rightStr.trimLeft().startsWith('\u1010\u1031\u102C\u1004\u103A\u1038')) {
-            ancientMeasureWords = ['\u1010\u1031\u102C\u1004\u103A\u1038'];
-        } else if (rightStr && rightStr.trimLeft().startsWith('\u1010\u1004\u103A\u1038')) {
-            ancientMeasureWords = ['\u1010\u1004\u103A\u1038'];
-        } else {
-            ancientMeasureWords = [
-                '\u1010\u1031\u102C\u1004\u103A\u1038',
-                '\u1010\u1004\u103A\u1038'
-            ];
-        }
+        const ancientMeasureWords = [
+            '\u1010\u1031\u102C\u1004\u103A\u1038',
+            '\u1010\u1004\u103A\u1038'
+        ];
 
         return {
             matchedStr,
