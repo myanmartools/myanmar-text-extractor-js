@@ -343,20 +343,13 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let matchedStr = input.substring(0, 4);
         let normalizedStr = matchedStr;
-        let spaceIncluded: boolean | undefined;
 
         if (input[4] !== '\u102B') {
-            if (input.length < 6 || input[5] !== '\u102B' || !this._containSpaceRegExp.test(input[4])) {
-                return null;
-            }
-
-            matchedStr += input[4] + input[5];
-            normalizedStr += input[5];
-            spaceIncluded = true;
-        } else {
-            matchedStr += input[4];
-            normalizedStr += input[4];
+            return null;
         }
+
+        matchedStr += input[4];
+        normalizedStr += input[4];
 
         const rightStr = input.substring(matchedStr.length);
         const right1stCp = rightStr ? rightStr.codePointAt(0) : undefined;
@@ -364,7 +357,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const numberFragment: TextFragment = {
+        return {
             matchedStr,
             normalizedStr,
             numberStr: c4,
@@ -373,15 +366,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             // အင်္ဂါ
             ancientMeasureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
         };
-
-        if (spaceIncluded) {
-            numberFragment.spaceIncluded = true;
-
-            numberFragment.normalizeReason = numberFragment.normalizeReason || {};
-            numberFragment.normalizeReason.removeSpace = true;
-        }
-
-        return numberFragment;
     }
 
     private getNumberTinOrTaungFragment(input: string, firstCp: number): TextFragment | null {
