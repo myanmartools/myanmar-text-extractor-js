@@ -1163,6 +1163,13 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
+
+        it(String.raw`should NOT return number fragment when input '(၁\uFF09၀ိ'`, () => {
+            const input = '(၁\uFF09၀ိ';
+            const fragment = extractor.extractNext(input) as TextFragment;
+
+            expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
+        });
     });
 
     describe('brackets', () => {
