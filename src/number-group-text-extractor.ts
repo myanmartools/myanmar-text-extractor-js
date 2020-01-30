@@ -257,13 +257,22 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
-        const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
         if (matchedStr.length !== newMatchedStr.length) {
-            if (!(newLastCp >= 0x1040 && newLastCp <= 0x1049)) {
+            if (newMatchedStr.length < 3) {
                 return null;
-            } else {
-                matchedStr = newMatchedStr;
             }
+
+            const m2 = newMatchedStr.match(this._phRegExp);
+            if (m2 == null) {
+                return null;
+            }
+
+            const m2Str = m2[0];
+            if (m2Str.length !== newMatchedStr.length) {
+                return null;
+            }
+
+            matchedStr = newMatchedStr;
         }
 
         const extractInfo = this.getPhoneNumberExtractInfo(matchedStr);
