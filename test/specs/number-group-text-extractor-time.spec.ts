@@ -217,6 +217,32 @@ describe('NumberGroupTextExtractor#time', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with ၎င်း
+        it(String.raw`should return time fragment when input '၂၃:၅၉:၅၎င်း'`, () => {
+            const input = '၂၃:၅၉:၅၎င်း';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၂၃:၅၉:၅',
+                normalizedStr: '၂၃:၅၉:၅',
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with ဝဲ
+        it(String.raw`should return time fragment when input '၂၃:၅၉:၅ဝဲ'`, () => {
+            const input = '၂၃:၅၉:၅ဝဲ';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: '၂၃:၅၉:၅',
+                normalizedStr: '၂၃:၅၉:၅',
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Normalize
         it(String.raw`should return time fragment when input '၁၂း၅၉း၅၉'`, () => {
             const input = '၁၂း၅၉း၅၉';
