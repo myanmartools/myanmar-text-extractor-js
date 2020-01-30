@@ -352,8 +352,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
         normalizedStr += input[4];
 
         const rightStr = input.substring(matchedStr.length);
-        const right1stCp = rightStr ? rightStr.codePointAt(0) : undefined;
-        if (right1stCp && right1stCp >= 0x102B && right1stCp <= 0x103E) {
+
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
             return null;
         }
 
@@ -386,8 +386,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = input.substring(0, 4);
 
         const rightStr = input.substring(matchedStr.length);
-        const rFirstCp = rightStr ? rightStr.codePointAt(0) : undefined;
-        if (rFirstCp && rFirstCp >= 0x102B && rFirstCp <= 0x103E) {
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
             return null;
         }
 
@@ -423,8 +422,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = m[0];
 
         const rightStr = input.substring(matchedStr.length);
-        const right1stCp = rightStr ? rightStr.codePointAt(0) : undefined;
-        if (right1stCp && right1stCp >= 0x102B && right1stCp <= 0x103E) {
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
             return null;
         }
 
