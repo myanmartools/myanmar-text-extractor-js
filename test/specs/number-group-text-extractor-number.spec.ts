@@ -1257,5 +1257,12 @@ describe('NumberGroupTextExtractor#number', () => {
 
             expect(fragment == null || !fragment.number).toBeTruthy();
         });
+
+        it(String.raw`should NOT return number fragment when input '(၁၁'`, () => {
+            const input = '(၁၁';
+            const fragment = extractor.extractNext(input) as TextFragment;
+
+            expect(fragment == null || !fragment.number).toBeTruthy();
+        });
     });
 });
