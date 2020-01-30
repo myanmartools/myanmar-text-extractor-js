@@ -41,7 +41,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     // Date
     private readonly _dtYear2DigitsGroup = `(?:[\u1041\u1042][${this._possibleNumber}])`;
-    private readonly _dtYearGroup = `(?:[\u1041\u1042][${this._possibleNumber}]{3,3})`;
+    private readonly _dtYearGroup = `(?:[\u1041-\u1049][${this._possibleNumber}]{3,3})`;
     private readonly _dtMonthGroup = '(?:\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])';
     private readonly _dtDayGroup = `(?:[\u1041-\u1042][${this._possibleNumber}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])`;
     private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleNumber}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
