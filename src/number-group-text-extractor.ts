@@ -845,10 +845,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 prevIsSpace = false;
                 numberGroup = false;
             } else if (cp === 0x0023) {
-                if (!prevIsDigit) {
-                    return null;
-                }
-
                 extractInfo.normalizedStr += c;
                 numberGroup = false;
                 break;
