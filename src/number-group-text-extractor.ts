@@ -175,12 +175,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        const newMatchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
-        if (matchedStr.length !== newMatchedStr.length) {
+        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
-        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
+        const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
+        if (matchedStr.length !== newMatchedStr.length) {
             return null;
         }
 
@@ -215,16 +215,21 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const matchedStr = m[0];
+        let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-
-        const newMatchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
-        if (matchedStr.length !== newMatchedStr.length) {
-            return null;
-        }
 
         if (rightStr && !this.isRightStrSafeForTime(rightStr)) {
             return null;
+        }
+
+        const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
+        const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
+        if (matchedStr.length !== newMatchedStr.length) {
+            if (!(newLastCp >= 0x1040 && newLastCp <= 0x1049)) {
+                return null;
+            } else {
+                matchedStr = newMatchedStr;
+            }
         }
 
         const extractInfo = this.getTimeExtractInfo(matchedStr);
@@ -247,13 +252,18 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
-        if (!matchedStr) {
+        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
-        if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
-            return null;
+        const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
+        const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
+        if (matchedStr.length !== newMatchedStr.length) {
+            if (!(newLastCp >= 0x1040 && newLastCp <= 0x1049)) {
+                return null;
+            } else {
+                matchedStr = newMatchedStr;
+            }
         }
 
         const extractInfo = this.getPhoneNumberExtractInfo(matchedStr);
@@ -301,9 +311,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let matchedStr = m[0];
-        const rightStr = input.substring(matchedStr.length);
-        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+        const matchedStr = m[0];
         if (!matchedStr) {
             return null;
         }
@@ -468,7 +476,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-        matchedStr = this.getMatchedStrWithU101DAndU104EEndCheck(matchedStr, rightStr);
+
+        matchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
         if (!matchedStr) {
             return null;
         }
@@ -923,7 +932,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             startOfString = false;
         }
 
-        if (!digitCount) {
+        if (!digitCount || possibleDigitCount < 3) {
             return null;
         }
 
@@ -1114,7 +1123,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return extractInfo;
     }
 
-    private getMatchedStrWithU101DAndU104EEndCheck(matchedStr: string, rightStr: string): string {
+    private trimWithU101DAndU104EEnd(matchedStr: string, rightStr: string): string {
         if (!rightStr) {
             return matchedStr;
         }
