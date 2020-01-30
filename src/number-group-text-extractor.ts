@@ -225,10 +225,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
         const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
         if (matchedStr.length !== newMatchedStr.length) {
-            if (!(newLastCp >= 0x1040 && newLastCp <= 0x1049)) {
-                return null;
-            } else {
+            if (newLastCp >= 0x1040 && newLastCp <= 0x1049) {
                 matchedStr = newMatchedStr;
+            } else {
+                return null;
             }
         }
 
