@@ -174,7 +174,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
-
         if (rightStr && !this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
@@ -668,7 +667,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 prevIsSpace = true;
                 prevIsSeparator = false;
             } else {
-                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && dateSeparator && c !== dateSeparator)) {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace) || (dateSeparator && c !== dateSeparator)) {
                     return null;
                 }
 
