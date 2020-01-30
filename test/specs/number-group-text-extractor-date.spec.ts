@@ -24,6 +24,21 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // dd-MM-yyyy
+        it(String.raw`should return date fragment when input '၀၁-၀၁-၉၉၉၉'`, () => {
+            const input = '၀၁-၀၁-၉၉၉၉';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const expactedFragment: TextFragment = {
+                matchedStr: input,
+                normalizedStr: input,
+                possibleDate: true,
+                dateFormat: 'dd-MM-yyyy',
+                dateSeparator: '-'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // dd/MM/yyyy
         it(String.raw`should return date fragment when input '၀၁/၀၁/၂၀၂၀'`, () => {
             const input = '၀၁/၀၁/၂၀၂၀';
@@ -354,13 +369,6 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment.possibleDate).toBeFalsy();
         });
 
-        it(String.raw`should NOT return date fragment when input '၃၀-၁၂-၃၀၀၀'`, () => {
-            const input = '၃၀-၁၂-၃၀၀၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-
-            expect(actualFragment.possibleDate).toBeFalsy();
-        });
-
         it(String.raw`should NOT return date fragment when input '၂၀/၁/၃၁'`, () => {
             const input = '၂၀/၁/၃၁';
             const actualFragment = extractor.extractNext(input) as TextFragment;
@@ -468,6 +476,13 @@ describe('NumberGroupTextExtractor#date', () => {
 
         it(String.raw`should NOT return date fragment when input '၀၁-၀၁-၂၀၂၀|၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀|၁';
+            const actualFragment = extractor.extractNext(input) as TextFragment;
+
+            expect(actualFragment.possibleDate).toBeFalsy();
+        });
+
+        it(String.raw`should NOT return date fragment when input '၀၁--၀၁--၂၀၂၀'`, () => {
+            const input = '၀၁--၀၁--၂၀၂၀';
             const actualFragment = extractor.extractNext(input) as TextFragment;
 
             expect(actualFragment.possibleDate).toBeFalsy();
