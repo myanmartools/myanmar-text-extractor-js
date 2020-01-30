@@ -467,17 +467,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let matchedStr = m[0];
-        const rightStr = input.substring(matchedStr.length);
-
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
-            const newMatchedStr = matchedStr.substring(0, matchedStr.length - 1);
-            if (this._numberGroupRegExp.test(newMatchedStr)) {
-                matchedStr = newMatchedStr;
-            } else {
-                return null;
-            }
-        }
+        const matchedStr = m[0];
 
         const extractInfo = this.getNumberGroupExtractInfo(matchedStr);
         if (extractInfo == null) {
@@ -489,22 +479,55 @@ export class NumberGroupTextExtractor implements TextExtractor {
             number: true
         };
 
+        if (this.mergeAncientNumeralShortcutSuffixFragment(input, numberFragment)) {
+            return numberFragment;
+        } else {
+            const rightStr = input.substring(numberFragment.matchedStr.length);
+            if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+                const newMatchedStr = numberFragment.matchedStr.substring(0, numberFragment.matchedStr.length - 1);
+                if (newMatchedStr.length === 1) {
+                    const cp = newMatchedStr.codePointAt(0) as number;
+                    if (cp >= 0x1040 && cp <= 0x1049) {
+                        return {
+                            matchedStr: newMatchedStr,
+                            normalizedStr: newMatchedStr,
+                            numberStr: newMatchedStr,
+                            number: true
+                        };
+                    } else {
+                        return null;
+                    }
+                }
 
-        this.mergeAncientNumeralShortcutSuffixFragment(input, numberFragment);
+                if (this._numberGroupRegExp.test(newMatchedStr)) {
+                    const newExtractInfo = this.getNumberGroupExtractInfo(newMatchedStr);
+                    if (newExtractInfo == null) {
+                        return null;
+                    }
 
-        return numberFragment;
+                    return {
+                        ...newExtractInfo,
+                        number: true
+                    };
+                } else {
+                    return null;
+                }
+            }
+
+            return numberFragment;
+        }
     }
 
     // tslint:disable-next-line: max-func-body-length
-    private mergeAncientNumeralShortcutSuffixFragment(input: string, numberFragment: TextFragment): void {
+    private mergeAncientNumeralShortcutSuffixFragment(input: string, numberFragment: TextFragment): boolean {
         const rightStr = input.substring(numberFragment.matchedStr.length);
         if (!rightStr) {
-            return;
+            return false;
         }
 
         const right1stCp = rightStr.codePointAt(0);
         if (!right1stCp) {
-            return;
+            return false;
         }
 
         const ingaTinOrTaungAncientNumberFragment = this.getIngaTinOrTaungAncientNumberFragment(rightStr, right1stCp);
@@ -526,12 +549,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 };
             }
 
-            return;
+            return true;
         }
 
         const diacriticsOrAThetMatch = rightStr.match(this._diacriticsAndAThetRegExp);
         if (diacriticsOrAThetMatch == null) {
-            return;
+            return false;
         }
 
         const diacriticsOrAThetMatchedStr = diacriticsOrAThetMatch[0];
@@ -597,7 +620,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         if (!ancientMeasureWords || !ancientMeasureWords.length) {
-            return;
+            return false;
         }
 
         numberFragment.matchedStr += diacriticsOrAThetMatchedStr;
@@ -610,6 +633,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             numberFragment.normalizeReason = numberFragment.normalizeReason || {};
             numberFragment.normalizeReason.removeSpace = true;
         }
+
+        return true;
     }
 
     // tslint:disable-next-line: max-func-body-length
