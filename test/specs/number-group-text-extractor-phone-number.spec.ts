@@ -431,11 +431,43 @@ describe('NumberGroupTextExtractor#phone-number', () => {
     });
 
     describe('not', () => {
+        // \u104E
+        it(String.raw`should NOT return phone number fragment when input '၁၂၎င်း'`, () => {
+            const input = '၁၂၎င်း';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
+        // \u101D
+        it(String.raw`should NOT return phone number fragment when input '၁၂ဝိ'`, () => {
+            const input = '၁၂ဝိ';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
+        // \u101D
+        it(String.raw`should NOT return phone number fragment when input '၁၂-ဝိ'`, () => {
+            const input = '၁၂-ဝိ';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
+        // \u101D
+        it(String.raw`should NOT return phone number fragment when input '၁၂၃-ဝိ'`, () => {
+            const input = '၁၂၃-ဝိ';
+            const fragment = extractor.extractNext(input);
+
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
         it(String.raw`should NOT return phone number fragment when input '*၁၂၃'`, () => {
             const input = '*၁၂၃';
-            const actualFragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input);
 
-            expect(actualFragment == null || !actualFragment.possiblePhoneNumber).toBeTruthy();
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
     });
 });
