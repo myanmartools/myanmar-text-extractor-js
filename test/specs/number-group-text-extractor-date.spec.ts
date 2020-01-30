@@ -611,6 +611,13 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
+        // Extra spaces
+        it(String.raw`should NOT return date fragment when input '၀၁ ၀၁  ၂၀၂၀'`, () => {
+            const input = '၀၁ ၀၁  ၂၀၂၀';
+            const fragment = extractor.extractNext(input);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
         it(String.raw`should NOT return date fragment when input '၀၁ ၀၁ ၂၀၂၀ ၁'`, () => {
             const input = '၀၁ ၀၁ ၂၀၂၀ ၁';
             const fragment = extractor.extractNext(input);
