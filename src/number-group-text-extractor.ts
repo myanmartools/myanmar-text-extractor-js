@@ -623,6 +623,14 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return false;
         }
 
+        const lastC = numberFragment.matchedStr[numberFragment.matchedStr.length - 1];
+        if ((lastC === '\u101D' || lastC === '\u104E') && rightStr.length > diacriticsOrAThetMatchedStr.length) {
+            const nextRightCp = rightStr.codePointAt(diacriticsOrAThetMatchedStr.length);
+            if (nextRightCp && ((nextRightCp >= 0x1000 && nextRightCp <= 0x1049) || (nextRightCp >= 0x104C && nextRightCp <= 0x104F))) {
+                return false;
+            }
+        }
+
         numberFragment.matchedStr += diacriticsOrAThetMatchedStr;
         numberFragment.normalizedStr += diacriticsOrAThetNormalizedStr;
         numberFragment.ancientWrittenForm = true;
