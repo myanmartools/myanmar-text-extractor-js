@@ -179,8 +179,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
-        if (matchedStr.length !== newMatchedStr.length) {
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
             return null;
         }
 
@@ -222,9 +221,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
-        const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
-        if (matchedStr.length !== newMatchedStr.length) {
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+            const newMatchedStr = matchedStr.substring(0, matchedStr.length - 1);
+            const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
             if (newLastCp >= 0x1040 && newLastCp <= 0x1049) {
                 matchedStr = newMatchedStr;
             } else {
@@ -249,30 +248,15 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let matchedStr = m[0];
+        const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
         if (!this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
             return null;
         }
 
-        const newMatchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
-        if (matchedStr.length !== newMatchedStr.length) {
-            if (newMatchedStr.length < 3) {
-                return null;
-            }
-
-            const m2 = newMatchedStr.match(this._phRegExp);
-            if (m2 == null) {
-                return null;
-            }
-
-            const m2Str = m2[0];
-            if (m2Str.length !== newMatchedStr.length) {
-                return null;
-            }
-
-            matchedStr = newMatchedStr;
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+            return null;
         }
 
         const extractInfo = this.getPhoneNumberExtractInfo(matchedStr);
@@ -486,9 +470,13 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        matchedStr = this.trimWithU101DAndU104EEnd(matchedStr, rightStr);
-        if (!matchedStr) {
-            return null;
+        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+            const newMatchedStr = matchedStr.substring(0, matchedStr.length - 1);
+            if (this._numberGroupRegExp.test(newMatchedStr)) {
+                matchedStr = newMatchedStr;
+            } else {
+                return null;
+            }
         }
 
         const extractInfo = this.getNumberGroupExtractInfo(matchedStr);
@@ -1130,19 +1118,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         return extractInfo;
-    }
-
-    private trimWithU101DAndU104EEnd(matchedStr: string, rightStr: string): string {
-        if (!rightStr) {
-            return matchedStr;
-        }
-
-        const lastC = matchedStr[matchedStr.length - 1];
-        if ((lastC === '\u101D' || lastC === '\u104E') && this._diacriticsAndAThetRegExp.test(rightStr)) {
-            return matchedStr.substring(0, matchedStr.length - 1);
-        }
-
-        return matchedStr;
     }
 
     private hasCorrectClosingBracket(openingBracketCp: number, str: string): boolean {
