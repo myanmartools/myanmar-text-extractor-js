@@ -1,20 +1,17 @@
-import { SingleLetterTextExtractor } from '../../src/single-letter-text-extractor';
+import { SingleCharTextExtractor } from '../../src/single-char-text-extractor';
 import { TextFragment } from '../../src/text-fragment';
 
-describe('SingleLetterTextExtractor', () => {
-    let extractor: SingleLetterTextExtractor;
+describe('SingleCharTextExtractor', () => {
+    let extractor: SingleCharTextExtractor;
 
     beforeEach(() => {
-        extractor = new SingleLetterTextExtractor();
+        extractor = new SingleCharTextExtractor();
     });
 
-    describe('empty-input', () => {
-        // Not
-        //
-        it(String.raw`should NOT return fragment with when input empty`, () => {
-            const input = '';
-            const fragment = extractor.extractNext(input);
-
+    describe('not', () => {
+        it(String.raw`should NOT return fragment with when input Shan letter 'ဢ'`, () => {
+            const input = 'ဢ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
     });
