@@ -1,7 +1,7 @@
 import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
 
-export class SingleLetterTextExtractor implements TextExtractor {
+export class SingleCharTextExtractor implements TextExtractor {
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
         if (!firstCp) {
