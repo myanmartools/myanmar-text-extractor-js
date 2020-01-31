@@ -1,5 +1,5 @@
 import { NumberGroupTextExtractor } from './number-group-text-extractor';
-import { SingleLetterTextExtractor } from './single-letter-text-extractor';
+import { SingleCharTextExtractor } from './single-char-text-extractor';
 import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
 
@@ -20,7 +20,7 @@ export class MyanmarTextExtractor implements TextExtractor {
     // private readonly _d3bOr3c31O37Or38RegExp = new RegExp('^[\u103B\u103C]\u1031[\u1037\u1038]?');
 
     constructor(
-        private readonly _singleLetterTextExtractor: SingleLetterTextExtractor,
+        private readonly _singleCharTextExtractor: SingleCharTextExtractor,
         private readonly _numberGroupTextExtractor: NumberGroupTextExtractor) { }
 
     extractNext(input: string, firstCp?: number): TextFragment | null {
@@ -29,9 +29,11 @@ export class MyanmarTextExtractor implements TextExtractor {
             return null;
         }
 
-        const singleLetterTextFragment = this._singleLetterTextExtractor.extractNext(input, firstCp);
-        if (singleLetterTextFragment != null) {
-            return singleLetterTextFragment;
+        if (firstCp >= 0x1000 && firstCp <= 0x104F) {
+            const singleCharTextFragment = this._singleCharTextExtractor.extractNext(input, firstCp);
+            if (singleCharTextFragment != null) {
+                return singleCharTextFragment;
+            }
         }
 
         const numberGroupTextFragment = this._numberGroupTextExtractor.extractNext(input, firstCp);
