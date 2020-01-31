@@ -1,15 +1,28 @@
 import { NormalizeReason } from './normalize-reason';
 
 /**
+ * The fragment type enum.
+ */
+export enum FragmentType {
+    Symbol = 0,
+    Letter = 1,
+    Number = 2
+}
+
+/**
  * Text fragment model for fragmented result.
  */
 export interface TextFragment {
     /**
-     * Matched fragmented string.
+     * Fragment type enum.
+     */
+    fragmentType: FragmentType;
+    /**
+     * Matched string.
      */
     matchedStr: string;
     /**
-     * Normalized matched fragmented string.
+     * Normalized matched string.
      */
     normalizedStr: string;
     /**
@@ -17,13 +30,15 @@ export interface TextFragment {
      */
     punctuation?: boolean;
     /**
+     * True if a diacritic symbol.
+     */
+    diacritic?: boolean;
+
+
+    /**
      * True if digit or number group fragment.
      */
-    number?: boolean;
-    /**
-     * True if alphabet fragment. အက္ခရာအစိတ်အပိုင်း။
-     */
-    alphabet?: boolean;
+    numberGroup?: boolean;
     /**
      * True if possible date fragment.
      */
