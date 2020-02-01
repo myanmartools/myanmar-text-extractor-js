@@ -2,12 +2,7 @@ import { TextExtractor } from './text-extractor';
 import { FragmentType, TextFragment } from './text-fragment';
 
 export class SingleCharTextExtractor implements TextExtractor {
-    extractNext(input: string, firstCp?: number): TextFragment | null {
-        firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
-        if (!firstCp) {
-            return null;
-        }
-
+    extractNext(input: string, firstCp: number): TextFragment | null {
         // ဤ / ဪ နှင့် [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ / ဿ / ၎ တစ်လုံးတည်း
         if (firstCp === 0x1024 || firstCp === 0x102A ||
             (input.length === 1 && ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
