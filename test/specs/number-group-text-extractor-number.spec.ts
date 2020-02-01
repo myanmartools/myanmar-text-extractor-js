@@ -453,6 +453,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁.၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -466,6 +467,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁၀.၀၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -479,6 +481,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁,၉၉၉.၀၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -493,6 +496,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁,၂၃၄,၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -507,6 +511,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁⎖၂၃၄⎖၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -521,6 +526,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁٬၂၃၄٬၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -535,6 +541,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = "၁'၂၃၄'၅၆၇.၈၉";
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -549,6 +556,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁_၂၃၄_၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -563,6 +571,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁ ၂၃၄ ၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -577,6 +586,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁၂,၃၄,၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -591,6 +601,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁၂၃,၄၅၆၇.၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -605,6 +616,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၃.၁၄၁၅၉၂၆၅၃၅';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 numberGroup: true,
@@ -620,6 +632,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁ . ၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁.၂',
                 numberGroup: true,
@@ -637,6 +650,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁\u200B.\u200B၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁.၂',
                 numberGroup: true,
@@ -654,6 +668,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၁,၂၃၄,၅၆၇\u00B7၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
                 numberGroup: true,
