@@ -1,5 +1,5 @@
 import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
-import { TextFragment } from '../../src/text-fragment';
+import { FragmentType, TextFragment } from '../../src/text-fragment';
 
 describe('NumberGroupTextExtractor#number', () => {
     let extractor: NumberGroupTextExtractor;
@@ -13,9 +13,10 @@ describe('NumberGroupTextExtractor#number', () => {
             const input = '၀၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: input
             };
 
@@ -28,7 +29,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: input
             };
 
@@ -41,7 +42,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: input,
                 possiblePhoneNumber: true
             };
@@ -55,7 +56,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: input,
                 possiblePhoneNumber: true
             };
@@ -70,7 +71,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၁',
                 normalizedStr: '၁',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁'
             };
 
@@ -84,7 +85,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၁၀',
                 normalizedStr: '၁၀',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀'
             };
 
@@ -98,7 +99,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၁',
                 normalizedStr: '၁',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁'
             };
 
@@ -113,7 +114,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၄',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၄',
                 normalizeReason: {
                     changeU104EToU1044: true
@@ -129,7 +130,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၉၀',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၉၀',
                 possiblePhoneNumber: true,
                 normalizeReason: {
@@ -146,7 +147,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၀၁၉',
-                number: true,
+                numberGroup: true,
                 numberStr: '၀၁၉',
                 possiblePhoneNumber: true,
                 normalizeReason: {
@@ -185,7 +186,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀၀',
                 numberSeparator: ','
             };
@@ -199,7 +200,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀၀၀',
                 numberSeparator: ','
             };
@@ -213,7 +214,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
             };
@@ -227,7 +228,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: '⎖'
             };
@@ -242,7 +243,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: '٬'
             };
@@ -256,7 +257,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: "'"
             };
@@ -270,7 +271,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
             };
@@ -284,7 +285,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: ','
             };
@@ -299,7 +300,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 spaceIncluded: true
             };
@@ -314,7 +315,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇',
                 numberSeparator: '_'
             };
@@ -330,7 +331,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၀၀၀',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀၀၀',
                 numberSeparator: ',',
                 spaceIncluded: true,
@@ -348,7 +349,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၀၀၀',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀၀၀',
                 numberSeparator: ',',
                 spaceIncluded: true,
@@ -366,7 +367,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၀၀၀',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀၀၀',
                 numberSeparator: ',',
                 spaceIncluded: true,
@@ -384,7 +385,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၉၄၀',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၉၄၀',
                 numberSeparator: ',',
                 normalizeReason: {
@@ -402,7 +403,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၉၄၀.၀၄',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၉၄၀.၀၄',
                 numberSeparator: ',',
                 normalizeReason: {
@@ -430,7 +431,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁.၂'
             };
 
@@ -443,7 +444,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀.၀၂'
             };
 
@@ -456,7 +457,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၉၉၉.၀၂',
                 numberSeparator: ','
             };
@@ -470,7 +471,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ','
             };
@@ -484,7 +485,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: '⎖'
             };
@@ -498,7 +499,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: '٬'
             };
@@ -512,7 +513,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: "'"
             };
@@ -526,7 +527,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: '_'
             };
@@ -540,7 +541,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 spaceIncluded: true
             };
@@ -554,7 +555,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ','
             };
@@ -568,7 +569,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ','
             };
@@ -582,7 +583,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၃.၁၄၁၅၉၂၆၅၃၅'
             };
 
@@ -597,7 +598,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁.၂',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁.၂',
                 spaceIncluded: true,
                 normalizeReason: {
@@ -614,7 +615,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁.၂',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁.၂',
                 spaceIncluded: true,
                 normalizeReason: {
@@ -631,7 +632,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၂၃၄၅၆၇.၈၉',
                 numberSeparator: ',',
                 normalizeReason: {
@@ -650,7 +651,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
@@ -665,7 +666,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
@@ -680,7 +681,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၉၂၀',
                 numberSeparator: ',',
                 ancientWrittenForm: true,
@@ -696,7 +697,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['တောင်း', 'တင်း']
@@ -713,7 +714,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '(၁)၀ိ',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀',
                 ancientWrittenForm: true,
                 spaceIncluded: true,
@@ -732,7 +733,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '(၄)၀ိ',
-                number: true,
+                numberGroup: true,
                 numberStr: '၄၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ဆယ်သား'],
@@ -784,7 +785,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ရွေး']
@@ -799,7 +800,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ရွေး']
@@ -814,7 +815,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
@@ -833,7 +834,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ထွာ']
@@ -848,7 +849,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
@@ -867,7 +868,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['မူး']
@@ -882,7 +883,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['မူး']
@@ -897,7 +898,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
@@ -915,7 +916,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ပြည်']
@@ -930,7 +931,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ခွဲ']
@@ -945,7 +946,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ပိဿာ']
@@ -960,7 +961,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
@@ -978,7 +979,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['လမျက်']
@@ -993,7 +994,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['လမယ်']
@@ -1008,7 +1009,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ခွက်']
@@ -1025,7 +1026,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁ွက်',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ခွက်'],
@@ -1045,7 +1046,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၀ိ',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
@@ -1068,7 +1069,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: '၁ဝိ',
                 normalizedStr: '၁၀ိ',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
@@ -1118,7 +1119,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ဆယ်သား']
@@ -1149,7 +1150,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၁'
             };
 
@@ -1162,7 +1163,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၉၀'
             };
 
@@ -1175,7 +1176,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၀၉'
             };
 
@@ -1188,7 +1189,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
-                number: true,
+                numberGroup: true,
                 numberStr: '၉၉၉'
             };
 
@@ -1203,7 +1204,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '(၁)',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 spaceIncluded: true,
                 normalizeReason: {
@@ -1220,7 +1221,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '(၁)',
-                number: true,
+                numberGroup: true,
                 numberStr: '၁',
                 spaceIncluded: true,
                 normalizeReason: {
@@ -1237,7 +1238,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '(၉၀)',
-                number: true,
+                numberGroup: true,
                 numberStr: '၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true
@@ -1253,7 +1254,7 @@ describe('NumberGroupTextExtractor#number', () => {
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '(၄၉၀)',
-                number: true,
+                numberGroup: true,
                 numberStr: '၄၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true,
