@@ -171,19 +171,19 @@ describe('NumberGroupTextExtractor#number', () => {
         //
         it(String.raw`should NOT return fragment with when input '\u104E\u101D'`, () => {
             const input = '\u101D\u104E';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || fragment.fragmentType !== FragmentType.Number).toBeTruthy();
         });
 
         it(String.raw`should NOT return fragment with when input '\u104E၄င်း'`, () => {
             const input = '\u104E၄င်း';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || fragment.fragmentType !== FragmentType.Number).toBeTruthy();
         });
 
         it(String.raw`should NOT return fragment with when input '\u104E\u101D၀ု'`, () => {
             const input = '\u104E\u101D၀ု';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || fragment.fragmentType !== FragmentType.Number).toBeTruthy();
         });
     });
@@ -443,7 +443,7 @@ describe('NumberGroupTextExtractor#number', () => {
         //
         it(String.raw`should NOT return fragment with when input '\u104E,\u104E\u104E\u101D'`, () => {
             const input = '\u104E,\u104E\u104E\u101D';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || fragment.fragmentType !== FragmentType.Number).toBeTruthy();
         });
     });
