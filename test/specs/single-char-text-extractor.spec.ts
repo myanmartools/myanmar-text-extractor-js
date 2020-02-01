@@ -40,7 +40,7 @@ describe('SingleCharTextExtractor', () => {
         });
     });
 
-    describe('single-letter', () => {
+    describe('single-letter-without-diacritics', () => {
         it(String.raw`should return fragment when input 'ဤ'`, () => {
             const input = 'ဤ';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
