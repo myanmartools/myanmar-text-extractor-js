@@ -264,6 +264,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '(၀၉)၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true
@@ -276,6 +277,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '(၀၉) ၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -289,6 +291,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '(၀၉) ၁၂၃-၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -302,6 +305,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '[၀၉]၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true
@@ -314,6 +318,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၉၉၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -328,6 +333,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၅၅၁၂၃';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -342,6 +348,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၀၁-၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true
@@ -354,6 +361,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၀၁-၁၂၃-၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true
@@ -366,6 +374,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၀၁/၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true
@@ -378,6 +387,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၀၁/၁၂၃-၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true
@@ -390,6 +400,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၀၁ / ၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -403,6 +414,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၁_၂၃၄_၅၆၇';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -418,6 +430,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၁ ၂၃၄ ၅၆၇';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
@@ -434,6 +447,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '၉၉\u101D';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၉၉၀',
                 possiblePhoneNumber: true,
@@ -451,6 +465,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             const input = '\u104E၉၉\u101D';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၄၉၉၀',
                 possiblePhoneNumber: true,
