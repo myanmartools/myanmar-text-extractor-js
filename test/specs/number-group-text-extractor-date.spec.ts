@@ -12,7 +12,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd-MM-yyyy
         it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -27,7 +27,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd-MM-yyyy
         it(String.raw`should return date fragment when input '၀၁-၀၁-၉၉၉၉'`, () => {
             const input = '၀၁-၀၁-၉၉၉၉';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -42,7 +42,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd/MM/yyyy
         it(String.raw`should return date fragment when input '၀၁/၀၁/၂၀၂၀'`, () => {
             const input = '၀၁/၀၁/၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -57,7 +57,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd.MM.yyyy
         it(String.raw`should return date fragment when input '၀၁.၀၁.၂၀၂၀'`, () => {
             const input = '၀၁.၀၁.၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -72,7 +72,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd_MM_yyyy
         it(String.raw`should return date fragment when input '၀၁_၀၁_၂၀၂၀'`, () => {
             const input = '၀၁_၀၁_၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -87,7 +87,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd၊MM၊yyyy
         it(String.raw`should return date fragment when input '၀၁၊၀၁၊၂၀၂၀'`, () => {
             const input = '၀၁၊၀၁၊၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -102,7 +102,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd~MM~yyyy
         it(String.raw`should return date fragment when input '၀၁~၀၁~၂၀၂၀'`, () => {
             const input = '၀၁~၀၁~၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -117,7 +117,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd MM yyyy
         it(String.raw`should return date fragment when input '၃၁ ၁၂ ၂၀၂၀'`, () => {
             const input = '၃၁ ၁၂ ၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -133,7 +133,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // d/M/yyyy
         it(String.raw`should return date fragment when input '၃၁/၁/၂၀၂၀'`, () => {
             const input = '၃၁/၁/၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -148,7 +148,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd/MM/yy
         it(String.raw`should return date fragment when input '၃၁/၀၁/၂၀'`, () => {
             const input = '၃၁/၀၁/၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -163,7 +163,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // d/M/yy
         it(String.raw`should return date fragment when input '၃၁/၁/၂၀'`, () => {
             const input = '၃၁/၁/၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -178,7 +178,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // Ends with -
         it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀-'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀-';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
@@ -193,7 +193,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // Ends with /
         it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀/'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀/';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
@@ -208,7 +208,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // Ends with က
         it(String.raw`should return date fragment when input '၀၁-၀၁-၂၀၂၀က'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀က';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁-၀၁-၂၀၂၀',
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
@@ -223,7 +223,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // Ends with က
         it(String.raw`should return date fragment when input '၀၁ ၀၁ ၂၀၂၀ က'`, () => {
             const input = '၀၁ ၀၁ ၂၀၂၀ က';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: '၀၁ ၀၁ ၂၀၂၀',
                 normalizedStr: '၀၁ ၀၁ ၂၀၂၀',
@@ -241,7 +241,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd\u00A0MM\u00A0yyyy
         it(String.raw`should return date fragment when input '၃၁\u00A0၁၂\u00A0၂၀၂၀'`, () => {
             const input = '၃၁\u00A0၁၂\u00A0၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
@@ -260,7 +260,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd ၊ MM ၊ yyyy
         it(String.raw`should return date fragment when input '၃၁ ၊ ၁၂ ၊ ၂၀၂၀'`, () => {
             const input = '၃၁ ၊ ၁၂ ၊ ၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
@@ -279,7 +279,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // dd/ MM/ yyyy
         it(String.raw`should return date fragment when input '၃၁/ ၁၂/ ၂၀၂၀'`, () => {
             const input = '၃၁/ ၁၂/ ၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁/၁၂/၂၀၂၀',
@@ -298,7 +298,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // \U101D
         it(String.raw`should return date fragment when input '၃၁၊၁၂၊၂၀၂\u101D'`, () => {
             const input = '၃၁၊၁၂၊၂၀၂\u101D';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
@@ -316,7 +316,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // \U104E
         it(String.raw`should return date fragment when input '၁\u104E၊၁၂၊၂၀၂၀'`, () => {
             const input = '၁\u104E၊၁၂၊၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
@@ -334,7 +334,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // \U101D and \U104E
         it(String.raw`should return date fragment when input '၁\u104E၊၁၂၊၂\u101D၂\u101D'`, () => {
             const input = '၁\u104E၊၁၂၊၂\u101D၂\u101D';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
@@ -353,7 +353,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // Space (\u200B)
         it(String.raw`should return date fragment when input '၃၁\u200B၁၂\u200B၂၀၂၀'`, () => {
             const input = '၃၁\u200B၁၂\u200B၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: '၃၁ ၁၂ ၂၀၂၀',
@@ -374,7 +374,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // yyyy/MM/dd
         it(String.raw`should return date fragment when input '၂၀၂၀/၀၁/၃၁'`, () => {
             const input = '၂၀၂၀/၀၁/၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -389,7 +389,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // yyyy-MM-dd
         it(String.raw`should return date fragment when input '၂၀၂၀-၀၁-၃၁'`, () => {
             const input = '၂၀၂၀-၀၁-၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -404,7 +404,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // yyyy/M/d
         it(String.raw`should return date fragment when input '၂၀၂၀/၁/၃၁'`, () => {
             const input = '၂၀၂၀/၁/၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -419,7 +419,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // yyyy MM dd
         it(String.raw`should return date fragment when input '၂၀၂၀ ၀၁ ၃၁'`, () => {
             const input = '၂၀၂၀ ၀၁ ၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -435,7 +435,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // yyyyMMdd
         it(String.raw`should return date fragment when input '၂၀၂၀၀၁၃၁'`, () => {
             const input = '၂၀၂၀၀၁၃၁';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -453,7 +453,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // MM/dd/yyyy
         it(String.raw`should return date fragment when input '၁၂/၃၁/၂၀၂၀'`, () => {
             const input = '၁၂/၃၁/၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -468,7 +468,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // M/d/yyyy
         it(String.raw`should return date fragment when input '၁/၃၁/၂၀၂၀'`, () => {
             const input = '၁/၃၁/၂၀၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -483,7 +483,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // MM/dd/yy
         it(String.raw`should return date fragment when input '၁၁/၃၁/၂၀'`, () => {
             const input = '၁၁/၃၁/၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
@@ -498,7 +498,7 @@ describe('NumberGroupTextExtractor#date', () => {
         // M/d/yy
         it(String.raw`should return date fragment when input '၁/၃၁/၂၀'`, () => {
             const input = '၁/၃၁/၂၀';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 matchedStr: input,
                 normalizedStr: input,
