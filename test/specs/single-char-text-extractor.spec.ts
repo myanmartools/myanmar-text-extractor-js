@@ -1,5 +1,5 @@
 import { SingleCharTextExtractor } from '../../src/single-char-text-extractor';
-import { TextFragment } from '../../src/text-fragment';
+import { TextFragment, FragmentType } from '../../src/text-fragment';
 
 describe('SingleCharTextExtractor', () => {
     let extractor: SingleCharTextExtractor;
@@ -14,40 +14,64 @@ describe('SingleCharTextExtractor', () => {
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
+
+        it(String.raw`should NOT return fragment with when input Mon letter 'ဨ'`, () => {
+            const input = 'ဨ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        it(String.raw`should NOT return fragment with when input Mon diacritic symbol 'ဳ'`, () => {
+            const input = 'ဳ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        it(String.raw`should NOT return fragment with when input Mon diacritic symbol 'ဴ'`, () => {
+            const input = 'ဴ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        it(String.raw`should NOT return fragment with when input Mon diacritic symbol 'ဵ'`, () => {
+            const input = 'ဵ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
     });
 
-    describe('single-char-alphabet', () => {
-        it(String.raw`should return alphabet fragment when input 'ဤ'`, () => {
+    describe('single-letter', () => {
+        it(String.raw`should return fragment when input 'ဤ'`, () => {
             const input = 'ဤ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return alphabet fragment when input 'ဪ'`, () => {
+        it(String.raw`should return fragment when input 'ဪ'`, () => {
             const input = 'ဪ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return alphabet fragment when input 'ဤက'`, () => {
+        it(String.raw`should return fragment when input 'ဤက'`, () => {
             const input = 'ဤက';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: 'ဤ',
-                normalizedStr: 'ဤ',
-                alphabet: true
+                normalizedStr: 'ဤ'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
