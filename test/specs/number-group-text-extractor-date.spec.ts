@@ -398,6 +398,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၂၀၂၀/၀၁/၃၁';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -413,6 +414,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၂၀၂၀-၀၁-၃၁';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -428,6 +430,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၂၀၂၀/၁/၃၁';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -443,6 +446,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၂၀၂၀ ၀၁ ၃၁';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -459,6 +463,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၂၀၂၀၀၁၃၁';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
