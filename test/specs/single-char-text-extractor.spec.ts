@@ -80,6 +80,13 @@ describe('SingleCharTextExtractor', () => {
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
+
+        // More than one char
+        it(String.raw`should NOT return fragment when input 'ကြ'`, () => {
+            const input = 'ကြ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
     });
 
     describe('single-letter-without-diacritics', () => {
@@ -240,6 +247,73 @@ describe('SingleCharTextExtractor', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 numberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('single-diacritic-symbol-input', () => {
+        it(String.raw`should return fragment when input '\u102B'`, () => {
+            const input = '\u102B';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                diacritic: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '\u1031'`, () => {
+            const input = '\u1031';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                diacritic: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '\u1036'`, () => {
+            const input = '\u1036';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                diacritic: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '\u1039'`, () => {
+            const input = '\u1039';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                diacritic: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '\u103E'`, () => {
+            const input = '\u103E';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                diacritic: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
