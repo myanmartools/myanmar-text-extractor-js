@@ -1,5 +1,5 @@
 import { SingleCharTextExtractor } from '../../src/single-char-text-extractor';
-import { TextFragment, FragmentType } from '../../src/text-fragment';
+import { FragmentType, TextFragment } from '../../src/text-fragment';
 
 describe('SingleCharTextExtractor', () => {
     let extractor: SingleCharTextExtractor;
@@ -244,50 +244,38 @@ describe('SingleCharTextExtractor', () => {
         });
     });
 
-    describe('punctuation', () => {
-        it(String.raw`should return punctuation fragment when input '၌'`, () => {
+    describe('letter-punctuation', () => {
+        it(String.raw`should return fragment when input '၌'`, () => {
             const input = '၌';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
                 normalizedStr: input,
-                punctuation: true,
-                alphabet: true
+                punctuation: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return punctuation fragment when input '၍'`, () => {
+        it(String.raw`should return fragment when input '၍'`, () => {
             const input = '၍';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
                 normalizedStr: input,
-                punctuation: true,
-                alphabet: true
+                punctuation: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return punctuation fragment when input '၏'`, () => {
+        it(String.raw`should return fragment when input '၏'`, () => {
             const input = '၏';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                punctuation: true,
-                alphabet: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        it(String.raw`should return punctuation fragment when input '၊'`, () => {
-            const input = '၊';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
                 normalizedStr: input,
                 punctuation: true
@@ -296,35 +284,52 @@ describe('SingleCharTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return punctuation fragment when input '။'`, () => {
-            const input = '။';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
-            const expactedFragment: TextFragment = {
-                matchedStr: input,
-                normalizedStr: input,
-                punctuation: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        it(String.raw`should return punctuation fragment when input '၌က'`, () => {
+        it(String.raw`should return fragment when input '၌က'`, () => {
             const input = '၌က';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: '၌',
                 normalizedStr: '၌',
-                punctuation: true,
-                alphabet: true
+                punctuation: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('symbol-punctuation', () => {
+        it(String.raw`should return fragment when input '၊'`, () => {
+            const input = '၊';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return punctuation fragment when input '၊က'`, () => {
-            const input = '၊က';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+        it(String.raw`should return fragment when input '။'`, () => {
+            const input = '။';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
+                matchedStr: input,
+                normalizedStr: input,
+                punctuation: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၊က'`, () => {
+            const input = '၊က';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Symbol,
                 matchedStr: '၊',
                 normalizedStr: '၊',
                 punctuation: true
