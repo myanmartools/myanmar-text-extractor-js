@@ -527,46 +527,46 @@ describe('NumberGroupTextExtractor#phone-number', () => {
         // \u104E
         it(String.raw`should NOT return fragment when input '၁၂၎င်း'`, () => {
             const input = '၁၂၎င်း';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
 
         // \u101D
         it(String.raw`should NOT return fragment when input '၁၂ဝိ'`, () => {
             const input = '၁၂ဝိ';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
 
         // \u101D
         it(String.raw`should NOT return fragment when input '၁၂-ဝိ'`, () => {
             const input = '၁၂-ဝိ';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
 
         // \u101D
         it(String.raw`should NOT return fragment when input '၁၂၃-ဝိ'`, () => {
             const input = '၁၂၃-ဝိ';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
 
         it(String.raw`should NOT return fragment when input '*၁၂၃'`, () => {
             const input = '*၁၂၃';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
 
         it(String.raw`should NOT return fragment when input '၁၂ * ၃'`, () => {
             const input = '၁၂ * ၃';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
 
         it(String.raw`should NOT return fragment when input '၁၂၃ ၄၉၆# ၁'`, () => {
             const input = '၁၂၃ ၄၉၆# ၁';
-            const fragment = extractor.extractNext(input);
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
         });
     });
