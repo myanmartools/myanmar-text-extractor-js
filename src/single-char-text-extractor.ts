@@ -41,7 +41,8 @@ export class SingleCharTextExtractor implements TextExtractor {
                 return {
                     fragmentType: FragmentType.Number,
                     matchedStr: input[0],
-                    normalizedStr: input[0]
+                    normalizedStr: input[0],
+                    numberStr: input[0],
                 };
             }
 
