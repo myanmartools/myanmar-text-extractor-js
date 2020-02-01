@@ -225,7 +225,8 @@ describe('SingleCharTextExtractor', () => {
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
-                normalizedStr: input
+                normalizedStr: input,
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -237,7 +238,8 @@ describe('SingleCharTextExtractor', () => {
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
-                normalizedStr: input
+                normalizedStr: input,
+                numberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
