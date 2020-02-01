@@ -482,6 +482,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၁၂/၃၁/၂၀၂၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -497,6 +498,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၁/၃၁/၂၀၂၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -512,6 +514,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၁၁/၃၁/၂၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
@@ -527,6 +530,7 @@ describe('NumberGroupTextExtractor#date', () => {
             const input = '၁/၃၁/၂၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
                 possibleDate: true,
