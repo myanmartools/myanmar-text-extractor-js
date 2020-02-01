@@ -93,11 +93,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'အ'`, () => {
             const input = 'အ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -105,11 +105,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'ဣ'`, () => {
             const input = 'ဣ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -117,11 +117,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'ဥ'`, () => {
             const input = 'ဥ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -129,11 +129,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'ဧ'`, () => {
             const input = 'ဧ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -141,11 +141,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'ဩ'`, () => {
             const input = 'ဩ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -153,11 +153,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'ဿ'`, () => {
             const input = 'ဿ';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -165,11 +165,11 @@ describe('SingleCharTextExtractor', () => {
 
         it(String.raw`should return fragment when input '၎'`, () => {
             const input = '၎';
-            const actualFragment = extractor.extractNext(input) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -178,11 +178,11 @@ describe('SingleCharTextExtractor', () => {
         // With first char codepoint
         it(String.raw`should return fragment when input 'က' (with first char codepoint)`, () => {
             const input = 'က';
-            const actualFragment = extractor.extractNext(input, 0x1000) as TextFragment;
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
                 matchedStr: input,
-                normalizedStr: input,
-                alphabet: true
+                normalizedStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
