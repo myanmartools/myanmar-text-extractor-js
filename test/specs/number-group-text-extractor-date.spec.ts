@@ -468,7 +468,7 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'yyyyMMdd',
-                number: true,
+                numberGroup: true,
                 numberStr: input
             };
 
