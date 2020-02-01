@@ -9,32 +9,74 @@ describe('SingleCharTextExtractor', () => {
     });
 
     describe('not', () => {
-        it(String.raw`should NOT return fragment with when input Shan letter 'ဢ'`, () => {
+        it(String.raw`should NOT return fragment when input 'ဢ'`, () => {
             const input = 'ဢ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
 
-        it(String.raw`should NOT return fragment with when input Mon letter 'ဨ'`, () => {
+        it(String.raw`should NOT return fragment when input 'ဨ'`, () => {
             const input = 'ဨ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
 
-        it(String.raw`should NOT return fragment with when input Mon diacritic symbol 'ဳ'`, () => {
+        it(String.raw`should NOT return fragment when input diacritic symbol 'ဳ'`, () => {
             const input = 'ဳ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
 
-        it(String.raw`should NOT return fragment with when input Mon diacritic symbol 'ဴ'`, () => {
+        it(String.raw`should NOT return fragment when input diacritic symbol 'ဴ'`, () => {
             const input = 'ဴ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
 
-        it(String.raw`should NOT return fragment with when input Mon diacritic symbol 'ဵ'`, () => {
+        it(String.raw`should NOT return fragment when input diacritic symbol 'ဵ'`, () => {
             const input = 'ဵ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        // \u1050
+        it(String.raw`should NOT return fragment when input 'ၐ'`, () => {
+            const input = 'ၐ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        // \u109F
+        it(String.raw`should NOT return fragment when input '႟'`, () => {
+            const input = '႟';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        // \uAA60 (Myanmar Extended-A)
+        it(String.raw`should NOT return fragment when input 'ꩠ'`, () => {
+            const input = 'ꩠ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        // \uAA7F (Myanmar Extended-A)
+        it(String.raw`should NOT return fragment when input 'ꩿ'`, () => {
+            const input = 'ꩿ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        // \uA9E0 (Myanmar Extended-B)
+        it(String.raw`should NOT return fragment when input 'ꧠ'`, () => {
+            const input = 'ꧠ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
+        // \uA9FE (Myanmar Extended-B)
+        it(String.raw`should NOT return fragment when input 'ꧾ'`, () => {
+            const input = 'ꧾ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment).toBeFalsy();
         });
@@ -186,15 +228,6 @@ describe('SingleCharTextExtractor', () => {
             };
 
             expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // Not
-        //
-        it(String.raw`should NOT return fragment with when input '\u1050'`, () => {
-            const input = '\u1050';
-            const fragment = extractor.extractNext(input);
-
-            expect(fragment).toBeFalsy();
         });
     });
 
