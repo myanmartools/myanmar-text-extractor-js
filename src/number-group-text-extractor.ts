@@ -1,6 +1,6 @@
 import { ExtractInfo } from './extract-info';
 import { TextExtractor } from './text-extractor';
-import { TextFragment } from './text-fragment';
+import { FragmentType, TextFragment } from './text-fragment';
 
 export class NumberGroupTextExtractor implements TextExtractor {
     // Spaces
@@ -66,34 +66,23 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Diacritics and AThet
     private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)|(?:[\u102B-\u103E]+))`);
 
-    extractNext(input: string, firstCp?: number): TextFragment | null {
-        firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
-        if (!firstCp) {
+    extractNext(input: string, firstCp: number): TextFragment | null {
+        if (input.length < 2) {
             return null;
         }
 
-        const inputLen = input.length;
         const isStartsWithNumber = firstCp >= 0x1040 && firstCp <= 0x1049;
         const isStartsWithPossibleNumber = !isStartsWithNumber && (firstCp === 0x101D || firstCp === 0x104E);
 
         if (isStartsWithNumber || isStartsWithPossibleNumber) {
-            if (inputLen === 1) {
-                return isStartsWithNumber ? {
-                    matchedStr: input,
-                    normalizedStr: input,
-                    number: true,
-                    numberStr: input
-                } : null;
-            }
-
-            if (inputLen > 5) {
+            if (input.length > 5) {
                 const dateFragment = this.getDateFragment(input);
                 if (dateFragment != null) {
                     return dateFragment;
                 }
             }
 
-            if (inputLen > 2) {
+            if (input.length > 2) {
                 const timeFragment = this.getTimeFragment(input);
                 if (timeFragment != null) {
                     return timeFragment;
@@ -109,7 +98,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         // င (အင်္ဂါ / တင်း / တောင်း)
-        if (inputLen > 3 && firstCp === 0x1004) {
+        if (input.length > 3 && firstCp === 0x1004) {
             const ingaTinOrTaungAncientNumberFragment = this.getIngaTinOrTaungAncientNumberFragment(input, firstCp);
             if (ingaTinOrTaungAncientNumberFragment != null) {
                 return ingaTinOrTaungAncientNumberFragment;
@@ -117,7 +106,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         // * + ＋
-        if (inputLen > 3 && (firstCp === 0x002A || firstCp === 0x002B || firstCp === 0xFF0B)) {
+        if (input.length > 3 && (firstCp === 0x002A || firstCp === 0x002B || firstCp === 0xFF0B)) {
             const phoneNumberFragment = this.getPhoneNumberFragment(input);
             if (phoneNumberFragment != null) {
                 return phoneNumberFragment;
@@ -125,7 +114,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         // ( [ （ ［
-        if (inputLen > 2 && (firstCp === 0x0028 || firstCp === 0x005B || firstCp === 0xFF08 || firstCp === 0xFF3B)) {
+        if (input.length > 2 && (firstCp === 0x0028 || firstCp === 0x005B || firstCp === 0xFF08 || firstCp === 0xFF3B)) {
             const openingBracketsNumberFragment = this.getOpeningBracketsNumberFragment(input, firstCp);
             if (openingBracketsNumberFragment != null) {
                 return openingBracketsNumberFragment;
@@ -196,11 +185,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const fragment: TextFragment = {
             ...extractInfo,
+            fragmentType: FragmentType.Number,
             possibleDate: true
         };
 
         if (extractInfo.numberStr) {
-            fragment.number = true;
+            fragment.numberGroup = true;
         }
 
         return fragment;
@@ -237,6 +227,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         return {
             ...extractInfo,
+            fragmentType: FragmentType.Number,
             possibleTime: true
         };
     }
@@ -272,11 +263,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const fragment: TextFragment = {
             ...extractInfo,
+            fragmentType: FragmentType.Number,
             possiblePhoneNumber: true
         };
 
         if (extractInfo.numberStr) {
-            fragment.number = true;
+            fragment.numberGroup = true;
         }
 
         return fragment;
@@ -312,7 +304,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         return {
             ...extractInfo,
-            number: true
+            fragmentType: FragmentType.Number,
+            numberGroup: true
         };
     }
 
@@ -353,10 +346,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         return {
+            fragmentType: FragmentType.Number,
             matchedStr,
             normalizedStr,
             numberStr: c4,
-            number: true,
+            numberGroup: true,
             ancientWrittenForm: true,
             // အင်္ဂါ
             ancientMeasureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
@@ -391,9 +385,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
         ];
 
         return {
+            fragmentType: FragmentType.Number,
             matchedStr,
             normalizedStr: matchedStr,
-            number: true,
+            numberGroup: true,
             ancientWrittenForm: true,
             numberStr: c4,
             // အင်္ဂါ
@@ -421,7 +416,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         return {
             ...extractInfo,
-            number: true,
+            fragmentType: FragmentType.Number,
+            numberGroup: true,
             ancientWrittenForm: true,
             // ဆယ်သား
             ancientMeasureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
@@ -443,7 +439,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const numberFragment: TextFragment = {
             ...extractInfo,
-            number: true
+            fragmentType: FragmentType.Number,
+            numberGroup: true
         };
 
         if (this.mergeAncientNumeralShortcutSuffixFragment(input, numberFragment)) {
@@ -456,10 +453,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     const cp = newMatchedStr.codePointAt(0) as number;
                     if (cp >= 0x1040 && cp <= 0x1049) {
                         return {
+                            fragmentType: FragmentType.Number,
                             matchedStr: newMatchedStr,
                             normalizedStr: newMatchedStr,
                             numberStr: newMatchedStr,
-                            number: true
+                            numberGroup: true
                         };
                     } else {
                         return null;
@@ -479,7 +477,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
                 return {
                     ...newExtractInfo,
-                    number: true
+                    fragmentType: FragmentType.Number,
+                    numberGroup: true
                 };
 
 
