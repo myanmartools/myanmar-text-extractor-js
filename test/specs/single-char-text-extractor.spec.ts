@@ -120,7 +120,7 @@ describe('SingleCharTextExtractor', () => {
         });
     });
 
-    describe('single-char-input', () => {
+    describe('single-letter-input', () => {
         it(String.raw`should return fragment when input 'က'`, () => {
             const input = 'က';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
@@ -216,13 +216,26 @@ describe('SingleCharTextExtractor', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+    });
 
-        // With first char codepoint
-        it(String.raw`should return fragment when input 'က' (with first char codepoint)`, () => {
-            const input = 'က';
+    describe('single-number-input', () => {
+        it(String.raw`should return fragment when input '၀'`, () => {
+            const input = '၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Letter,
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၉'`, () => {
+            const input = '၉';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input
             };
