@@ -33,22 +33,20 @@ export interface TextFragment {
      * True if a diacritic symbol.
      */
     diacritic?: boolean;
-
-
     /**
-     * True if digit or number group fragment.
+     * True if digit or digit group.
      */
-    numberGroup?: boolean;
+    digitOrDigitGroup?: boolean;
     /**
-     * True if possible date fragment.
+     * True if possible date.
      */
     possibleDate?: boolean;
     /**
-     * True if possible time fragment.
+     * True if possible time.
      */
     possibleTime?: boolean;
     /**
-     * True if possible phone number fragment.
+     * True if possible phone number.
      */
     possiblePhoneNumber?: boolean;
     /**
@@ -60,18 +58,24 @@ export interface TextFragment {
      */
     spaceIncluded?: boolean;
     /**
-     * Digit string for number fragment type.
+     * Digit or digit group string.
      */
-    numberStr?: string;
+    digitOrDigitGroupStr?: string;
     /**
-     * Noumber / thousand separator for number fragment type.
+     * Digit or thousand separator.
      */
-    numberSeparator?: string;
+    digitSeparator?: string;
     /**
-     * Detected measure words for ancient number fragment type.
+     * Detected ancient measure words.
      */
     ancientMeasureWords?: string[];
+    /**
+     * Date format string.
+     */
     dateFormat?: string;
+    /**
+     * Date separator.
+     */
     dateSeparator?: string;
     /**
      * The reason object for normalized string.
