@@ -11,7 +11,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _containSpaceRegExp = new RegExp(`[${this._space}]`);
 
     // Number
-    private readonly _possibleNumber = '\u1040-\u1049\u101D\u104E';
+    private readonly _possibleDigit = '\u1040-\u1049\u101D\u104E';
 
     // Decimal point
     private readonly _decimalPoint = '\u002E\u00B7\u02D9';
@@ -25,10 +25,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _closingBracket = ')\\]\uFF09\uFF3D';
 
     // Number group
-    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleNumber}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleNumber}]{2,4})*(?:[${this._space}]?[${this._decimalPoint}][${this._space}]?[${this._possibleNumber}]+)?`);
+    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleDigit}]{2,4})*(?:[${this._space}]?[${this._decimalPoint}][${this._space}]?[${this._possibleDigit}]+)?`);
 
     // Number group starts with 'ဝ' / '၎'
-    private readonly _possibleNumberGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleNumber}]*[${this._thousandSeparator}${this._decimalPoint}]?[${this._possibleNumber}]*[\u1040-\u1049]`);
+    private readonly _possibleDigitGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleDigit}]*[${this._thousandSeparator}${this._decimalPoint}]?[${this._possibleDigit}]*[\u1040-\u1049]`);
 
     // Number with hsettha (ဆယ်သား)
     private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
@@ -40,20 +40,20 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
 
     // Date
-    private readonly _dtYear2DigitsGroup = `(?:[\u1041\u1042][${this._possibleNumber}])`;
-    private readonly _dtYearGroup = `(?:[\u1041-\u1049][${this._possibleNumber}]{3,3})`;
+    private readonly _dtYear2DigitsGroup = `(?:[\u1041\u1042][${this._possibleDigit}])`;
+    private readonly _dtYearGroup = `(?:[\u1041-\u1049][${this._possibleDigit}]{3,3})`;
     private readonly _dtMonthGroup = '(?:\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])';
-    private readonly _dtDayGroup = `(?:[\u1041-\u1042][${this._possibleNumber}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])`;
-    private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleNumber}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
-    private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleNumber}]|[\u1041-\u1049\u104E])`;
+    private readonly _dtDayGroup = `(?:[\u1041-\u1042][${this._possibleDigit}]|\u1043[\u1040-\u1041\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])`;
+    private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleDigit}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
+    private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleDigit}]|[\u1041-\u1049\u104E])`;
     private readonly _dtTimeSeparatorGroup = `[${this._space}]?[:;\u1038][${this._space}]?`;
-    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleNumber}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleNumber}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleNumber}]{1,4})`);
+    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigit}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,4})`);
     private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
     private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
     private readonly _dtYMDRegExp = new RegExp(`^${this._dtYearGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}`);
     private readonly _dtMDYRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
     private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
-    private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleNumber}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleNumber}]|\u1043[\u1040-\u1041\u101D])`);
+    private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigit}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigit}]|\u1043[\u1040-\u1041\u101D])`);
     private readonly _dtTimeRegExp = new RegExp(`^${this._dtHourGroup}(?:${this._dtTimeSeparatorGroup}${this._dtMinuteSecondGroup}){1,2}`);
 
     // Phone Number
@@ -61,7 +61,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _phStar = '*';
     private readonly _phHash = '#';
     private readonly _phSeparator = `${this._dtOrPhSeparator}${this._openingBracket}${this._closingBracket}`;
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleNumber}]){3,}${this._phHash}?`);
+    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleDigit}]){3,}${this._phHash}?`);
 
     // Diacritics and AThet
     private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)|(?:[\u102B-\u103E]+))`);
@@ -168,22 +168,21 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const rightStr = input.substring(extractInfo.matchedStr.length);
-
         if (rightStr.length > 0) {
-            if ((!extractInfo.dateSeparator || extractInfo.spaceIncluded) &&
-                !this.isRightStrSafeForDateWithSpaceOrNoSeparator(rightStr)) {
+            if (this.isRightStrPossibleDigit(rightStr)) {
+                return null;
+            }
+
+            if (!extractInfo.dateSeparator && !this.isRightStrSafeForDateWithNoSeparator(rightStr)) {
+                return null;
+            }
+
+            if (extractInfo.dateSeparator === ' ' && !this.isRightStrSafeForDateWithSpaceSeparator(rightStr)) {
                 return null;
             }
 
             if (this._diacriticsAndAThetRegExp.test(rightStr)) {
                 return null;
-            }
-
-            if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
-                const rightStr2 = rightStr.substring(1);
-                if (this.isRightStrPossibleNumberGroup(rightStr2)) {
-                    return null;
-                }
             }
         }
 
@@ -193,8 +192,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             possibleDate: true
         };
 
-        if (extractInfo.numberStr) {
-            fragment.numberGroup = true;
+        if (extractInfo.digitOrDigitGroupStr) {
+            fragment.digitOrDigitGroup = true;
         }
 
         return fragment;
@@ -260,7 +259,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+            if (this.isRightStrPossibleDigit(rightStr2)) {
                 return null;
             }
         }
@@ -271,8 +270,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             possiblePhoneNumber: true
         };
 
-        if (extractInfo.numberStr) {
-            fragment.numberGroup = true;
+        if (extractInfo.digitOrDigitGroupStr) {
+            fragment.digitOrDigitGroup = true;
         }
 
         return fragment;
@@ -309,7 +308,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return {
             ...extractInfo,
             fragmentType: FragmentType.Number,
-            numberGroup: true
+            digitOrDigitGroup: true
         };
     }
 
@@ -353,8 +352,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             fragmentType: FragmentType.Number,
             matchedStr,
             normalizedStr,
-            numberStr: c4,
-            numberGroup: true,
+            digitOrDigitGroupStr: c4,
+            digitOrDigitGroup: true,
             ancientWrittenForm: true,
             // အင်္ဂါ
             ancientMeasureWords: ['\u1021\u1004\u103A\u1039\u1002\u102B']
@@ -392,9 +391,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
             fragmentType: FragmentType.Number,
             matchedStr,
             normalizedStr: matchedStr,
-            numberGroup: true,
+            digitOrDigitGroup: true,
             ancientWrittenForm: true,
-            numberStr: c4,
+            digitOrDigitGroupStr: c4,
             // အင်္ဂါ
             ancientMeasureWords
         };
@@ -421,7 +420,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return {
             ...extractInfo,
             fragmentType: FragmentType.Number,
-            numberGroup: true,
+            digitOrDigitGroup: true,
             ancientWrittenForm: true,
             // ဆယ်သား
             ancientMeasureWords: ['\u1006\u101A\u103A\u101E\u102C\u1038']
@@ -444,7 +443,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const numberFragment: TextFragment = {
             ...extractInfo,
             fragmentType: FragmentType.Number,
-            numberGroup: true
+            digitOrDigitGroup: true
         };
 
         if (this.mergeAncientNumeralShortcutSuffixFragment(input, numberFragment)) {
@@ -460,8 +459,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
                             fragmentType: FragmentType.Number,
                             matchedStr: newMatchedStr,
                             normalizedStr: newMatchedStr,
-                            numberStr: newMatchedStr,
-                            numberGroup: true
+                            digitOrDigitGroupStr: newMatchedStr,
+                            digitOrDigitGroup: true
                         };
                     } else {
                         return null;
@@ -482,7 +481,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return {
                     ...newExtractInfo,
                     fragmentType: FragmentType.Number,
-                    numberGroup: true
+                    digitOrDigitGroup: true
                 };
 
 
@@ -508,7 +507,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         if (ingaTinOrTaungAncientNumberFragment != null) {
             numberFragment.matchedStr += ingaTinOrTaungAncientNumberFragment.matchedStr;
             numberFragment.normalizedStr += ingaTinOrTaungAncientNumberFragment.normalizedStr;
-            numberFragment.numberStr += ingaTinOrTaungAncientNumberFragment.numberStr as string;
+            numberFragment.digitOrDigitGroupStr += ingaTinOrTaungAncientNumberFragment.digitOrDigitGroupStr as string;
             numberFragment.ancientWrittenForm = true;
             numberFragment.ancientMeasureWords = ingaTinOrTaungAncientNumberFragment.ancientMeasureWords;
 
@@ -723,7 +722,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             }
         } else {
             extractInfo.dateFormat = 'yyyyMMdd';
-            extractInfo.numberStr = extractInfo.normalizedStr;
+            extractInfo.digitOrDigitGroupStr = extractInfo.normalizedStr;
         }
 
         return extractInfo;
@@ -788,9 +787,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
             normalizedStr: ''
         };
 
-        let numberStr = '';
-        let numberGroup = true;
-        let numberSeparator = '';
+        let digitOrDigitGroupStr = '';
+        let digitOrDigitGroup = true;
+        let digitSeparator = '';
         let curStr = matchedStr;
         let startOfString = true;
         let prevIsDigit = false;
@@ -809,7 +808,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
             curStr = curStr.substring(1);
             startOfString = false;
-            numberGroup = false;
+            digitOrDigitGroup = false;
         }
 
         for (let i = 0; i < curStr.length; i++) {
@@ -820,7 +819,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 ++digitCount;
                 ++possibleDigitCount;
                 extractInfo.normalizedStr += c;
-                numberStr += c;
+                digitOrDigitGroupStr += c;
                 prevIsDigit = true;
                 prevIsSpace = false;
             } else if (cp === 0x101D || cp === 0x104E) {
@@ -828,11 +827,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
-                    numberStr += '\u1040';
+                    digitOrDigitGroupStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
-                    numberStr += '\u1044';
+                    digitOrDigitGroupStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
 
@@ -846,10 +845,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-                numberGroup = false;
+                digitOrDigitGroup = false;
             } else if (cp === 0x0023) {
                 extractInfo.normalizedStr += c;
-                numberGroup = false;
+                digitOrDigitGroup = false;
                 break;
             } else if (cp === 0x0028 || cp === 0x005B || cp === 0xFF08 || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
@@ -859,7 +858,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 extractInfo.normalizedStr += c;
                 prevIsDigit = false;
                 prevIsSpace = false;
-                numberGroup = false;
+                digitOrDigitGroup = false;
             } else if (this._containSpaceRegExp.test(c)) {
                 if (prevIsSpace) {
                     return null;
@@ -885,19 +884,19 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
 
                 if (this._thousandSeparatorRegExp.test(c)) {
-                    if (numberSeparator && numberSeparator !== c) {
-                        numberGroup = false;
+                    if (digitSeparator && digitSeparator !== c) {
+                        digitOrDigitGroup = false;
                     } else {
-                        numberSeparator = c;
+                        digitSeparator = c;
                     }
 
                     extractInfo.normalizedStr += c;
                 } else if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
                     ++dotCount;
                     if (dotCount > 1) {
-                        numberGroup = false;
+                        digitOrDigitGroup = false;
                     } else {
-                        numberStr += '.';
+                        digitOrDigitGroupStr += '.';
                     }
 
                     extractInfo.normalizedStr += '.';
@@ -911,7 +910,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                         ++slashCount;
                     }
 
-                    numberGroup = false;
+                    digitOrDigitGroup = false;
                     extractInfo.normalizedStr += c;
                 }
 
@@ -930,10 +929,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (numberGroup) {
-            extractInfo.numberStr = numberStr;
-            if (numberSeparator) {
-                extractInfo.numberSeparator = numberSeparator;
+        if (digitOrDigitGroup) {
+            extractInfo.digitOrDigitGroupStr = digitOrDigitGroupStr;
+            if (digitSeparator) {
+                extractInfo.digitSeparator = digitSeparator;
             }
         }
 
@@ -956,13 +955,13 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const extractInfo: ExtractInfo = {
             matchedStr,
             normalizedStr: '',
-            numberStr: ''
+            digitOrDigitGroupStr: ''
         };
 
         let prevIsDigit = false;
         let prevIsSpace = false;
         let prevIsSeparator = false;
-        let numberSeparator = '';
+        let digitSeparator = '';
         let digitCount = 0;
         let tmpSpace = '';
 
@@ -971,7 +970,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++digitCount;
-                extractInfo.numberStr += c;
+                extractInfo.digitOrDigitGroupStr += c;
                 if (tmpSpace) {
                     extractInfo.spaceIncluded = true;
                     extractInfo.normalizedStr += ' ' + c;
@@ -993,11 +992,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
-                    extractInfo.numberStr += '\u1040';
+                    extractInfo.digitOrDigitGroupStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
-                    extractInfo.numberStr += '\u1044';
+                    extractInfo.digitOrDigitGroupStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
 
@@ -1023,7 +1022,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 prevIsSpace = true;
                 prevIsSeparator = false;
             } else {
-                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && numberSeparator && c !== numberSeparator)) {
+                if (prevIsSeparator || (!prevIsDigit && !prevIsSpace && digitSeparator && c !== digitSeparator)) {
                     return null;
                 }
 
@@ -1034,7 +1033,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
 
                 if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
-                    extractInfo.numberStr += '.';
+                    extractInfo.digitOrDigitGroupStr += '.';
                     extractInfo.normalizedStr += '.';
 
                     if (cp !== 0x002E) {
@@ -1043,7 +1042,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     }
                 } else {
                     extractInfo.normalizedStr += c;
-                    numberSeparator = c;
+                    digitSeparator = c;
                 }
 
                 prevIsDigit = false;
@@ -1056,8 +1055,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (numberSeparator) {
-            extractInfo.numberSeparator = numberSeparator;
+        if (digitSeparator) {
+            extractInfo.digitSeparator = digitSeparator;
         }
 
         return extractInfo;
@@ -1067,7 +1066,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const extractInfo: ExtractInfo = {
             matchedStr,
             normalizedStr: '',
-            numberStr: ''
+            digitOrDigitGroupStr: ''
         };
 
         let digitCount = 0;
@@ -1079,16 +1078,16 @@ export class NumberGroupTextExtractor implements TextExtractor {
             if (cp >= 0x1040 && cp <= 0x1049) {
                 ++digitCount;
                 extractInfo.normalizedStr += c;
-                extractInfo.numberStr += c;
+                extractInfo.digitOrDigitGroupStr += c;
             } else if (cp === 0x101D || cp === 0x104E) {
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
-                    extractInfo.numberStr += '\u1040';
+                    extractInfo.digitOrDigitGroupStr += '\u1040';
                     extractInfo.normalizeReason.changeU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
-                    extractInfo.numberStr += '\u1044';
+                    extractInfo.digitOrDigitGroupStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
             } else if (cp === 0x0028 || cp === 0x005B || cp === 0xFF08 || cp === 0xFF3B) {
@@ -1136,11 +1135,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return false;
     }
 
-    private isRightStrSafeForDateWithSpaceOrNoSeparator(rightStr: string): boolean {
-        if (this.isRightStrPossibleNumberGroup(rightStr)) {
-            return false;
-        }
-
+    private isRightStrSafeForDateWithSpaceSeparator(rightStr: string): boolean {
         const cp = rightStr.codePointAt(0);
         if (!cp) {
             return true;
@@ -1156,7 +1151,45 @@ export class NumberGroupTextExtractor implements TextExtractor {
             (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
             (cp >= 0x007B && cp <= 0x007E))) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+            if (this.isRightStrPossibleDigit(rightStr2)) {
+                return false;
+            }
+        }
+
+        if (rightStr.length > 1 && this._containSpaceRegExp.test(rightStr[0])) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleDigit(rightStr2)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private isRightStrSafeForDateWithNoSeparator(rightStr: string): boolean {
+        const cp = rightStr.codePointAt(0);
+        if (!cp) {
+            return true;
+        }
+
+        // $ % + @ ＋
+        if (cp === 0x0024 || cp === 0x0025 || cp === 0x002B || cp === 0x0040 || cp === 0xFF0B) {
+            return false;
+        }
+
+        if (rightStr.length > 1 && ((cp >= 0x0021 && cp <= 0x002F) ||
+            cp === 0x003A || (cp >= 0x003C && cp <= 0x003F) ||
+            (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
+            (cp >= 0x007B && cp <= 0x007E))) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleDigit(rightStr2)) {
+                return false;
+            }
+        }
+
+        if (rightStr.length > 1 && this._containSpaceRegExp.test(rightStr[0])) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleDigit(rightStr2)) {
                 return false;
             }
         }
@@ -1165,7 +1198,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private isRightStrSafeForTime(rightStr: string): boolean {
-        if (this.isRightStrPossibleNumberGroup(rightStr)) {
+        if (this.isRightStrPossibleDigit(rightStr)) {
             return false;
         }
 
@@ -1181,7 +1214,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             cp === 0x005C || cp === 0x005E || cp === 0x005F ||
             cp === 0x0060 || cp === 0x007C || cp === 0x007E)) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+            if (this.isRightStrPossibleDigit(rightStr2)) {
                 return false;
             }
         }
@@ -1190,7 +1223,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private isRightStrSafeForPhoneNumber(rightStr: string): boolean {
-        if (this.isRightStrPossibleNumberGroup(rightStr)) {
+        if (this.isRightStrPossibleDigit(rightStr)) {
             return false;
         }
 
@@ -1209,7 +1242,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
             (cp >= 0x007B && cp <= 0x007E))) {
             const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+            if (this.isRightStrPossibleDigit(rightStr2)) {
                 return false;
             }
         }
@@ -1217,7 +1250,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return true;
     }
 
-    private isRightStrPossibleNumberGroup(rightStr: string): boolean {
+    private isRightStrPossibleDigit(rightStr: string): boolean {
         const cp = rightStr.codePointAt(0);
         if (!cp) {
             return false;
@@ -1228,7 +1261,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         if (rightStr.length > 1 && (cp === 0x101D || cp === 0x104E) &&
-            this._possibleNumberGroupStartsWithU101DOrU104ERegExp.test(rightStr)) {
+            this._possibleDigitGroupStartsWithU101DOrU104ERegExp.test(rightStr)) {
             return true;
         }
 
