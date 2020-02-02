@@ -162,24 +162,28 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const matchedStr = m[0];
-        const rightStr = input.substring(matchedStr.length);
-        if (rightStr && !this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
-            return null;
-        }
-
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
-            return null;
-        }
-
         const extractInfo = this.getDateExtractInfo(matchedStr, monthStart);
         if (extractInfo == null) {
             return null;
         }
 
-        if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
-            const rightStr2 = rightStr.substring(1);
-            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+        const rightStr = input.substring(extractInfo.matchedStr.length);
+
+        if (rightStr.length > 0) {
+            if ((!extractInfo.dateSeparator || extractInfo.spaceIncluded) &&
+                !this.isRightStrSafeForDateWithSpaceOrNoSeparator(rightStr)) {
                 return null;
+            }
+
+            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
+                return null;
+            }
+
+            if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
+                const rightStr2 = rightStr.substring(1);
+                if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+                    return null;
+                }
             }
         }
 
@@ -241,7 +245,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
 
-        if (rightStr && !this.isRightStrSafeForDateOrPhoneNumber(rightStr)) {
+        if (rightStr && !this.isRightStrSafeForPhoneNumber(rightStr)) {
             return null;
         }
 
@@ -1132,7 +1136,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return false;
     }
 
-    private isRightStrSafeForDateOrPhoneNumber(rightStr: string): boolean {
+    private isRightStrSafeForDateWithSpaceOrNoSeparator(rightStr: string): boolean {
         if (this.isRightStrPossibleNumberGroup(rightStr)) {
             return false;
         }
@@ -1176,6 +1180,34 @@ export class NumberGroupTextExtractor implements TextExtractor {
             (cp >= 0x003A && cp <= 0x003F) ||
             cp === 0x005C || cp === 0x005E || cp === 0x005F ||
             cp === 0x0060 || cp === 0x007C || cp === 0x007E)) {
+            const rightStr2 = rightStr.substring(1);
+            if (this.isRightStrPossibleNumberGroup(rightStr2)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private isRightStrSafeForPhoneNumber(rightStr: string): boolean {
+        if (this.isRightStrPossibleNumberGroup(rightStr)) {
+            return false;
+        }
+
+        const cp = rightStr.codePointAt(0);
+        if (!cp) {
+            return true;
+        }
+
+        // # $ % + @ ＋
+        if ((cp >= 0x0023 && cp <= 0x0025) || cp === 0x002B || cp === 0x0040 || cp === 0xFF0B) {
+            return false;
+        }
+
+        if (rightStr.length > 1 && ((cp >= 0x0021 && cp <= 0x002F) ||
+            cp === 0x003A || (cp >= 0x003C && cp <= 0x003F) ||
+            (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
+            (cp >= 0x007B && cp <= 0x007E))) {
             const rightStr2 = rightStr.substring(1);
             if (this.isRightStrPossibleNumberGroup(rightStr2)) {
                 return false;
