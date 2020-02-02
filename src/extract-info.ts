@@ -5,8 +5,8 @@ export interface ExtractInfo {
     normalizedStr: string;
     spaceIncluded?: boolean;
     normalizeReason?: NormalizeReason;
-    numberStr?: string;
-    numberSeparator?: string;
+    digitOrDigitGroupStr?: string;
+    digitSeparator?: string;
     dateSeparator?: string;
     dateFormat?: string;
 }
