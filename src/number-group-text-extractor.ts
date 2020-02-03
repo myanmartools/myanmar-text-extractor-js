@@ -177,7 +177,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (!extractInfo.dateSeparator && !this.checkRightStrForDateWithNoSeparator(rightStr)) {
+            if (!this.checkRightStrForDateWithNoSeparator(rightStr)) {
                 return null;
             }
 
@@ -1146,7 +1146,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         // $ %
-        if (rightStr.length === 1 && (cp === 0x0024 || cp === 0x0025)) {
+        if (cp === 0x0024 || cp === 0x0025) {
             return false;
         }
 
