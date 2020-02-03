@@ -181,8 +181,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (extractInfo.dateSeparator === ' ' && !this.checkRightStrForDateWithSpaceSeparator(rightStr)) {
-                return null;
+            if (rightStr.length > 1 && extractInfo.dateSeparator === ' ' && this._containSpaceRegExp.test(rightStr[0])) {
+                const rightStr2 = rightStr.substring(1);
+                if (this.checkRightStrForPossibleDigit(rightStr2)) {
+                    return null;
+                }
             }
 
             if (this._diacriticsAndAThetRegExp.test(rightStr)) {
@@ -1162,37 +1165,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return false;
                 }
-            }
-        }
-
-        return true;
-    }
-
-    private checkRightStrForDateWithSpaceSeparator(rightStr: string): boolean {
-        const cp = rightStr.codePointAt(0);
-        if (!cp) {
-            return true;
-        }
-
-        // # $ % + @ ＋
-        if ((cp >= 0x0023 && cp <= 0x0025) || cp === 0x002B || cp === 0x0040 || cp === 0xFF0B) {
-            return false;
-        }
-
-        if (rightStr.length > 1 && ((cp >= 0x0021 && cp <= 0x002F) ||
-            cp === 0x003A || (cp >= 0x003C && cp <= 0x003F) ||
-            (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
-            (cp >= 0x007B && cp <= 0x007E))) {
-            const rightStr2 = rightStr.substring(1);
-            if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                return false;
-            }
-        }
-
-        if (rightStr.length > 1 && this._containSpaceRegExp.test(rightStr[0])) {
-            const rightStr2 = rightStr.substring(1);
-            if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                return false;
             }
         }
 
