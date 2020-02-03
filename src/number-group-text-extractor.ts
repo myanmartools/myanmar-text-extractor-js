@@ -14,11 +14,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Domain Name
     private readonly _possibleDomainNameSuffixRegExp = /^[\S]+\.[a-zA-Z]{2,63}/;
 
-    // Number
+    // Digits
     private readonly _possibleDigit = '\u1040-\u1049\u101D\u104E';
 
     // Decimal point
     private readonly _decimalPoint = '\u002E\u00B7\u02D9';
+    private readonly _decimalPointRegExp = new RegExp(`^[${this._decimalPoint}]`);
 
     // Thousand separator
     private readonly _thousandSeparator = '\u002C\u066B\u066C\u2396\u005F\u0027';
@@ -177,8 +178,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if ((!extractInfo.dateSeparator || extractInfo.dateSeparator === ' ') &&
-                !this.isValidRightStrForDateWithSpaceOrNoSeparator(rightStr)) {
+            if (!this.isValidRightStrForDate(rightStr)) {
                 return null;
             }
 
@@ -1140,34 +1140,33 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return false;
     }
 
-    private isValidRightStrForDateWithSpaceOrNoSeparator(rightStr: string): boolean {
-        const cp = rightStr.codePointAt(0);
-        if (!cp) {
-            return true;
-        }
-
-        // $ %
-        if (rightStr.length === 1 && (cp === 0x0024 || cp === 0x0025)) {
-            return false;
-        }
-
-        if (rightStr.length > 1) {
+    private isValidRightStrForDate(rightStr: string): boolean {
+        if (rightStr.length === 1) {
+            // $ %
+            if (rightStr[0] === '$' || rightStr[0] === '%') {
+                return false;
+            }
+        } else {
             const rightStr2 = rightStr.substring(1);
 
-            if (cp === 0x0040) {
+            // @
+            if (rightStr[0] === '@') {
                 if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
                     return false;
                 }
+
                 if (this._possibleDomainNameSuffixRegExp.test(rightStr2)) {
                     return false;
                 }
-            } else if (cp === 0x0021 || cp === 0x0023 || cp === 0x0026 ||
-                cp === 0x002A || cp === 0x002B || (cp >= 0x002D && cp <= 0x002F) ||
-                cp === 0x003A || cp === 0x005C || cp === 0x005E || cp === 0x005F || cp === 0x0060 ||
-                cp === 0x007E) {
+            } else if (this._decimalPointRegExp.test(rightStr)) {
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return false;
                 }
+                // if (cp === 0x0021 || cp === 0x0023 || cp === 0x0026 ||
+                //     cp === 0x002A || cp === 0x002B || (cp >= 0x002D && cp <= 0x002F) ||
+                //     cp === 0x003A || cp === 0x005C || cp === 0x005E || cp === 0x005F || cp === 0x0060 ||
+                //     cp === 0x007E) {
+                // }
             }
         }
 
