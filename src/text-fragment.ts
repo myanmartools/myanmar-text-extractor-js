@@ -34,13 +34,29 @@ export interface TextFragment {
      */
     diacritic?: boolean;
     /**
-     * True if digit or digit group.
+     * True if digit or number group.
      */
-    digitOrDigitGroup?: boolean;
+    digitOrNumberGroup?: boolean;
+    /**
+     * Digit or number group string.
+     */
+    digitStr?: string;
+    /**
+     * Digit or thousand separator.
+     */
+    digitSeparator?: string;
     /**
      * True if possible date.
      */
     possibleDate?: boolean;
+    /**
+     * Date format string.
+     */
+    dateFormat?: string;
+    /**
+     * Date separator.
+     */
+    dateSeparator?: string;
     /**
      * True if possible time.
      */
@@ -50,6 +66,10 @@ export interface TextFragment {
      */
     possiblePhoneNumber?: boolean;
     /**
+     * Phone number string.
+     */
+    phoneNumberStr?: string;
+    /**
      * True if ancient written form.
      */
     ancientWrittenForm?: boolean;
@@ -58,25 +78,9 @@ export interface TextFragment {
      */
     spaceIncluded?: boolean;
     /**
-     * Digit or digit group string.
-     */
-    digitOrDigitGroupStr?: string;
-    /**
-     * Digit or thousand separator.
-     */
-    digitSeparator?: string;
-    /**
      * Detected ancient measure words.
      */
     ancientMeasureWords?: string[];
-    /**
-     * Date format string.
-     */
-    dateFormat?: string;
-    /**
-     * Date separator.
-     */
-    dateSeparator?: string;
     /**
      * The reason object for normalized string.
      */
