@@ -1147,7 +1147,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         // $ %
-        if (cp === 0x0024 || cp === 0x0025) {
+        if (rightStr.length === 1 && (cp === 0x0024 || cp === 0x0025)) {
             return false;
         }
 
