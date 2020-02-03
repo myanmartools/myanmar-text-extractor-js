@@ -630,6 +630,20 @@ describe('NumberGroupTextExtractor#date', () => {
         });
 
         // Invalid ends (isValidRightStrForDate)
+        it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀@ကခ.com'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀@ကခ.com';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Invalid ends (isValidRightStrForDate)
+        it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀@၁၂၃'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀@၁၂၃';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Invalid ends (isValidRightStrForDate)
         it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀_၁'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀_၁';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
