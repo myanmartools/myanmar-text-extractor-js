@@ -169,6 +169,12 @@ describe('NumberGroupTextExtractor#number', () => {
 
         // Not
         //
+        it(String.raw`should NOT return fragment with when input '၁'`, () => {
+            const input = '၁';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment).toBeFalsy();
+        });
+
         it(String.raw`should NOT return fragment with when input '\u104E\u101D'`, () => {
             const input = '\u101D\u104E';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
