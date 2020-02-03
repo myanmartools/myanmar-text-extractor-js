@@ -177,7 +177,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (!this.checkRightStrForDateWithNoSeparator(rightStr)) {
+            if (!this.checkRightStrForDate(rightStr)) {
                 return null;
             }
 
@@ -1139,7 +1139,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return false;
     }
 
-    private checkRightStrForDateWithNoSeparator(rightStr: string): boolean {
+    private checkRightStrForDate(rightStr: string): boolean {
         const cp = rightStr.codePointAt(0);
         if (!cp) {
             return true;
