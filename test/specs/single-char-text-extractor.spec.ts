@@ -233,6 +233,7 @@ describe('SingleCharTextExtractor', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
+                digitOrNumberGroup: true,
                 digitStr: input
             };
 
