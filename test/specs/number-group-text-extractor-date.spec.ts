@@ -594,8 +594,16 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
+        // Extra digits (At checkRightStrForPossibleDigit)
         it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀၅'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀၅';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Extra digits (At checkRightStrForPossibleDigit)
+        it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀၄၉'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀၅၄၉';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
