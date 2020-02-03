@@ -469,7 +469,9 @@ describe('NumberGroupTextExtractor#date', () => {
                 possibleDate: true,
                 dateFormat: 'yyyyMMdd',
                 digitOrNumberGroup: true,
-                digitStr: input
+                digitStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
