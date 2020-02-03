@@ -559,6 +559,13 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
+        // Invalid year
+        it(String.raw`should NOT return fragment when input '၃၀-၁၂-၀၀၀၁'`, () => {
+            const input = '၃၀-၁၂-၀၀၀၁';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
         // Invalid short year
         it(String.raw`should NOT return fragment when input '၂၀/၁/၃၁'`, () => {
             const input = '၂၀/၁/၃၁';
