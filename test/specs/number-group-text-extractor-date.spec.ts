@@ -545,6 +545,13 @@ describe('NumberGroupTextExtractor#date', () => {
     });
 
     describe('not', () => {
+        // \u104E and \u101D (Not matched)
+        it(String.raw`should NOT return fragment when input '၎-၎-၎ဝဝဝ'`, () => {
+            const input = '၎-၎-၎ဝဝဝ';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
         // Invalid day (Not matched)
         it(String.raw`should NOT return fragment when input '၃၂-၁၂-၂၀၂၀'`, () => {
             const input = '၃၂-၁၂-၂၀၂၀';
@@ -688,13 +695,6 @@ describe('NumberGroupTextExtractor#date', () => {
         // Invalid ends (Invalid diacritics and AThet)
         it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၎င်း' (\u104E)`, () => {
             const input = '၀၁-၀၁-၂၀၂၎င်း';
-            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
-        });
-
-        // \u104E and \u101D
-        it(String.raw`should NOT return fragment when input '၎-၎-၎ဝဝဝ'`, () => {
-            const input = '၎-၎-၎ဝဝဝ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
