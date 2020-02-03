@@ -545,30 +545,37 @@ describe('NumberGroupTextExtractor#date', () => {
     });
 
     describe('not', () => {
-        // Invalid day
+        // Invalid day (Not matched)
         it(String.raw`should NOT return fragment when input '၃၂-၁၂-၂၀၂၀'`, () => {
             const input = '၃၂-၁၂-၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
-        // Invalid month
+        // Invalid month (Not matched)
         it(String.raw`should NOT return fragment when input '၃၀-၁၃-၂၀၂၀'`, () => {
             const input = '၃၀-၁၃-၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
-        // Invalid year
+        // Invalid year (Not matched)
         it(String.raw`should NOT return fragment when input '၃၀-၁၂-၀၀၀၁'`, () => {
             const input = '၃၀-၁၂-၀၀၀၁';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
-        // Invalid short year
+        // Invalid short year (Not matched)
         it(String.raw`should NOT return fragment when input '၂၀/၁/၃၁'`, () => {
             const input = '၂၀/၁/၃၁';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Extra spaces (At getDateExtractInfo)
+        it(String.raw`should NOT return fragment when input '၀၁ ၀၁  ၂၀၂၀'`, () => {
+            const input = '၀၁ ၀၁  ၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
@@ -612,13 +619,6 @@ describe('NumberGroupTextExtractor#date', () => {
 
         it(String.raw`should NOT return fragment when input '၀၁-၀၁/၂၀၂၀'`, () => {
             const input = '၀၁-၀၁/၂၀၂၀';
-            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
-        });
-
-        // Extra spaces
-        it(String.raw`should NOT return fragment when input '၀၁ ၀၁  ၂၀၂၀'`, () => {
-            const input = '၀၁ ၀၁  ၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
