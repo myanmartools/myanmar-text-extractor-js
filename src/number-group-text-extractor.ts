@@ -43,7 +43,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     // -/._
     private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
-
+    private readonly _dtOrPhSeparatorRegExp = new RegExp(`^[${this._dtOrPhSeparator}]`);
     // Date
     private readonly _dtYear2DigitsGroup = `(?:[\u1041\u1042][${this._possibleDigit}])`;
     private readonly _dtYearGroup = `(?:[\u1041-\u1049][${this._possibleDigit}]{3,3})`;
@@ -1158,15 +1158,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 if (this._possibleDomainNameSuffixRegExp.test(rightStr2)) {
                     return false;
                 }
-            } else if (this._decimalPointRegExp.test(rightStr)) {
+            } else if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return false;
                 }
-                // if (cp === 0x0021 || cp === 0x0023 || cp === 0x0026 ||
-                //     cp === 0x002A || cp === 0x002B || (cp >= 0x002D && cp <= 0x002F) ||
-                //     cp === 0x003A || cp === 0x005C || cp === 0x005E || cp === 0x005F || cp === 0x0060 ||
-                //     cp === 0x007E) {
-                // }
             }
         }
 
