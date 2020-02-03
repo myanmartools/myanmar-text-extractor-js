@@ -468,8 +468,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'yyyyMMdd',
-                digitOrDigitGroup: true,
-                digitOrDigitGroupStr: input
+                digitOrNumberGroup: true,
+                digitStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
