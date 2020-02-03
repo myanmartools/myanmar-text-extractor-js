@@ -5,8 +5,13 @@ export interface ExtractInfo {
     normalizedStr: string;
     spaceIncluded?: boolean;
     normalizeReason?: NormalizeReason;
-    digitOrDigitGroupStr?: string;
+    digitOrNumberGroup?: boolean;
+    digitStr?: string;
     digitSeparator?: string;
+    possibleDate?: boolean;
     dateSeparator?: string;
     dateFormat?: string;
+    possibleTime?: boolean;
+    possiblePhoneNumber?: boolean;
+    phoneNumberStr?: string;
 }
