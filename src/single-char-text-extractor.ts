@@ -42,8 +42,8 @@ export class SingleCharTextExtractor implements TextExtractor {
                     fragmentType: FragmentType.Number,
                     matchedStr: input[0],
                     normalizedStr: input[0],
-                    digitOrDigitGroup: true,
-                    digitOrDigitGroupStr: input[0],
+                    digitOrNumberGroup: true,
+                    digitStr: input[0],
                 };
             }
 
