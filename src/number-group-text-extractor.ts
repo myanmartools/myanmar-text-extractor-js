@@ -174,10 +174,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const rightStr = input.substring(extractInfo.matchedStr.length);
         if (rightStr.length > 0) {
-            if (this.checkRightStrForPossibleDigit(rightStr)) {
-                return null;
-            }
-
             if (!this.isValidRightStrForDate(rightStr)) {
                 return null;
             }
@@ -1141,6 +1137,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private isValidRightStrForDate(rightStr: string): boolean {
+        if (this.checkRightStrForPossibleDigit(rightStr)) {
+            return false;
+        }
+
         if (rightStr.length === 1) {
             // $ %
             if (rightStr[0] === '$' || rightStr[0] === '%') {
