@@ -545,18 +545,21 @@ describe('NumberGroupTextExtractor#date', () => {
     });
 
     describe('not', () => {
+        // Invalid day
         it(String.raw`should NOT return fragment when input '၃၂-၁၂-၂၀၂၀'`, () => {
             const input = '၃၂-၁၂-၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
+        // Invalid month
         it(String.raw`should NOT return fragment when input '၃၀-၁၃-၂၀၂၀'`, () => {
             const input = '၃၀-၁၃-၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
+        // Invalid short year
         it(String.raw`should NOT return fragment when input '၂၀/၁/၃၁'`, () => {
             const input = '၂၀/၁/၃၁';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
