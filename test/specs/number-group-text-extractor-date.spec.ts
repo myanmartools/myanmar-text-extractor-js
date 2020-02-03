@@ -657,6 +657,13 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
+        // Invalid ends (isValidRightStrForDate)
+        it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀#၁'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀#၁';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
         // \u104E and \u101D
         it(String.raw`should NOT return fragment when input '၎-၎-၎ဝဝဝ'`, () => {
             const input = '၎-၎-၎ဝဝဝ';
