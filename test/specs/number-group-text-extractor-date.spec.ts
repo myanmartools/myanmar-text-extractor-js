@@ -202,9 +202,57 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with -က
+        it(String.raw`should return fragment when input '၀၁-၀၁-၂၀၂၀-က'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀-က';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
+                possibleDate: true,
+                dateFormat: 'dd-MM-yyyy',
+                dateSeparator: '-'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Ends with /
         it(String.raw`should return fragment when input '၀၁-၀၁-၂၀၂၀/'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀/';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
+                possibleDate: true,
+                dateFormat: 'dd-MM-yyyy',
+                dateSeparator: '-'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with @
+        it(String.raw`should return fragment when input '၀၁-၀၁-၂၀၂၀@'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀@';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၀၁-၀၁-၂၀၂၀',
+                normalizedStr: '၀၁-၀၁-၂၀၂၀',
+                possibleDate: true,
+                dateFormat: 'dd-MM-yyyy',
+                dateSeparator: '-'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with @က
+        it(String.raw`should return fragment when input '၀၁-၀၁-၂၀၂၀@က'`, () => {
+            const input = '၀၁-၀၁-၂၀၂၀@က';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Number,
