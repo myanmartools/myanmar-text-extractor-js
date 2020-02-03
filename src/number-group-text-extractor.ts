@@ -1142,14 +1142,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         if (rightStr.length === 1) {
-            // $ %
             if (rightStr[0] === '$' || rightStr[0] === '%') {
                 return false;
             }
         } else {
             const rightStr2 = rightStr.substring(1);
-
-            // @
             if (rightStr[0] === '@') {
                 if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
                     return false;
