@@ -580,9 +580,16 @@ describe('NumberGroupTextExtractor#date', () => {
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
 
-        // Extra separator (At getDateExtractInfo)
+        // Extra separators (At getDateExtractInfo)
         it(String.raw`should NOT return fragment when input '၀၁--၀၁--၂၀၂၀'`, () => {
             const input = '၀၁--၀၁--၂၀၂၀';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
+        });
+
+        // Invalid separators (At getDateExtractInfo)
+        it(String.raw`should NOT return fragment when input '၀၁-၀၁/၂၀၂၀'`, () => {
+            const input = '၀၁-၀၁/၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
@@ -614,12 +621,6 @@ describe('NumberGroupTextExtractor#date', () => {
         // \u104E and \u101D
         it(String.raw`should NOT return fragment when input '၎-၎-၎ဝဝဝ'`, () => {
             const input = '၎-၎-၎ဝဝဝ';
-            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
-        });
-
-        it(String.raw`should NOT return fragment when input '၀၁-၀၁/၂၀၂၀'`, () => {
-            const input = '၀၁-၀၁/၂၀၂၀';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
