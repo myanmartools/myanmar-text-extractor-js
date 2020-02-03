@@ -1154,9 +1154,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
             const rightStr2 = rightStr.substring(1);
 
             if (cp === 0x0040) {
-                if (this.checkRightStrForPossibleDigit(rightStr2)) {
+                if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
                     return false;
-                } else if (this._possibleDomainNameSuffixRegExp.test(rightStr2)) {
+                }
+                if (this._possibleDomainNameSuffixRegExp.test(rightStr2)) {
                     return false;
                 }
             } else if (cp === 0x0021 || cp === 0x0023 || cp === 0x0026 ||
