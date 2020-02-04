@@ -174,7 +174,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const rightStr = input.substring(extractInfo.matchedStr.length);
         if (rightStr.length > 0) {
-            if (!this.isValidRightStrForDate(rightStr)) {
+            if (!this.isightStrValidRForDate(rightStr)) {
                 return null;
             }
 
@@ -204,25 +204,15 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        let matchedStr = m[0];
-        const rightStr = input.substring(matchedStr.length);
+        const matchedStr = m[0];
         const extractInfo = this.getTimeExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
 
-        if (rightStr && !this.isRightStrSafeForTime(rightStr)) {
+        const rightStr = input.substring(matchedStr.length);
+        if (rightStr.length > 0 && !this.isRightStrValidForTime(rightStr)) {
             return null;
-        }
-
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
-            const newMatchedStr = matchedStr.substring(0, matchedStr.length - 1);
-            const newLastCp = newMatchedStr.codePointAt(newMatchedStr.length - 1) as number;
-            if (newLastCp >= 0x1040 && newLastCp <= 0x1049) {
-                matchedStr = newMatchedStr;
-            } else {
-                return null;
-            }
         }
 
         return {
@@ -1136,7 +1126,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return false;
     }
 
-    private isValidRightStrForDate(rightStr: string): boolean {
+    private isightStrValidRForDate(rightStr: string): boolean {
         if (this.checkRightStrForPossibleDigit(rightStr)) {
             return false;
         }
@@ -1165,7 +1155,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return true;
     }
 
-    private isRightStrSafeForTime(rightStr: string): boolean {
+    private isRightStrValidForTime(rightStr: string): boolean {
         if (this.checkRightStrForPossibleDigit(rightStr)) {
             return false;
         }
@@ -1185,6 +1175,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
             if (this.checkRightStrForPossibleDigit(rightStr2)) {
                 return false;
             }
+        }
+
+        if (this._diacriticsAndAThetRegExp.test(rightStr)) {
+            return false;
         }
 
         return true;
