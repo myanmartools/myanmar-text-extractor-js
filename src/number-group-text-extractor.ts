@@ -206,26 +206,43 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const matchedStr = m[0];
-        const extractInfo = this.getTimeExtractInfo(matchedStr);
+        let extractInfo = this.getTimeExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
 
-        const rightStr = input.substring(matchedStr.length);
+        const rightStr = input.substring(extractInfo.matchedStr.length);
         if (rightStr.length > 0) {
             if (this.checkRightStrForPossibleDigit(rightStr)) {
                 return null;
             }
 
-            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
-                if (extractInfo.normalizedStr.length < 5 || (rightStr.length > 1 && !this._containWhitespaceRegExp.test(rightStr[1]))) {
+            if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
+                const rightStr2 = rightStr.substring(1);
+                if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return null;
                 }
             }
 
-            if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
-                const rightStr2 = rightStr.substring(1);
-                if (this.checkRightStrForPossibleDigit(rightStr2)) {
+            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
+                if (extractInfo.normalizedStr.split(':').length > 2 && extractInfo.matchedStr[extractInfo.matchedStr.length - 2] !== ':') {
+                    const lastMatchedC = extractInfo.matchedStr[extractInfo.matchedStr.length - 1];
+                    if (lastMatchedC === '\u101D' || lastMatchedC === '\u104E' || lastMatchedC === '\u1040' || lastMatchedC === '\u1044') {
+                        const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
+                        if (this._dtTimeRegExp.test(newStr)) {
+                            const newExtractInfo = this.getTimeExtractInfo(newStr);
+                            if (newExtractInfo == null) {
+                                return null;
+                            }
+
+                            extractInfo = newExtractInfo;
+                        } else {
+                            return null;
+                        }
+                    } else if (rightStr.length > 1 && !this._containWhitespaceRegExp.test(rightStr[1])) {
+                        return null;
+                    }
+                } else {
                     return null;
                 }
             }
