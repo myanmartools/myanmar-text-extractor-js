@@ -206,6 +206,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         let matchedStr = m[0];
         const rightStr = input.substring(matchedStr.length);
+        const extractInfo = this.getTimeExtractInfo(matchedStr);
+        if (extractInfo == null) {
+            return null;
+        }
 
         if (rightStr && !this.isRightStrSafeForTime(rightStr)) {
             return null;
@@ -219,11 +223,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
             } else {
                 return null;
             }
-        }
-
-        const extractInfo = this.getTimeExtractInfo(matchedStr);
-        if (extractInfo == null) {
-            return null;
         }
 
         return {
@@ -756,10 +755,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
             } else if (this._containSpaceRegExp.test(c)) {
                 extractInfo.spaceIncluded = true;
-
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 extractInfo.normalizeReason.removeSpace = true;
-            } else {
+            } else if (cp === 0x003A || cp === 0x1038 || cp === 0x003B) {
                 extractInfo.normalizedStr += ':';
                 if (cp === 0x003A) {
                     ++colonSeparatorCount;
@@ -771,6 +769,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
                         ++colonSeparatorCount;
                     }
                 }
+            } else {
+                extractInfo.normalizedStr += c;
             }
         }
 
