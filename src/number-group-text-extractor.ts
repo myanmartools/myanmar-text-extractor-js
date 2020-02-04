@@ -10,6 +10,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
     private readonly _containSpaceRegExp = new RegExp(`[${this._space}]`);
+    private readonly _containWhitespaceRegExp = /[\s]/;
 
     // Domain Name
     private readonly _possibleDomainNameSuffixRegExp = /^[\S]+\.[a-zA-Z]{2,63}/;
@@ -211,8 +212,23 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const rightStr = input.substring(matchedStr.length);
-        if (rightStr.length > 0 && !this.isRightStrValidForTime(rightStr)) {
-            return null;
+        if (rightStr.length > 0) {
+            if (this.checkRightStrForPossibleDigit(rightStr)) {
+                return null;
+            }
+
+            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
+                if (extractInfo.normalizedStr.length < 5 || (rightStr.length > 1 && !this._containWhitespaceRegExp.test(rightStr[1]))) {
+                    return null;
+                }
+            }
+
+            if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
+                const rightStr2 = rightStr.substring(1);
+                if (this.checkRightStrForPossibleDigit(rightStr2)) {
+                    return null;
+                }
+            }
         }
 
         return {
@@ -1146,27 +1162,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     return false;
                 }
             } else if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
-                if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    private isRightStrValidForTime(rightStr: string): boolean {
-        if (this.checkRightStrForPossibleDigit(rightStr)) {
-            return false;
-        }
-
-        if (rightStr.length > 1) {
-            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
-                return false;
-            }
-
-            if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
-                const rightStr2 = rightStr.substring(1);
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return false;
                 }
