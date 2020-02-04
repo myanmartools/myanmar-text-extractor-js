@@ -1160,25 +1160,17 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return false;
         }
 
-        const cp = rightStr.codePointAt(0);
-        if (!cp) {
-            return true;
-        }
-
-        if (rightStr.length > 1 && (cp === 0x0021 ||
-            (cp >= 0x0023 && cp <= 0x0027) ||
-            (cp >= 0x002A && cp <= 0x002F) ||
-            (cp >= 0x003A && cp <= 0x003F) ||
-            cp === 0x005C || cp === 0x005E || cp === 0x005F ||
-            cp === 0x0060 || cp === 0x007C || cp === 0x007E)) {
-            const rightStr2 = rightStr.substring(1);
-            if (this.checkRightStrForPossibleDigit(rightStr2)) {
+        if (rightStr.length > 1) {
+            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
                 return false;
             }
-        }
 
-        if (this._diacriticsAndAThetRegExp.test(rightStr)) {
-            return false;
+            if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
+                const rightStr2 = rightStr.substring(1);
+                if (this.checkRightStrForPossibleDigit(rightStr2)) {
+                    return false;
+                }
+            }
         }
 
         return true;
