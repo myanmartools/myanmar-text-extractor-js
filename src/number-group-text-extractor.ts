@@ -242,7 +242,9 @@ export class NumberGroupTextExtractor implements TextExtractor {
             if (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr)) {
                 if (extractInfo.normalizedStr.split(':').length > 2 && extractInfo.matchedStr[extractInfo.matchedStr.length - 2] !== ':') {
                     const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
-                    if (this._dtTimeRegExp.test(newStr)) {
+                    const newMatch = newStr.match(this._dtTimeRegExp);
+
+                    if (newMatch && newMatch[0].length === newStr.length) {
                         const newExtractInfo = this.getTimeExtractInfo(newStr);
                         if (newExtractInfo == null) {
                             return null;
