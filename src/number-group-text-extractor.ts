@@ -12,15 +12,31 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _containSpaceRegExp = new RegExp(`[${this._space}]`);
     private readonly _containWhitespaceRegExp = /[\s]/;
 
-    // Domain Name
-    private readonly _possibleDomainNameSuffixRegExp = /^[\S]+\.[a-zA-Z]{2,63}/;
-
-    // Digits
+    // Digit
     private readonly _possibleDigit = '\u1040-\u1049\u101D\u104E';
 
-    // Decimal point
-    private readonly _decimalPoint = '\u002E\u00B7\u02D9';
-    private readonly _decimalPointRegExp = new RegExp(`^[${this._decimalPoint}]`);
+    // Dash
+    private readonly _dash = '\\-_';
+    private readonly _dashExt = '~\u2010-\u2015\u2212\u30FC\uFF0D\u2053\u223C\uFF5E';
+    private readonly _dashRegExp = new RegExp(`^[${this._dash}${this._dashExt}]`);
+
+    // Slash
+    private readonly _slash = '/';
+    private readonly _slashExt = '\uFF0F';
+
+    // Dot
+    private readonly _dot = '\\.';
+    private readonly _dotExt = '\u00B7\u02D9';
+    private readonly _dotRegExp = new RegExp(`^[${this._dot}${this._dotExt}]`);
+
+    // Plus
+    private readonly _plus = '+\uFF0B';
+
+    // Star
+    private readonly _star = '*';
+
+    // Hash
+    private readonly _hash = '#';
 
     // Thousand separator
     private readonly _thousandSeparator = '\u002C\u066B\u066C\u2396\u005F\u0027';
@@ -31,10 +47,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _closingBracket = ')\\]\uFF09\uFF3D';
 
     // Number group
-    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleDigit}]{2,4})*(?:[${this._space}]?[${this._decimalPoint}][${this._space}]?[${this._possibleDigit}]+)?`);
+    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleDigit}]{2,4})*(?:[${this._space}]?[${this._dot}][${this._space}]?[${this._possibleDigit}]+)?`);
 
     // Number group starts with 'ဝ' / '၎'
-    private readonly _possibleDigitGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleDigit}]*[${this._thousandSeparator}${this._decimalPoint}]?[${this._possibleDigit}]*[\u1040-\u1049]`);
+    private readonly _possibleDigitGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleDigit}]*[${this._thousandSeparator}${this._dot}]?[${this._possibleDigit}]*[\u1040-\u1049]`);
 
     // Number with hsettha (ဆယ်သား)
     private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
@@ -42,10 +58,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Number with brackets
     private readonly _numberBracketsRegExp = new RegExp(`^[${this._openingBracket}][${this._space}]?[\u101D\u1040-\u1049\u104E]+[${this._space}]?[${this._closingBracket}]`);
 
-    // -/._
-    private readonly _dtOrPhSeparator = '\\-/._~\u104A\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F\u2053\u223C\uFF5E';
-    private readonly _dtOrPhSeparatorRegExp = new RegExp(`^[${this._dtOrPhSeparator}]`);
     // Date
+    private readonly _dtSeparator = `${this._dash}${this._slash}${this._dot}\u104A${this._dashExt}${this._slashExt}${this._dotExt}`;
     private readonly _dtYear2DigitsGroup = `(?:[\u1041\u1042][${this._possibleDigit}])`;
     private readonly _dtYearGroup = `(?:[\u1041-\u1049][${this._possibleDigit}]{3,3})`;
     private readonly _dtMonthGroup = '(?:\u1041[\u1040-\u1042\u101D]|[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1049\u104E])';
@@ -53,21 +67,21 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleDigit}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
     private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleDigit}]|[\u1041-\u1049\u104E])`;
     private readonly _dtTimeSeparatorGroup = `[${this._space}]?[:;\u1038][${this._space}]?`;
-    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigit}]{1,4})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,2})[${this._dtOrPhSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,4})`);
-    private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
-    private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
-    private readonly _dtYMDRegExp = new RegExp(`^${this._dtYearGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}`);
-    private readonly _dtMDYRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
-    private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtOrPhSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
+    private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigit}]{1,4})[${this._dtSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,2})[${this._dtSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,4})`);
+    private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
+    private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
+    private readonly _dtYMDRegExp = new RegExp(`^${this._dtYearGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtDayGroup}`);
+    private readonly _dtMDYRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
+    private readonly _dtMDYWith2DigitYearRegExp = new RegExp(`^${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
     private readonly _dtYMDIsoRegExp = new RegExp(`^(?:[\u1041\u1042][${this._possibleDigit}]{3,3})(?:[\u1040\u101D][\u1041-\u1049\u104E]|\u1041[\u1040-\u1042\u101D])(?:[\u1040\u101D][\u1041-\u1049\u104E]|[\u1041-\u1042][${this._possibleDigit}]|\u1043[\u1040-\u1041\u101D])`);
     private readonly _dtTimeRegExp = new RegExp(`^${this._dtHourGroup}(?:${this._dtTimeSeparatorGroup}${this._dtMinuteSecondGroup}){1,2}(?:\.[\u1040-\u1049]{7,7})?(?:(?:Z)|(?:[+\\-][\u1040-\u1042][\u1040-\u1049]:?[\u1040-\u1045][\u1040-\u1049]{0,4}))?`);
 
     // Phone Number
-    private readonly _phPlus = '+\uFF0B';
-    private readonly _phStar = '*';
-    private readonly _phHash = '#';
-    private readonly _phSeparator = `${this._dtOrPhSeparator}${this._openingBracket}${this._closingBracket}`;
-    private readonly _phRegExp = new RegExp(`^[${this._phPlus}]?(?:[${this._phSeparator}${this._space}${this._phStar}]*[${this._possibleDigit}]){3,}${this._phHash}?`);
+    private readonly _phSeparator = `${this._dash}${this._slash}${this._dot}${this._openingBracket}${this._closingBracket}\u104A${this._dashExt}${this._slashExt}${this._dotExt}\uFF0E`;
+    private readonly _phRegExp = new RegExp(`^[${this._plus}]?(?:[${this._phSeparator}${this._space}${this._star}]*[${this._possibleDigit}]){3,}${this._hash}?`);
+
+    // Domain Name
+    private readonly _possibleDomainNameSuffixRegExp = /^[\S]+\.[a-zA-Z]{2,63}/;
 
     // Diacritics and AThet
     private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)|(?:[\u102B-\u103E]+))`);
@@ -217,7 +231,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
+            if (this._dotRegExp.test(rightStr) || this._dashRegExp.test(rightStr)) {
                 const rightStr2 = rightStr.substring(1);
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return null;
@@ -1178,7 +1192,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 if (this._possibleDomainNameSuffixRegExp.test(rightStr2)) {
                     return false;
                 }
-            } else if (this._decimalPointRegExp.test(rightStr) || this._dtOrPhSeparatorRegExp.test(rightStr)) {
+            } else if (this._dotRegExp.test(rightStr) || this._dashRegExp.test(rightStr)) {
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return false;
                 }
