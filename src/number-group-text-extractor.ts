@@ -231,7 +231,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (this._dotRegExp.test(rightStr) || this._dashRegExp.test(rightStr)) {
+            if (rightStr[0] === ':') {
                 const rightStr2 = rightStr.substring(1);
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return null;
