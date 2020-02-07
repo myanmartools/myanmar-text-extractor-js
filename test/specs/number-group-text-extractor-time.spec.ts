@@ -429,20 +429,6 @@ describe('NumberGroupTextExtractor#time', () => {
         });
 
         // Invalid end
-        it(String.raw`should NOT return fragment when input '၁၂:၅၉:၅၉.၁'`, () => {
-            const input = '၁၂:၅၉:၅၉.၁';
-            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
-        });
-
-        // Invalid end
-        it(String.raw`should NOT return fragment when input '၁၂:၅၉:၅၉-၁'`, () => {
-            const input = '၁၂:၅၉:၅၉-၁';
-            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
-        });
-
-        // Invalid end
         it(String.raw`should NOT return fragment when input '၁၂:၅၉:၅၉_၁'`, () => {
             const input = '၁၂:၅၉:၅၉_၁';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
