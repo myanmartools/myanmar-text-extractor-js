@@ -47,10 +47,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _closingBracket = ')\\]\uFF09\uFF3D';
 
     // Number group
-    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleDigit}]{2,4})*(?:[${this._space}]?[${this._dot}][${this._space}]?[${this._possibleDigit}]+)?`);
+    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:[${this._space}]?[${this._thousandSeparator}${this._space}][${this._space}]?[${this._possibleDigit}]{2,4})*(?:[${this._space}]?[${this._dot}${this._dotExt}][${this._space}]?[${this._possibleDigit}]+)?`);
 
     // Number group starts with 'ဝ' / '၎'
-    private readonly _possibleDigitGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleDigit}]*[${this._thousandSeparator}${this._dot}]?[${this._possibleDigit}]*[\u1040-\u1049]`);
+    private readonly _possibleDigitGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleDigit}]*[${this._thousandSeparator}${this._dot}${this._dotExt}]?[${this._possibleDigit}]*[\u1040-\u1049]`);
 
     // Number with hsettha (ဆယ်သား)
     private readonly _hsethaRegExp = new RegExp(`^[(\uFF08][${this._space}]?[\u1041-\u1049\u104E][${this._space}]?[)\uFF09][${this._space}]?\u1040\u102D`);
@@ -232,7 +232,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (rightStr[0] === ':') {
+            if (rightStr[0] === ':' || rightStr[0] === '_') {
                 const rightStr2 = rightStr.substring(1);
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return null;
