@@ -84,7 +84,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _possibleDomainNameSuffixRegExp = /^[\S]+\.[a-zA-Z]{2,63}/;
 
     // Diacritics and AThet
-    private readonly _diacriticsAndAThetRegExp = new RegExp(`^(?:(?:[\u102B-\u103E]*([${this._space}])?[\u1000-\u1021]\u103A)|(?:[\u102B-\u103E]+))`);
+    private readonly _aThetRegExp = new RegExp(`^(?:[\u102B-\u103E]*([${this._space}])?)?[\u1000-\u1021]\u103A`);
+    private readonly _diacriticsRegExp = new RegExp('^[\u102B-\u103E]+');
 
     extractNext(input: string, firstCp: number): TextFragment | null {
         if (input.length < 2) {
@@ -200,7 +201,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
             }
 
-            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
+            if (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr)) {
                 return null;
             }
         }
@@ -238,7 +239,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
             }
 
-            if (this._diacriticsAndAThetRegExp.test(rightStr)) {
+            if (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr)) {
                 if (extractInfo.normalizedStr.split(':').length > 2 && extractInfo.matchedStr[extractInfo.matchedStr.length - 2] !== ':') {
                     const lastMatchedC = extractInfo.matchedStr[extractInfo.matchedStr.length - 1];
                     if (lastMatchedC === '\u101D' || lastMatchedC === '\u104E' || lastMatchedC === '\u1040' || lastMatchedC === '\u1044') {
@@ -282,7 +283,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+        if (rightStr && (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr))) {
             return null;
         }
 
@@ -378,7 +379,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const rightStr = input.substring(matchedStr.length);
 
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+        if (rightStr && (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr))) {
             return null;
         }
 
@@ -412,7 +413,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = input.substring(0, 4);
 
         const rightStr = input.substring(matchedStr.length);
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+        if (rightStr && (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr))) {
             return null;
         }
 
@@ -442,7 +443,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const matchedStr = m[0];
 
         const rightStr = input.substring(matchedStr.length);
-        if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+        if (rightStr && (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr))) {
             return null;
         }
 
@@ -484,7 +485,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return numberFragment;
         } else {
             const rightStr = input.substring(numberFragment.matchedStr.length);
-            if (rightStr && this._diacriticsAndAThetRegExp.test(rightStr)) {
+            if (rightStr && (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr))) {
                 const newMatchedStr = numberFragment.matchedStr.substring(0, numberFragment.matchedStr.length - 1);
                 if (newMatchedStr.length === 1) {
                     const cp = newMatchedStr.codePointAt(0) as number;
@@ -548,7 +549,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return true;
         }
 
-        const diacriticsOrAThetMatch = rightStr.match(this._diacriticsAndAThetRegExp);
+        let diacriticsOrAThetMatch = rightStr.match(this._aThetRegExp);
+        if (diacriticsOrAThetMatch == null) {
+            diacriticsOrAThetMatch = rightStr.match(this._diacriticsRegExp);
+        }
+
         if (diacriticsOrAThetMatch == null) {
             return false;
         }
