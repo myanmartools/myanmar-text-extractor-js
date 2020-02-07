@@ -10,7 +10,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
     private readonly _containSpaceRegExp = new RegExp(`[${this._space}]`);
-    private readonly _containWhitespaceRegExp = /[\s]/;
+    // private readonly _containWhitespaceRegExp = /[\s]/;
 
     // Digit
     private readonly _possibleDigit = '\u1040-\u1049\u101D\u104E';
@@ -241,20 +241,15 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
             if (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr)) {
                 if (extractInfo.normalizedStr.split(':').length > 2 && extractInfo.matchedStr[extractInfo.matchedStr.length - 2] !== ':') {
-                    const lastMatchedC = extractInfo.matchedStr[extractInfo.matchedStr.length - 1];
-                    if (lastMatchedC === '\u101D' || lastMatchedC === '\u104E' || lastMatchedC === '\u1040' || lastMatchedC === '\u1044') {
-                        const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
-                        if (this._dtTimeRegExp.test(newStr)) {
-                            const newExtractInfo = this.getTimeExtractInfo(newStr);
-                            if (newExtractInfo == null) {
-                                return null;
-                            }
-
-                            extractInfo = newExtractInfo;
-                        } else {
+                    const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
+                    if (this._dtTimeRegExp.test(newStr)) {
+                        const newExtractInfo = this.getTimeExtractInfo(newStr);
+                        if (newExtractInfo == null) {
                             return null;
                         }
-                    } else if (rightStr.length > 1 && !this._containWhitespaceRegExp.test(rightStr[1])) {
+
+                        extractInfo = newExtractInfo;
+                    } else {
                         return null;
                     }
                 } else {
