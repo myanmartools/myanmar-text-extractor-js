@@ -232,7 +232,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if (rightStr[0] === ':' || rightStr[0] === '_') {
+            if (rightStr[0] === ':' || rightStr[0] === '\u1038' || rightStr[0] === '_') {
                 const rightStr2 = rightStr.substring(1);
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return null;
