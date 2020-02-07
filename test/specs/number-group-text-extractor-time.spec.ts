@@ -107,6 +107,34 @@ describe('NumberGroupTextExtractor#time', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // End with :
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉:'`, () => {
+            const input = '၂၃:၅၉:၅၉:';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // End with _
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉_'`, () => {
+            const input = '၂၃:၅၉:၅၉_';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // End with /
         it(String.raw`should return fragment when input '၂၃:၅၉:၅၉/'`, () => {
             const input = '၂၃:၅၉:၅၉/';
