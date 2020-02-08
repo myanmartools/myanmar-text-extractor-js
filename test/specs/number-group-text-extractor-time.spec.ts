@@ -86,6 +86,20 @@ describe('NumberGroupTextExtractor#time', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // End with .ဝင်း
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉.ဝင်း'`, () => {
+            const input = '၂၃:၅၉:၅၉.ဝင်း';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၂၃:၅၉:၅၉',
+                normalizedStr: '၂၃:၅၉:၅၉',
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('hour-minute-second', () => {
