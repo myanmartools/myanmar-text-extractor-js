@@ -9,6 +9,32 @@ describe('NumberGroupTextExtractor#time', () => {
     });
 
     describe('iso-time', () => {
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉.၀၀၀၀၀၀၀Z'`, () => {
+            const input = '၂၃:၅၉:၅၉.၀၀၀၀၀၀၀Z';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉.၀၀၀၀၀၀၀+၀၀:၀၀'`, () => {
+            const input = '၂၃:၅၉:၅၉.၀၀၀၀၀၀၀+၀၀:၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return fragment when input '၂၃:၅၉:၅၉Z'`, () => {
             const input = '၂၃:၅၉:၅၉Z';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
