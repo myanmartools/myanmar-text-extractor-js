@@ -575,8 +575,8 @@ describe('NumberGroupTextExtractor#time', () => {
             expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
 
-        it(String.raw`should NOT return fragment when input '\u101D\u104E:\u101D၄င်း'`, () => {
-            const input = '\u101D\u104E:\u101D၄င်း';
+        it(String.raw`should NOT return fragment when input '၀၁:\u101D၎င်း'`, () => {
+            const input = '၀၁:\u101D၎င်း';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
