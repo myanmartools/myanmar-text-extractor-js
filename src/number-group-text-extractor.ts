@@ -245,6 +245,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
                         return null;
                     }
 
+                    const secondLastMatchedCp = extractInfo.matchedStr.codePointAt(extractInfo.matchedStr.length - 2);
+                    if (secondLastMatchedCp && (secondLastMatchedCp === 0x101D || secondLastMatchedCp === 0x104E)) {
+                        return null;
+                    }
+
                     const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
                     const newMatch = newStr.match(this._dtTimeRegExp);
 
