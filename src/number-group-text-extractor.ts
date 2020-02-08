@@ -200,7 +200,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 return null;
             }
 
-            if ((rightStr[0] === '$' || rightStr[0] === '%') && (!extractInfo.dateSeparator || rightStr.length === 1)) {
+            if ((rightStr[0] === '$' || rightStr[0] === '%') &&
+                (!extractInfo.dateSeparator || extractInfo.dateSeparator === ' ' || rightStr.length === 1)) {
                 return null;
             }
 
