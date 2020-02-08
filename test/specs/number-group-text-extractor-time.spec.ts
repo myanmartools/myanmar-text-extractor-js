@@ -8,8 +8,7 @@ describe('NumberGroupTextExtractor#time', () => {
         extractor = new NumberGroupTextExtractor();
     });
 
-    describe('hour-minute-second', () => {
-        // hh:mm:ssZ (ISO)
+    describe('iso-time', () => {
         it(String.raw`should return fragment when input '၂၃:၅၉:၅၉Z'`, () => {
             const input = '၂၃:၅၉:၅၉Z';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
@@ -23,6 +22,47 @@ describe('NumberGroupTextExtractor#time', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉+၀၀:၀၀'`, () => {
+            const input = '၂၃:၅၉:၅၉+၀၀:၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉+၀၆:၃၀'`, () => {
+            const input = '၂၃:၅၉:၅၉+၀၆:၃၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉-၀၅:၀၀'`, () => {
+            const input = '၂၃:၅၉:၅၉-၀၅:၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('hour-minute-second', () => {
         // hh:mm:ss
         it(String.raw`should return fragment when input '၂၃:၅၉:၅၉'`, () => {
             const input = '၂၃:၅၉:၅၉';
