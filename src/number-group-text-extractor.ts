@@ -237,10 +237,14 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 if (this.checkRightStrForPossibleDigit(rightStr2)) {
                     return null;
                 }
-            }
+            } else if (this._diacriticsRegExp.test(rightStr) || this._aThetRegExp.test(rightStr)) {
+                if (extractInfo.normalizedStr.split(':').length > 2 &&
+                    extractInfo.matchedStr[extractInfo.matchedStr.length - 2] !== ':') {
+                    const lastMatchedCp = extractInfo.matchedStr.codePointAt(extractInfo.matchedStr.length - 1);
+                    if (lastMatchedCp && lastMatchedCp >= 0x1040 && lastMatchedCp <= 0x1049) {
+                        return null;
+                    }
 
-            if (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr)) {
-                if (extractInfo.normalizedStr.split(':').length > 2 && extractInfo.matchedStr[extractInfo.matchedStr.length - 2] !== ':') {
                     const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
                     const newMatch = newStr.match(this._dtTimeRegExp);
 
