@@ -9,6 +9,20 @@ describe('NumberGroupTextExtractor#time', () => {
     });
 
     describe('hour-minute-second', () => {
+        // hh:mm:ssZ (ISO)
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉Z'`, () => {
+            const input = '၂၃:၅၉:၅၉Z';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possibleTime: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // hh:mm:ss
         it(String.raw`should return fragment when input '၂၃:၅၉:၅၉'`, () => {
             const input = '၂၃:၅၉:၅၉';
