@@ -248,16 +248,16 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     const newStr = extractInfo.matchedStr.substring(0, extractInfo.matchedStr.length - 1);
                     const newMatch = newStr.match(this._dtTimeRegExp);
 
-                    if (newMatch && newMatch[0].length === newStr.length) {
-                        const newExtractInfo = this.getTimeExtractInfo(newStr);
-                        if (newExtractInfo == null) {
-                            return null;
-                        }
-
-                        extractInfo = newExtractInfo;
-                    } else {
+                    if (newMatch == null) {
                         return null;
                     }
+
+                    const newExtractInfo = this.getTimeExtractInfo(newMatch[0]);
+                    if (newExtractInfo == null) {
+                        return null;
+                    }
+
+                    extractInfo = newExtractInfo;
                 } else {
                     return null;
                 }
