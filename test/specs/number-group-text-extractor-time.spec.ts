@@ -275,20 +275,6 @@ describe('NumberGroupTextExtractor#time', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        // End with ု
-        it(String.raw`should return fragment when input '၂၃:၅၉:၅၉ု'`, () => {
-            const input = '၂၃:၅၉:၅၉ု';
-            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Number,
-                matchedStr: '၂၃:၅၉:၅၉',
-                normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
         // End with ၎င်း
         it(String.raw`should return fragment when input '၂၃:၅၉:၅၎င်း'`, () => {
             const input = '၂၃:၅၉:၅၎င်း';
@@ -304,7 +290,7 @@ describe('NumberGroupTextExtractor#time', () => {
         });
 
         // End with ဝဲ (\u101D)
-        it(String.raw`should return fragment when input '၂၃:၅၉:၅ဝဲ' ((\u101D))`, () => {
+        it(String.raw`should return fragment when input '၂၃:၅၉:၅ဝဲ' (\u101D)`, () => {
             const input = '၂၃:၅၉:၅ဝဲ';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
@@ -473,6 +459,12 @@ describe('NumberGroupTextExtractor#time', () => {
         // Invalid end
         it(String.raw`should NOT return fragment when input '၁၂:၅၉:၅၉_၁'`, () => {
             const input = '၁၂:၅၉:၅၉_၁';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possibleTime).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return fragment when input '၁၂:၅၉:၅၉ိ'`, () => {
+            const input = '၁၂:၅၉:၅၉ိ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleTime).toBeTruthy();
         });
