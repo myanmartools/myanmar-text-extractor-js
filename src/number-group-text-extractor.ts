@@ -18,7 +18,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Dash
     private readonly _dash = '\\-_';
     private readonly _dashExt = '~\u2010-\u2015\u2212\u30FC\uFF0D\u2053\u223C\uFF5E';
-    private readonly _dashRegExp = new RegExp(`^[${this._dash}${this._dashExt}]`);
+    // private readonly _dashRegExp = new RegExp(`^[${this._dash}${this._dashExt}]`);
 
     // Slash
     private readonly _slash = '/';
@@ -27,7 +27,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Dot
     private readonly _dot = '\\.';
     private readonly _dotExt = '\u00B7\u02D9';
-    private readonly _dotRegExp = new RegExp(`^[${this._dot}${this._dotExt}]`);
+    // private readonly _dotRegExp = new RegExp(`^[${this._dot}${this._dotExt}]`);
 
     // Plus
     private readonly _plus = '+\uFF0B';
@@ -67,6 +67,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _dtHourGroup = `(?:[\u1040\u1041\u101D][${this._possibleDigit}]|\u1042[\u1040-\u1043\u101D]|[\u1041-\u1049\u104E])`;
     private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleDigit}]|[\u1041-\u1049\u104E])`;
     private readonly _dtTimeSeparatorGroup = `[${this._space}]?[:;\u1038][${this._space}]?`;
+
+    private readonly _dtSeparatorRegExp = new RegExp(`^[${this._dtSeparator}]`);
     private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigit}]{1,4})[${this._dtSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,2})[${this._dtSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,4})`);
     private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
     private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
@@ -190,19 +192,38 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         const rightStr = input.substring(extractInfo.matchedStr.length);
         if (rightStr.length > 0) {
-            if (!this.isightStrValidRForDate(rightStr)) {
+            if (this.checkRightStrForPossibleDigit(rightStr)) {
                 return null;
             }
 
-            if (rightStr.length > 1 && extractInfo.dateSeparator === ' ' && this._containSpaceRegExp.test(rightStr[0])) {
-                const rightStr2 = rightStr.substring(1);
-                if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                    return null;
+            if ((rightStr.length > 1 && this._aThetRegExp.test(rightStr)) || this._diacriticsRegExp.test(rightStr)) {
+                return null;
+            }
+
+            if ((rightStr[0] === '$' || rightStr[0] === '%') && (!extractInfo.dateSeparator || rightStr.length === 1)) {
+                return null;
+            }
+
+            if (rightStr.length > 1) {
+                let shouldCheckRightStr2ForPossibleDigit = false;
+                if ((!extractInfo.dateSeparator || extractInfo.dateSeparator === ' ') && this._containSpaceRegExp.test(rightStr[0])) {
+                    shouldCheckRightStr2ForPossibleDigit = true;
+                } else if (this._dtSeparatorRegExp.test(rightStr[0])) {
+                    shouldCheckRightStr2ForPossibleDigit = true;
+                } else if (rightStr[0] === '@') {
+                    if (this._possibleDomainNameSuffixRegExp.test(rightStr.substring(1))) {
+                        return null;
+                    }
+
+                    shouldCheckRightStr2ForPossibleDigit = true;
                 }
-            }
 
-            if (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr)) {
-                return null;
+                if (shouldCheckRightStr2ForPossibleDigit) {
+                    const rightStr2 = rightStr.substring(1);
+                    if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
+                        return null;
+                    }
+                }
             }
         }
 
@@ -1182,35 +1203,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         return false;
-    }
-
-    private isightStrValidRForDate(rightStr: string): boolean {
-        if (this.checkRightStrForPossibleDigit(rightStr)) {
-            return false;
-        }
-
-        if (rightStr.length === 1) {
-            if (rightStr[0] === '$' || rightStr[0] === '%') {
-                return false;
-            }
-        } else {
-            const rightStr2 = rightStr.substring(1);
-            if (rightStr[0] === '@') {
-                if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
-                    return false;
-                }
-
-                if (this._possibleDomainNameSuffixRegExp.test(rightStr2)) {
-                    return false;
-                }
-            } else if (this._dotRegExp.test(rightStr) || this._dashRegExp.test(rightStr)) {
-                if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
     private isRightStrSafeForPhoneNumber(rightStr: string): boolean {
