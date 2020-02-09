@@ -74,9 +74,13 @@ export interface TextFragment {
      */
     ancientWrittenForm?: boolean;
     /**
-     * True if space detected.
+     * True if space included.
      */
     spaceIncluded?: boolean;
+    /**
+     * True if separator included.
+     */
+    separatorIncluded?: boolean;
     /**
      * Detected ancient measure words.
      */
