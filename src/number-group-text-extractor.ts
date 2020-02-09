@@ -9,8 +9,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
 
     private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
-    private readonly _containSpaceRegExp = new RegExp(`[${this._space}]`);
-    // private readonly _containWhitespaceRegExp = /[\s]/;
+    private readonly _containsSpaceRegExp = new RegExp(`[${this._space}]`);
 
     // Digit
     private readonly _possibleDigit = '\u1040-\u1049\u101D\u104E';
@@ -18,16 +17,17 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Dash
     private readonly _dash = '\\-_';
     private readonly _dashExt = '~\u2010-\u2015\u2212\u30FC\uFF0D\u2053\u223C\uFF5E';
-    // private readonly _dashRegExp = new RegExp(`^[${this._dash}${this._dashExt}]`);
+    private readonly _dashRegExp = new RegExp(`^[${this._dash}${this._dashExt}]`);
 
     // Slash
     private readonly _slash = '/';
     private readonly _slashExt = '\uFF0F';
+    private readonly _slashRegExp = new RegExp(`^[${this._slash}${this._slashExt}]`);
 
     // Dot
     private readonly _dot = '\\.';
     private readonly _dotExt = '\u00B7\u02D9';
-    // private readonly _dotRegExp = new RegExp(`^[${this._dot}${this._dotExt}]`);
+    private readonly _dotRegExp = new RegExp(`^[${this._dot}${this._dotExt}]`);
 
     // Plus
     private readonly _plus = '+\uFF0B';
@@ -68,7 +68,6 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private readonly _dtMinuteSecondGroup = `(?:[\u1040-\u1045\u101D\u104E][${this._possibleDigit}]|[\u1041-\u1049\u104E])`;
     private readonly _dtTimeSeparatorGroup = `[${this._space}]?[:;\u1038][${this._space}]?`;
 
-    private readonly _dtSeparatorRegExp = new RegExp(`^[${this._dtSeparator}]`);
     private readonly _dtDateQuickRegExp = new RegExp(`^(?:[${this._possibleDigit}]{1,4})[${this._dtSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,2})[${this._dtSeparator}${this._space}]*(?:[${this._possibleDigit}]{1,4})`);
     private readonly _dtDMYRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYearGroup}`);
     private readonly _dtDMYWith2DigitYearRegExp = new RegExp(`^${this._dtDayGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtMonthGroup}[${this._dtSeparator}${this._space}]{1,3}${this._dtYear2DigitsGroup}`);
@@ -185,47 +184,15 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const matchedStr = m[0];
+
         const extractInfo = this.getDateExtractInfo(matchedStr, monthStart);
         if (extractInfo == null) {
             return null;
         }
 
         const rightStr = input.substring(extractInfo.matchedStr.length);
-        if (rightStr.length > 0) {
-            if (this.checkRightStrForPossibleDigit(rightStr)) {
-                return null;
-            }
-
-            if ((rightStr.length > 1 && this._aThetRegExp.test(rightStr)) || this._diacriticsRegExp.test(rightStr)) {
-                return null;
-            }
-
-            if ((rightStr[0] === '$' || rightStr[0] === '%') &&
-                (!extractInfo.dateSeparator || extractInfo.dateSeparator === ' ' || rightStr.length === 1)) {
-                return null;
-            }
-
-            if (rightStr.length > 1) {
-                let shouldCheckRightStr2ForPossibleDigit = false;
-                if ((!extractInfo.dateSeparator || extractInfo.dateSeparator === ' ') && this._containSpaceRegExp.test(rightStr[0])) {
-                    shouldCheckRightStr2ForPossibleDigit = true;
-                } else if (this._dtSeparatorRegExp.test(rightStr[0])) {
-                    shouldCheckRightStr2ForPossibleDigit = true;
-                } else if (rightStr[0] === '@') {
-                    if (this._possibleDomainNameSuffixRegExp.test(rightStr.substring(1))) {
-                        return null;
-                    }
-
-                    shouldCheckRightStr2ForPossibleDigit = true;
-                }
-
-                if (shouldCheckRightStr2ForPossibleDigit) {
-                    const rightStr2 = rightStr.substring(1);
-                    if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
-                        return null;
-                    }
-                }
-            }
+        if (rightStr && !this.checkRightStrSafeForDateAndPhoneNumber(rightStr, extractInfo)) {
+            return null;
         }
 
         return {
@@ -305,26 +272,15 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         const matchedStr = m[0];
-        const rightStr = input.substring(matchedStr.length);
-
-        if (rightStr && !this.isRightStrSafeForPhoneNumber(rightStr)) {
-            return null;
-        }
-
-        if (rightStr && (this._aThetRegExp.test(rightStr) || this._diacriticsRegExp.test(rightStr))) {
-            return null;
-        }
 
         const extractInfo = this.getPhoneNumberExtractInfo(matchedStr);
         if (extractInfo == null) {
             return null;
         }
 
-        if (extractInfo.spaceIncluded && rightStr.length > 1 && (this._containSpaceRegExp.test(rightStr[0]))) {
-            const rightStr2 = rightStr.substring(1);
-            if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                return null;
-            }
+        const rightStr = input.substring(matchedStr.length);
+        if (rightStr && !this.checkRightStrSafeForDateAndPhoneNumber(rightStr, extractInfo)) {
+            return null;
         }
 
         const fragment: TextFragment = {
@@ -589,7 +545,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         const diacriticsOrAThetMatchedStr = diacriticsOrAThetMatch[0];
         const spaceIncluded = diacriticsOrAThetMatch[1] ? true : false;
         const diacriticsOrAThetNormalizedStr = spaceIncluded ?
-            diacriticsOrAThetMatchedStr.replace(this._containSpaceRegExp, '') : diacriticsOrAThetMatchedStr;
+            diacriticsOrAThetMatchedStr.replace(this._containsSpaceRegExp, '') : diacriticsOrAThetMatchedStr;
 
         let ancientMeasureWords: string[] | undefined;
 
@@ -711,7 +667,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 prevIsDigit = true;
                 prevIsSpace = false;
                 prevIsSeparator = false;
-            } else if (this._containSpaceRegExp.test(c)) {
+            } else if (this._containsSpaceRegExp.test(c)) {
                 if (prevIsSpace) {
                     return null;
                 }
@@ -759,6 +715,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
         }
 
         if (extractInfo.dateSeparator != null) {
+            extractInfo.separatorIncluded = true;
+
             const dParts = extractInfo.normalizedStr.split(extractInfo.dateSeparator);
             if (dParts.length !== 3) {
                 return null;
@@ -823,7 +781,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.normalizeReason.changeU104EToU1044 = true;
                 }
-            } else if (this._containSpaceRegExp.test(c)) {
+            } else if (this._containsSpaceRegExp.test(c)) {
                 extractInfo.spaceIncluded = true;
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 extractInfo.normalizeReason.removeSpace = true;
@@ -848,6 +806,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
+        extractInfo.separatorIncluded = true;
+
         return extractInfo;
     }
 
@@ -869,6 +829,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
         let possibleDigitCount = 0;
         let dotCount = 0;
         let slashCount = 0;
+        let separatorIncluded = false;
 
         if (curStr[0] === '+' || curStr[0] === '\uFF0B') {
             extractInfo.normalizedStr += '+';
@@ -930,7 +891,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 prevIsDigit = false;
                 prevIsSpace = false;
                 digitOrNumberGroup = false;
-            } else if (this._containSpaceRegExp.test(c)) {
+                separatorIncluded = true;
+            } else if (this._containsSpaceRegExp.test(c)) {
                 if (prevIsSpace) {
                     return null;
                 }
@@ -987,6 +949,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
                 prevIsDigit = false;
                 prevIsSpace = false;
+                separatorIncluded = true;
             }
 
             startOfString = false;
@@ -998,6 +961,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (extractInfo.normalizedStr[0] === '*' && extractInfo.normalizedStr[extractInfo.normalizedStr.length - 1] !== '#') {
             return null;
+        }
+
+        if (separatorIncluded) {
+            extractInfo.separatorIncluded = true;
         }
 
         if (digitOrNumberGroup) {
@@ -1074,7 +1041,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 prevIsDigit = true;
                 prevIsSpace = false;
                 prevIsSeparator = false;
-            } else if (this._containSpaceRegExp.test(c)) {
+            } else if (this._containsSpaceRegExp.test(c)) {
                 if (prevIsSpace) {
                     return null;
                 }
@@ -1128,6 +1095,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
         if (digitSeparator) {
             extractInfo.digitSeparator = digitSeparator;
+            extractInfo.separatorIncluded = true;
         }
 
         return extractInfo;
@@ -1167,7 +1135,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
                 }
 
                 extractInfo.normalizedStr += c;
-            } else if (this._containSpaceRegExp.test(c)) {
+            } else if (this._containsSpaceRegExp.test(c)) {
                 extractInfo.spaceIncluded = true;
                 extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                 extractInfo.normalizeReason.removeSpace = true;
@@ -1206,28 +1174,39 @@ export class NumberGroupTextExtractor implements TextExtractor {
         return false;
     }
 
-    private isRightStrSafeForPhoneNumber(rightStr: string): boolean {
+    private checkRightStrSafeForDateAndPhoneNumber(rightStr: string, extractInfo: ExtractInfo): boolean {
         if (this.checkRightStrForPossibleDigit(rightStr)) {
             return false;
         }
 
-        const cp = rightStr.codePointAt(0);
-        if (!cp) {
-            return true;
-        }
-
-        // # $ % + @ ＋
-        if ((cp >= 0x0023 && cp <= 0x0025) || cp === 0x002B || cp === 0x0040 || cp === 0xFF0B) {
+        if ((rightStr.length > 1 && this._aThetRegExp.test(rightStr)) || this._diacriticsRegExp.test(rightStr)) {
             return false;
         }
 
-        if (rightStr.length > 1 && ((cp >= 0x0021 && cp <= 0x002F) ||
-            cp === 0x003A || (cp >= 0x003C && cp <= 0x003F) ||
-            (cp >= 0x005B && cp <= 0x005F) || cp === 0x0060 ||
-            (cp >= 0x007B && cp <= 0x007E))) {
-            const rightStr2 = rightStr.substring(1);
-            if (this.checkRightStrForPossibleDigit(rightStr2)) {
-                return false;
+        if ((rightStr[0] === '$' || rightStr[0] === '%') &&
+            (!extractInfo.separatorIncluded || extractInfo.spaceIncluded || rightStr.length === 1)) {
+            return false;
+        }
+
+        if (rightStr.length > 1) {
+            let shouldCheckRightStr2ForPossibleDigit = false;
+            if ((!extractInfo.separatorIncluded || extractInfo.spaceIncluded) && this._containsSpaceRegExp.test(rightStr[0])) {
+                shouldCheckRightStr2ForPossibleDigit = true;
+            } else if (this._dashRegExp.test(rightStr[0]) || this._dotRegExp.test(rightStr[0]) || this._slashRegExp.test(rightStr[0])) {
+                shouldCheckRightStr2ForPossibleDigit = true;
+            } else if (rightStr[0] === '@') {
+                if (this._possibleDomainNameSuffixRegExp.test(rightStr.substring(1))) {
+                    return false;
+                }
+
+                shouldCheckRightStr2ForPossibleDigit = true;
+            }
+
+            if (shouldCheckRightStr2ForPossibleDigit) {
+                const rightStr2 = rightStr.substring(1);
+                if (this.checkRightStrForPossibleDigit(rightStr2) && !this._dtTimeRegExp.test(rightStr2)) {
+                    return false;
+                }
             }
         }
 
