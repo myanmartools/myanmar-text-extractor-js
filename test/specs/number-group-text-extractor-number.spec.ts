@@ -204,7 +204,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၀၀',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -219,7 +220,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၀၀၀',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -234,7 +236,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -249,7 +252,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '⎖'
+                digitSeparator: '⎖',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -265,7 +269,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '٬'
+                digitSeparator: '٬',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -280,7 +285,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: "'"
+                digitSeparator: "'",
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -295,7 +301,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -310,7 +317,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -326,7 +334,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 possiblePhoneNumber: true,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                spaceIncluded: true
+                spaceIncluded: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -342,7 +351,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 possiblePhoneNumber: true,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '_'
+                digitSeparator: '_',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -361,6 +371,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitStr: '၁၀၀၀',
                 digitSeparator: ',',
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -380,6 +391,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitStr: '၁၀၀၀',
                 digitSeparator: ',',
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -399,6 +411,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitStr: '၁၀၀၀',
                 digitSeparator: ',',
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -417,6 +430,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitOrNumberGroup: true,
                 digitStr: '၁၉၄၀',
                 digitSeparator: ',',
+                separatorIncluded: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
                     changeU101DToU1040: true
@@ -436,6 +450,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitOrNumberGroup: true,
                 digitStr: '၁၉၄၀.၀၄',
                 digitSeparator: ',',
+                separatorIncluded: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
                     changeU101DToU1040: true
@@ -492,7 +507,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၉၉၉.၀၂',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -507,7 +523,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -522,7 +539,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: '⎖'
+                digitSeparator: '⎖',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -537,7 +555,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: '٬'
+                digitSeparator: '٬',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -552,7 +571,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: "'"
+                digitSeparator: "'",
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -567,7 +587,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: '_'
+                digitSeparator: '_',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -582,7 +603,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                spaceIncluded: true
+                spaceIncluded: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -597,7 +619,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -612,7 +635,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ','
+                digitSeparator: ',',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -680,6 +704,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitOrNumberGroup: true,
                 digitStr: '၁၂၃၄၅၆၇.၈၉',
                 digitSeparator: ',',
+                separatorIncluded: true,
                 normalizeReason: {
                     normalizeDecimalPoint: true
                 }
