@@ -16,7 +16,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -29,7 +30,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -42,7 +44,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -55,7 +58,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -68,7 +72,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -81,7 +86,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -95,7 +101,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -111,7 +118,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -125,7 +133,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -139,7 +148,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -153,7 +163,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -167,7 +178,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -181,7 +193,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -195,7 +208,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -209,7 +223,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -223,7 +238,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -237,7 +253,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -251,7 +268,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -265,7 +283,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -279,7 +298,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -293,7 +313,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -307,7 +328,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -321,7 +343,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -335,7 +358,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -349,7 +373,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -363,7 +388,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅၉',
                 normalizedStr: '၂၃:၅၉:၅၉',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -377,7 +403,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅',
                 normalizedStr: '၂၃:၅၉:၅',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -391,7 +418,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၂၃:၅၉:၅',
                 normalizedStr: '၂၃:၅၉:၅',
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -407,6 +435,7 @@ describe('NumberGroupTextExtractor#time', () => {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
                 possibleTime: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     normalizeColon: true
                 }
@@ -423,6 +452,7 @@ describe('NumberGroupTextExtractor#time', () => {
                 matchedStr: input,
                 normalizedStr: '၁၂:၅၉:၅၉',
                 possibleTime: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     normalizeColon: true
                 }
@@ -440,6 +470,7 @@ describe('NumberGroupTextExtractor#time', () => {
                 normalizedStr: '၁၂:၅၉:၅၉',
                 possibleTime: true,
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -457,6 +488,7 @@ describe('NumberGroupTextExtractor#time', () => {
                 normalizedStr: '၁၂:၅၉:၅၉',
                 possibleTime: true,
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -473,6 +505,7 @@ describe('NumberGroupTextExtractor#time', () => {
                 matchedStr: input,
                 normalizedStr: '၂၀:၄၉:၅၉',
                 possibleTime: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true
@@ -492,7 +525,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -506,7 +540,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -520,7 +555,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possibleTime: true
+                possibleTime: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
