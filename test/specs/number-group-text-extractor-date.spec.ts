@@ -19,7 +19,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -35,7 +36,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -51,7 +53,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd/MM/yyyy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -67,7 +70,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd.MM.yyyy',
-                dateSeparator: '.'
+                dateSeparator: '.',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -83,7 +87,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd_MM_yyyy',
-                dateSeparator: '_'
+                dateSeparator: '_',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -99,7 +104,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd၊MM၊yyyy',
-                dateSeparator: '၊'
+                dateSeparator: '၊',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -115,7 +121,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd~MM~yyyy',
-                dateSeparator: '~'
+                dateSeparator: '~',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -132,7 +139,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 possibleDate: true,
                 spaceIncluded: true,
                 dateFormat: 'dd MM yyyy',
-                dateSeparator: ' '
+                dateSeparator: ' ',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -148,7 +156,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'd/M/yyyy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -164,7 +173,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'dd/MM/yy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -180,7 +190,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'd/M/yy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -196,7 +207,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -212,7 +224,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -228,7 +241,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -244,7 +258,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -260,7 +275,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -276,7 +292,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -292,7 +309,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၀၁-၀၁-၂၀၂၀',
                 possibleDate: true,
                 dateFormat: 'dd-MM-yyyy',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -309,7 +327,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 possibleDate: true,
                 dateFormat: 'dd MM yyyy',
                 dateSeparator: ' ',
-                spaceIncluded: true
+                spaceIncluded: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -331,7 +350,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     normalizeSpace: true
                 },
                 dateFormat: 'dd MM yyyy',
-                dateSeparator: ' '
+                dateSeparator: ' ',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -351,7 +371,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     removeSpace: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
-                dateSeparator: '၊'
+                dateSeparator: '၊',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -371,7 +392,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     removeSpace: true
                 },
                 dateFormat: 'dd/MM/yyyy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -390,7 +412,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     changeU101DToU1040: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
-                dateSeparator: '၊'
+                dateSeparator: '၊',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -409,7 +432,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     changeU104EToU1044: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
-                dateSeparator: '၊'
+                dateSeparator: '၊',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -429,7 +453,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     changeU101DToU1040: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
-                dateSeparator: '၊'
+                dateSeparator: '၊',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -449,7 +474,8 @@ describe('NumberGroupTextExtractor#date', () => {
                     normalizeSpace: true
                 },
                 dateFormat: 'dd MM yyyy',
-                dateSeparator: ' '
+                dateSeparator: ' ',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -467,7 +493,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'yyyy/MM/dd',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -483,7 +510,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'yyyy-MM-dd',
-                dateSeparator: '-'
+                dateSeparator: '-',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -499,7 +527,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'yyyy/M/d',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -516,12 +545,15 @@ describe('NumberGroupTextExtractor#date', () => {
                 possibleDate: true,
                 spaceIncluded: true,
                 dateFormat: 'yyyy MM dd',
-                dateSeparator: ' '
+                dateSeparator: ' ',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+    });
 
+    describe('iso-no-separator', () => {
         // yyyyMMdd
         it(String.raw`should return fragment when input '၂၀၂၀၀၁၃၁'`, () => {
             const input = '၂၀၂၀၀၁၃၁';
@@ -532,10 +564,10 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'yyyyMMdd',
-                digitOrNumberGroup: true,
-                digitStr: input,
                 possiblePhoneNumber: true,
-                phoneNumberStr: input
+                phoneNumberStr: input,
+                digitOrNumberGroup: true,
+                digitStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -553,7 +585,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'MM/dd/yyyy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -569,7 +602,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'M/d/yyyy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -585,7 +619,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'MM/dd/yy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -601,7 +636,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: input,
                 possibleDate: true,
                 dateFormat: 'M/d/yy',
-                dateSeparator: '/'
+                dateSeparator: '/',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
