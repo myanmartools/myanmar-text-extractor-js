@@ -4,6 +4,7 @@ export interface ExtractInfo {
     matchedStr: string;
     normalizedStr: string;
     spaceIncluded?: boolean;
+    separatorIncluded?: boolean;
     normalizeReason?: NormalizeReason;
     digitOrNumberGroup?: boolean;
     digitStr?: string;
