@@ -294,7 +294,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                spaceIncluded: true
+                spaceIncluded: true,
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);

@@ -478,7 +478,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 digitOrNumberGroup: true,
-                digitStr: '၁.၂'
+                digitStr: '၁.၂',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -492,7 +493,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 digitOrNumberGroup: true,
-                digitStr: '၁၀.၀၂'
+                digitStr: '၁၀.၀၂',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -650,7 +652,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 digitOrNumberGroup: true,
-                digitStr: '၃.၁၄၁၅၉၂၆၅၃၅'
+                digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
+                separatorIncluded: true
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -668,6 +671,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitOrNumberGroup: true,
                 digitStr: '၁.၂',
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -686,6 +690,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitOrNumberGroup: true,
                 digitStr: '၁.၂',
                 spaceIncluded: true,
+                separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
                 }
@@ -757,6 +762,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 digitOrNumberGroup: true,
                 digitStr: '၁၉၂၀',
                 digitSeparator: ',',
+                separatorIncluded: true,
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
             };
