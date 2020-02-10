@@ -36,15 +36,15 @@ export interface TextFragment {
     /**
      * True if digit or number group.
      */
-    digitOrNumberGroup?: boolean;
+    decimal?: boolean;
     /**
      * Digit or number group string.
      */
-    digitStr?: string;
+    decimalStr?: string;
     /**
      * Digit or thousand separator.
      */
-    digitSeparator?: string;
+    decimalSeparator?: string;
     /**
      * True if possible date.
      */
