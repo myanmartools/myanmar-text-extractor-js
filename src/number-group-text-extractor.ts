@@ -989,8 +989,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
             extractInfo.decimal = true;
             extractInfo.decimalStr = decimalExtractInfo.decimalStr;
-            if (decimalExtractInfo.decimalSeparator) {
-                extractInfo.decimalSeparator = decimalExtractInfo.decimalSeparator;
+            if (decimalExtractInfo.thousandSeparator) {
+                extractInfo.thousandSeparator = decimalExtractInfo.thousandSeparator;
             }
         }
 
@@ -1077,12 +1077,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
                         extractInfo.normalizeReason.normalizeDecimalPoint = true;
                     }
                 } else {
-                    if (extractInfo.decimalSeparator && c !== extractInfo.decimalSeparator) {
+                    if (extractInfo.thousandSeparator && c !== extractInfo.thousandSeparator) {
                         return null;
                     }
 
                     extractInfo.normalizedStr += c;
-                    extractInfo.decimalSeparator = c;
+                    extractInfo.thousandSeparator = c;
                 }
 
                 extractInfo.separatorIncluded = true;
