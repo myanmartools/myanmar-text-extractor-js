@@ -6,9 +6,9 @@ export interface ExtractInfo {
     spaceIncluded?: boolean;
     separatorIncluded?: boolean;
     normalizeReason?: NormalizeReason;
-    digitOrNumberGroup?: boolean;
-    digitStr?: string;
-    digitSeparator?: string;
+    decimal?: boolean;
+    decimalStr?: string;
+    decimalSeparator?: string;
     possibleDate?: boolean;
     dateSeparator?: string;
     dateFormat?: string;
