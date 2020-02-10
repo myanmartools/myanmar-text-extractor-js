@@ -1146,19 +1146,11 @@ export class NumberGroupTextExtractor implements TextExtractor {
     private hasCorrectClosingBracket(openingBracketCp: number, str: string): boolean {
         for (const c of str) {
             const cp = c.codePointAt(0) as number;
-            if (cp === 0x0029 && openingBracketCp === 0x0028) {
+            if ((cp === 0x0029 || cp === 0xFF09) && (openingBracketCp === 0x0028 || openingBracketCp === 0xFF08)) {
                 return true;
             }
 
-            if (cp === 0xFF09 && openingBracketCp === 0xFF08) {
-                return true;
-            }
-
-            if (cp === 0x005D && openingBracketCp === 0x005B) {
-                return true;
-            }
-
-            if (cp === 0xFF3D && openingBracketCp === 0xFF3B) {
+            if ((cp === 0x005D || cp === 0xFF3D) && (openingBracketCp === 0x005B || openingBracketCp === 0xFF3B)) {
                 return true;
             }
         }
