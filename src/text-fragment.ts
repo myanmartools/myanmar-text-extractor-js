@@ -44,7 +44,7 @@ export interface TextFragment {
     /**
      * Digit or thousand separator.
      */
-    decimalSeparator?: string;
+    thousandSeparator?: string;
     /**
      * True if possible date.
      */
