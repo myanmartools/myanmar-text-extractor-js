@@ -208,7 +208,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၀၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -224,7 +224,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၀၀၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -240,7 +240,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -256,7 +256,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: '⎖',
+                thousandSeparator: '⎖',
                 separatorIncluded: true
             };
 
@@ -273,7 +273,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: '٬',
+                thousandSeparator: '٬',
                 separatorIncluded: true
             };
 
@@ -289,7 +289,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: "'",
+                thousandSeparator: "'",
                 separatorIncluded: true
             };
 
@@ -305,7 +305,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -321,7 +321,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -357,7 +357,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 decimalStr: '၁၂၃၄၅၆၇',
                 possiblePhoneNumber: true,
                 phoneNumberStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: '_',
+                thousandSeparator: '_',
                 separatorIncluded: true
             };
 
@@ -375,7 +375,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁,၀၀၀',
                 decimal: true,
                 decimalStr: '၁၀၀၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -395,7 +395,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁,၀၀၀',
                 decimal: true,
                 decimalStr: '၁၀၀၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -415,7 +415,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁,၀၀၀',
                 decimal: true,
                 decimalStr: '၁၀၀၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -435,7 +435,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁,၉၄၀',
                 decimal: true,
                 decimalStr: '၁၉၄၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
@@ -455,7 +455,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁,၉၄၀.၀၄',
                 decimal: true,
                 decimalStr: '၁၉၄၀.၀၄',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
@@ -545,7 +545,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၉၉၉.၀၂',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -561,7 +561,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -577,7 +577,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: '⎖',
+                thousandSeparator: '⎖',
                 separatorIncluded: true
             };
 
@@ -593,7 +593,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: '٬',
+                thousandSeparator: '٬',
                 separatorIncluded: true
             };
 
@@ -609,7 +609,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: "'",
+                thousandSeparator: "'",
                 separatorIncluded: true
             };
 
@@ -625,7 +625,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: '_',
+                thousandSeparator: '_',
                 possiblePhoneNumber: true,
                 phoneNumberStr: '၁၂၃၄၅၆၇၈၉',
                 separatorIncluded: true
@@ -661,7 +661,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -677,7 +677,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -748,7 +748,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇.၈၉',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
                     normalizeDecimalPoint: true
@@ -801,7 +801,7 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: input,
                 decimal: true,
                 decimalStr: '၁၉၂၀',
-                decimalSeparator: ',',
+                thousandSeparator: ',',
                 separatorIncluded: true,
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']

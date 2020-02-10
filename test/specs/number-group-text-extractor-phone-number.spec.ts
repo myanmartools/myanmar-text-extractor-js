@@ -383,6 +383,38 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '၀၁.၁၂၃၄၅၆'`, () => {
+            const input = '၀၁.၁၂၃၄၅၆';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
+                decimal: true,
+                decimalStr: '၀၁.၁၂၃၄၅၆',
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၀၁.၁၂၃.၄၅၆'`, () => {
+            const input = '၀၁.၁၂၃.၄၅၆';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return fragment when input '၀၁-၁၂၃၄၅၆'`, () => {
             const input = '၀၁-၁၂၃၄၅၆';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
@@ -470,7 +502,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 phoneNumberStr: '၁၂၃၄၅၆၇',
                 decimal: true,
                 decimalStr: '၁၂၃၄၅၆၇',
-                decimalSeparator: '_',
+                thousandSeparator: '_',
                 separatorIncluded: true
             };
 
