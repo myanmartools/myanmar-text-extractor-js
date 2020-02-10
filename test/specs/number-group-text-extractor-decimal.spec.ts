@@ -883,6 +883,28 @@ describe('NumberGroupTextExtractor#decimal', () => {
 
         // Normalize
         //
+        it(String.raw`should return fragment when input '၁\u00A0၂၃၄\u00A0၅၆၇.၈၉'`, () => {
+            const input = '၁\u00A0၂၃၄\u00A0၅၆၇.၈၉';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: '၁ ၂၃၄ ၅၆၇.၈၉',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၁၂၃၄၅၆၇၈၉',
+                spaceIncluded: true,
+                separatorIncluded: true,
+                normalizeReason: {
+                    normalizeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+
         it(String.raw`should return fragment when input '၁,၉၉၉ . ၀၂'`, () => {
             const input = '၁,၉၉၉ . ၀၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
