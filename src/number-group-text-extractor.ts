@@ -53,7 +53,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Number group
     private readonly _decimalPointWithSpaceGroup = `(?:[${this._space}]?[${this._dot}${this._dotExt}][${this._space}]?[${this._possibleDigit}]+)`;
     private readonly _decimalPointGroup = `(?:[${this._dot}${this._dotExt}][${this._possibleDigit}]+)`;
-    private readonly _numberGroupWithSeparatorRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:(?:(?:[${this._space}]?[${this._thousandSeparator}}][${this._space}]?)|(?:[${this._space}]))[${this._possibleDigit}]{2,4})*${this._decimalPointWithSpaceGroup}?`);
+    private readonly _numberGroupWithSeparatorRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:(?:(?:[${this._space}]?[${this._thousandSeparator}}][${this._space}]?)|(?:[${this._space}]))[${this._possibleDigit}]{2,4})+${this._decimalPointWithSpaceGroup}?`);
     private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]+${this._decimalPointGroup}?`);
 
     // Number group starts with 'ဝ' / '၎'
