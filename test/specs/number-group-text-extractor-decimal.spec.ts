@@ -1441,8 +1441,8 @@ describe('NumberGroupTextExtractor#decimal', () => {
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
 
-        it(String.raw`should NOT return ancient fragment when input '(၁\uFF09၀ိ'`, () => {
-            const input = '(၁\uFF09၀ိ';
+        it(String.raw`should NOT return ancient fragment when input '(၁]၀ိ'`, () => {
+            const input = '(၁]၀ိ';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.ancientMeasureWords).toBeTruthy();
         });
