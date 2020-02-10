@@ -8,7 +8,7 @@ export interface ExtractInfo {
     normalizeReason?: NormalizeReason;
     decimal?: boolean;
     decimalStr?: string;
-    decimalSeparator?: string;
+    thousandSeparator?: string;
     possibleDate?: boolean;
     dateSeparator?: string;
     dateFormat?: string;
