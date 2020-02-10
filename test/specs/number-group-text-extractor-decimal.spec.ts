@@ -1,14 +1,14 @@
 import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
 import { FragmentType, TextFragment } from '../../src/text-fragment';
 
-describe('NumberGroupTextExtractor#number', () => {
+describe('NumberGroupTextExtractor#decimal', () => {
     let extractor: NumberGroupTextExtractor;
 
     beforeEach(() => {
         extractor = new NumberGroupTextExtractor();
     });
 
-    describe('number-group', () => {
+    describe('decimal', () => {
         it(String.raw`should return fragment when input '၀၉'`, () => {
             const input = '၀၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
@@ -69,6 +69,118 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '၁၀၀၀၀'`, () => {
+            const input = '၁၀၀၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀၀၀၀'`, () => {
+            const input = '၁၀၀၀၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀၀၀၀၀'`, () => {
+            const input = '၁၀၀၀၀၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀၀၀၀၀၀'`, () => {
+            const input = '၁၀၀၀၀၀၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀၀၀၀၀၀၀'`, () => {
+            const input = '၁၀၀၀၀၀၀၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀၀၀၀၀၀၀၀'`, () => {
+            const input = '၁၀၀၀၀၀၀၀၀၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၉၈၇၆၅၄၃၂၁၀'`, () => {
+            const input = '၉၈၇၆၅၄၃၂၁၀';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Ends with ၊
         it(String.raw`should return fragment when input '၁၊'`, () => {
             const input = '၁၊';
@@ -79,6 +191,38 @@ describe('NumberGroupTextExtractor#number', () => {
                 normalizedStr: '၁',
                 decimal: true,
                 decimalStr: '၁'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with .
+        it(String.raw`should return fragment when input '၁.'`, () => {
+            const input = '၁.';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၁',
+                normalizedStr: '၁',
+                decimal: true,
+                decimalStr: '၁'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with .
+        it(String.raw`should return fragment when input '၁၀၀၀၀၀၀၀.'`, () => {
+            const input = '၁၀၀၀၀၀၀၀.';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၁၀၀၀၀၀၀၀',
+                normalizedStr: '၁၀၀၀၀၀၀၀',
+                decimal: true,
+                decimalStr: '၁၀၀၀၀၀၀၀',
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၁၀၀၀၀၀၀၀'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -198,7 +342,7 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
-    describe('number-group-with-separator', () => {
+    describe('decimal-with-separator', () => {
         it(String.raw`should return fragment when input '၁,၀၀'`, () => {
             const input = '၁,၀၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
@@ -496,7 +640,7 @@ describe('NumberGroupTextExtractor#number', () => {
         });
     });
 
-    describe('number-group-with-decimal-point', () => {
+    describe('decimal-with-point', () => {
         it(String.raw`should return fragment when input '၁.၂'`, () => {
             const input = '၁.၂';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
