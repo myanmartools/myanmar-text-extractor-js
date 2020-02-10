@@ -386,6 +386,27 @@ describe('NumberGroupTextExtractor#number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '၁\u00A0၂၃၄\u00A0၅၆၇'`, () => {
+            const input = '၁\u00A0၂၃၄\u00A0၅၆၇';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: '၁ ၂၃၄ ၅၆၇',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၁၂၃၄၅၆၇',
+                spaceIncluded: true,
+                separatorIncluded: true,
+                normalizeReason: {
+                    normalizeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return fragment when input '၁,\u200B၀၀၀'`, () => {
             const input = '၁,\u200B၀၀၀';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
