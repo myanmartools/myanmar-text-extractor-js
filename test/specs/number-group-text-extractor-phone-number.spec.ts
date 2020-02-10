@@ -86,6 +86,21 @@ describe('NumberGroupTextExtractor#phone-number', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '+（၉၅)၉' (\uFF08)`, () => {
+            const input = '+（၉၅)၉';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return fragment when input '+[၉၅] ၉'`, () => {
             const input = '+[၉၅] ၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
