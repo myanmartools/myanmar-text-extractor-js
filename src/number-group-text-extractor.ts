@@ -1227,13 +1227,8 @@ export class NumberGroupTextExtractor implements TextExtractor {
 
     private matchNumberGroup(input: string): RegExpMatchArray | null {
         let m = input.match(this._numberGroupWithSeparatorRegExp);
-        if (m == null || m[0].length < input.length) {
-            const m2 = input.match(this._numberGroupRegExp);
-            if (m == null) {
-                m = m2;
-            } else if (m2 != null && m2[0].length > m[0].length) {
-                m = m2;
-            }
+        if (m == null) {
+            m = input.match(this._numberGroupRegExp);
         }
 
         return m;
