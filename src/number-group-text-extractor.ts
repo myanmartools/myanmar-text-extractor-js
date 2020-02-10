@@ -961,11 +961,7 @@ export class NumberGroupTextExtractor implements TextExtractor {
             return null;
         }
 
-        if (slashCount === 1 && extractInfo.normalizedStr[0] !== '+' && extractInfo.normalizedStr.length < 8) {
-            return null;
-        }
-
-        if (dotCount === 1 && extractInfo.normalizedStr[0] !== '+' && extractInfo.normalizedStr[0] !== '\u1040' &&
+        if ((dotCount === 1 || slashCount === 1) && extractInfo.normalizedStr[0] !== '+' && extractInfo.normalizedStr[0] !== '\u1040' &&
             extractInfo.phoneNumberStr && extractInfo.normalizedStr.length === extractInfo.phoneNumberStr.length + 1) {
             return null;
         }
