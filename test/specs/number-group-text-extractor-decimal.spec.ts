@@ -1433,6 +1433,22 @@ describe('NumberGroupTextExtractor#decimal', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '(၁）၀ိ' (\uFF09)`, () => {
+            const input = '(၁）၀ိ';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: '၁၀',
+                ancientWrittenForm: true,
+                ancientMeasureWords: ['ဆယ်သား']
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Not
         //
         it(String.raw`should NOT return ancient fragment when input '(၁)၀ို'`, () => {
