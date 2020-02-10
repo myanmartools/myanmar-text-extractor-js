@@ -16,7 +16,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possiblePhoneNumber: true
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -30,6 +31,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -45,6 +47,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -60,6 +63,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 separatorIncluded: true
             };
 
@@ -74,6 +78,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -89,6 +94,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -104,6 +110,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 separatorIncluded: true
             };
 
@@ -118,6 +125,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -133,6 +141,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -148,6 +157,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉၁၂၃၄၅၆၇၈၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -163,8 +173,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: input
+                phoneNumberStr: input,
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -178,6 +189,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၀၉၅၉',
                 separatorIncluded: true
             };
 
@@ -194,6 +206,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '+၉၅၉',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 normalizeReason: {
                     normalizePlusSign: true
                 }
@@ -210,6 +223,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '+၄၀၁၂၃၄၅၆',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၄၀၁၂၃၄၅၆',
                 spaceIncluded: true,
                 normalizeReason: {
                     changeU101DToU1040: true,
@@ -229,6 +243,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '+၉၅ ၉',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -247,6 +262,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '+၉၅၉',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '+၉၅၉',
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
@@ -266,6 +282,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၉၁',
                 separatorIncluded: true
             };
 
@@ -280,6 +297,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၉၁၂၃၄၅၆',
                 separatorIncluded: true
             };
 
@@ -294,6 +312,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၉၁၂၃၄၅၆',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -309,6 +328,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၉၁၂၃၄၅၆',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -324,6 +344,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၉၁၂၃၄၅၆',
                 separatorIncluded: true
             };
 
@@ -338,8 +359,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: input
+                phoneNumberStr: input,
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -353,8 +375,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: input
+                phoneNumberStr: input,
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -368,6 +391,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
                 separatorIncluded: true
             };
 
@@ -382,6 +406,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
                 separatorIncluded: true
             };
 
@@ -396,6 +421,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
                 separatorIncluded: true
             };
 
@@ -410,6 +436,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
                 separatorIncluded: true
             };
 
@@ -424,6 +451,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၁၂၃၄၅၆',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -439,9 +467,10 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '_',
+                phoneNumberStr: '၁၂၃၄၅၆၇',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: '_',
                 separatorIncluded: true
             };
 
@@ -456,8 +485,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: input,
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
+                phoneNumberStr: '၁၂၃၄၅၆၇',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -474,8 +504,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '၉၉၀',
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: '၉၉၀',
+                phoneNumberStr: '၉၉၀',
+                decimal: true,
+                decimalStr: '၉၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true
                 }
@@ -492,8 +523,9 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: input,
                 normalizedStr: '၄၉၉၀',
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: '၄၉၉၀',
+                phoneNumberStr: '၄၉၉၀',
+                decimal: true,
+                decimalStr: '၄၉၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true
@@ -512,7 +544,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                possiblePhoneNumber: true
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -525,7 +558,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '*၁၂၃#',
                 normalizedStr: '*၁၂၃#',
-                possiblePhoneNumber: true
+                possiblePhoneNumber: true,
+                phoneNumberStr: '*၁၂၃#',
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -539,6 +573,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 matchedStr: '*၁၂၃ ၄၅၆#',
                 normalizedStr: '*၁၂၃ ၄၅၆#',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '*၁၂၃၄၅၆#',
                 spaceIncluded: true,
                 separatorIncluded: true
             };

@@ -16,8 +16,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -30,8 +30,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -44,9 +44,10 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input,
-                possiblePhoneNumber: true
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -59,9 +60,10 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input,
-                possiblePhoneNumber: true
+                decimal: true,
+                decimalStr: input,
+                possiblePhoneNumber: true,
+                phoneNumberStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -75,8 +77,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၁',
                 normalizedStr: '၁',
-                digitOrNumberGroup: true,
-                digitStr: '၁'
+                decimal: true,
+                decimalStr: '၁'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -90,8 +92,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၁၀',
                 normalizedStr: '၁၀',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀'
+                decimal: true,
+                decimalStr: '၁၀'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -105,8 +107,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၁',
                 normalizedStr: '၁',
-                digitOrNumberGroup: true,
-                digitStr: '၁'
+                decimal: true,
+                decimalStr: '၁'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -121,8 +123,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁၄',
-                digitOrNumberGroup: true,
-                digitStr: '၁၄',
+                decimal: true,
+                decimalStr: '၁၄',
                 normalizeReason: {
                     changeU104EToU1044: true
                 }
@@ -138,9 +140,10 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁၉၀',
-                digitOrNumberGroup: true,
-                digitStr: '၁၉၀',
+                decimal: true,
+                decimalStr: '၁၉၀',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၁၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true
                 }
@@ -156,9 +159,10 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၀၁၉',
-                digitOrNumberGroup: true,
-                digitStr: '၀၁၉',
+                decimal: true,
+                decimalStr: '၀၁၉',
                 possiblePhoneNumber: true,
+                phoneNumberStr: '၀၁၉',
                 normalizeReason: {
                     changeU101DToU1040: true
                 }
@@ -202,9 +206,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၀၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၀၀',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -218,9 +222,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၀၀၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၀၀၀',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -234,9 +238,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -250,9 +254,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '⎖',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: '⎖',
                 separatorIncluded: true
             };
 
@@ -267,9 +271,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '٬',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: '٬',
                 separatorIncluded: true
             };
 
@@ -283,9 +287,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: "'",
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: "'",
                 separatorIncluded: true
             };
 
@@ -299,9 +303,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -315,9 +319,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -331,9 +335,10 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
+                phoneNumberStr: '၁၂၃၄၅၆၇',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -348,10 +353,11 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
                 possiblePhoneNumber: true,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇',
-                digitSeparator: '_',
+                phoneNumberStr: '၁၂၃၄၅၆၇',
+                decimalSeparator: '_',
                 separatorIncluded: true
             };
 
@@ -367,9 +373,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၀၀၀',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀၀၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၀၀၀',
+                decimalSeparator: ',',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -387,9 +393,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၀၀၀',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀၀၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၀၀၀',
+                decimalSeparator: ',',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -407,9 +413,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၀၀၀',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀၀၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၀၀၀',
+                decimalSeparator: ',',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -427,9 +433,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၉၄၀',
-                digitOrNumberGroup: true,
-                digitStr: '၁၉၄၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၉၄၀',
+                decimalSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
@@ -447,9 +453,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၉၄၀.၀၄',
-                digitOrNumberGroup: true,
-                digitStr: '၁၉၄၀.၀၄',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၉၄၀.၀၄',
+                decimalSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
                     changeU104EToU1044: true,
@@ -477,8 +483,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁.၂',
+                decimal: true,
+                decimalStr: input,
                 separatorIncluded: true
             };
 
@@ -492,8 +498,38 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၀.၀၂',
+                decimal: true,
+                decimalStr: input,
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀.၀၂'`, () => {
+            const input = '၁၀၀.၀၂';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁၀၀၀.၀၂'`, () => {
+            const input = '၁၀၀၀.၀၂';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: input,
                 separatorIncluded: true
             };
 
@@ -507,9 +543,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၉၉၉.၀၂',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၉၉၉.၀၂',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -523,9 +559,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -539,9 +575,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: '⎖',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: '⎖',
                 separatorIncluded: true
             };
 
@@ -555,9 +591,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: '٬',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: '٬',
                 separatorIncluded: true
             };
 
@@ -571,9 +607,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: "'",
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: "'",
                 separatorIncluded: true
             };
 
@@ -587,9 +623,11 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: '_',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: '_',
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၁၂၃၄၅၆၇၈၉',
                 separatorIncluded: true
             };
 
@@ -603,8 +641,10 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၁၂၃၄၅၆၇၈၉',
                 spaceIncluded: true,
                 separatorIncluded: true
             };
@@ -619,9 +659,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -635,9 +675,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: ',',
                 separatorIncluded: true
             };
 
@@ -651,8 +691,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၃.၁၄၁၅၉၂၆၅၃၅',
+                decimal: true,
+                decimalStr: '၃.၁၄၁၅၉၂၆၅၃၅',
                 separatorIncluded: true
             };
 
@@ -668,8 +708,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁.၂',
-                digitOrNumberGroup: true,
-                digitStr: '၁.၂',
+                decimal: true,
+                decimalStr: '၁.၂',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -687,8 +727,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁.၂',
-                digitOrNumberGroup: true,
-                digitStr: '၁.၂',
+                decimal: true,
+                decimalStr: '၁.၂',
                 spaceIncluded: true,
                 separatorIncluded: true,
                 normalizeReason: {
@@ -706,9 +746,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁,၂၃၄,၅၆၇.၈၉',
-                digitOrNumberGroup: true,
-                digitStr: '၁၂၃၄၅၆၇.၈၉',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇.၈၉',
+                decimalSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
                     normalizeDecimalPoint: true
@@ -727,8 +767,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
             };
@@ -743,8 +783,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၀',
+                decimal: true,
+                decimalStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
             };
@@ -759,9 +799,9 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၉၂၀',
-                digitSeparator: ',',
+                decimal: true,
+                decimalStr: '၁၉၂၀',
+                decimalSeparator: ',',
                 separatorIncluded: true,
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['အင်္ဂါ']
@@ -777,8 +817,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['တောင်း', 'တင်း']
             };
@@ -795,8 +835,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '(၁)၀ိ',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀',
+                decimal: true,
+                decimalStr: '၁၀',
                 ancientWrittenForm: true,
                 spaceIncluded: true,
                 ancientMeasureWords: ['ဆယ်သား'],
@@ -815,8 +855,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '(၄)၀ိ',
-                digitOrNumberGroup: true,
-                digitStr: '၄၀',
+                decimal: true,
+                decimalStr: '၄၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ဆယ်သား'],
                 normalizeReason: {
@@ -868,8 +908,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ရွေး']
             };
@@ -884,8 +924,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ရွေး']
             };
@@ -900,8 +940,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
                     'ကျပ်',
@@ -920,8 +960,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ထွာ']
             };
@@ -936,8 +976,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
                     'ပဲ',
@@ -956,8 +996,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['မူး']
             };
@@ -972,8 +1012,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['မူး']
             };
@@ -988,8 +1028,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
                     'လက်သစ်',
@@ -1007,8 +1047,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ပြည်']
             };
@@ -1023,8 +1063,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ခွဲ']
             };
@@ -1039,8 +1079,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ပိဿာ']
             };
@@ -1055,8 +1095,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
                     'ပြား',
@@ -1074,8 +1114,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['လမျက်']
             };
@@ -1090,8 +1130,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['လမယ်']
             };
@@ -1106,8 +1146,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ခွက်']
             };
@@ -1124,8 +1164,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁ွက်',
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ခွက်'],
                 spaceIncluded: true,
@@ -1145,8 +1185,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '၁၀ိ',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀',
+                decimal: true,
+                decimalStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
                     'ကျပ်',
@@ -1169,8 +1209,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: '၁ဝိ',
                 normalizedStr: '၁၀ိ',
-                digitOrNumberGroup: true,
-                digitStr: '၁၀',
+                decimal: true,
+                decimalStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: [
                     'ကျပ်',
@@ -1220,8 +1260,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁၀',
+                decimal: true,
+                decimalStr: '၁၀',
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ဆယ်သား']
             };
@@ -1252,8 +1292,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၁'
+                decimal: true,
+                decimalStr: '၁'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -1266,8 +1306,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၉၀'
+                decimal: true,
+                decimalStr: '၉၀'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -1280,8 +1320,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၀၉'
+                decimal: true,
+                decimalStr: '၀၉'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -1294,8 +1334,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: '၉၉၉'
+                decimal: true,
+                decimalStr: '၉၉၉'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -1310,8 +1350,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '(၁)',
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
@@ -1328,8 +1368,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '(၁)',
-                digitOrNumberGroup: true,
-                digitStr: '၁',
+                decimal: true,
+                decimalStr: '၁',
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
@@ -1346,8 +1386,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '(၉၀)',
-                digitOrNumberGroup: true,
-                digitStr: '၉၀',
+                decimal: true,
+                decimalStr: '၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true
                 }
@@ -1363,8 +1403,8 @@ describe('NumberGroupTextExtractor#number', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: '(၄၉၀)',
-                digitOrNumberGroup: true,
-                digitStr: '၄၉၀',
+                decimal: true,
+                decimalStr: '၄၉၀',
                 normalizeReason: {
                     changeU101DToU1040: true,
                     changeU104EToU1044: true

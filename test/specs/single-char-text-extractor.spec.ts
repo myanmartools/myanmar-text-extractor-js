@@ -233,8 +233,8 @@ describe('SingleCharTextExtractor', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -247,8 +247,8 @@ describe('SingleCharTextExtractor', () => {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
                 normalizedStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);

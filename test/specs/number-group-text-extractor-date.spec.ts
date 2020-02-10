@@ -566,8 +566,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 dateFormat: 'yyyyMMdd',
                 possiblePhoneNumber: true,
                 phoneNumberStr: input,
-                digitOrNumberGroup: true,
-                digitStr: input
+                decimal: true,
+                decimalStr: input
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -711,13 +711,6 @@ describe('NumberGroupTextExtractor#date', () => {
         // Extra digits (At isValidRightStrForDate -> checkRightStrForPossibleDigit)
         it(String.raw`should NOT return fragment when input '၀၁-၀၁-၂၀၂၀၄၉'`, () => {
             const input = '၀၁-၀၁-၂၀၂၀၅၄၉';
-            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            expect(fragment == null || !fragment.possibleDate).toBeTruthy();
-        });
-
-        // Invalid ends $ (isValidRightStrForDate)
-        it(String.raw`should NOT return fragment when input '၃၀-၁၂-၂၀၂၀$'`, () => {
-            const input = '၃၀-၁၂-၂၀၂၀$';
             const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
             expect(fragment == null || !fragment.possibleDate).toBeTruthy();
         });
