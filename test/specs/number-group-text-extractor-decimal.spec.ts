@@ -730,46 +730,6 @@ describe('NumberGroupTextExtractor#decimal', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
-
-        // Normalize
-        //
-        it(String.raw`should return fragment when input '၁ . ၂'`, () => {
-            const input = '၁ . ၂';
-            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Number,
-                matchedStr: input,
-                normalizedStr: '၁.၂',
-                decimal: true,
-                decimalStr: '၁.၂',
-                spaceIncluded: true,
-                separatorIncluded: true,
-                normalizeReason: {
-                    removeSpace: true
-                }
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        it(String.raw`should return fragment when input '၁\u200B.\u200B၂'`, () => {
-            const input = '၁\u200B.\u200B၂';
-            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Number,
-                matchedStr: input,
-                normalizedStr: '၁.၂',
-                decimal: true,
-                decimalStr: '၁.၂',
-                spaceIncluded: true,
-                separatorIncluded: true,
-                normalizeReason: {
-                    removeSpace: true
-                }
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
     });
 
     describe('decimal-with-separator-and-point', () => {
@@ -923,6 +883,26 @@ describe('NumberGroupTextExtractor#decimal', () => {
 
         // Normalize
         //
+        it(String.raw`should return fragment when input '၁,၉၉၉ . ၀၂'`, () => {
+            const input = '၁,၉၉၉ . ၀၂';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: '၁,၉၉၉.၀၂',
+                decimal: true,
+                decimalStr: '၁၉၉၉.၀၂',
+                thousandSeparator: ',',
+                separatorIncluded: true,
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return fragment when input '၁,၂၃၄,၅၆၇\u00B7၈၉'`, () => {
             const input = '၁,၂၃၄,၅၆၇\u00B7၈၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
