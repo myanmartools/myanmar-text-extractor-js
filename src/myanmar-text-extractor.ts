@@ -1,4 +1,4 @@
-import { NumberGroupTextExtractor } from './number-group-text-extractor';
+import { NumberTextExtractor } from './number-text-extractor';
 import { SingleCharTextExtractor } from './single-char-text-extractor';
 import { TextExtractor } from './text-extractor';
 import { TextFragment } from './text-fragment';
@@ -21,7 +21,7 @@ export class MyanmarTextExtractor implements TextExtractor {
 
     constructor(
         private readonly _singleCharTextExtractor: SingleCharTextExtractor,
-        private readonly _numberGroupTextExtractor: NumberGroupTextExtractor) { }
+        private readonly _numberTextExtractor: NumberTextExtractor) { }
 
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
@@ -36,7 +36,7 @@ export class MyanmarTextExtractor implements TextExtractor {
             }
         }
 
-        const numberGroupTextFragment = this._numberGroupTextExtractor.extractNext(input, firstCp);
+        const numberGroupTextFragment = this._numberTextExtractor.extractNext(input, firstCp);
         if (numberGroupTextFragment != null) {
             return numberGroupTextFragment;
         }
