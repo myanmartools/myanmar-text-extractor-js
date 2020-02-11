@@ -53,8 +53,10 @@ export class NumberGroupTextExtractor implements TextExtractor {
     // Number group
     private readonly _decimalPointWithSpaceGroup = `(?:[${this._space}]?[${this._dot}${this._dotExt}][${this._space}]?[${this._possibleDigit}]+)`;
     private readonly _decimalPointGroup = `(?:[${this._dot}${this._dotExt}][${this._possibleDigit}]+)`;
-    private readonly _numberGroupWithSeparatorRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:(?:(?:[${this._space}]?[${this._thousandSeparator}}][${this._space}]?)|(?:[${this._space}]))[${this._possibleDigit}]{2,4})+${this._decimalPointWithSpaceGroup}?`);
-    private readonly _numberGroupRegExp = new RegExp(`^[${this._possibleDigit}]+${this._decimalPointGroup}?`);
+    private readonly _decimalGroupWithSeparatorRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:(?:[${this._space}]?[${this._thousandSeparator}}][${this._space}]?)[${this._possibleDigit}]{2,4})+${this._decimalPointWithSpaceGroup}?`);
+    private readonly _decimalGroupWithSpaceSeparatorRegExp = new RegExp(`^[${this._possibleDigit}]{1,3}(?:[${this._space}][${this._possibleDigit}]{3,3})+${this._decimalPointGroup}?`);
+
+    private readonly _decimalGroupRegExp = new RegExp(`^[${this._possibleDigit}]+${this._decimalPointGroup}?`);
 
     // Number group starts with 'ဝ' / '၎'
     private readonly _possibleDigitGroupStartsWithU101DOrU104ERegExp = new RegExp(`^[\u101D\u104E][${this._possibleDigit}]*[${this._thousandSeparator}${this._dot}${this._dotExt}]?[${this._possibleDigit}]*[\u1040-\u1049]`);
@@ -1218,9 +1220,12 @@ export class NumberGroupTextExtractor implements TextExtractor {
     }
 
     private matchNumberGroup(input: string): RegExpMatchArray | null {
-        let m = input.match(this._numberGroupWithSeparatorRegExp);
+        let m = input.match(this._decimalGroupWithSeparatorRegExp);
         if (m == null) {
-            m = input.match(this._numberGroupRegExp);
+            m = input.match(this._decimalGroupWithSpaceSeparatorRegExp);
+        }
+        if (m == null) {
+            m = input.match(this._decimalGroupRegExp);
         }
 
         return m;
