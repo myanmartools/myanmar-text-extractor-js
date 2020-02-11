@@ -9,6 +9,7 @@ export class NumberTextExtractor implements TextExtractor {
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
 
     private readonly _visibleSpaceRegExp = new RegExp(`[${this._visibleSpace}]`);
+    private readonly _invisibleSpaceRegExp = new RegExp(`[${this._invisibleSpace}]`);
     private readonly _containsSpaceRegExp = new RegExp(`[${this._space}]`);
 
     // Diacritics and AThet
@@ -126,7 +127,7 @@ export class NumberTextExtractor implements TextExtractor {
                 }
             }
 
-            return this.getNumberGroupFragment(input);
+            return this.getDecimalFragment(input);
         }
 
         // င (အင်္ဂါ / တင်း / တောင်း)
@@ -449,9 +450,8 @@ export class NumberTextExtractor implements TextExtractor {
         };
     }
 
-    private getNumberGroupFragment(input: string): TextFragment | null {
-        const m = this.matchNumberGroup(input);
-
+    private getDecimalFragment(input: string): TextFragment | null {
+        const m = this.matchDecimalGroup(input);
         if (m == null) {
             return null;
         }
@@ -490,7 +490,7 @@ export class NumberTextExtractor implements TextExtractor {
                     }
                 }
 
-                const m2 = this.matchNumberGroup(newMatchedStr);
+                const m2 = this.matchDecimalGroup(newMatchedStr);
 
                 if (m2 == null) {
                     return null;
@@ -996,7 +996,7 @@ export class NumberTextExtractor implements TextExtractor {
             return extractInfo;
         }
 
-        const m = this.matchNumberGroup(extractInfo.normalizedStr);
+        const m = this.matchDecimalGroup(extractInfo.normalizedStr);
         if (m == null) {
             return extractInfo;
         }
@@ -1022,7 +1022,7 @@ export class NumberTextExtractor implements TextExtractor {
     // tslint:disable-next-line: max-func-body-length
     private getDecimalExtractInfo(matchedStr: string): ExtractInfo | null {
         const extractInfo: ExtractInfo = {
-            matchedStr,
+            matchedStr: '',
             normalizedStr: '',
             decimalStr: ''
         };
@@ -1030,34 +1030,37 @@ export class NumberTextExtractor implements TextExtractor {
         let digitCount = 0;
         let tmpSpace = '';
         let prevIsSeparator = false;
+        let thousandSeparator = '';
+        let hasMultiSeparator = false;
+        let hasPendingSpace = false;
 
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
 
             if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x101D || cp === 0x104E) {
-                let normalizedDigit = '';
+                let digitStr = '';
 
                 if (cp >= 0x1040 && cp <= 0x1049) {
                     ++digitCount;
-                    normalizedDigit = c;
+                    digitStr = c;
                 } else {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     if (cp === 0x101D) {
-                        normalizedDigit = '\u1040';
+                        digitStr = '\u1040';
                         extractInfo.normalizeReason.changeU101DToU1040 = true;
                     } else {
-                        normalizedDigit = '\u1044';
+                        digitStr = '\u1044';
                         extractInfo.normalizeReason.changeU104EToU1044 = true;
                     }
                 }
 
-                extractInfo.decimalStr += normalizedDigit;
+                extractInfo.decimalStr += digitStr;
 
                 if (tmpSpace) {
                     extractInfo.spaceIncluded = true;
                     extractInfo.separatorIncluded = true;
 
-                    extractInfo.normalizedStr += ' ' + normalizedDigit;
+                    extractInfo.normalizedStr += ' ' + digitStr;
 
                     if (tmpSpace !== ' ') {
                         extractInfo.normalizeReason = extractInfo.normalizeReason || {};
@@ -1065,30 +1068,30 @@ export class NumberTextExtractor implements TextExtractor {
                     }
 
                     tmpSpace = '';
+                    hasPendingSpace = false;
                 } else {
-                    extractInfo.normalizedStr += normalizedDigit;
+                    extractInfo.normalizedStr += digitStr;
+
+                    if (hasPendingSpace) {
+                        extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                        extractInfo.normalizeReason.removeSpace = true;
+                        extractInfo.spaceIncluded = true;
+                        hasPendingSpace = false;
+                    }
                 }
 
                 prevIsSeparator = false;
-            } else if (this._containsSpaceRegExp.test(c)) {
-                extractInfo.spaceIncluded = true;
-
-                if (prevIsSeparator || !this._visibleSpaceRegExp.test(c)) {
-                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.removeSpace = true;
-                    tmpSpace = '';
-                } else {
+            } else if (this._visibleSpaceRegExp.test(c)) {
+                if (!prevIsSeparator) {
                     tmpSpace = c;
                 }
 
+                hasPendingSpace = true;
+                prevIsSeparator = false;
+            } else if (this._invisibleSpaceRegExp.test(c)) {
+                hasPendingSpace = true;
                 prevIsSeparator = false;
             } else {
-                if (tmpSpace) {
-                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-                    extractInfo.normalizeReason.removeSpace = true;
-                    tmpSpace = '';
-                }
-
                 // Dot
                 if (cp === 0x002E || cp === 0x00B7 || cp === 0x02D9) {
                     extractInfo.decimalStr += '.';
@@ -1099,21 +1102,41 @@ export class NumberTextExtractor implements TextExtractor {
                         extractInfo.normalizeReason.normalizeDecimalPoint = true;
                     }
                 } else {
-                    if (extractInfo.thousandSeparator && c !== extractInfo.thousandSeparator) {
-                        return null;
+                    if (thousandSeparator && c !== thousandSeparator) {
+                        if (hasPendingSpace) {
+                            break;
+                        }
+
+                        hasMultiSeparator = true;
                     }
 
                     extractInfo.normalizedStr += c;
-                    extractInfo.thousandSeparator = c;
+                    thousandSeparator = c;
+                }
+
+                if (hasPendingSpace) {
+                    extractInfo.spaceIncluded = true;
+                    extractInfo.normalizeReason = extractInfo.normalizeReason || {};
+                    extractInfo.normalizeReason.removeSpace = true;
+                    tmpSpace = '';
+                    hasPendingSpace = false;
                 }
 
                 extractInfo.separatorIncluded = true;
                 prevIsSeparator = true;
             }
+
+            extractInfo.matchedStr += c;
         }
 
         if (!digitCount) {
             return null;
+        }
+
+        extractInfo.matchedStr = extractInfo.matchedStr.trimRight();
+
+        if (thousandSeparator && !hasMultiSeparator) {
+            extractInfo.thousandSeparator = thousandSeparator;
         }
 
         return extractInfo;
@@ -1243,7 +1266,7 @@ export class NumberTextExtractor implements TextExtractor {
         return false;
     }
 
-    private matchNumberGroup(input: string): RegExpMatchArray | null {
+    private matchDecimalGroup(input: string): RegExpMatchArray | null {
         let m = input.match(this._decimalGroupWithSeparatorRegExp);
         if (m == null) {
             m = input.match(this._decimalGroupWithSpaceSeparatorRegExp);
