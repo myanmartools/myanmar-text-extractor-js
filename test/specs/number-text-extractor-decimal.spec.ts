@@ -228,6 +228,38 @@ describe('NumberGroupTextExtractor#decimal', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with ,
+        it(String.raw`should return fragment when input '၁၀,'`, () => {
+            const input = '၁၀,';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၁၀',
+                normalizedStr: '၁၀',
+                decimal: true,
+                decimalStr: '၁၀'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // Ends with ,
+        it(String.raw`should return fragment when input '၁၀၀,'`, () => {
+            const input = '၁၀၀,';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၁၀၀',
+                normalizedStr: '၁၀၀',
+                decimal: true,
+                decimalStr: '၁၀၀',
+                possiblePhoneNumber: true,
+                phoneNumberStr: '၁၀၀'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Ends with က
         it(String.raw`should return fragment when input '၁၀က'`, () => {
             const input = '၁၀က';
