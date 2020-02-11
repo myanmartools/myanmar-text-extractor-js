@@ -1,11 +1,11 @@
-import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
+import { NumberTextExtractor } from '../../src/number-text-extractor';
 import { FragmentType, TextFragment } from '../../src/text-fragment';
 
 describe('NumberGroupTextExtractor#decimal', () => {
-    let extractor: NumberGroupTextExtractor;
+    let extractor: NumberTextExtractor;
 
     beforeEach(() => {
-        extractor = new NumberGroupTextExtractor();
+        extractor = new NumberTextExtractor();
     });
 
     describe('decimal', () => {

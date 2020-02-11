@@ -1,11 +1,11 @@
-import { NumberGroupTextExtractor } from '../../src/number-group-text-extractor';
+import { NumberTextExtractor } from '../../src/number-text-extractor';
 import { TextFragment, FragmentType } from '../../src/text-fragment';
 
 describe('NumberGroupTextExtractor#date', () => {
-    let extractor: NumberGroupTextExtractor;
+    let extractor: NumberTextExtractor;
 
     beforeEach(() => {
-        extractor = new NumberGroupTextExtractor();
+        extractor = new NumberTextExtractor();
     });
 
     describe('day-month-year', () => {
