@@ -92,8 +92,8 @@ export class NumberTextExtractor implements TextExtractor {
     private readonly _dtTimeRegExp = new RegExp(`^${this._dtHourGroup}(?:${this._dtTimeSeparatorGroup}${this._dtMinuteSecondGroup}){1,2}(?:\.[\u1040-\u1049]{7,7})?(?:(?:Z)|(?:[+\\-][\u1040-\u1042][\u1040-\u1049]:?[\u1040-\u1045][\u1040-\u1049]{0,4}))?${this._dtTimeNotFollowedByGroup}`);
 
     // Phone Number
-    private readonly _phSeparator = `${this._dash}${this._slash}${this._dot}${this._openingBracket}${this._closingBracket}\u104A${this._dashExt}${this._slashExt}${this._dotExt}\uFF0E`;
-    private readonly _phRegExp = new RegExp(`^[${this._plus}]?(?:[${this._phSeparator}${this._space}${this._star}]*[${this._possibleDigit}]){3,}${this._hash}?`);
+    private readonly _phSeparator = `${this._dash}${this._slash}${this._dot}${this._openingBracket}\u104A${this._dashExt}${this._slashExt}${this._dotExt}\uFF0E`;
+    private readonly _phRegExp = new RegExp(`^[${this._plus}]?(?:[${this._phSeparator}${this._space}${this._star}]*[${this._possibleDigit}][${this._space}${this._closingBracket}]*){3,}${this._hash}?`);
 
     // Domain Name
     private readonly _possibleDomainNameSuffixRegExp = /^[\S]+\.[a-zA-Z]{2,63}/;
@@ -834,6 +834,7 @@ export class NumberTextExtractor implements TextExtractor {
         let prevIsSpace = false;
         let digitCount = 0;
         let possibleDigitCount = 0;
+        let maxDigitCountSplittedBySeparator = 0;
         let dotCount = 0;
         let slashCount = 0;
 
@@ -859,6 +860,11 @@ export class NumberTextExtractor implements TextExtractor {
             if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x101D || cp === 0x104E) {
                 let decimalStr = '';
                 ++possibleDigitCount;
+                if (!prevIsDigit) {
+                    maxDigitCountSplittedBySeparator = 0;
+                }
+                ++maxDigitCountSplittedBySeparator;
+
                 if (cp >= 0x1040 && cp <= 0x1049) {
                     ++digitCount;
                     decimalStr = c;
@@ -955,7 +961,21 @@ export class NumberTextExtractor implements TextExtractor {
             startOfString = false;
         }
 
-        if (!digitCount || possibleDigitCount < 3) {
+        if (!digitCount || possibleDigitCount < 3 || maxDigitCountSplittedBySeparator < 2) {
+            return null;
+        }
+
+        if (extractInfo.normalizedStr[0] === '+' && possibleDigitCount < 6) {
+            return null;
+        }
+
+        if (extractInfo.normalizedStr[0] === '\u1040' && extractInfo.normalizedStr[1] === '\u1040' && possibleDigitCount < 8) {
+            return null;
+        }
+
+
+        if ((extractInfo.spaceIncluded || extractInfo.separatorIncluded) &&
+            extractInfo.phoneNumberStr && extractInfo.phoneNumberStr.length < 5) {
             return null;
         }
 
@@ -966,6 +986,10 @@ export class NumberTextExtractor implements TextExtractor {
         if ((dotCount === 1 || slashCount === 1) && extractInfo.normalizedStr[0] !== '+' && extractInfo.normalizedStr[0] !== '\u1040' &&
             extractInfo.phoneNumberStr && extractInfo.normalizedStr.length === extractInfo.phoneNumberStr.length + 1) {
             return null;
+        }
+
+        if (extractInfo.normalizedStr[0] === '\u1040') {
+            possibleDecimal = false;
         }
 
         if (!possibleDecimal) {
