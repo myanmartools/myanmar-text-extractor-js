@@ -555,6 +555,38 @@ describe('NumberGroupTextExtractor#decimal', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input '၁,၂၃၄'၅၆၇'`, () => {
+            const input = "၁,၂၃၄'၅၆၇";
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: input,
+                decimal: true,
+                decimalStr: '၁၂၃၄၅၆၇',
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁,၂၃၄ '၅၆၇'`, () => {
+            const input = "၁,၂၃၄ '၅၆၇";
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၁,၂၃၄',
+                normalizedStr: '၁,၂၃၄',
+                decimal: true,
+                decimalStr: '၁၂၃၄',
+                thousandSeparator: ',',
+                separatorIncluded: true
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+
         // Normalize
         //
         it(String.raw`should return fragment when input '၁, ၀၀၀'`, () => {
@@ -571,6 +603,25 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 separatorIncluded: true,
                 normalizeReason: {
                     removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input '၁\u00A0၂၃၄'`, () => {
+            const input = '၁\u00A0၂၃၄';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: input,
+                normalizedStr: '၁ ၂၃၄',
+                decimal: true,
+                decimalStr: '၁၂၃၄',
+                spaceIncluded: true,
+                separatorIncluded: true,
+                normalizeReason: {
+                    normalizeSpace: true
                 }
             };
 
