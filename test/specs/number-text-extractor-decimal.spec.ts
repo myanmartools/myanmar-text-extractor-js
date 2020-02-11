@@ -290,6 +290,21 @@ describe('NumberGroupTextExtractor#decimal', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Ends with space + ၀၁
+        it(String.raw`should return fragment when input '၉၀ ၀၁'`, () => {
+            const input = '၉၀ ၀၁';
+            const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Number,
+                matchedStr: '၉၀',
+                normalizedStr: '၉၀',
+                decimal: true,
+                decimalStr: '၉၀'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // Normalize
         //
         it(String.raw`should return fragment when input '၁\u104E'`, () => {
@@ -328,19 +343,19 @@ describe('NumberGroupTextExtractor#decimal', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return fragment when input '\u101D၁၉'`, () => {
-            const input = '\u101D၁၉';
+        it(String.raw`should return fragment when input '\u104E၁၉'`, () => {
+            const input = '\u104E၁၉';
             const actualFragment = extractor.extractNext(input, input.codePointAt(0) as number);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Number,
                 matchedStr: input,
-                normalizedStr: '၀၁၉',
+                normalizedStr: '၄၁၉',
                 decimal: true,
-                decimalStr: '၀၁၉',
+                decimalStr: '၄၁၉',
                 possiblePhoneNumber: true,
-                phoneNumberStr: '၀၁၉',
+                phoneNumberStr: '၄၁၉',
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    changeU104EToU1044: true
                 }
             };
 
