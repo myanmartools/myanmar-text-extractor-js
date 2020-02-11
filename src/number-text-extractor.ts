@@ -2,7 +2,7 @@ import { ExtractInfo } from './extract-info';
 import { TextExtractor } from './text-extractor';
 import { FragmentType, TextFragment } from './text-fragment';
 
-export class NumberGroupTextExtractor implements TextExtractor {
+export class NumberTextExtractor implements TextExtractor {
     // Spaces
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
     private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
