@@ -140,5 +140,39 @@ describe('LetterTextExtractor', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        // Normalize
+        //
+        it(String.raw`should return fragment when input 'က ာ'`, () => {
+            const input = 'က ာ';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: 'ကာ',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ကု ့'`, () => {
+            const input = 'ကု ့';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: 'ကု့',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 });
