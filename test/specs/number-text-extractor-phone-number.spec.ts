@@ -723,6 +723,18 @@ describe('NumberGroupTextExtractor#phone-number', () => {
     });
 
     describe('not', () => {
+        it(String.raw`should NOT return fragment when input '+၁၂၃၄၅'`, () => {
+            const input = '+၁၂၃၄၅';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
+        it(String.raw`should NOT return fragment when input '၀၀၁၂၃၄၅'`, () => {
+            const input = '၀၀၁၂၃၄၅';
+            const fragment = extractor.extractNext(input, input.codePointAt(0) as number);
+            expect(fragment == null || !fragment.possiblePhoneNumber).toBeTruthy();
+        });
+
         // \u104E
         it(String.raw`should NOT return fragment when input '၁၂၎င်း'`, () => {
             const input = '၁၂၎င်း';
