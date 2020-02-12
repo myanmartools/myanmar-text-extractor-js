@@ -853,8 +853,7 @@ export class NumberTextExtractor implements TextExtractor {
             possibleDecimal = false;
         }
 
-        for (let i = 0; i < curStr.length; i++) {
-            const c = curStr[i];
+        for (const c of curStr) {
             const cp = c.codePointAt(0) as number;
 
             if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x101D || cp === 0x104E) {
@@ -899,9 +898,9 @@ export class NumberTextExtractor implements TextExtractor {
                 possibleDecimal = false;
                 break;
             } else if (cp === 0x0028 || cp === 0x005B || cp === 0xFF08 || cp === 0xFF3B) {
-                if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
-                    return null;
-                }
+                // if (!this.hasCorrectClosingBracket(cp, curStr.substring(i + 1))) {
+                //     return null;
+                // }
 
                 extractInfo.normalizedStr += c;
                 extractInfo.separatorIncluded = true;
