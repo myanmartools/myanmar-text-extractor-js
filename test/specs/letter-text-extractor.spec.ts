@@ -251,4 +251,18 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
     });
+
+    describe('with-kinsi', () => {
+        it(String.raw`should return fragment when input 'အင်္ဂါ'`, () => {
+            const input = 'အင်္ဂါ';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
 });
