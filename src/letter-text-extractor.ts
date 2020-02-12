@@ -39,7 +39,7 @@ export class LetterTextExtractor implements TextExtractor {
         let spaceIncluded = false;
         for (const c of matchedStr) {
             const cp = c.codePointAt(0) as number;
-            if (cp >= 0x1000 && cp <= 0x4F) {
+            if (cp >= 0x1000 && cp <= 0x104F) {
                 normalizedStr += c;
             } else {
                 spaceIncluded = true;
