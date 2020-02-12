@@ -175,4 +175,18 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
     });
+
+    describe('with-athet', () => {
+        it(String.raw`should return fragment when input 'ကက်'`, () => {
+            const input = 'ကက်';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
 });
