@@ -1,3 +1,4 @@
+import { LetterTextExtractor } from './letter-text-extractor';
 import { NumberTextExtractor } from './number-text-extractor';
 import { SingleCharTextExtractor } from './single-char-text-extractor';
 import { TextExtractor } from './text-extractor';
@@ -21,7 +22,8 @@ export class MyanmarTextExtractor implements TextExtractor {
 
     constructor(
         private readonly _singleCharTextExtractor: SingleCharTextExtractor,
-        private readonly _numberTextExtractor: NumberTextExtractor) { }
+        private readonly _numberTextExtractor: NumberTextExtractor,
+        private readonly _letterTextExtractor: LetterTextExtractor) { }
 
     extractNext(input: string, firstCp?: number): TextFragment | null {
         firstCp = firstCp == null ? input.codePointAt(0) : firstCp;
@@ -36,83 +38,25 @@ export class MyanmarTextExtractor implements TextExtractor {
             }
         }
 
-        const numberGroupTextFragment = this._numberTextExtractor.extractNext(input, firstCp);
-        if (numberGroupTextFragment != null) {
-            return numberGroupTextFragment;
+        if (input.length > 1) {
+            const numberGroupTextFragment = this._numberTextExtractor.extractNext(input, firstCp);
+            if (numberGroupTextFragment != null) {
+                return numberGroupTextFragment;
+            }
+
+            if ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
+                firstCp === 0x1023 || (firstCp >= 0x1025 && firstCp <= 0x1027) ||
+                firstCp === 0x1029 || firstCp === 0x103F ||
+                (firstCp >= 0x1040 && firstCp <= 0x1049) || firstCp === 0x104E) {
+                const letterTextExtractor = this._letterTextExtractor.extractNext(input);
+                if (letterTextExtractor != null) {
+                    return letterTextExtractor;
+                }
+            }
         }
 
         return null;
     }
-
-    // private detectAndAppendTimePart(matchedStr: string, rightStr: string, extractInfo: DateExtractInfo): string | null {
-    //     if (rightStr.length < 5) {
-    //         return null;
-    //     }
-
-    //     let spaceStr = '';
-    //     let trimedRightStr = rightStr;
-    //     while (this._spaceRegExp.test(trimedRightStr[0])) {
-    //         spaceStr += trimedRightStr[0];
-    //         trimedRightStr = trimedRightStr.substring(1);
-    //     }
-
-    //     if (trimedRightStr.length < 5) {
-    //         return null;
-    //     }
-
-    //     const m = trimedRightStr.match(this._dtTimeRegExp);
-    //     if (m == null) {
-    //         return null;
-    //     }
-
-    //     const timeMatchedStr = m[0];
-    //     const timeExtractInfo = this.getDateExtractInfo(timeMatchedStr);
-    //     if (timeExtractInfo == null) {
-    //         return null;
-    //     }
-
-    //     const newMatchedStr = `${matchedStr}${spaceStr}${timeMatchedStr}`;
-    //     extractInfo.spaceIncluded = true;
-    //     extractInfo.normalizedStr += ' ' + timeExtractInfo.normalizedStr;
-
-    //     if (spaceStr !== ' ') {
-    //         extractInfo.normalizeReason = extractInfo.normalizeReason || {};
-    //         extractInfo.normalizeReason.normalizeSpace = true;
-    //     }
-
-    //     if (timeExtractInfo.normalizeReason) {
-    //         extractInfo.normalizeReason = {
-    //             ...extractInfo.normalizeReason,
-    //             ...timeExtractInfo.normalizeReason
-    //         };
-    //     }
-
-    //     if (timeExtractInfo.invalidReason) {
-    //         extractInfo.invalidReason = {
-    //             ...extractInfo.invalidReason,
-    //             ...timeExtractInfo.invalidReason
-    //         };
-    //     }
-
-    //     return newMatchedStr;
-    // }
-
-
-    // private startsWithPossibleNumber(cp: number): boolean {
-    //     if ((cp >= 0x1040 && cp <= 0x1049) || cp === 0x101D || cp === 0x104E) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
-    // private startsWithPossibleNumberOrBracket(cp: number): boolean {
-    //     if (this.startsWithPossibleNumber(cp) || this.startsWithOpeningBracket(cp)) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
 
     // private getFragmentForCombination(input: string, firstCp: number, curOptions: TextFragmenterOptions): TextFragment | null {
     //     if (!((firstCp >= 0x1000 && firstCp <= 0x1021) ||
