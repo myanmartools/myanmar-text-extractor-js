@@ -327,6 +327,24 @@ describe('LetterTextExtractor', () => {
         });
     });
 
+    describe('athet-normalize', () => {
+        it(String.raw`should return fragment when input 'က က်က'`, () => {
+            const input = 'က က်က';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'က က်',
+                normalizedStr: 'ကက်',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
     describe('diacritic-and-athet', () => {
         it(String.raw`should return fragment when input 'ကွက်'`, () => {
             const input = 'ကွက်';
