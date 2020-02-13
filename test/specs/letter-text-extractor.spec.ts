@@ -10,7 +10,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-diacritic', () => {
+    describe('diacritic', () => {
         it(String.raw`should return fragment when input 'ကါ'`, () => {
             const input = 'ကါ';
             const actualFragment = extractor.extractNext(input);
@@ -180,7 +180,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-diacritic-normalize', () => {
+    describe('diacritic-normalize', () => {
         // Space
         it(String.raw`should return fragment when input 'က ာ'`, () => {
             const input = 'က ာ';
@@ -301,7 +301,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-athet', () => {
+    describe('athet', () => {
         it(String.raw`should return fragment when input 'ကက်'`, () => {
             const input = 'ကက်';
             const actualFragment = extractor.extractNext(input);
@@ -315,7 +315,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-diacritic-and-athet', () => {
+    describe('diacritic-and-athet', () => {
         it(String.raw`should return fragment when input 'ကွက်'`, () => {
             const input = 'ကွက်';
             const actualFragment = extractor.extractNext(input);
@@ -377,7 +377,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-kinsi', () => {
+    describe('kinsi', () => {
         it(String.raw`should return fragment when input 'အင်္ဂါ'`, () => {
             const input = 'အင်္ဂါ';
             const actualFragment = extractor.extractNext(input);
@@ -391,7 +391,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-pahsin', () => {
+    describe('pahsin', () => {
         it(String.raw`should return fragment when input 'သက္က'`, () => {
             const input = 'သက္က';
             const actualFragment = extractor.extractNext(input);
