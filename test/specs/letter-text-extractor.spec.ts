@@ -370,6 +370,9 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+    });
+
+    describe('diacritic-and-athet-on-single-consonant', () => {
         it(String.raw`should return fragment when input 'ကျွန်ုပ်'`, () => {
             const input = 'ကျွန်ုပ်';
             const actualFragment = extractor.extractNext(input);
@@ -384,6 +387,19 @@ describe('LetterTextExtractor', () => {
 
         it(String.raw`should return fragment when input 'ယောက်ျား'`, () => {
             const input = 'ယောက်ျား';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // \u101A\u1031\u102C\u1000\u103B\u103A\u102C\u1038
+        it(String.raw`should return fragment when input 'ယောကျ်ား'`, () => {
+            const input = 'ယောကျ်ား';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
