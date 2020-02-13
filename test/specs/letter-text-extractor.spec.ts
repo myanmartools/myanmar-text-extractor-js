@@ -8,7 +8,7 @@ describe('LetterTextExtractor', () => {
         extractor = new LetterTextExtractor();
     });
 
-    describe('with-diacritics', () => {
+    describe('with-diacritic', () => {
         it(String.raw`should return fragment when input 'ကါ'`, () => {
             const input = 'ကါ';
             const actualFragment = extractor.extractNext(input);
@@ -226,7 +226,7 @@ describe('LetterTextExtractor', () => {
         });
     });
 
-    describe('with-diacritics-and-athet', () => {
+    describe('with-diacritic-and-athet', () => {
         it(String.raw`should return fragment when input 'ကွက်'`, () => {
             const input = 'ကွက်';
             const actualFragment = extractor.extractNext(input);
