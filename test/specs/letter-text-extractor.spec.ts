@@ -370,77 +370,26 @@ describe('LetterTextExtractor', () => {
 
     });
 
-    describe('diacritic-and-athet-on-single-consonant', () => {
-        it(String.raw`should return fragment when input 'ကျွန်ုပ်'`, () => {
-            const input = 'ကျွန်ုပ်';
-            const actualFragment = extractor.extractNext(input);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        it(String.raw`should return fragment when input 'ယောက်ျား'`, () => {
-            const input = 'ယောက်ျား';
-            const actualFragment = extractor.extractNext(input);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        // \u101A\u1031\u102C\u1000\u103B\u103A\u102C\u1038
-        it(String.raw`should return fragment when input 'ယောကျ်ား'`, () => {
-            const input = 'ယောကျ်ား';
-            const actualFragment = extractor.extractNext(input);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-
-        it(String.raw`should return fragment when input 'လက်ျာ'`, () => {
-            const input = 'လက်ျာ';
-            const actualFragment = extractor.extractNext(input);
-            const expactedFragment: TextFragment = {
-                fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
-            };
-
-            expect(actualFragment).toEqual(expactedFragment);
-        });
-    });
-
     describe('kinsi', () => {
-        it(String.raw`should return fragment when input 'အင်္ဂါ'`, () => {
-            const input = 'အင်္ဂါ';
+        it(String.raw`should return fragment when input 'အင်္ဂါက'`, () => {
+            const input = 'အင်္ဂါက';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
+                matchedStr: 'အင်္ဂါ',
+                normalizedStr: 'အင်္ဂါ'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return fragment when input 'သင်္ကြန်'`, () => {
-            const input = 'သင်္ကြန်';
+        it(String.raw`should return fragment when input 'သင်္ကြန်က'`, () => {
+            const input = 'သင်္ကြန်က';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
+                matchedStr: 'သင်္ကြန်',
+                normalizedStr: 'သင်္ကြန်'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
@@ -448,25 +397,88 @@ describe('LetterTextExtractor', () => {
     });
 
     describe('pahsin', () => {
-        it(String.raw`should return fragment when input 'သက္က'`, () => {
-            const input = 'သက္က';
+        it(String.raw`should return fragment when input 'သက္ကက'`, () => {
+            const input = 'သက္ကက';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
+                matchedStr: 'သက္က',
+                normalizedStr: 'သက္က'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
         });
 
-        it(String.raw`should return fragment when input 'ကမ္ဘာ'`, () => {
-            const input = 'ကမ္ဘာ';
+        it(String.raw`should return fragment when input 'ကမ္ဘာက'`, () => {
+            const input = 'ကမ္ဘာက';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
+                matchedStr: 'ကမ္ဘာ',
+                normalizedStr: 'ကမ္ဘာ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'သဒ္ဓမ္မက'`, () => {
+            const input = 'သဒ္ဓမ္မက';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'သဒ္ဓမ္မ',
+                normalizedStr: 'သဒ္ဓမ္မ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
+
+    describe('pahsin-single-letter', () => {
+        it(String.raw`should return fragment when input 'ပိဿာက'`, () => {
+            const input = 'ပိဿာက';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ပိဿာ',
+                normalizedStr: 'ပိဿာ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ကျွန်ုပ်က'`, () => {
+            const input = 'ကျွန်ုပ်က';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ကျွန်ုပ်',
+                normalizedStr: 'ကျွန်ုပ်'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ယောက်ျားက'`, () => {
+            const input = 'ယောက်ျားက';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ယောက်ျား',
+                normalizedStr: 'ယောက်ျား'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // \u101A\u1031\u102C\u1000\u103B\u103A\u102C\u1038
+        it(String.raw`should return fragment when input 'ယောကျ်ားက'`, () => {
+            const input = 'ယောကျ်ားက';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ယောကျ်ား',
+                normalizedStr: 'ယောကျ်ား'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
