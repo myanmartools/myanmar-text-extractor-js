@@ -265,4 +265,18 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
     });
+
+    describe('with-pahsin', () => {
+        it(String.raw`should return fragment when input 'သက္က'`, () => {
+            const input = 'သက္က';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+    });
 });
