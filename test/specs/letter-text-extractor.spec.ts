@@ -5,9 +5,7 @@ describe('LetterTextExtractor', () => {
     let extractor: LetterTextExtractor;
 
     beforeEach(() => {
-        extractor = new LetterTextExtractor({
-            analyzeAndNormalize: true
-        });
+        extractor = new LetterTextExtractor();
     });
 
     describe('diacritic', () => {
