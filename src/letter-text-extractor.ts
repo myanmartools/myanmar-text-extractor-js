@@ -2,7 +2,7 @@ import { TextExtractor } from './text-extractor';
 import { FragmentType, TextFragment } from './text-fragment';
 
 export class LetterTextExtractor implements TextExtractor {
-    // Spaces
+    // Space
     private readonly _visibleSpace = ' \u00A0\u1680\u2000-\u2009\u202F\u205F\u3000';
     private readonly _invisibleSpace = '\u00AD\u180E\u200A\u200B\u2060\uFEFF';
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
@@ -40,28 +40,14 @@ export class LetterTextExtractor implements TextExtractor {
             curMatchedStr = this.matchDiacriticsAThetPahsin(curStr);
         }
 
-        let normalizedStr = '';
-        let spaceIncluded = false;
-        for (const c of matchedStr) {
-            const cp = c.codePointAt(0) as number;
-            if (!(cp >= 0x1000 && cp <= 0x109F) && (cp === 0x0020 || this._spaceRegExp.test(c))) {
-                spaceIncluded = true;
-            } else {
-                normalizedStr += c;
-            }
-        }
-
         const textFragment: TextFragment = {
             fragmentType: FragmentType.Letter,
             matchedStr,
-            normalizedStr
+            normalizedStr: ''
         };
 
-        if (spaceIncluded) {
-            textFragment.spaceIncluded = true;
-            textFragment.normalizeReason = textFragment.normalizeReason || {};
-            textFragment.normalizeReason.removeSpace = true;
-        }
+
+        this.analyzeTextFragment(textFragment);
 
         return textFragment;
     }
@@ -83,5 +69,20 @@ export class LetterTextExtractor implements TextExtractor {
         }
 
         return null;
+    }
+
+    private analyzeTextFragment(textFragment: TextFragment): void {
+        for (const c of textFragment.matchedStr) {
+            const cp = c.codePointAt(0) as number;
+            if (!(cp >= 0x1000 && cp <= 0x109F) && (cp === 0x0020 || this._spaceRegExp.test(c))) {
+                if (!textFragment.spaceIncluded) {
+                    textFragment.spaceIncluded = true;
+                    textFragment.normalizeReason = textFragment.normalizeReason || {};
+                    textFragment.normalizeReason.removeSpace = true;
+                }
+            } else {
+                textFragment.normalizedStr += c;
+            }
+        }
     }
 }
