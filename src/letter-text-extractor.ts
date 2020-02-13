@@ -31,11 +31,6 @@ export class LetterTextExtractor implements TextExtractor {
         while (curMatchedStr != null) {
             matchedStr += curMatchedStr;
             curStr = curStr.substring(curMatchedStr.length);
-            while (curStr.length > 0 && (curMatchedStr[curMatchedStr.length - 1] === '\u1039' || curStr[0] === '\u103F')) {
-                matchedStr += curStr[0];
-                curStr = curStr.substring(1);
-            }
-
             if (!curStr) {
                 break;
             }
@@ -56,22 +51,29 @@ export class LetterTextExtractor implements TextExtractor {
     }
 
     private matchDiacriticsAThetPahsin(curStr: string): string | null {
+        if (curStr[0] === '\u103F') {
+            return curStr[0];
+        }
+
         let m = curStr.match(this._diacriticRegExp);
-        if (m != null) {
-            return m[0];
+        if (m == null) {
+            m = curStr.match(this._aThetRegExp);
+        }
+        if (m == null) {
+            m = curStr.match(this._pahsinRegExp);
         }
 
-        m = curStr.match(this._aThetRegExp);
-        if (m != null) {
-            return m[0];
+        if (m == null) {
+            return null;
         }
 
-        m = curStr.match(this._pahsinRegExp);
-        if (m != null) {
-            return m[0];
+        let matchedStr = m[0];
+
+        if (matchedStr[matchedStr.length - 1] === '\u1039' && curStr.length > matchedStr.length) {
+            matchedStr += curStr[matchedStr.length];
         }
 
-        return null;
+        return matchedStr;
     }
 
     private analyzeAndNormalizeTextFragment(textFragment: TextFragment): void {
