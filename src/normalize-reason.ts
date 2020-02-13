@@ -3,7 +3,9 @@ export interface NormalizeReason {
     normalizeSpace?: boolean;
     removeSpace?: boolean;
     normalizeColon?: boolean;
-    changeU101DToU1040?: boolean;
-    changeU104EToU1044?: boolean;
+    swapU101DToU1040?: boolean;
+    swapU104EToU1044?: boolean;
     normalizeDecimalPoint?: boolean;
+    swapU1040ToU101D?: boolean;
+    swapU1044ToU104E?: boolean;
 }
