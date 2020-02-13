@@ -435,6 +435,18 @@ describe('LetterTextExtractor', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return fragment when input 'သင်္ကြန်'`, () => {
+            const input = 'သင်္ကြန်';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 
     describe('pahsin', () => {
