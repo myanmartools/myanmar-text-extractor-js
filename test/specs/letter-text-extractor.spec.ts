@@ -302,13 +302,25 @@ describe('LetterTextExtractor', () => {
     });
 
     describe('athet', () => {
-        it(String.raw`should return fragment when input 'ကက်'`, () => {
-            const input = 'ကက်';
+        it(String.raw`should return fragment when input 'ကက်က'`, () => {
+            const input = 'ကက်က';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
-                matchedStr: input,
-                normalizedStr: input
+                matchedStr: 'ကက်',
+                normalizedStr: 'ကက်'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ကြွက်က'`, () => {
+            const input = 'ကြွက်က';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ကြွက်',
+                normalizedStr: 'ကြွက်'
             };
 
             expect(actualFragment).toEqual(expactedFragment);
