@@ -663,10 +663,10 @@ export class NumberTextExtractor implements TextExtractor {
 
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
-                    extractInfo.normalizeReason.changeU101DToU1040 = true;
+                    extractInfo.normalizeReason.swapU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
-                    extractInfo.normalizeReason.changeU104EToU1044 = true;
+                    extractInfo.normalizeReason.swapU104EToU1044 = true;
                 }
 
                 prevIsDigit = true;
@@ -783,10 +783,10 @@ export class NumberTextExtractor implements TextExtractor {
 
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
-                    extractInfo.normalizeReason.changeU101DToU1040 = true;
+                    extractInfo.normalizeReason.swapU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
-                    extractInfo.normalizeReason.changeU104EToU1044 = true;
+                    extractInfo.normalizeReason.swapU104EToU1044 = true;
                 }
             } else if (this._containsSpaceRegExp.test(c)) {
                 extractInfo.spaceIncluded = true;
@@ -871,10 +871,10 @@ export class NumberTextExtractor implements TextExtractor {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     if (cp === 0x101D) {
                         decimalStr = '\u1040';
-                        extractInfo.normalizeReason.changeU101DToU1040 = true;
+                        extractInfo.normalizeReason.swapU101DToU1040 = true;
                     } else {
                         decimalStr = '\u1044';
-                        extractInfo.normalizeReason.changeU104EToU1044 = true;
+                        extractInfo.normalizeReason.swapU104EToU1044 = true;
                     }
                 }
 
@@ -1046,10 +1046,10 @@ export class NumberTextExtractor implements TextExtractor {
                     extractInfo.normalizeReason = extractInfo.normalizeReason || {};
                     if (cp === 0x101D) {
                         digitStr = '\u1040';
-                        extractInfo.normalizeReason.changeU101DToU1040 = true;
+                        extractInfo.normalizeReason.swapU101DToU1040 = true;
                     } else {
                         digitStr = '\u1044';
-                        extractInfo.normalizeReason.changeU104EToU1044 = true;
+                        extractInfo.normalizeReason.swapU104EToU1044 = true;
                     }
                 }
 
@@ -1163,11 +1163,11 @@ export class NumberTextExtractor implements TextExtractor {
                 if (cp === 0x101D) {
                     extractInfo.normalizedStr += '\u1040';
                     extractInfo.decimalStr += '\u1040';
-                    extractInfo.normalizeReason.changeU101DToU1040 = true;
+                    extractInfo.normalizeReason.swapU101DToU1040 = true;
                 } else {
                     extractInfo.normalizedStr += '\u1044';
                     extractInfo.decimalStr += '\u1044';
-                    extractInfo.normalizeReason.changeU104EToU1044 = true;
+                    extractInfo.normalizeReason.swapU104EToU1044 = true;
                 }
             } else if (cp === 0x0028 || cp === 0x005B || cp === 0xFF08 || cp === 0xFF3B) {
                 if (!this.hasCorrectClosingBracket(cp, matchedStr.substring(i + 1))) {
