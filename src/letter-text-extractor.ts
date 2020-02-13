@@ -1,4 +1,3 @@
-import { MyanmarTextExtractorOptions } from './myanmar-text-extractor-options';
 import { TextExtractor } from './text-extractor';
 import { FragmentType, TextFragment } from './text-fragment';
 
@@ -22,10 +21,6 @@ export class LetterTextExtractor implements TextExtractor {
 
     // Lagaung
     private readonly _possibleLagaungRegExp = new RegExp(`^[\u104E\u1044][${this._space}]?\u1004[${this._space}]?\u103A`);
-
-    constructor(private readonly _options: MyanmarTextExtractorOptions) {
-
-    }
 
     extractNext(input: string): TextFragment | null {
         let matchedStr = input[0];
@@ -55,9 +50,7 @@ export class LetterTextExtractor implements TextExtractor {
         };
 
 
-        if (this._options.analyzeAndNormalize) {
-            this.analyzeAndNormalizeTextFragment(textFragment);
-        }
+        this.analyzeAndNormalizeTextFragment(textFragment);
 
         return textFragment;
     }
