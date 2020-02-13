@@ -461,5 +461,17 @@ describe('LetterTextExtractor', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+
+        it(String.raw`should return fragment when input 'ကမ္ဘာ'`, () => {
+            const input = 'ကမ္ဘာ';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: input
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
     });
 });
