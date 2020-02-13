@@ -303,8 +303,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 phoneNumberStr: '+၄၀၁၂၃၄၅၆',
                 spaceIncluded: true,
                 normalizeReason: {
-                    changeU101DToU1040: true,
-                    changeU104EToU1044: true,
+                    swapU101DToU1040: true,
+                    swapU104EToU1044: true,
                     removeSpace: true
                 }
             };
@@ -629,7 +629,7 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 decimal: true,
                 decimalStr: '၉၉၀',
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    swapU101DToU1040: true
                 }
             };
 
@@ -648,8 +648,8 @@ describe('NumberGroupTextExtractor#phone-number', () => {
                 decimal: true,
                 decimalStr: '၄၉၉၀',
                 normalizeReason: {
-                    changeU101DToU1040: true,
-                    changeU104EToU1044: true
+                    swapU101DToU1040: true,
+                    swapU104EToU1044: true
                 }
             };
 

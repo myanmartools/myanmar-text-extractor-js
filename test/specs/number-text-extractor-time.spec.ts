@@ -507,8 +507,8 @@ describe('NumberGroupTextExtractor#time', () => {
                 possibleTime: true,
                 separatorIncluded: true,
                 normalizeReason: {
-                    changeU101DToU1040: true,
-                    changeU104EToU1044: true
+                    swapU101DToU1040: true,
+                    swapU104EToU1044: true
                 }
             };
 

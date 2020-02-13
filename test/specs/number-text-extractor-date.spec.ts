@@ -409,7 +409,7 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၃၁၊၁၂၊၂၀၂၀',
                 possibleDate: true,
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    swapU101DToU1040: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊',
@@ -429,7 +429,7 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
                 possibleDate: true,
                 normalizeReason: {
-                    changeU104EToU1044: true
+                    swapU104EToU1044: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊',
@@ -449,8 +449,8 @@ describe('NumberGroupTextExtractor#date', () => {
                 normalizedStr: '၁၄၊၁၂၊၂၀၂၀',
                 possibleDate: true,
                 normalizeReason: {
-                    changeU104EToU1044: true,
-                    changeU101DToU1040: true
+                    swapU104EToU1044: true,
+                    swapU101DToU1040: true
                 },
                 dateFormat: 'dd၊MM၊yyyy',
                 dateSeparator: '၊',

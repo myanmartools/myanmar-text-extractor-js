@@ -317,7 +317,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 decimal: true,
                 decimalStr: '၁၄',
                 normalizeReason: {
-                    changeU104EToU1044: true
+                    swapU104EToU1044: true
                 }
             };
 
@@ -336,7 +336,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 possiblePhoneNumber: true,
                 phoneNumberStr: '၁၉၀',
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    swapU101DToU1040: true
                 }
             };
 
@@ -355,7 +355,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 possiblePhoneNumber: true,
                 phoneNumberStr: '၄၁၉',
                 normalizeReason: {
-                    changeU104EToU1044: true
+                    swapU104EToU1044: true
                 }
             };
 
@@ -701,8 +701,8 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 thousandSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
-                    changeU104EToU1044: true,
-                    changeU101DToU1040: true
+                    swapU104EToU1044: true,
+                    swapU101DToU1040: true
                 }
             };
 
@@ -721,8 +721,8 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 thousandSeparator: ',',
                 separatorIncluded: true,
                 normalizeReason: {
-                    changeU104EToU1044: true,
-                    changeU101DToU1040: true
+                    swapU104EToU1044: true,
+                    swapU101DToU1040: true
                 }
             };
 
@@ -1144,7 +1144,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 ancientWrittenForm: true,
                 ancientMeasureWords: ['ဆယ်သား'],
                 normalizeReason: {
-                    changeU104EToU1044: true
+                    swapU104EToU1044: true
                 }
             };
 
@@ -1478,7 +1478,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                     'မိုက်'
                 ],
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    swapU101DToU1040: true
                 }
             };
 
@@ -1502,7 +1502,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                     'မိုက်'
                 ],
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    swapU101DToU1040: true
                 }
             };
 
@@ -1689,7 +1689,7 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 decimal: true,
                 decimalStr: '၉၀',
                 normalizeReason: {
-                    changeU101DToU1040: true
+                    swapU101DToU1040: true
                 }
             };
 
@@ -1706,8 +1706,8 @@ describe('NumberGroupTextExtractor#decimal', () => {
                 decimal: true,
                 decimalStr: '၄၉၀',
                 normalizeReason: {
-                    changeU101DToU1040: true,
-                    changeU104EToU1044: true
+                    swapU101DToU1040: true,
+                    swapU104EToU1044: true
                 }
             };
 

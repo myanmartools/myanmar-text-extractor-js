@@ -5,7 +5,9 @@ describe('LetterTextExtractor', () => {
     let extractor: LetterTextExtractor;
 
     beforeEach(() => {
-        extractor = new LetterTextExtractor();
+        extractor = new LetterTextExtractor({
+            analyzeAndNormalize: true
+        });
     });
 
     describe('with-diacritic', () => {
@@ -205,6 +207,38 @@ describe('LetterTextExtractor', () => {
                 spaceIncluded: true,
                 normalizeReason: {
                     removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // \u1040
+        it(String.raw`should return fragment when input '၀ိုး' (\u1040)`, () => {
+            const input = '၀ိုး';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: 'ဝိုး',
+                normalizeReason: {
+                    swapU1040ToU101D: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // \u1044
+        it(String.raw`should return fragment when input '၄င်' (\u1044)`, () => {
+            const input = '၄င်';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: '၎င်',
+                normalizeReason: {
+                    swapU1044ToU104E: true
                 }
             };
 
