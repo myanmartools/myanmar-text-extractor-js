@@ -178,9 +178,10 @@ describe('LetterTextExtractor', () => {
 
             expect(actualFragment).toEqual(expactedFragment);
         });
+    });
 
-        // Normalize
-        //
+    describe('with-diacritic-normalize', () => {
+        // Space
         it(String.raw`should return fragment when input 'က ာ'`, () => {
             const input = 'က ာ';
             const actualFragment = extractor.extractNext(input);
@@ -197,6 +198,7 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Space
         it(String.raw`should return fragment when input 'ကု ့'`, () => {
             const input = 'ကု ့';
             const actualFragment = extractor.extractNext(input);
@@ -229,6 +231,24 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // \u1040 and space
+        it(String.raw`should return fragment when input '၀ ံ' (\u1040)`, () => {
+            const input = '၀ ံ';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: 'ဝံ',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true,
+                    swapU1040ToU101D: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // \u1044
         it(String.raw`should return fragment when input '၄င်' (\u1044)`, () => {
             const input = '၄င်';
@@ -238,6 +258,24 @@ describe('LetterTextExtractor', () => {
                 matchedStr: input,
                 normalizedStr: '၎င်',
                 normalizeReason: {
+                    swapU1044ToU104E: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        // \u1044 and space
+        it(String.raw`should return fragment when input '၄ င ်' (\u1044)`, () => {
+            const input = '၄ င ်';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: '၎င်',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true,
                     swapU1044ToU104E: true
                 }
             };
