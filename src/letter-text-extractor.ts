@@ -8,8 +8,8 @@ export class LetterTextExtractor implements TextExtractor {
     private readonly _space = `${this._visibleSpace}${this._invisibleSpace}`;
     private readonly _spaceRegExp = new RegExp(`^[${this._space}]`);
 
-    // Diacritics
-    private readonly _diacriticsRegExp = new RegExp(`^(?:[${this._space}]?[\u102B-\u103E])+`);
+    // Diacritic
+    private readonly _diacriticRegExp = new RegExp(`^(?:[${this._space}]?[\u102B-\u103E])+`);
 
     // AThet
     private readonly _aThetRegExp = new RegExp(`^[${this._space}]?[\u1000-\u1021\u1025](?:(?:[${this._space}]?[\u103B-\u103E])+)?[${this._space}]?\u103A(?:(?:[${this._space}]?[\u102B-\u103E])+)?`);
@@ -51,7 +51,6 @@ export class LetterTextExtractor implements TextExtractor {
             }
         }
 
-
         const textFragment: TextFragment = {
             fragmentType: FragmentType.Letter,
             matchedStr,
@@ -68,7 +67,7 @@ export class LetterTextExtractor implements TextExtractor {
     }
 
     private matchDiacriticsAThetPahsin(curStr: string): string | null {
-        let m = curStr.match(this._diacriticsRegExp);
+        let m = curStr.match(this._diacriticRegExp);
         if (m != null) {
             return m[0];
         }
