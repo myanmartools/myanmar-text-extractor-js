@@ -215,6 +215,23 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        // Space
+        it(String.raw`should return fragment when input 'က ိ ု ့'`, () => {
+            const input = 'က ိ ု ့';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: input,
+                normalizedStr: 'ကို့',
+                spaceIncluded: true,
+                normalizeReason: {
+                    removeSpace: true
+                }
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         // \u1040
         it(String.raw`should return fragment when input '၀ိုး' (\u1040)`, () => {
             const input = '၀ိုး';
