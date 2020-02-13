@@ -33,8 +33,56 @@ describe('LetterTextExtractor', () => {
             expect(actualFragment).toEqual(expactedFragment);
         });
 
+        it(String.raw`should return fragment when input 'ကါ '`, () => {
+            const input = 'ကါ ';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ကါ',
+                normalizedStr: 'ကါ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
         it(String.raw`should return fragment when input 'ကါ၊'`, () => {
             const input = 'ကါ၊';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ကါ',
+                normalizedStr: 'ကါ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ကါ။'`, () => {
+            const input = 'ကါ။';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ကါ',
+                normalizedStr: 'ကါ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ကါ.'`, () => {
+            const input = 'ကါ.';
+            const actualFragment = extractor.extractNext(input);
+            const expactedFragment: TextFragment = {
+                fragmentType: FragmentType.Letter,
+                matchedStr: 'ကါ',
+                normalizedStr: 'ကါ'
+            };
+
+            expect(actualFragment).toEqual(expactedFragment);
+        });
+
+        it(String.raw`should return fragment when input 'ကါa'`, () => {
+            const input = 'ကါa';
             const actualFragment = extractor.extractNext(input);
             const expactedFragment: TextFragment = {
                 fragmentType: FragmentType.Letter,
