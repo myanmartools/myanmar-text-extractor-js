@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/lib-tools/schemas/schema.json",
+  "projects": {
+    "myanmar-text-extractor-js": {
+      "tasks": {
+        "build": {
+          "outputPath": "dist/packages/myanmar-text-extractor-js",
+          "script": {
+            "compilations": "auto",
+            "umdId": "myanmarTextExtractor"
+          }
+        },
+        "test": {
+          "testIndexFile": "test/test.ts",
+          "tsConfig": "tsconfig.test.json",
+          "envOverrides": {
+            "ci": {
+              "codeCoverageExclude": [
+                "**/test.ts",
+                "**/index.ts",
+                "**/public_api.ts"
+              ],
+              "reporters": [
+                "junit",
+                "coverage"
+              ],
+              "browsers": [
+                "ChromeHeadlessCI"
+              ],
+              "singleRun": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
