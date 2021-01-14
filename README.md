@@ -1,5 +1,7 @@
 # Myanmar Text Extractor JavaScript
 
+[![GitHub Actions Status](https://github.com/myanmartools/myanmar-text-extractor-js/workflows/Main%20Workflow/badge.svg)](https://github.com/myanmartools/myanmar-text-extractor-js/actions)
+
 Burmese language (Myanmar text) extractor JavaScript library for word segmentation, text extraction or syllable break.
 ## Supported Platforms
 
