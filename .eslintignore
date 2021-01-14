@@ -3,3 +3,4 @@ dist
 junit
 node_modules
 out-tsc
+tmp
