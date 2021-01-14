@@ -9,37 +9,5 @@
   ],
   "packageFiles": ["package.json"],
   "automerge": true,
-  "rangeStrategy": "bump",
-  "packageRules": [
-    {
-      "packagePatterns": [
-        "^@dagonmetric\/.*"
-      ],
-      "groupName": "dagonmetric"
-    },
-    {
-      "packagePatterns": [
-        "^@myanmartools\/.*"
-      ],
-      "groupName": "myanmartools"
-    },
-    {
-      "packagePatterns": [
-        "^@types\/.*"
-      ],
-      "groupName": "types"
-    },
-    {
-      "packagePatterns": ["^jasmine.*"],
-      "groupName": "jasmine"
-    },
-    {
-      "packagePatterns": ["^karma.*"],
-      "groupName": "karma"
-    },
-    {
-      "packagePatterns": ["^protractor.*"],
-      "groupName": "protractor"
-    }
-  ]
+  "rangeStrategy": "bump"
 }
