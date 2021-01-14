@@ -9,8 +9,8 @@
 export interface ExtractInfo {
     totalTrimedInputLength: number;
     curStr: string;
-    trimedCurStrLength: number;
     firstCp: number;
+    trimedCurStrLength: number;
     lastKnownWritingStyle?: 'uni' | 'zg' | null;
     lastKnownWritingStyleProbability?: number;
 }
