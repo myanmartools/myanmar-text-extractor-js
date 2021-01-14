@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2015",
+    "importHelpers": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "declaration": true,
+    "types": [],
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "./dist/packages/myanmar-text-extractor-js"
+  },
+  "files": [
+    "public_api.ts"
+  ]
+}
