@@ -18,13 +18,9 @@ Please fill in the *entire* template below.
 
 <!-- Describe what the desired behavior would be. -->
 
-## Playground Link
-
-<!-- A link to a Playground "Share" link which demonstrates this behavior -->
-
 ## Environment
 
-<!-- Library package version: -->
+<!-- - Library package version: -->
 
 ## Additional Context
 
