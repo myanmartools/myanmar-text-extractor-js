@@ -11,7 +11,3 @@ import { TextFragment } from './text-fragment';
 export interface SingleLetterTextFragment extends TextFragment {
     category: 'single-letter';
 }
-
-export interface SingleLetterPunctuationTextFragment extends TextFragment {
-    category: 'single-letter-punctuation';
-}
