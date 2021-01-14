@@ -7,7 +7,7 @@
  */
 
 import { ExtractInfo } from './extract-info';
-import { SingleLetterPunctuationTextFragment, SingleLetterTextFragment } from './single-letter-text-fragment';
+import { SingleLetterTextFragment } from './single-letter-text-fragment';
 
 import { p0, p100, p30, p45, p48, p50 } from './probabilities';
 
@@ -69,27 +69,4 @@ export function extractSingleLetter(extractInfo: Readonly<ExtractInfo>): SingleL
         uniProbability,
         zgProbability
     };
-}
-
-/**
- * Extract punctuation letter.
- * ၌ / ၍ / ၏
- * @param extractInfo ExtractInfo object.
- * @returns Returns the SingleLetterPunctuationTextFragment object.
- */
-export function extractSingleLetterPunctuation(
-    extractInfo: Readonly<ExtractInfo>
-): SingleLetterPunctuationTextFragment | null {
-    const firstCp = extractInfo.firstCp;
-
-    if (firstCp === 0x104c || firstCp === 0x104d || firstCp === 0x104f) {
-        return {
-            category: 'single-letter-punctuation',
-            matchedStr: extractInfo.curStr[0],
-            uniProbability: p50,
-            zgProbability: p50
-        };
-    }
-
-    return null;
 }
