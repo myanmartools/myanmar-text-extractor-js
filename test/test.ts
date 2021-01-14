@@ -1,13 +1,7 @@
-declare const require: {
-    context(
-        path: string,
-        deep?: boolean,
-        filter?: RegExp
-    ): {
-        keys(): string[];
-        <T>(id: string): T;
-    };
-};
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 const testsContext = (require as any).context('.', true, /\.spec\.ts$/);
 
