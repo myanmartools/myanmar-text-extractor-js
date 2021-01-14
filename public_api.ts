@@ -14,4 +14,6 @@
 export * from './src/extract-info';
 export * from './src/punctuation-symbol-text-extractor';
 export * from './src/punctuation-symbol-text-fragment';
+export * from './src/punctuation-letter-text-extractor';
+export * from './src/punctuation-letter-text-fragment';
 export * from './src/text-fragment';
