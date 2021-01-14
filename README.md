@@ -2,17 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/myanmartools/community.svg)](https://gitter.im/myanmartools/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Myanmar text (Burmese language) extractor for word segmentation, text extraction or syllable break JavaScript library module written in Typescript.
-
-## Features
-
-* Possible date fragment extraction
-* Possible time fragment extraction
-* Possible phone number fragment extraction
-* Number fragment extraction
-* Non-digit alphabet fragment extraction
-* Punctuation fragment extraction
-
+Burmese language (Myanmar text) extractor JavaScript library for word segmentation, text extraction or syllable break.
 ## Supported Platforms
 
 * Web / browser applications
