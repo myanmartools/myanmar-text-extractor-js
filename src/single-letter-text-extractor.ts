@@ -13,7 +13,10 @@ import { p0, p100, p30, p45, p48, p50 } from './probabilities';
 
 /**
  * Extract single letter.
- * ဤ / ဪ နှင့် [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ / uni: ဿ / uni: ၎ (သို့) zg: ၎င်း
+ * ဤ / ဪ
+ * [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
+ * uni: ဿ (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
+ * uni: ၎ (သို့) zg: ၎င်း (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
  * @param extractInfo ExtractInfo object.
  * @returns Returns the SingleLetterTextFragment object.
  */
