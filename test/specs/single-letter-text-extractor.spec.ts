@@ -202,4 +202,73 @@ describe('extractSingleLetter', () => {
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
+
+    it(String.raw`should return 'SingleLetterTextFragment' when input '၎'`, () => {
+        const input = '၎';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 0.45,
+            zgProbability: 0.5
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    it(
+        String.raw`should return 'SingleLetterTextFragment' with zg prob: 1, uni prob: 0.3 when input '၎' and lastKnownWritingStyle is 'zg'`,
+        () => {
+            const input = '၎';
+
+            const actualFragment = extractSingleLetter({
+                totalTrimedInputLength: input.trim().length,
+                curStr: input,
+                firstCp: input.codePointAt(0) as number,
+                trimedCurStrLength: input.trim().length,
+                lastKnownWritingStyle: 'zg'
+            });
+
+            const expactedFragment: SingleLetterTextFragment = {
+                category: 'single-letter',
+                matchedStr: input[0],
+                uniProbability: 0.3,
+                zgProbability: 1
+            };
+
+            void expect(actualFragment).toEqual(expactedFragment);
+        }
+    );
+
+    it(
+        String.raw`should return 'SingleLetterTextFragment' with zg prob: 0.5, uni prob: 0.48 when input '၎' and lastKnownWritingStyle is 'uni' and prob > 0.5`,
+        () => {
+            const input = '၎';
+
+            const actualFragment = extractSingleLetter({
+                totalTrimedInputLength: input.trim().length,
+                curStr: input,
+                firstCp: input.codePointAt(0) as number,
+                trimedCurStrLength: input.trim().length,
+                lastKnownWritingStyle: 'uni',
+                lastKnownWritingStyleProbability: 0.55
+            });
+
+            const expactedFragment: SingleLetterTextFragment = {
+                category: 'single-letter',
+                matchedStr: input[0],
+                uniProbability: 0.48,
+                zgProbability: 0.5
+            };
+
+            void expect(actualFragment).toEqual(expactedFragment);
+        }
+    );
 });
