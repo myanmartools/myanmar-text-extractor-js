@@ -181,4 +181,25 @@ describe('extractSingleLetter', () => {
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
+
+    // uni only
+    it(String.raw`should return 'SingleLetterTextFragment' when input 'ဿ'`, () => {
+        const input = 'ဿ';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 1,
+            zgProbability: 0
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
 });
