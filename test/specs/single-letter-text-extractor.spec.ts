@@ -101,4 +101,84 @@ describe('extractSingleLetter', () => {
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
+
+    it(String.raw`should return 'SingleLetterTextFragment' when input 'ဥ'`, () => {
+        const input = 'ဥ';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    it(String.raw`should return 'SingleLetterTextFragment' when input 'ဦ'`, () => {
+        const input = 'ဦ';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    it(String.raw`should return 'SingleLetterTextFragment' when input 'ဧ'`, () => {
+        const input = 'ဧ';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    it(String.raw`should return 'SingleLetterTextFragment' when input 'ဩ'`, () => {
+        const input = 'ဩ';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
 });
