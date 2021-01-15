@@ -1,7 +1,7 @@
 import { extractSingleNumber } from '../../src/single-number-text-extractor';
 import { SingleNumberTextFragment } from '../../src/single-number-text-fragment';
 
-describe('extractSingleLetter', () => {
+describe('extractSingleNumber', () => {
     it(String.raw`should return 'SingleNumberTextFragment' when input '၀'`, () => {
         const input = '၀';
 
