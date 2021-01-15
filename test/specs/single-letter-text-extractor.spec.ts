@@ -271,4 +271,27 @@ describe('extractSingleLetter', () => {
             void expect(actualFragment).toEqual(expactedFragment);
         }
     );
+
+    it(
+        String.raw`should return 'SingleLetterTextFragment' with zg prob: 0.5, uni prob: 0.45 when input '၎' and lastKnownWritingStyle is 'null'`,
+        () => {
+            const input = '၎';
+
+            const actualFragment = extractSingleLetter({
+                totalTrimedInputLength: input.trim().length,
+                curStr: input,
+                firstCp: input.codePointAt(0) as number,
+                trimedCurStrLength: input.trim().length
+            });
+
+            const expactedFragment: SingleLetterTextFragment = {
+                category: 'single-letter',
+                matchedStr: input[0],
+                uniProbability: 0.45,
+                zgProbability: 0.5
+            };
+
+            void expect(actualFragment).toEqual(expactedFragment);
+        }
+    );
 });
