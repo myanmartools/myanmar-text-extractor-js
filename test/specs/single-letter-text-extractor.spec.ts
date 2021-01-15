@@ -294,4 +294,76 @@ describe('extractSingleLetter', () => {
             void expect(actualFragment).toEqual(expactedFragment);
         }
     );
+
+    it(String.raw`should return 'SingleLetterTextFragment' when input 'ဤက'`, () => {
+        const input = 'ဤက';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        const expactedFragment: SingleLetterTextFragment = {
+            category: 'single-letter',
+            matchedStr: input[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    it(String.raw`should return 'null' when input 'ကက'`, () => {
+        const input = 'ကက';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        void expect(actualFragment).toBeNull();
+    });
+
+    it(String.raw`should return 'null' when input 'ဣက'`, () => {
+        const input = 'ဣက';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        void expect(actualFragment).toBeNull();
+    });
+
+    it(String.raw`should return 'null' when input 'ဿက'`, () => {
+        const input = 'ဿက';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        void expect(actualFragment).toBeNull();
+    });
+
+    it(String.raw`should return 'null' when input '၎က'`, () => {
+        const input = '၎က';
+
+        const actualFragment = extractSingleLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length
+        });
+
+        void expect(actualFragment).toBeNull();
+    });
 });
