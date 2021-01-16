@@ -9,6 +9,7 @@
 export const p100 = 1;
 export const p90 = 0.9;
 export const p60 = 0.6;
+export const p55 = 0.55;
 export const p50 = 0.5;
 export const p48 = 0.48;
 export const p45 = 0.45;
