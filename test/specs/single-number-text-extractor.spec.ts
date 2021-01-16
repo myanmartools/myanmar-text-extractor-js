@@ -9,7 +9,9 @@ describe('extractSingleNumber', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleNumberTextFragment = {
@@ -30,7 +32,9 @@ describe('extractSingleNumber', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleNumberTextFragment = {
@@ -51,7 +55,9 @@ describe('extractSingleNumber', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         void expect(actualFragment).toBeNull();
