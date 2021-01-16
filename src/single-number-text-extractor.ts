@@ -19,10 +19,9 @@ import { p50 } from './probabilities';
  */
 export function extractSingleNumber(extractInfo: Readonly<ExtractInfo>): SingleNumberTextFragment | null {
     const firstCp = extractInfo.firstCp;
-    const totalTrimedInputLength = extractInfo.totalTrimedInputLength;
     const trimedCurStrLength = extractInfo.trimedCurStrLength;
 
-    if ((totalTrimedInputLength === 1 || trimedCurStrLength === 1) && firstCp >= 0x1040 && firstCp <= 0x1049) {
+    if (trimedCurStrLength === 1 && firstCp >= 0x1040 && firstCp <= 0x1049) {
         const matchedStr = extractInfo.curStr[0];
 
         return {
