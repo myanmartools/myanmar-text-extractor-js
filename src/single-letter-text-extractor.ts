@@ -9,12 +9,11 @@
 import { ExtractInfo } from './extract-info';
 import { SingleLetterTextFragment } from './single-letter-text-fragment';
 
-import { p0, p100, p30, p45, p48, p50 } from './probabilities';
+import { p0, p100, p30, p45, p48, p50, p90 } from './probabilities';
 
 /**
  * Extract single letter.
- * ဤ / ဪ
- * [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
+ * ဤ / ဪ / [က-အ] / ဣ / ဥ / ဦ / ဧ / ဩ (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
  * uni: ဿ (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
  * uni: ၎ (သို့) zg: ၎င်း (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
  * @param extractInfo ExtractInfo object.
@@ -22,7 +21,6 @@ import { p0, p100, p30, p45, p48, p50 } from './probabilities';
  */
 export function extractSingleLetter(extractInfo: Readonly<ExtractInfo>): SingleLetterTextFragment | null {
     const firstCp = extractInfo.firstCp;
-    const totalTrimedInputLength = extractInfo.totalTrimedInputLength;
     const trimedCurStrLength = extractInfo.trimedCurStrLength;
 
     let matchedStr = '';
@@ -32,7 +30,7 @@ export function extractSingleLetter(extractInfo: Readonly<ExtractInfo>): SingleL
     if (
         firstCp === 0x1024 ||
         firstCp === 0x102a ||
-        ((totalTrimedInputLength === 1 || trimedCurStrLength === 1) &&
+        (trimedCurStrLength === 1 &&
             ((firstCp >= 0x1000 && firstCp <= 0x1021) ||
                 firstCp === 0x1023 ||
                 (firstCp >= 0x1025 && firstCp <= 0x1027) ||
@@ -40,17 +38,15 @@ export function extractSingleLetter(extractInfo: Readonly<ExtractInfo>): SingleL
     ) {
         matchedStr = extractInfo.curStr[0];
         uniProbability = zgProbability = p50;
-    } else if ((totalTrimedInputLength === 1 || trimedCurStrLength === 1) && firstCp === 0x103f) {
-        // uni only: ဿ
+    } else if (trimedCurStrLength === 1 && firstCp === 0x103f) {
         matchedStr = extractInfo.curStr[0];
         uniProbability = p100;
         zgProbability = p0;
-    } else if ((totalTrimedInputLength === 1 || trimedCurStrLength === 1) && firstCp === 0x104e) {
-        // uni: ၎ (သို့) zg: ၎င်း
+    } else if (trimedCurStrLength === 1 && firstCp === 0x104e) {
         matchedStr = extractInfo.curStr[0];
         if (extractInfo.lastKnownWritingStyle === 'zg') {
             uniProbability = p30;
-            zgProbability = p100;
+            zgProbability = p90;
         } else {
             uniProbability =
                 extractInfo.lastKnownWritingStyle === 'uni' &&
