@@ -9,7 +9,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -29,7 +31,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -49,7 +53,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -69,7 +75,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -89,7 +97,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -109,7 +119,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -129,7 +141,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -149,7 +163,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -169,7 +185,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -190,7 +208,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -210,7 +230,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -233,7 +255,8 @@ describe('extractSingleLetter', () => {
                 curStr: input,
                 firstCp: input.codePointAt(0) as number,
                 trimedCurStrLength: input.trim().length,
-                lastKnownWritingStyle: 'zg'
+                lastKnownWritingStyle: 'zg',
+                lastKnownWritingStyleProbability: 0.55
             });
 
             const expactedFragment: SingleLetterTextFragment = {
@@ -281,7 +304,9 @@ describe('extractSingleLetter', () => {
                 totalTrimedInputLength: input.trim().length,
                 curStr: input,
                 firstCp: input.codePointAt(0) as number,
-                trimedCurStrLength: input.trim().length
+                trimedCurStrLength: input.trim().length,
+                lastKnownWritingStyle: null,
+                lastKnownWritingStyleProbability: 0
             });
 
             const expactedFragment: SingleLetterTextFragment = {
@@ -302,7 +327,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -322,7 +349,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         void expect(actualFragment).toBeNull();
@@ -335,7 +364,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         void expect(actualFragment).toBeNull();
@@ -348,7 +379,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         void expect(actualFragment).toBeNull();
@@ -361,7 +394,9 @@ describe('extractSingleLetter', () => {
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0
         });
 
         void expect(actualFragment).toBeNull();
