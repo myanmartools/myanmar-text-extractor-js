@@ -7,8 +7,10 @@
  */
 
 export const p100 = 1;
+export const p60 = 0.6;
 export const p50 = 0.5;
 export const p48 = 0.48;
 export const p45 = 0.45;
+export const p40 = 0.4;
 export const p30 = 0.3;
 export const p0 = 0;
