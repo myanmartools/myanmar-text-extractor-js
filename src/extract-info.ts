@@ -11,6 +11,6 @@ export interface ExtractInfo {
     curStr: string;
     firstCp: number;
     trimedCurStrLength: number;
-    lastKnownWritingStyle?: 'uni' | 'zg' | null;
-    lastKnownWritingStyleProbability?: number;
+    lastKnownWritingStyle: 'uni' | 'zg' | null;
+    lastKnownWritingStyleProbability: number;
 }
