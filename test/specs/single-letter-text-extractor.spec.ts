@@ -246,7 +246,7 @@ describe('extractSingleLetter', () => {
     });
 
     it(
-        String.raw`should return 'SingleLetterTextFragment' with zg prob: 1, uni prob: 0.3 when input '၎' and lastKnownWritingStyle is 'zg'`,
+        String.raw`should return 'SingleLetterTextFragment' with zg prob: 0.9, uni prob: 0.3 when input '၎' and lastKnownWritingStyle is 'zg'`,
         () => {
             const input = '၎';
 
@@ -263,7 +263,7 @@ describe('extractSingleLetter', () => {
                 category: 'single-letter',
                 matchedStr: input[0],
                 uniProbability: 0.3,
-                zgProbability: 1
+                zgProbability: 0.9
             };
 
             void expect(actualFragment).toEqual(expactedFragment);
