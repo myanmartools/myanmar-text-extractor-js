@@ -250,7 +250,6 @@ describe('extractSingleDottedLetter', () => {
         }
     );
 
-    // uni only
     it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဿ︀'`, () => {
         const input = 'ဿ︀';
 
