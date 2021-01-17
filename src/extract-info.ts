@@ -16,7 +16,7 @@ export interface ExtractInfo {
     lastKnownWritingStyle: 'uni' | 'zg' | null;
     lastKnownWritingStyleProbability: number;
     fragments: TextFragment[];
+    leftStr: string;
     checkSpacesBetween?: boolean;
-    checkInvisibleSpacesBetween?: boolean;
     checkDottedCharsBetween?: boolean;
 }
