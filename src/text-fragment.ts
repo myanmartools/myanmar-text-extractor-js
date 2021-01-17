@@ -11,4 +11,5 @@ export interface TextFragment {
     matchedStr: string;
     uniProbability: number;
     zgProbability: number;
+    normalizedStr?: string;
 }
