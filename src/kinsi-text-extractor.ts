@@ -88,7 +88,6 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
 
     // Exact match - သချိုင်း
     if (
-        extractInfo.lastKnownWritingStyle === 'uni' &&
         testStr.length >= 7 &&
         extractInfo.fragments.length > 0 &&
         extractInfo.fragments[extractInfo.fragments.length - 1].matchedStr === '\u101E' &&
