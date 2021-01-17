@@ -12,7 +12,6 @@ describe('extracKinsiFragment', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: 'uni',
             lastKnownWritingStyleProbability: 0.5,
-            leftStr: 'သ',
             fragments: [
                 {
                     matchedStr: 'သ',
@@ -20,7 +19,8 @@ describe('extracKinsiFragment', () => {
                     uniProbability: 0.5,
                     zgProbability: 0.5
                 }
-            ]
+            ],
+            leftStr: 'သ'
         });
 
         const expactedFragment: KinsiTextFragment = {
