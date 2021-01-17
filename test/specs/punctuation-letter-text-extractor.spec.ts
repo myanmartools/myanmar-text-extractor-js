@@ -11,7 +11,8 @@ describe('extractPunctuationLetter', () => {
             firstCp: input.codePointAt(0) as number,
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0
+            lastKnownWritingStyleProbability: 0,
+            fragments: []
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -33,7 +34,8 @@ describe('extractPunctuationLetter', () => {
             firstCp: input.codePointAt(0) as number,
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0
+            lastKnownWritingStyleProbability: 0,
+            fragments: []
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -55,7 +57,8 @@ describe('extractPunctuationLetter', () => {
             firstCp: input.codePointAt(0) as number,
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0
+            lastKnownWritingStyleProbability: 0,
+            fragments: []
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -77,7 +80,8 @@ describe('extractPunctuationLetter', () => {
             firstCp: input.codePointAt(0) as number,
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0
+            lastKnownWritingStyleProbability: 0,
+            fragments: []
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -99,7 +103,8 @@ describe('extractPunctuationLetter', () => {
             firstCp: input.codePointAt(0) as number,
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0
+            lastKnownWritingStyleProbability: 0,
+            fragments: []
         });
 
         void expect(actualFragment).toBeNull();
