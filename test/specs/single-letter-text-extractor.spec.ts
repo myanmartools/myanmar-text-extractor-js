@@ -12,7 +12,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -35,7 +36,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -58,7 +60,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -81,7 +84,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -104,7 +108,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -127,7 +132,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -150,7 +156,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -173,7 +180,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -196,7 +204,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -219,7 +228,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -242,7 +252,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -272,7 +283,8 @@ describe('extractSingleLetter', () => {
                     uniProbability: 0,
                     zgProbability: 0.55
                 }
-            ]
+            ],
+            leftStr: 'က'
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -304,7 +316,8 @@ describe('extractSingleLetter', () => {
                         uniProbability: 0,
                         zgProbability: 0.55
                     }
-                ]
+                ],
+                leftStr: 'က'
             });
 
             const expactedFragment: SingleLetterTextFragment = {
@@ -328,7 +341,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -351,7 +365,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleLetterTextFragment = {
@@ -374,7 +389,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
@@ -390,7 +406,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
@@ -406,7 +423,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
@@ -422,7 +440,8 @@ describe('extractSingleLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
