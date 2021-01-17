@@ -17,6 +17,5 @@ export interface ExtractInfo {
     lastKnownWritingStyleProbability: number;
     fragments: TextFragment[];
     leftStr: string;
-    checkSpacesBetween?: boolean;
-    checkDottedCharsBetween?: boolean;
+    maxMatch?: boolean;
 }
