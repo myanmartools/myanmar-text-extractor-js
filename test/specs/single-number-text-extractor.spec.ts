@@ -12,7 +12,8 @@ describe('extractSingleNumber', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleNumberTextFragment = {
@@ -36,7 +37,8 @@ describe('extractSingleNumber', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleNumberTextFragment = {
@@ -60,7 +62,8 @@ describe('extractSingleNumber', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
