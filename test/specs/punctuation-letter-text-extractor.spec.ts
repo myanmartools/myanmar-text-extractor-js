@@ -12,7 +12,8 @@ describe('extractPunctuationLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -35,7 +36,8 @@ describe('extractPunctuationLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -58,7 +60,8 @@ describe('extractPunctuationLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -81,7 +84,8 @@ describe('extractPunctuationLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationLetterTextFragment = {
@@ -104,7 +108,8 @@ describe('extractPunctuationLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
