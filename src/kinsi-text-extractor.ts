@@ -61,7 +61,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
     if (extractInfo.totalTrimedInputLength === 3) {
         return {
             category: 'kinsi',
-            kinsiFragmentOnly: true,
+            kinsiSymbolOnly: true,
             leftLetterRequired: true,
             rightLetterRequired: true,
             matchedStr: extractInfo.curStr.substring(0, 3),
