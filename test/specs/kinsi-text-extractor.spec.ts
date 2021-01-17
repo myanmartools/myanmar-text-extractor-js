@@ -12,6 +12,7 @@ describe('extracKinsiFragment', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: 'uni',
             lastKnownWritingStyleProbability: 0.5,
+            leftStr: 'သ',
             fragments: [
                 {
                     matchedStr: 'သ',
