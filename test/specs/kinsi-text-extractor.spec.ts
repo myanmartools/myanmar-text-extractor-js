@@ -64,7 +64,7 @@ describe('extracKinsiFragment', () => {
                 {
                     category: 'single-letter',
                     matchedStr: 'က',
-                    uniProbability: 0.5,
+                    uniProbability: 0.55,
                     zgProbability: 0.5
                 }
             ],
@@ -78,6 +78,37 @@ describe('extracKinsiFragment', () => {
             rightLetterRequired: true,
             uniProbability: 0.6,
             zgProbability: 0.3
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
+    it(String.raw`should return 'KinsiTextFragment' when input 'ကင်္', lastKnownWritingStyle: 'zg'`, () => {
+        const actualFragment = extracKinsiFragment({
+            totalTrimedInputLength: 'ကင်္'.trim().length,
+            curStr: 'င်္',
+            firstCp: 'င်္'.codePointAt(0) as number,
+            trimedCurStrLength: 'င်္'.trim().length,
+            lastKnownWritingStyle: 'zg',
+            lastKnownWritingStyleProbability: 0.55,
+            fragments: [
+                {
+                    category: 'single-letter',
+                    matchedStr: 'က',
+                    uniProbability: 0.5,
+                    zgProbability: 0.55
+                }
+            ],
+            leftStr: 'က'
+        });
+
+        const expactedFragment: KinsiTextFragment = {
+            category: 'kinsi',
+            matchedStr: 'င်္',
+            leftLetterRequired: true,
+            rightLetterRequired: true,
+            uniProbability: 0.48,
+            zgProbability: 0.4
         };
 
         void expect(actualFragment).toEqual(expactedFragment);
