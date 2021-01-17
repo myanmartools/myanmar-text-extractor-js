@@ -10,7 +10,7 @@ import { TextFragment } from './text-fragment';
 
 export interface KinsiTextFragment extends TextFragment {
     category: 'kinsi';
-    kinsiFragmentOnly?: boolean;
+    kinsiSymbolOnly?: boolean;
     leftLetterRequired?: boolean;
     rightLetterRequired?: boolean;
 }
