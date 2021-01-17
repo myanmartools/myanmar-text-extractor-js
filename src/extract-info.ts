@@ -6,6 +6,8 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
+import { TextFragment } from './text-fragment';
+
 export interface ExtractInfo {
     totalTrimedInputLength: number;
     curStr: string;
@@ -13,4 +15,5 @@ export interface ExtractInfo {
     trimedCurStrLength: number;
     lastKnownWritingStyle: 'uni' | 'zg' | null;
     lastKnownWritingStyleProbability: number;
+    fragments: TextFragment[];
 }
