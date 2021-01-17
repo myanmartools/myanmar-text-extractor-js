@@ -8,17 +8,20 @@
 
 import { ExtractInfo } from './extract-info';
 import { KinsiTextFragment } from './kinsi-text-fragment';
+import { invisibleSpace, visibleSpace } from './shared-char-patterns/space';
 
 import { p0, p10, p100, p20, p30, p40, p48, p50, p60, p70, p90 } from './probabilities';
 
 const ksStr = '\u1004\u103A\u1039';
 const cOrginalUnderKs = '\u1000-\u1003';
 const cFakeUnderKs = '\u1018\u101C\u101E';
-
 const acAfCUnderKsG =
     '(?:\u103B\u102E|\u103B\u102C|\u103C\u1036|\u103B\u1031|\u1031\u102C|\u102B|\u102C|\u102F|\u1031\u1037)';
 
 const ksStrictRegExp = new RegExp(`^[${cOrginalUnderKs}${cFakeUnderKs}]${acAfCUnderKsG}?`);
+const ksWithAthetMaxRegExp1 = new RegExp(
+    `^\u1001\uFE00?\u103B\u102D\u102F[${visibleSpace}${invisibleSpace}]+\u1004\uFE00?\u103A\u1038`
+);
 
 const dictKinsiParts = [
     ['\u101E\u102D', '\u1002\u102F'],
@@ -101,6 +104,30 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
             uniProbability: p100,
             zgProbability: p0
         };
+    }
+
+    // Exact match - သ + ချိုင်း (Max match)
+    if (
+        extractInfo.maxMatch &&
+        testStr.length >= 8 &&
+        extractInfo.lastKnownWritingStyle === 'uni' &&
+        testStr[0] === '\u1001' &&
+        (testStr[1] === '\u103B' || testStr[1] === '\uFE00') &&
+        (testStr[2] === '\u103B' || testStr[2] === '\u102D') &&
+        (extractInfo.leftStr.trimRight().endsWith('\u101E') || extractInfo.leftStr.trimRight().endsWith('\u101E\uFE00'))
+    ) {
+        const ksWithAthetMatch = ksWithAthetMaxRegExp1.exec(testStr);
+        if (ksWithAthetMatch != null) {
+            const mStr = ksWithAthetMatch[0];
+
+            return {
+                category: 'kinsi',
+                matchedStr: `${ksStr}${mStr}`,
+                normalizedStr: `${ksStr}\u1001\u103B\u102D\u102F\u1004\u103A\u1038`,
+                uniProbability: p90,
+                zgProbability: p0
+            };
+        }
     }
 
     const m = ksStrictRegExp.exec(testStr);
