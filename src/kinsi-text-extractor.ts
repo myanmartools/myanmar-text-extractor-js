@@ -92,7 +92,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
         extractInfo.fragments.length > 0 &&
         extractInfo.fragments[extractInfo.fragments.length - 1].matchedStr === '\u101E' &&
         testStr[0] === '\u1001' &&
-        testStr[testStr.length - 1] === '\u1038' &&
+        testStr[6] === '\u1038' &&
         testStr.startsWith('\u1001\u103B\u102D\u102F\u1004\u103A\u1038')
     ) {
         return {
