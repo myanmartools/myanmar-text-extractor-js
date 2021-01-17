@@ -12,7 +12,8 @@ describe('extractPunctuationSymbol', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationSymbolTextFragment = {
@@ -35,7 +36,8 @@ describe('extractPunctuationSymbol', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationSymbolTextFragment = {
@@ -58,7 +60,8 @@ describe('extractPunctuationSymbol', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: PunctuationSymbolTextFragment = {
@@ -81,7 +84,8 @@ describe('extractPunctuationSymbol', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
