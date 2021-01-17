@@ -12,7 +12,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -35,7 +36,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -58,7 +60,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -81,7 +84,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -104,7 +108,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -127,7 +132,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -150,7 +156,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -173,7 +180,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -196,7 +204,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -228,7 +237,8 @@ describe('extractSingleDottedLetter', () => {
                         uniProbability: 0,
                         zgProbability: 0.5
                     }
-                ]
+                ],
+                leftStr: 'က'
             });
 
             const expactedFragment: SingleDottedLetterTextFragment = {
@@ -261,7 +271,8 @@ describe('extractSingleDottedLetter', () => {
                         uniProbability: 0,
                         zgProbability: 0.5
                     }
-                ]
+                ],
+                leftStr: 'က'
             });
 
             const expactedFragment: SingleDottedLetterTextFragment = {
@@ -285,7 +296,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -308,7 +320,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -338,7 +351,8 @@ describe('extractSingleDottedLetter', () => {
                     uniProbability: 0,
                     zgProbability: 0.55
                 }
-            ]
+            ],
+            leftStr: 'က'
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -363,7 +377,8 @@ describe('extractSingleDottedLetter', () => {
                 trimedCurStrLength: input.trim().length,
                 lastKnownWritingStyle: null,
                 lastKnownWritingStyleProbability: 0,
-                fragments: []
+                fragments: [],
+                leftStr: ''
             });
 
             const expactedFragment: SingleDottedLetterTextFragment = {
@@ -396,7 +411,8 @@ describe('extractSingleDottedLetter', () => {
                         uniProbability: 0,
                         zgProbability: 0.55
                     }
-                ]
+                ],
+                leftStr: 'က'
             });
 
             const expactedFragment: SingleDottedLetterTextFragment = {
@@ -420,7 +436,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -443,7 +460,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         const expactedFragment: SingleDottedLetterTextFragment = {
@@ -466,7 +484,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
@@ -482,7 +501,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
@@ -498,7 +518,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
@@ -514,7 +535,8 @@ describe('extractSingleDottedLetter', () => {
             trimedCurStrLength: input.trim().length,
             lastKnownWritingStyle: null,
             lastKnownWritingStyleProbability: 0,
-            fragments: []
+            fragments: [],
+            leftStr: ''
         });
 
         void expect(actualFragment).toBeNull();
