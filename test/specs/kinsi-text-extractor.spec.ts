@@ -2,6 +2,33 @@ import { extracKinsiFragment } from '../../src/kinsi-text-extractor';
 import { KinsiTextFragment } from '../../src/kinsi-text-fragment';
 
 describe('extracKinsiFragment', () => {
+    it(String.raw`should return 'KinsiTextFragment' when input 'င်္'`, () => {
+        const input = 'င်္';
+
+        const actualFragment = extracKinsiFragment({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0,
+            fragments: [],
+            leftStr: ''
+        });
+
+        const expactedFragment: KinsiTextFragment = {
+            category: 'kinsi',
+            matchedStr: input,
+            kinsiSymbolOnly: true,
+            leftLetterRequired: true,
+            rightLetterRequired: true,
+            uniProbability: 1,
+            zgProbability: 0
+        };
+
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
+
     it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချိုင်း'`, () => {
         const input = 'င်္ချိုင်း';
 
