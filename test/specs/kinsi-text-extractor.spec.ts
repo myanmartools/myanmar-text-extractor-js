@@ -224,37 +224,40 @@ describe('extracKinsiFragment', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချို  င်း' (max match - spaces between)`, () => {
-        const input = 'င်္ချို  င်း';
-        const curStr = input;
+    it(
+        String.raw`should return 'KinsiTextFragment' when input 'င်္ချို­င်း' (max match - invisible spaces between)`,
+        () => {
+            const input = 'င်္ချို­င်း';
+            const curStr = input;
 
-        const actualFragment = extracKinsiFragment({
-            totalTrimedInputLength: input.trim().length,
-            curStr,
-            firstCp: curStr.codePointAt(0) as number,
-            trimedCurStrLength: curStr.trim().length,
-            lastKnownWritingStyle: 'uni',
-            lastKnownWritingStyleProbability: 0.5,
-            fragments: [
-                {
-                    matchedStr: 'သ',
-                    category: 'single-letter',
-                    uniProbability: 0.5,
-                    zgProbability: 0.5
-                }
-            ],
-            leftStr: 'သ',
-            maxMatch: true
-        });
+            const actualFragment = extracKinsiFragment({
+                totalTrimedInputLength: input.trim().length,
+                curStr,
+                firstCp: curStr.codePointAt(0) as number,
+                trimedCurStrLength: curStr.trim().length,
+                lastKnownWritingStyle: 'uni',
+                lastKnownWritingStyleProbability: 0.5,
+                fragments: [
+                    {
+                        matchedStr: 'သ',
+                        category: 'single-letter',
+                        uniProbability: 0.5,
+                        zgProbability: 0.5
+                    }
+                ],
+                leftStr: 'သ',
+                maxMatch: true
+            });
 
-        const expactedFragment: KinsiTextFragment = {
-            category: 'kinsi',
-            matchedStr: curStr,
-            normalizedStr: 'င်္ချိုင်း',
-            uniProbability: 0.9,
-            zgProbability: 0
-        };
+            const expactedFragment: KinsiTextFragment = {
+                category: 'kinsi',
+                matchedStr: curStr,
+                normalizedStr: 'င်္ချိုင်း',
+                uniProbability: 0.9,
+                zgProbability: 0
+            };
 
-        void expect(actualFragment).toEqual(expactedFragment);
-    });
+            void expect(actualFragment).toEqual(expactedFragment);
+        }
+    );
 });
