@@ -190,7 +190,7 @@ describe('extracKinsiFragment', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချို  င်း' (max match)`, () => {
+    it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချို  င်း' (max match - spaces between)`, () => {
         const input = 'င်္ချို  င်း';
         const curStr = input;
 
