@@ -67,7 +67,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
             kinsiSymbolOnly: true,
             leftLetterRequired: true,
             rightLetterRequired: true,
-            matchedStr: extractInfo.curStr.substring(0, 3),
+            matchedStr: ksStr,
             uniProbability: p60,
             zgProbability: p30
         };
@@ -78,7 +78,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
             category: 'kinsi',
             leftLetterRequired: extractInfo.lastKnownWritingStyle === 'uni' ? false : true,
             rightLetterRequired: true,
-            matchedStr: extractInfo.curStr.substring(0, 3),
+            matchedStr: ksStr,
             uniProbability: extractInfo.lastKnownWritingStyle !== 'zg' ? p60 : p48,
             zgProbability:
                 extractInfo.lastKnownWritingStyle === 'zg' && extractInfo.lastKnownWritingStyleProbability > p50
