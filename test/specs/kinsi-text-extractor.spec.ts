@@ -318,10 +318,10 @@ describe('extracKinsiFragment', () => {
                 zgProbability: 0,
                 rightFragment: {
                     category: 'letter-and-athet',
-                    matchedStr: 'ချို­င်း',
+                    matchedStr: 'ခ︀ျို⁠င︀်း',
                     uniProbability: 0.9,
                     zgProbability: 0,
-                    normalizedStr: 'ခ︀ျို⁠င︀်း'
+                    normalizedStr: 'ချိုင်း'
                 }
             };
 
