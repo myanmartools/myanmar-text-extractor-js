@@ -7,9 +7,10 @@
  */
 
 export interface TextFragment {
-    category: string;
+    category: 'punctuation-letter' | 'punctuation-symbol' | 'dotted-letter' | 'dotted-number' | 'letter' | 'number';
     matchedStr: string;
     uniProbability: number;
     zgProbability: number;
     normalizedStr?: string;
+    rightFragment?: Partial<TextFragment>;
 }
