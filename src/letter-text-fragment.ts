@@ -8,6 +8,6 @@
 
 import { TextFragment } from './text-fragment';
 
-export interface SingleLetterTextFragment extends TextFragment {
-    category: 'single-letter';
+export interface LetterTextFragment extends TextFragment {
+    category: 'letter';
 }
