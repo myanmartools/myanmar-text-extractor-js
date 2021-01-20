@@ -7,7 +7,7 @@
  */
 
 import { ExtractInfo } from './extract-info';
-import { SingleDottedLetterTextFragment } from './single-dotted-letter-text-fragment';
+import { DottedLetterTextFragment } from './dotted-letter-text-fragment';
 
 import { p0, p100, p40, p45, p48, p50, p60 } from './probabilities';
 
@@ -17,9 +17,9 @@ import { p0, p100, p40, p45, p48, p50, p60 } from './probabilities';
  * uni: ဿ︀ (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
  * uni: ၎︀ (သို့) zg: ၎︀င်း (တစ်လုံးတည်းဖြစ်ခဲ့လျှင်)
  * @param extractInfo ExtractInfo object.
- * @returns Returns the SingleDottedLetterTextFragment object.
+ * @returns Returns the DottedLetterTextFragment object.
  */
-export function extractSingleDottedLetter(extractInfo: Readonly<ExtractInfo>): SingleDottedLetterTextFragment | null {
+export function extractSingleDottedLetter(extractInfo: Readonly<ExtractInfo>): DottedLetterTextFragment | null {
     if (extractInfo.trimedCurStrLength < 2 || extractInfo.curStr[1] !== '\uFE00') {
         return null;
     }
@@ -71,7 +71,7 @@ export function extractSingleDottedLetter(extractInfo: Readonly<ExtractInfo>): S
     }
 
     return {
-        category: 'single-dotted-letter',
+        category: 'dotted-letter',
         matchedStr,
         uniProbability,
         zgProbability
