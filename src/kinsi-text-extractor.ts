@@ -18,10 +18,10 @@ const cFakeUnderKs = '\u1018\u101C\u101E';
 const acAfCUnderKsG =
     '(?:\u103B\u102E|\u103B\u102C|\u103C\u1036|\u103B\u1031|\u1031\u102C|\u102B|\u102C|\u102F|\u1031\u1037)';
 
-const ksStrictRegExp = new RegExp(`^[${cOrginalUnderKs}${cFakeUnderKs}]${acAfCUnderKsG}?`);
 const ksWithAthetMaxRegExp1 = new RegExp(
     `^\u1001\uFE00?\u103B\u102D\u102F[${visibleSpace}${invisibleSpace}]+\u1004\uFE00?\u103A\u1038`
 );
+const ksStrictRegExp = new RegExp(`^[${cOrginalUnderKs}${cFakeUnderKs}]${acAfCUnderKsG}?`);
 
 const dictKinsiParts = [
     ['\u101E\u102D', '\u1002\u102F'],
