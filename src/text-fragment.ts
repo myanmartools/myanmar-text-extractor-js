@@ -7,7 +7,14 @@
  */
 
 export interface TextFragment {
-    category: 'punctuation-letter' | 'punctuation-symbol' | 'dotted-letter' | 'dotted-number' | 'letter' | 'number';
+    category:
+        | 'punctuation-letter'
+        | 'punctuation-symbol'
+        | 'dotted-letter'
+        | 'dotted-number'
+        | 'letter'
+        | 'number'
+        | 'kinsi';
     matchedStr: string;
     uniProbability: number;
     zgProbability: number;
