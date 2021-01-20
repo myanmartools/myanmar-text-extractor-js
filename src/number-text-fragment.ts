@@ -8,7 +8,7 @@
 
 import { TextFragment } from './text-fragment';
 
-export interface SingleNumberTextFragment extends TextFragment {
-    category: 'single-number';
+export interface NumberTextFragment extends TextFragment {
+    category: 'number';
     decimalStr: string;
 }
