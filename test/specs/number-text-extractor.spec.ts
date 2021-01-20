@@ -1,11 +1,11 @@
-import { extractSingleDottedNumber } from '../../src/single-dotted-number-text-extractor';
-import { SingleDottedNumberTextFragment } from '../../src/single-dotted-number-text-fragment';
+import { extractSingleNumber } from '../../src/number-text-extractor';
+import { NumberTextFragment } from '../../src/number-text-fragment';
 
-describe('extractSingleDottedNumber', () => {
-    it(String.raw`should return 'SingleDottedNumberTextFragment' when input '၀︀'`, () => {
-        const input = '၀︀';
+describe('extractSingleNumber', () => {
+    it(String.raw`should return 'NumberTextFragment' when input '၀'`, () => {
+        const input = '၀';
 
-        const actualFragment = extractSingleDottedNumber({
+        const actualFragment = extractSingleNumber({
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
@@ -16,21 +16,21 @@ describe('extractSingleDottedNumber', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedNumberTextFragment = {
-            category: 'single-dotted-number',
-            matchedStr: input.substring(0, 2),
+        const expactedFragment: NumberTextFragment = {
+            category: 'number',
+            matchedStr: input[0],
             decimalStr: '၀',
-            uniProbability: 0.6,
-            zgProbability: 0.4
+            uniProbability: 0.5,
+            zgProbability: 0.5
         };
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedNumberTextFragment' when input '၉︀'`, () => {
-        const input = '၉︀';
+    it(String.raw`should return 'NumberTextFragment' when input '၉'`, () => {
+        const input = '၉';
 
-        const actualFragment = extractSingleDottedNumber({
+        const actualFragment = extractSingleNumber({
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,
@@ -41,21 +41,21 @@ describe('extractSingleDottedNumber', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedNumberTextFragment = {
-            category: 'single-dotted-number',
-            matchedStr: input.substring(0, 2),
+        const expactedFragment: NumberTextFragment = {
+            category: 'number',
+            matchedStr: input[0],
             decimalStr: '၉',
-            uniProbability: 0.6,
-            zgProbability: 0.4
+            uniProbability: 0.5,
+            zgProbability: 0.5
         };
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'null' when input '၁︀၁︀'`, () => {
-        const input = '၁︀၁︀';
+    it(String.raw`should return 'null' when input '၁၁'`, () => {
+        const input = '၁၁';
 
-        const actualFragment = extractSingleDottedNumber({
+        const actualFragment = extractSingleNumber({
             totalTrimedInputLength: input.trim().length,
             curStr: input,
             firstCp: input.codePointAt(0) as number,

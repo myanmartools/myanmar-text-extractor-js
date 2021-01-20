@@ -1,8 +1,8 @@
-import { extractSingleDottedLetter } from '../../src/single-dotted-letter-text-extractor';
-import { SingleDottedLetterTextFragment } from '../../src/single-dotted-letter-text-fragment';
+import { extractSingleDottedLetter } from '../../src/dotted-letter-text-extractor';
+import { DottedLetterTextFragment } from '../../src/dotted-letter-text-fragment';
 
 describe('extractSingleDottedLetter', () => {
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဤ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဤ︀'`, () => {
         const input = 'ဤ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -16,8 +16,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -26,7 +26,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဪ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဪ︀'`, () => {
         const input = 'ဪ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -40,8 +40,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -50,7 +50,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'က︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'က︀'`, () => {
         const input = 'က︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -64,8 +64,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -74,7 +74,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'အ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'အ︀'`, () => {
         const input = 'အ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -88,8 +88,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -98,7 +98,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဣ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဣ︀'`, () => {
         const input = 'ဣ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -112,8 +112,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -122,7 +122,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဥ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဥ︀'`, () => {
         const input = 'ဥ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -136,8 +136,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -146,7 +146,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဦ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဦ︀'`, () => {
         const input = 'ဦ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -160,8 +160,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -170,7 +170,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဧ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဧ︀'`, () => {
         const input = 'ဧ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -184,8 +184,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -194,7 +194,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဩ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဩ︀'`, () => {
         const input = 'ဩ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -208,8 +208,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -219,7 +219,7 @@ describe('extractSingleDottedLetter', () => {
     });
 
     it(
-        String.raw`should return 'SingleDottedLetterTextFragment' when input: 'က︀', lastKnownWritingStyle: 'zg', lastKnownWritingStyleProbability > 0.5`,
+        String.raw`should return 'DottedLetterTextFragment' when input: 'က︀', lastKnownWritingStyle: 'zg', lastKnownWritingStyleProbability > 0.5`,
         () => {
             const input = 'က︀';
 
@@ -233,7 +233,7 @@ describe('extractSingleDottedLetter', () => {
                 fragments: [
                     {
                         matchedStr: 'က',
-                        category: 'single-letter',
+                        category: 'letter',
                         uniProbability: 0,
                         zgProbability: 0.5
                     }
@@ -241,8 +241,8 @@ describe('extractSingleDottedLetter', () => {
                 leftStr: 'က'
             });
 
-            const expactedFragment: SingleDottedLetterTextFragment = {
-                category: 'single-dotted-letter',
+            const expactedFragment: DottedLetterTextFragment = {
+                category: 'dotted-letter',
                 matchedStr: input.substring(0, 2),
                 uniProbability: 0.5,
                 zgProbability: 0.5
@@ -253,7 +253,7 @@ describe('extractSingleDottedLetter', () => {
     );
 
     it(
-        String.raw`should return 'SingleDottedLetterTextFragment' when input: 'က︀', lastKnownWritingStyle: 'zg', lastKnownWritingStyleProbability <= 0.5`,
+        String.raw`should return 'DottedLetterTextFragment' when input: 'က︀', lastKnownWritingStyle: 'zg', lastKnownWritingStyleProbability <= 0.5`,
         () => {
             const input = 'က︀';
 
@@ -267,7 +267,7 @@ describe('extractSingleDottedLetter', () => {
                 fragments: [
                     {
                         matchedStr: 'က',
-                        category: 'single-letter',
+                        category: 'letter',
                         uniProbability: 0,
                         zgProbability: 0.5
                     }
@@ -275,8 +275,8 @@ describe('extractSingleDottedLetter', () => {
                 leftStr: 'က'
             });
 
-            const expactedFragment: SingleDottedLetterTextFragment = {
-                category: 'single-dotted-letter',
+            const expactedFragment: DottedLetterTextFragment = {
+                category: 'dotted-letter',
                 matchedStr: input.substring(0, 2),
                 uniProbability: 0.5,
                 zgProbability: 0.48
@@ -286,7 +286,7 @@ describe('extractSingleDottedLetter', () => {
         }
     );
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဿ︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဿ︀'`, () => {
         const input = 'ဿ︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -300,8 +300,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 1,
             zgProbability: 0
@@ -310,7 +310,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input '၎︀'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input '၎︀'`, () => {
         const input = '၎︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -324,8 +324,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.45,
             zgProbability: 0.5
@@ -334,7 +334,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input '၎︀', lastKnownWritingStyle: 'zg'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input '၎︀', lastKnownWritingStyle: 'zg'`, () => {
         const input = '၎︀';
 
         const actualFragment = extractSingleDottedLetter({
@@ -347,7 +347,7 @@ describe('extractSingleDottedLetter', () => {
             fragments: [
                 {
                     matchedStr: 'က',
-                    category: 'single-letter',
+                    category: 'letter',
                     uniProbability: 0,
                     zgProbability: 0.55
                 }
@@ -355,8 +355,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: 'က'
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.4,
             zgProbability: 0.6
@@ -365,35 +365,32 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(
-        String.raw`should return 'SingleDottedLetterTextFragment' when input '၎︀', lastKnownWritingStyle: 'null',`,
-        () => {
-            const input = '၎︀';
+    it(String.raw`should return 'DottedLetterTextFragment' when input '၎︀', lastKnownWritingStyle: 'null',`, () => {
+        const input = '၎︀';
 
-            const actualFragment = extractSingleDottedLetter({
-                totalTrimedInputLength: input.trim().length,
-                curStr: input,
-                firstCp: input.codePointAt(0) as number,
-                trimedCurStrLength: input.trim().length,
-                lastKnownWritingStyle: null,
-                lastKnownWritingStyleProbability: 0,
-                fragments: [],
-                leftStr: ''
-            });
+        const actualFragment = extractSingleDottedLetter({
+            totalTrimedInputLength: input.trim().length,
+            curStr: input,
+            firstCp: input.codePointAt(0) as number,
+            trimedCurStrLength: input.trim().length,
+            lastKnownWritingStyle: null,
+            lastKnownWritingStyleProbability: 0,
+            fragments: [],
+            leftStr: ''
+        });
 
-            const expactedFragment: SingleDottedLetterTextFragment = {
-                category: 'single-dotted-letter',
-                matchedStr: input.substring(0, 2),
-                uniProbability: 0.45,
-                zgProbability: 0.5
-            };
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
+            matchedStr: input.substring(0, 2),
+            uniProbability: 0.45,
+            zgProbability: 0.5
+        };
 
-            void expect(actualFragment).toEqual(expactedFragment);
-        }
-    );
+        void expect(actualFragment).toEqual(expactedFragment);
+    });
 
     it(
-        String.raw`should return 'SingleDottedLetterTextFragment' when input '၎︀', lastKnownWritingStyle: 'uni', lastKnownWritingStyleProbability > 0.5`,
+        String.raw`should return 'DottedLetterTextFragment' when input '၎︀', lastKnownWritingStyle: 'uni', lastKnownWritingStyleProbability > 0.5`,
         () => {
             const input = '၎︀';
 
@@ -407,7 +404,7 @@ describe('extractSingleDottedLetter', () => {
                 fragments: [
                     {
                         matchedStr: 'က',
-                        category: 'single-letter',
+                        category: 'letter',
                         uniProbability: 0,
                         zgProbability: 0.55
                     }
@@ -415,8 +412,8 @@ describe('extractSingleDottedLetter', () => {
                 leftStr: 'က'
             });
 
-            const expactedFragment: SingleDottedLetterTextFragment = {
-                category: 'single-dotted-letter',
+            const expactedFragment: DottedLetterTextFragment = {
+                category: 'dotted-letter',
                 matchedStr: input.substring(0, 2),
                 uniProbability: 0.48,
                 zgProbability: 0.5
@@ -426,7 +423,7 @@ describe('extractSingleDottedLetter', () => {
         }
     );
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဤ︀က'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဤ︀က'`, () => {
         const input = 'ဤ︀က';
 
         const actualFragment = extractSingleDottedLetter({
@@ -440,8 +437,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4
@@ -450,7 +447,7 @@ describe('extractSingleDottedLetter', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'SingleDottedLetterTextFragment' when input 'ဪ︀က'`, () => {
+    it(String.raw`should return 'DottedLetterTextFragment' when input 'ဪ︀က'`, () => {
         const input = 'ဪ︀က';
 
         const actualFragment = extractSingleDottedLetter({
@@ -464,8 +461,8 @@ describe('extractSingleDottedLetter', () => {
             leftStr: ''
         });
 
-        const expactedFragment: SingleDottedLetterTextFragment = {
-            category: 'single-dotted-letter',
+        const expactedFragment: DottedLetterTextFragment = {
+            category: 'dotted-letter',
             matchedStr: input.substring(0, 2),
             uniProbability: 0.6,
             zgProbability: 0.4

@@ -71,7 +71,7 @@ describe('extracKinsiFragment', () => {
             lastKnownWritingStyleProbability: 0.55,
             fragments: [
                 {
-                    category: 'single-letter',
+                    category: 'letter',
                     matchedStr: 'က',
                     uniProbability: 0.55,
                     zgProbability: 0.5
@@ -105,7 +105,7 @@ describe('extracKinsiFragment', () => {
             lastKnownWritingStyleProbability: 0.55,
             fragments: [
                 {
-                    category: 'single-letter',
+                    category: 'letter',
                     matchedStr: 'က',
                     uniProbability: 0.5,
                     zgProbability: 0.55
@@ -126,9 +126,9 @@ describe('extracKinsiFragment', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချိုင်း'`, () => {
-        const input = 'င်္ချိုင်း';
-        const curStr = input;
+    it(String.raw`should return 'KinsiTextFragment' when input 'သင်္ချိုင်း'`, () => {
+        const input = 'သင်္ချိုင်း';
+        const curStr = 'င်္ချိုင်း';
 
         const actualFragment = extracKinsiFragment({
             totalTrimedInputLength: input.trim().length,
@@ -140,7 +140,7 @@ describe('extracKinsiFragment', () => {
             fragments: [
                 {
                     matchedStr: 'သ',
-                    category: 'single-letter',
+                    category: 'letter',
                     uniProbability: 0.5,
                     zgProbability: 0.5
                 }
@@ -150,17 +150,23 @@ describe('extracKinsiFragment', () => {
 
         const expactedFragment: KinsiTextFragment = {
             category: 'kinsi',
-            matchedStr: curStr,
+            matchedStr: 'င်္',
             uniProbability: 1,
-            zgProbability: 0
+            zgProbability: 0,
+            rightFragment: {
+                category: 'letter-and-athet',
+                matchedStr: 'ချိုင်း',
+                uniProbability: 1,
+                zgProbability: 0
+            }
         };
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချိုင်းက'`, () => {
-        const input = 'င်္ချိုင်းက';
-        const curStr = input;
+    it(String.raw`should return 'KinsiTextFragment' when input 'သင်္ချိုင်းက'`, () => {
+        const input = 'သင်္ချိုင်းက';
+        const curStr = 'င်္ချိုင်းက';
 
         const actualFragment = extracKinsiFragment({
             totalTrimedInputLength: input.trim().length,
@@ -172,7 +178,7 @@ describe('extracKinsiFragment', () => {
             fragments: [
                 {
                     matchedStr: 'သ',
-                    category: 'single-letter',
+                    category: 'letter',
                     uniProbability: 0.5,
                     zgProbability: 0.5
                 }
@@ -182,17 +188,23 @@ describe('extracKinsiFragment', () => {
 
         const expactedFragment: KinsiTextFragment = {
             category: 'kinsi',
-            matchedStr: 'င်္ချိုင်း',
+            matchedStr: 'င်္',
             uniProbability: 1,
-            zgProbability: 0
+            zgProbability: 0,
+            rightFragment: {
+                category: 'letter-and-athet',
+                matchedStr: 'ချိုင်း',
+                uniProbability: 1,
+                zgProbability: 0
+            }
         };
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'KinsiTextFragment' when input 'င်္ချို  င်း' (max match - spaces between)`, () => {
-        const input = 'င်္ချို  င်း';
-        const curStr = input;
+    it(String.raw`should return 'KinsiTextFragment' when input 'သင်္ချို  င်း' (max match - spaces between)`, () => {
+        const input = 'သင်္ချို  င်း';
+        const curStr = 'င်္ချို  င်း';
 
         const actualFragment = extracKinsiFragment({
             totalTrimedInputLength: input.trim().length,
@@ -204,7 +216,7 @@ describe('extracKinsiFragment', () => {
             fragments: [
                 {
                     matchedStr: 'သ',
-                    category: 'single-letter',
+                    category: 'letter',
                     uniProbability: 0.5,
                     zgProbability: 0.5
                 }
@@ -215,20 +227,26 @@ describe('extracKinsiFragment', () => {
 
         const expactedFragment: KinsiTextFragment = {
             category: 'kinsi',
-            matchedStr: curStr,
-            normalizedStr: 'င်္ချိုင်း',
-            uniProbability: 0.9,
-            zgProbability: 0
+            matchedStr: 'င်္',
+            uniProbability: 1,
+            zgProbability: 0,
+            rightFragment: {
+                category: 'letter-and-athet',
+                matchedStr: 'ချို  င်း',
+                uniProbability: 0.9,
+                zgProbability: 0,
+                normalizedStr: 'ချိုင်း'
+            }
         };
 
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
     it(
-        String.raw`should return 'KinsiTextFragment' when input 'င်္ချို­င်း' (max match - invisible spaces between)`,
+        String.raw`should return 'KinsiTextFragment' when input 'သင်္ချို­င်း' (max match - invisible spaces between)`,
         () => {
-            const input = 'င်္ချို­င်း';
-            const curStr = input;
+            const input = 'သင်္ချို­င်း';
+            const curStr = 'င်္ချို­င်း';
 
             const actualFragment = extracKinsiFragment({
                 totalTrimedInputLength: input.trim().length,
@@ -240,7 +258,7 @@ describe('extracKinsiFragment', () => {
                 fragments: [
                     {
                         matchedStr: 'သ',
-                        category: 'single-letter',
+                        category: 'letter',
                         uniProbability: 0.5,
                         zgProbability: 0.5
                     }
@@ -251,10 +269,16 @@ describe('extracKinsiFragment', () => {
 
             const expactedFragment: KinsiTextFragment = {
                 category: 'kinsi',
-                matchedStr: curStr,
-                normalizedStr: 'င်္ချိုင်း',
-                uniProbability: 0.9,
-                zgProbability: 0
+                matchedStr: 'င်္',
+                uniProbability: 1,
+                zgProbability: 0,
+                rightFragment: {
+                    category: 'letter-and-athet',
+                    matchedStr: 'ချို­င်း',
+                    uniProbability: 0.9,
+                    zgProbability: 0,
+                    normalizedStr: 'ချိုင်း'
+                }
             };
 
             void expect(actualFragment).toEqual(expactedFragment);
@@ -262,10 +286,10 @@ describe('extracKinsiFragment', () => {
     );
 
     it(
-        String.raw`should return 'KinsiTextFragment' when input 'င်္ခ︀ျို⁠င︀်း' (max match - invisible spaces between and dotted form)`,
+        String.raw`should return 'KinsiTextFragment' when input 'သ︀င်္ခ︀ျို⁠င︀်း' (max match - invisible spaces between and dotted form)`,
         () => {
-            const input = 'င်္ခ︀ျို⁠င︀်း';
-            const curStr = input;
+            const input = 'သ︀င်္ခ︀ျို⁠င︀်း';
+            const curStr = 'င်္ခ︀ျို⁠င︀်း';
 
             const actualFragment = extracKinsiFragment({
                 totalTrimedInputLength: input.trim().length,
@@ -276,10 +300,11 @@ describe('extracKinsiFragment', () => {
                 lastKnownWritingStyleProbability: 0.5,
                 fragments: [
                     {
-                        matchedStr: 'သ',
-                        category: 'single-letter',
-                        uniProbability: 0.5,
-                        zgProbability: 0.5
+                        matchedStr: 'သ︀',
+                        category: 'dotted-letter',
+                        uniProbability: 0.6,
+                        zgProbability: 0.4,
+                        normalizedStr: 'သ'
                     }
                 ],
                 leftStr: 'သ',
@@ -288,10 +313,16 @@ describe('extracKinsiFragment', () => {
 
             const expactedFragment: KinsiTextFragment = {
                 category: 'kinsi',
-                matchedStr: curStr,
-                normalizedStr: 'င်္ချိုင်း',
-                uniProbability: 0.9,
-                zgProbability: 0
+                matchedStr: 'င်္',
+                uniProbability: 1,
+                zgProbability: 0,
+                rightFragment: {
+                    category: 'letter-and-athet',
+                    matchedStr: 'ချို­င်း',
+                    uniProbability: 0.9,
+                    zgProbability: 0,
+                    normalizedStr: 'ခ︀ျို⁠င︀်း'
+                }
             };
 
             void expect(actualFragment).toEqual(expactedFragment);
