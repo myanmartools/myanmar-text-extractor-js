@@ -14,7 +14,8 @@ export interface TextFragment {
         | 'dotted-number'
         | 'letter'
         | 'number'
-        | 'kinsi';
+        | 'kinsi'
+        | 'letter-and-athet';
     matchedStr: string;
     uniProbability: number;
     zgProbability: number;
