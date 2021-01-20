@@ -20,5 +20,5 @@ export interface TextFragment {
     uniProbability: number;
     zgProbability: number;
     normalizedStr?: string;
-    rightFragment?: Partial<TextFragment>;
+    rightFragment?: TextFragment;
 }
