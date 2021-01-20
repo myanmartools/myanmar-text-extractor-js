@@ -89,24 +89,31 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
 
     const testStr = extractInfo.curStr.substring(3);
 
-    // Exact match - သ + ချိုင်း
+    // Exact match
+    const dictKsRightPart1 = '\u1001\u103B\u102D\u102F\u1004\u103A\u1038';
     if (
         testStr.length >= 7 &&
         extractInfo.fragments.length > 0 &&
         extractInfo.fragments[extractInfo.fragments.length - 1].matchedStr === '\u101E' &&
         testStr[0] === '\u1001' &&
         testStr[6] === '\u1038' &&
-        testStr.startsWith('\u1001\u103B\u102D\u102F\u1004\u103A\u1038')
+        testStr.startsWith(dictKsRightPart1)
     ) {
         return {
             category: 'kinsi',
-            matchedStr: `${ksStr}${testStr.substring(0, 7)}`,
+            matchedStr: ksStr,
             uniProbability: p100,
-            zgProbability: p0
+            zgProbability: p0,
+            rightFragment: {
+                category: 'letter-and-athet',
+                matchedStr: dictKsRightPart1,
+                uniProbability: p100,
+                zgProbability: p0
+            }
         };
     }
 
-    // Exact match - သ + ချိုင်း (Max match)
+    // Exact match (Max match)
     if (
         extractInfo.maxMatch &&
         testStr.length >= 8 &&
@@ -122,10 +129,16 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
 
             return {
                 category: 'kinsi',
-                matchedStr: `${ksStr}${mStr}`,
-                normalizedStr: `${ksStr}\u1001\u103B\u102D\u102F\u1004\u103A\u1038`,
+                matchedStr: ksStr,
                 uniProbability: p90,
-                zgProbability: p0
+                zgProbability: p0,
+                rightFragment: {
+                    category: 'letter-and-athet',
+                    matchedStr: mStr,
+                    normalizedStr: dictKsRightPart1,
+                    uniProbability: p90,
+                    zgProbability: p0
+                }
             };
         }
     }
