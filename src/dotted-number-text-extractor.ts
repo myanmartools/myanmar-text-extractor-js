@@ -7,7 +7,7 @@
  */
 
 import { ExtractInfo } from './extract-info';
-import { SingleDottedNumberTextFragment } from './single-dotted-number-text-fragment';
+import { DottedNumberTextFragment } from './dotted-number-text-fragment';
 
 import { p40, p60 } from './probabilities';
 
@@ -15,9 +15,9 @@ import { p40, p60 } from './probabilities';
  * Extract single dotted number.
  * [၀-၉]
  * @param extractInfo ExtractInfo object.
- * @returns Returns the SingleDottedNumberTextFragment object.
+ * @returns Returns the DottedNumberTextFragment object.
  */
-export function extractSingleDottedNumber(extractInfo: Readonly<ExtractInfo>): SingleDottedNumberTextFragment | null {
+export function extractSingleDottedNumber(extractInfo: Readonly<ExtractInfo>): DottedNumberTextFragment | null {
     if (extractInfo.trimedCurStrLength < 2 || extractInfo.curStr[1] !== '\uFE00') {
         return null;
     }
@@ -28,7 +28,7 @@ export function extractSingleDottedNumber(extractInfo: Readonly<ExtractInfo>): S
         const matchedStr = extractInfo.curStr.substring(0, 2);
 
         return {
-            category: 'single-dotted-number',
+            category: 'dotted-number',
             decimalStr: matchedStr[0],
             matchedStr,
             uniProbability: p60,
