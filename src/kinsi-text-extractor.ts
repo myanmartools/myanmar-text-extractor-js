@@ -130,7 +130,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
             return {
                 category: 'kinsi',
                 matchedStr: ksStr,
-                uniProbability: p90,
+                uniProbability: p100,
                 zgProbability: p0,
                 rightFragment: {
                     category: 'letter-and-athet',
