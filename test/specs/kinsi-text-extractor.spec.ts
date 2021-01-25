@@ -235,7 +235,12 @@ describe('extracKinsiFragment', () => {
                 matchedStr: 'ချို  င်း',
                 uniProbability: 0.9,
                 zgProbability: 0,
-                normalizedStr: 'ချိုင်း'
+                normalization: {
+                    normalizedStr: 'ချိုင်း',
+                    normalizationActions: {
+                        removeSpace: true
+                    }
+                }
             }
         };
 
@@ -277,7 +282,12 @@ describe('extracKinsiFragment', () => {
                     matchedStr: 'ချို­င်း',
                     uniProbability: 0.9,
                     zgProbability: 0,
-                    normalizedStr: 'ချိုင်း'
+                    normalization: {
+                        normalizedStr: 'ချိုင်း',
+                        normalizationActions: {
+                            removeSpace: true
+                        }
+                    }
                 }
             };
 
@@ -303,8 +313,7 @@ describe('extracKinsiFragment', () => {
                         matchedStr: 'သ︀',
                         category: 'dotted-letter',
                         uniProbability: 0.6,
-                        zgProbability: 0.4,
-                        normalizedStr: 'သ'
+                        zgProbability: 0.4
                     }
                 ],
                 leftStr: 'သ',
@@ -321,7 +330,13 @@ describe('extracKinsiFragment', () => {
                     matchedStr: 'ခ︀ျို⁠င︀်း',
                     uniProbability: 0.9,
                     zgProbability: 0,
-                    normalizedStr: 'ချိုင်း'
+                    normalization: {
+                        normalizedStr: 'ချိုင်း',
+                        normalizationActions: {
+                            removeSpace: true,
+                            removeDottedForm: true
+                        }
+                    }
                 }
             };
 
