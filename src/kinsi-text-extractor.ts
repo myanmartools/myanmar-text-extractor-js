@@ -7,6 +7,7 @@
  */
 
 import { ExtractInfo } from './extract-info';
+import { normalizeText } from './normalize-text';
 import { KinsiTextFragment } from './kinsi-text-fragment';
 import { invisibleSpace, visibleSpace } from './shared-char-patterns/space';
 
@@ -126,6 +127,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
         const ksWithAthetMatch = ksWithAthetMaxRegExp1.exec(testStr);
         if (ksWithAthetMatch != null) {
             const mStr = ksWithAthetMatch[0];
+            const normalizedResult = normalizeText(mStr, { removeSpace: true, removeDottedForm: true });
 
             return {
                 category: 'kinsi',
@@ -135,9 +137,10 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
                 rightFragment: {
                     category: 'letter-and-athet',
                     matchedStr: mStr,
-                    normalizedStr: dictKsRightPart1,
                     uniProbability: p90,
-                    zgProbability: p0
+                    zgProbability: p0,
+                    ...normalizedResult,
+                    normalizedStr: dictKsRightPart1
                 }
             };
         }
