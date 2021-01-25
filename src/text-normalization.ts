@@ -17,6 +17,6 @@ export interface TextNormalizationActions {
 }
 
 export interface TextNormalizationResult {
-    normalizedStr: string;
-    normalizationActions: TextNormalizationActions;
+    normalizedStr?: string;
+    normalizationActions?: TextNormalizationActions;
 }
