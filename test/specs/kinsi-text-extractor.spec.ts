@@ -1,12 +1,12 @@
-import { extracKinsiFragment } from '../../src/kinsi-text-extractor';
+import { extractKinsiFragment } from '../../src/kinsi-text-extractor';
 import { KinsiTextFragment } from '../../src/kinsi-text-fragment';
 
-describe('extracKinsiFragment', () => {
+describe('extractKinsiFragment', () => {
     it(String.raw`should return 'KinsiTextFragment' when input 'င်္'`, () => {
         const input = 'င်္';
         const curStr = input;
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -34,7 +34,7 @@ describe('extracKinsiFragment', () => {
         const input = 'င်္ ';
         const curStr = input;
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -62,7 +62,7 @@ describe('extracKinsiFragment', () => {
         const input = 'ကင်္';
         const curStr = 'င်္';
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -96,7 +96,7 @@ describe('extracKinsiFragment', () => {
         const input = 'ကင်္';
         const curStr = 'င်္';
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -130,7 +130,7 @@ describe('extracKinsiFragment', () => {
         const input = 'သင်္ချိုင်း';
         const curStr = 'င်္ချိုင်း';
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -168,7 +168,7 @@ describe('extracKinsiFragment', () => {
         const input = 'သင်္ချိုင်းက';
         const curStr = 'င်္ချိုင်းက';
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -206,7 +206,7 @@ describe('extracKinsiFragment', () => {
         const input = 'သင်္ချို  င်း';
         const curStr = 'င်္ချို  င်း';
 
-        const actualFragment = extracKinsiFragment({
+        const actualFragment = extractKinsiFragment({
             totalTrimedInputLength: input.trim().length,
             curStr,
             firstCp: curStr.codePointAt(0) as number,
@@ -253,7 +253,7 @@ describe('extracKinsiFragment', () => {
             const input = 'သင်္ချို­င်း';
             const curStr = 'င်္ချို­င်း';
 
-            const actualFragment = extracKinsiFragment({
+            const actualFragment = extractKinsiFragment({
                 totalTrimedInputLength: input.trim().length,
                 curStr,
                 firstCp: curStr.codePointAt(0) as number,
@@ -301,7 +301,7 @@ describe('extracKinsiFragment', () => {
             const input = 'သ︀င်္ခ︀ျို⁠င︀်း';
             const curStr = 'င်္ခ︀ျို⁠င︀်း';
 
-            const actualFragment = extracKinsiFragment({
+            const actualFragment = extractKinsiFragment({
                 totalTrimedInputLength: input.trim().length,
                 curStr,
                 firstCp: curStr.codePointAt(0) as number,
