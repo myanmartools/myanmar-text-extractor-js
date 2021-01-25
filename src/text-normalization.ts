@@ -14,6 +14,7 @@ export interface TextNormalizationOptions {
 export interface TextNormalizationActions {
     removeSpace?: boolean;
     removeDottedForm?: boolean;
+    changeU1025ToU1009?: boolean;
 }
 
 export interface TextNormalization {
