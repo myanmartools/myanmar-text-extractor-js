@@ -7,11 +7,11 @@
  */
 
 import { invisibleSpace, visibleSpace } from './shared-char-patterns/space';
-import { TextNormalizationActions, TextNormalizationOptions, TextNormalizationResult } from './text-normalization';
+import { TextNormalization, TextNormalizationActions, TextNormalizationOptions } from './text-normalization';
 
 const spaceRegExp = new RegExp(`[${visibleSpace}${invisibleSpace}]`);
 
-export function normalizeText(input: string, options: TextNormalizationOptions): TextNormalizationResult | null {
+export function normalizeText(input: string, options: TextNormalizationOptions): TextNormalization | null {
     let normalized = false;
     let normalizedStr = '';
     const normalizationActions: TextNormalizationActions = {};
