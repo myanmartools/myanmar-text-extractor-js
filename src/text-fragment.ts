@@ -17,6 +17,7 @@ export interface TextFragment {
         | 'letter'
         | 'number'
         | 'kinsi'
+        | 'athat'
         | 'letter-and-athet';
     matchedStr: string;
     uniProbability?: number;
