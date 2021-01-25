@@ -19,8 +19,8 @@ export interface TextFragment {
         | 'kinsi'
         | 'letter-and-athet';
     matchedStr: string;
-    uniProbability: number;
-    zgProbability: number;
+    uniProbability?: number;
+    zgProbability?: number;
     rightFragment?: TextFragment;
     normalization?: TextNormalization;
 }
