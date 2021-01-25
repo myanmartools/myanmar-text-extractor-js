@@ -6,9 +6,9 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { TextNormalizationResult } from './text-normalization';
+import { TextNormalization } from './text-normalization';
 
-export interface TextFragment extends TextNormalizationResult {
+export interface TextFragment {
     category:
         | 'punctuation-letter'
         | 'punctuation-symbol'
@@ -22,4 +22,5 @@ export interface TextFragment extends TextNormalizationResult {
     uniProbability: number;
     zgProbability: number;
     rightFragment?: TextFragment;
+    normalization: TextNormalization;
 }
