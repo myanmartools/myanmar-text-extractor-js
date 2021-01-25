@@ -16,7 +16,7 @@ export interface TextNormalizationActions {
     removeDottedForm?: boolean;
 }
 
-export interface TextNormalizationResult {
-    normalizedStr?: string;
-    normalizationActions?: TextNormalizationActions;
+export interface TextNormalization {
+    normalizedStr: string;
+    normalizationActions: TextNormalizationActions;
 }
