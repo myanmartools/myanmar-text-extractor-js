@@ -57,7 +57,7 @@ const dictKinsiParts = [
  * @param extractInfo ExtractInfo object.
  * @returns Returns the KinsiTextFragment object.
  */
-export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTextFragment | null {
+export function extractKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTextFragment | null {
     if (extractInfo.trimedCurStrLength < 3 || !extractInfo.curStr.startsWith(ksStr)) {
         return null;
     }
