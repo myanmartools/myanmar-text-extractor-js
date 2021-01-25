@@ -127,7 +127,10 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
         const ksWithAthetMatch = ksWithAthetMaxRegExp1.exec(testStr);
         if (ksWithAthetMatch != null) {
             const mStr = ksWithAthetMatch[0];
-            const normalizedResult = normalizeText(mStr, { removeSpace: true, removeDottedForm: true });
+            const normalization = normalizeText(mStr, { removeSpace: true, removeDottedForm: true });
+            if (normalization != null) {
+                normalization.normalizedStr = dictKsRightPart1;
+            }
 
             return {
                 category: 'kinsi',
@@ -139,8 +142,7 @@ export function extracKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTe
                     matchedStr: mStr,
                     uniProbability: p90,
                     zgProbability: p0,
-                    ...normalizedResult,
-                    normalizedStr: dictKsRightPart1
+                    normalization: normalization != null ? normalization : undefined
                 }
             };
         }
