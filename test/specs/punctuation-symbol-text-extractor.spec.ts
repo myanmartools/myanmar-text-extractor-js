@@ -1,24 +1,31 @@
 import { extractPunctuationSymbol } from '../../src/punctuation-symbol-text-extractor';
-import { PunctuationSymbolTextFragment } from '../../src/punctuation-symbol-text-fragment';
+import { TextFragment } from '../../src/text-fragment';
+import { TextExtractorInputInternal } from '../../src/text-extractor-input-internal';
+
+function prepareDefaultInput(input: string, curStr: string): TextExtractorInputInternal {
+    return {
+        totalTrimedInputLength: input.trim().length,
+        curStr,
+        firstCp: curStr.codePointAt(0) as number,
+        curStrRightTrimedLength: curStr.trimEnd().length,
+        prevMMWritingStyle: null,
+        prevMMWritingStyleProbability: 0,
+        leftStr: ''
+    };
+}
 
 describe('extractPunctuationSymbol', () => {
-    it(String.raw`should return 'PunctuationSymbolTextFragment' when input '၊'`, () => {
+    it(String.raw`should return 'punctuation-symbol' text fragment when input '၊'`, () => {
         const input = '၊';
+        const curStr = input;
 
-        const actualFragment = extractPunctuationSymbol({
-            totalTrimedInputLength: input.trim().length,
-            curStr: input,
-            firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length,
-            lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0,
-            fragments: [],
-            leftStr: ''
-        });
+        const extractorInput = prepareDefaultInput(input, curStr);
 
-        const expactedFragment: PunctuationSymbolTextFragment = {
+        const actualFragment = extractPunctuationSymbol(extractorInput);
+
+        const expactedFragment: TextFragment = {
             category: 'punctuation-symbol',
-            matchedStr: input[0],
+            matchedStr: curStr[0],
             uniProbability: 0.5,
             zgProbability: 0.5
         };
@@ -26,23 +33,17 @@ describe('extractPunctuationSymbol', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'PunctuationSymbolTextFragment' when input '။'`, () => {
+    it(String.raw`should return 'punctuation-symbol' text fragment when input '။'`, () => {
         const input = '။';
+        const curStr = input;
 
-        const actualFragment = extractPunctuationSymbol({
-            totalTrimedInputLength: input.trim().length,
-            curStr: input,
-            firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length,
-            lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0,
-            fragments: [],
-            leftStr: ''
-        });
+        const extractorInput = prepareDefaultInput(input, curStr);
 
-        const expactedFragment: PunctuationSymbolTextFragment = {
+        const actualFragment = extractPunctuationSymbol(extractorInput);
+
+        const expactedFragment: TextFragment = {
             category: 'punctuation-symbol',
-            matchedStr: input[0],
+            matchedStr: curStr[0],
             uniProbability: 0.5,
             zgProbability: 0.5
         };
@@ -50,23 +51,17 @@ describe('extractPunctuationSymbol', () => {
         void expect(actualFragment).toEqual(expactedFragment);
     });
 
-    it(String.raw`should return 'PunctuationSymbolTextFragment' when input '၊က'`, () => {
+    it(String.raw`should return 'punctuation-symbol' text fragment when input '၊က'`, () => {
         const input = '၊က';
+        const curStr = input;
 
-        const actualFragment = extractPunctuationSymbol({
-            totalTrimedInputLength: input.trim().length,
-            curStr: input,
-            firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length,
-            lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0,
-            fragments: [],
-            leftStr: ''
-        });
+        const extractorInput = prepareDefaultInput(input, curStr);
 
-        const expactedFragment: PunctuationSymbolTextFragment = {
+        const actualFragment = extractPunctuationSymbol(extractorInput);
+
+        const expactedFragment: TextFragment = {
             category: 'punctuation-symbol',
-            matchedStr: input[0],
+            matchedStr: curStr[0],
             uniProbability: 0.5,
             zgProbability: 0.5
         };
@@ -76,17 +71,11 @@ describe('extractPunctuationSymbol', () => {
 
     it(String.raw`should return 'null' when input 'က'`, () => {
         const input = 'က';
+        const curStr = input;
 
-        const actualFragment = extractPunctuationSymbol({
-            totalTrimedInputLength: input.trim().length,
-            curStr: input,
-            firstCp: input.codePointAt(0) as number,
-            trimedCurStrLength: input.trim().length,
-            lastKnownWritingStyle: null,
-            lastKnownWritingStyleProbability: 0,
-            fragments: [],
-            leftStr: ''
-        });
+        const extractorInput = prepareDefaultInput(input, curStr);
+
+        const actualFragment = extractPunctuationSymbol(extractorInput);
 
         void expect(actualFragment).toBeNull();
     });
