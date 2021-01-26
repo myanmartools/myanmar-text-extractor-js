@@ -6,7 +6,7 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { invisibleSpace, visibleSpace } from './shared-char-patterns/space';
+import { invisibleSpace, visibleSpace } from './char-patterns';
 import { TextNormalization, TextNormalizationActions, TextNormalizationOptions } from './text-normalization';
 
 const spaceRegExp = new RegExp(`[${visibleSpace}${invisibleSpace}]`);
