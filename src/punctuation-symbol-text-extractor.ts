@@ -10,13 +10,10 @@ import { TextExtractorInputInternal } from './text-extractor-input-internal';
 import { TextFragment } from './text-fragment';
 
 export function extractPunctuationSymbol(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
-    const curStr = input.curStr;
-    const firstCp = input.firstCp;
-
-    if (firstCp === 0x104a || firstCp === 0x104b) {
+    if (input.firstCp === 0x104a || input.firstCp === 0x104b) {
         return {
             category: 'punctuation-symbol',
-            matchedStr: curStr[0],
+            matchedStr: input.curStr[0],
             uniProbability: 0.5,
             zgProbability: 0.5
         };
