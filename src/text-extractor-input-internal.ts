@@ -10,4 +10,5 @@ import { TextExtractorInput } from './text-extractor-input';
 
 export interface TextExtractorInputInternal extends TextExtractorInput {
     firstCp: number;
+    curStrRightTrimedLength: number;
 }
