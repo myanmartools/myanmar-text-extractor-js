@@ -13,6 +13,8 @@ import { TextFragment } from './text-fragment';
 
 import { extractPunctuationLetter } from './punctuation-letter-text-extractor';
 import { extractPunctuationSymbol } from './punctuation-symbol-text-extractor';
+import { extractSingleLetter } from './single-letter-text-extractor';
+import { extractSingleNumber } from './single-number-text-extractor';
 
 export class MyanmarTextExtractor {
     extractNext(input: Readonly<TextExtractorInput>): TextFragment | null {
@@ -31,7 +33,17 @@ export class MyanmarTextExtractor {
             firstCp
         };
 
-        let fragment = extractPunctuationLetter(inputInternal);
+        let fragment = extractSingleLetter(inputInternal);
+        if (fragment != null) {
+            return fragment;
+        }
+
+        fragment = extractSingleNumber(inputInternal);
+        if (fragment != null) {
+            return fragment;
+        }
+
+        fragment = extractPunctuationLetter(inputInternal);
         if (fragment != null) {
             return fragment;
         }
