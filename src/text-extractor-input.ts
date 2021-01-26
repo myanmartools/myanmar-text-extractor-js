@@ -6,7 +6,7 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-export interface TextExtractInput {
+export interface TextExtractorInput {
     totalTrimedInputLength: number;
     curStr: string;
     leftStr: string;
