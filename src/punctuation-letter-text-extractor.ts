@@ -10,13 +10,10 @@ import { TextExtractorInputInternal } from './text-extractor-input-internal';
 import { TextFragment } from './text-fragment';
 
 export function extractPunctuationLetter(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
-    const curStr = input.curStr;
-    const firstCp = input.firstCp;
-
-    if (firstCp === 0x104c || firstCp === 0x104d || firstCp === 0x104f) {
+    if (input.firstCp === 0x104c || input.firstCp === 0x104d || input.firstCp === 0x104f) {
         return {
             category: 'punctuation-letter',
-            matchedStr: curStr[0],
+            matchedStr: input.curStr[0],
             uniProbability: 0.5,
             zgProbability: 0.5
         };
