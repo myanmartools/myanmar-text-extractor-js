@@ -10,12 +10,8 @@ import { TextExtractorInputInternal } from './text-extractor-input-internal';
 import { TextFragment } from './text-fragment';
 
 export function extractSingleNumber(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
-    const firstCp = input.firstCp;
-    const curStr = input.curStr;
-    const trimedCurStrLength = curStr.trimEnd().length;
-
-    if (firstCp >= 0x1040 && firstCp <= 0x1049 && trimedCurStrLength === 1) {
-        const matchedStr = curStr[0];
+    if (input.curStrRightTrimedLength === 1 && input.firstCp >= 0x1040 && input.firstCp <= 0x1049) {
+        const matchedStr = input.curStr[0];
 
         return {
             category: 'number',
