@@ -6,26 +6,19 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { ExtractInfo } from './extract-info';
-import { PunctuationLetterTextFragment } from './punctuation-letter-text-fragment';
+import { TextExtractorInputInternal } from './text-extractor-input-internal';
+import { TextFragment } from './text-fragment';
 
-import { p50 } from './probabilities';
-
-/**
- * Extract punctuation letter.
- * ၌ / ၍ / ၏
- * @param extractInfo ExtractInfo object.
- * @returns Returns the PunctuationLetterTextFragment object.
- */
-export function extractPunctuationLetter(extractInfo: Readonly<ExtractInfo>): PunctuationLetterTextFragment | null {
-    const firstCp = extractInfo.firstCp;
+export function extractPunctuationLetter(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
+    const curStr = input.curStr;
+    const firstCp = input.firstCp;
 
     if (firstCp === 0x104c || firstCp === 0x104d || firstCp === 0x104f) {
         return {
             category: 'punctuation-letter',
-            matchedStr: extractInfo.curStr[0],
-            uniProbability: p50,
-            zgProbability: p50
+            matchedStr: curStr[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
         };
     }
 
