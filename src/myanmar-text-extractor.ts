@@ -13,6 +13,8 @@ import { TextFragment } from './text-fragment';
 
 import { extractPunctuationLetter } from './punctuation-letter-text-extractor';
 import { extractPunctuationSymbol } from './punctuation-symbol-text-extractor';
+import { extractSingleDottedLetter } from './single-dotted-letter-text-extractor';
+import { extractSingleDottedNumber } from './single-dotted-number-text-extractor';
 import { extractSingleLetter } from './single-letter-text-extractor';
 import { extractSingleNumber } from './single-number-text-extractor';
 
@@ -41,9 +43,11 @@ export class MyanmarTextExtractor {
             return fragment;
         }
 
-        fragment = extractSingleNumber(inputInternal);
-        if (fragment != null) {
-            return fragment;
+        if (curStrRightTrimedLength === 1) {
+            fragment = extractSingleNumber(inputInternal);
+            if (fragment != null) {
+                return fragment;
+            }
         }
 
         fragment = extractPunctuationLetter(inputInternal);
@@ -54,6 +58,20 @@ export class MyanmarTextExtractor {
         fragment = extractPunctuationSymbol(inputInternal);
         if (fragment != null) {
             return fragment;
+        }
+
+        if (curStrRightTrimedLength > 1) {
+            fragment = extractSingleDottedLetter(inputInternal);
+            if (fragment != null) {
+                return fragment;
+            }
+
+            if (curStrRightTrimedLength === 2) {
+                fragment = extractSingleDottedNumber(inputInternal);
+                if (fragment != null) {
+                    return fragment;
+                }
+            }
         }
 
         return null;
