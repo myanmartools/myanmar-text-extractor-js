@@ -6,9 +6,8 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { ExtractInfo } from './extract-info';
-
-import { AthatTextFragment } from './athat-text-fragment';
+import { TextExtractorInputInternal } from './text-extractor-input-internal';
+import { TextFragment } from './text-fragment';
 import { TextNormalization } from './text-normalization';
 
 const athatAndOptDiac = '(?:\u103A\u1037\u1038?|\u1037\u103A\u1038?|\u103A\u1038|\u103A)';
@@ -20,17 +19,12 @@ const cUdAthat =
 const letterAndAthatMaxPsblRegExp = new RegExp(`^[${maxPsblCUdAthat}]\uFE00?${athatAndOptDiac}`);
 const letterAndAthatRegExp = new RegExp(`^[${cUdAthat}]${athatAndOptDiac}`);
 
-/**
- * Extract Athat (Virama) fragment.
- * @param extractInfo ExtractInfo object.
- * @returns Returns the AthatTextFragment object.
- */
-export function extractAthatFragment(extractInfo: Readonly<ExtractInfo>): AthatTextFragment | null {
-    if (extractInfo.trimedCurStrLength < 2) {
+export function extractAthatFragment(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
+    if (input.curStrRightTrimedLength < 2) {
         return null;
     }
 
-    const curStr = extractInfo.curStr;
+    const curStr = input.curStr;
 
     let m = letterAndAthatRegExp.exec(curStr);
     if (m == null) {
@@ -59,7 +53,7 @@ export function extractAthatFragment(extractInfo: Readonly<ExtractInfo>): AthatT
         normalization.normalizationActions.removeDottedForm = true;
     }
 
-    const fragment: AthatTextFragment = {
+    const fragment: TextFragment = {
         category: 'athat',
         matchedStr
     };
