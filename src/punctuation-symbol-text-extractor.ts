@@ -6,26 +6,19 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { ExtractInfo } from './extract-info';
-import { PunctuationSymbolTextFragment } from './punctuation-symbol-text-fragment';
+import { TextExtractorInputInternal } from './text-extractor-input-internal';
+import { TextFragment } from './text-fragment';
 
-import { p50 } from './probabilities';
-
-/**
- * Extract punctuation symbol.
- * ၊ / ။
- * @param extractInfo ExtractInfo object.
- * @returns Returns the PunctuationSymbolTextFragment object.
- */
-export function extractPunctuationSymbol(extractInfo: Readonly<ExtractInfo>): PunctuationSymbolTextFragment | null {
-    const firstCp = extractInfo.firstCp;
+export function extractPunctuationSymbol(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
+    const curStr = input.curStr;
+    const firstCp = input.firstCp;
 
     if (firstCp === 0x104a || firstCp === 0x104b) {
         return {
             category: 'punctuation-symbol',
-            matchedStr: extractInfo.curStr[0],
-            uniProbability: p50,
-            zgProbability: p50
+            matchedStr: curStr[0],
+            uniProbability: 0.5,
+            zgProbability: 0.5
         };
     }
 
