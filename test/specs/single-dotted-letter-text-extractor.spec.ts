@@ -208,7 +208,7 @@ describe('extractSingleDottedLetter', () => {
 
             const extractorInput = prepareDefaultInput(input, curStr);
             extractorInput.prevMMWritingStyle = 'zg';
-            extractorInput.prevMMWritingStyleProbability = 0.5;
+            extractorInput.prevMMWritingStyleProbability = 0.45;
 
             const actualFragment = extractSingleDottedLetter(extractorInput);
 
@@ -216,7 +216,7 @@ describe('extractSingleDottedLetter', () => {
                 category: 'dotted-letter',
                 matchedStr: curStr.substring(0, 2),
                 uniProbability: 0.5,
-                zgProbability: 0.48
+                zgProbability: 0.4
             };
 
             void expect(actualFragment).toEqual(expactedFragment);
