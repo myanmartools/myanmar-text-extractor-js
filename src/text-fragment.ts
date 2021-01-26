@@ -24,4 +24,5 @@ export interface TextFragment {
     zgProbability?: number;
     rightFragment?: TextFragment;
     normalization?: TextNormalization;
+    decimalStr?: string;
 }
