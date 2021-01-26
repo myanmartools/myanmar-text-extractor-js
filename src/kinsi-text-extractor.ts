@@ -6,19 +6,13 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { ExtractInfo } from './extract-info';
-
-import { KinsiTextFragment } from './kinsi-text-fragment';
+import { TextExtractorInputInternal } from './text-extractor-input-internal';
+import { TextFragment } from './text-fragment';
 
 const ksStr = '\u1004\u103A\u1039';
 
-/**
- * Extract kinsi fragment.
- * @param extractInfo ExtractInfo object.
- * @returns Returns the KinsiTextFragment object.
- */
-export function extractKinsiFragment(extractInfo: Readonly<ExtractInfo>): KinsiTextFragment | null {
-    if (extractInfo.trimedCurStrLength < 3 || !extractInfo.curStr.startsWith(ksStr)) {
+export function extractKinsiFragment(input: Readonly<TextExtractorInputInternal>): TextFragment | null {
+    if (input.curStrRightTrimedLength < 3 || !input.curStr.startsWith(ksStr)) {
         return null;
     }
 
