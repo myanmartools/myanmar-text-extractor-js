@@ -28,9 +28,12 @@ export class MyanmarTextExtractor {
             return null;
         }
 
+        const curStrRightTrimedLength = curStr.trimEnd().length;
+
         const inputInternal: TextExtractorInputInternal = {
             ...input,
-            firstCp
+            firstCp,
+            curStrRightTrimedLength
         };
 
         let fragment = extractSingleLetter(inputInternal);
