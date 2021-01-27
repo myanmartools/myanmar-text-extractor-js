@@ -60,7 +60,7 @@ export class MyanmarTextExtractor {
             return fragment;
         }
 
-        if (curStrRightTrimedLength > 1) {
+        if (curStrRightTrimedLength > 1 && curStr[1] === '\uFE00') {
             fragment = extractSingleDottedLetter(inputInternal);
             if (fragment != null) {
                 return fragment;
