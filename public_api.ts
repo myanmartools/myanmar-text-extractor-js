@@ -12,4 +12,6 @@
  * Entry point for all public APIs of this package.
  */
 
+export * from './src/myanmar-text-extractor';
+export * from './src/text-extractor-input';
 export * from './src/text-fragment';
